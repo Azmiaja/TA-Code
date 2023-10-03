@@ -22,5 +22,15 @@ Route::get('/test', function () {
 });
 
 Route::get('/home', function () {
-    return view('home');
+    return view('home', [
+        "title" => "Home",
+        "title2" => ""
+    ]);
 });
+Route::get('/manajemen-{user}', function ($user) {
+    return view("muser-{$user}", [
+        "title" => "Manajemen User",
+        "title2" => $user,
+    ]);
+})->where('user', 'pegawai|siswa');
+
