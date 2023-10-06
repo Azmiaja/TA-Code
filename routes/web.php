@@ -45,3 +45,79 @@ Route::get('/pembagianguru', function () {
     ]);
 });
 
+Route::get('/profile-sekolah', function () {
+    return view('profile-sekolah', [
+        "title" => "Profile Sekolah",
+        "title2" => ""
+    ]);
+});
+
+Route::get('/sejarah', function () {
+    return view('sejarah', [
+        "title" => "Sejarah",
+        "title2" => ""
+    ]);
+});
+
+Route::get('/visimisi', function () {
+    return view('visimisi', [
+        "title" => "Visi Misi",
+        "title2" => ""
+    ]);
+});
+
+Route::get('/beritasekolah', function () {
+    return view('beritasekolah', [
+        "title" => "Berita Sekolah",
+        "title2" => ""
+    ]);
+});
+
+Route::get('/pembagiansiswa', function () {
+    return view('pembagiansiswa', [
+        "title" => "Pembagian Siswa",
+        "title2" => ""
+    ]);
+});
+
+Route::get('/penjadwalanpelajaran', function () {
+    return view('penjadwalanpelajaran', [
+        "title" => "Penjadwalan Pelajaran",
+        "title2" => ""
+    ]);
+});
+
+Route::get('/penugasansiswa', function () {
+    return view('penugasansiswa', [
+        "title" => "Penugasan Siswa",
+        "title2" => ""
+    ]);
+});
+
+Route::get('/penilaiansiswa', function () {
+    return view('penilaiansiswa', [
+        "title" => "Penilaian Siswa",
+        "title2" => ""
+    ]);
+});
+
+Route::get('/laporannilai', function () {
+    return view('laporannilai', [
+        "title" => "Laporan Nilai",
+        "title2" => ""
+    ]);
+});
+
+Route::get('/pemberitahuanpembayaran', function () {
+    return view('pemberitahuanpembayaran', [
+        "title" => "Pemberitahuan Pembayaran",
+        "title2" => ""
+    ]);
+});
+
+Route::get('/laporanpembayaran', function () {
+    return view('laporanpembayaran', [
+        "title" => "Laporan Pembayaran",
+        "title2" => ""
+    ]);
+});

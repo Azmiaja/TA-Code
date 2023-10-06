@@ -89,22 +89,22 @@
                             </a>
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="be_widgets_tiles.html">
+                                    <a class="nav-main-link" href="profile-sekolah">
                                         <span class="nav-main-link-name">Profil Sekolah</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="be_widgets_users.html">
+                                    <a class="nav-main-link" href="sejarah">
                                         <span class="nav-main-link-name">Sejarah</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="be_widgets_stats.html">
+                                    <a class="nav-main-link" href="visimisi">
                                         <span class="nav-main-link-name">Visi Misi</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="be_widgets_blog.html">
+                                    <a class="nav-main-link" href="beritasekolah">
                                         <span class="nav-main-link-name">Berita Sekolah</span>
                                     </a>
                                 </li>
@@ -123,27 +123,27 @@
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="be_ui_grid.html">
+                                    <a class="nav-main-link" href="pembagiansiswa">
                                         <span class="nav-main-link-name">Pembagian Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="be_ui_grid.html">
+                                    <a class="nav-main-link" href="penjadwalanpelajaran">
                                         <span class="nav-main-link-name">Penjadwalan Pelajaran</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="be_ui_grid.html">
+                                    <a class="nav-main-link" href="penugasansiswa">
                                         <span class="nav-main-link-name">Penugasan Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="be_ui_grid.html">
+                                    <a class="nav-main-link" href="penilaiansiswa">
                                         <span class="nav-main-link-name">Penilaian Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="be_ui_grid.html">
+                                    <a class="nav-main-link" href="laporannilai">
                                         <span class="nav-main-link-name">Laporan Nilai</span>
                                     </a>
                                 </li>
@@ -157,12 +157,12 @@
                             </a>
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="be_tables_styles.html">
+                                    <a class="nav-main-link" href="pemberitahuanpembayaran">
                                         <span class="nav-main-link-name">Pemberitahuan Pembayaran</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="be_tables_responsive.html">
+                                    <a class="nav-main-link" href="laporanpembayaran">
                                         <span class="nav-main-link-name">Laporan Pembayaran</span>
                                     </a>
                                 </li>
