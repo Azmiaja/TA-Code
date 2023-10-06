@@ -118,7 +118,7 @@
                             </a>
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="be_ui_grid.html">
+                                    <a class="nav-main-link" href="pembagianguru">
                                         <span class="nav-main-link-name">Pembagian Guru</span>
                                     </a>
                                 </li>
