@@ -41,9 +41,9 @@
             <div class="content-header">
                 <a class="fw-semibold text-dual" href="home">
                     <span class="smini-visible">
-                        <img style="height: 20px;" src="assets/media/favicons/logo-tutwuri.png"></img>
+                        <img style="height: 35px; padding-left: .8rem;" src="assets/media/favicons/logo-tutwuri.png">
                     </span>
-                    <span class="smini-hide fs-6 tracking-wider">SDN Lemahbang</span>
+                    <span class="smini-hide fs-6 tracking-wider" style="padding-left: 1.25rem;">SDN Lemahbang</span>
                 </a>
             </div>
             {{-- End Sidebar header --}}
@@ -81,7 +81,7 @@
                             </ul>
                             {{-- End Sub menu manajemen user --}}
                         </li>
-                        <li class="nav-main-item">
+                        <li class="nav-main-item {{ $title === 'Manajemen Company' ? 'open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
                                 aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-grid"></i>
@@ -89,28 +89,28 @@
                             </a>
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="mcompany-profile">
+                                    <a class="nav-main-link {{ $title2 === 'profil' ? 'active' : '' }}" href="mcompany-profil">
                                         <span class="nav-main-link-name">Profil Sekolah</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="mcompany-sejarah">
+                                    <a class="nav-main-link {{ $title2 === 'sejarah' ? 'active' : '' }}" href="mcompany-sejarah">
                                         <span class="nav-main-link-name">Sejarah</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="mcompany-visimisi">
+                                    <a class="nav-main-link {{ $title2 === 'visimisi' ? 'active' : '' }}" href="mcompany-visimisi">
                                         <span class="nav-main-link-name">Visi Misi</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="mcompany-berita">
+                                    <a class="nav-main-link {{ $title2 === 'berita' ? 'active' : '' }}" href="mcompany-berita">
                                         <span class="nav-main-link-name">Berita Sekolah</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-main-item">
+                        <li class="nav-main-item {{ $title === 'Manajemen Kelas' ? 'open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
                                 aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-briefcase"></i>
@@ -118,38 +118,38 @@
                             </a>
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="mkelas-bagiguru">
+                                    <a class="nav-main-link {{ $title2 === 'bagiguru' ? 'active' : '' }}" href="mkelas-bagiguru">
                                         <span class="nav-main-link-name">Pembagian Guru</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="mkelas-bagisiswa">
+                                    <a class="nav-main-link {{ $title2 === 'bagisiswa' ? 'active' : '' }}" href="mkelas-bagisiswa">
                                         <span class="nav-main-link-name">Pembagian Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="mkelas-penjadwalan">
+                                    <a class="nav-main-link {{ $title2 === 'penjadwalan' ? 'active' : '' }}" href="mkelas-penjadwalan">
                                         <span class="nav-main-link-name">Penjadwalan Pelajaran</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="mkelas-penugasan">
+                                    <a class="nav-main-link {{ $title2 === 'penugasan' ? 'active' : '' }}" href="mkelas-penugasan">
                                         <span class="nav-main-link-name">Penugasan Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="mkelas-penilaian">
+                                    <a class="nav-main-link {{ $title2 === 'penilaian' ? 'active' : '' }}" href="mkelas-penilaian">
                                         <span class="nav-main-link-name">Penilaian Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="mkelas-laporan">
+                                    <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}" href="mkelas-laporan">
                                         <span class="nav-main-link-name">Laporan Nilai</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-main-item">
+                        <li class="nav-main-item {{ $title === 'Manajemen Keuangan' ? 'open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
                                 aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-wallet"></i>
@@ -157,18 +157,18 @@
                             </a>
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="mkeuangan-pemberitahuan">
+                                    <a class="nav-main-link {{ $title2 === 'pemberitahuan' ? 'active' : '' }}" href="mkeuangan-pemberitahuan">
                                         <span class="nav-main-link-name">Pemberitahuan Pembayaran</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="mkeuangan-laporan">
+                                    <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}" href="mkeuangan-laporan">
                                         <span class="nav-main-link-name">Laporan Pembayaran</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                    </ul/
+                    </ul>
                 </div>
             </div>
             {{-- End Sidebar menu --}}

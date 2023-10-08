@@ -13298,9 +13298,10 @@ small {
         padding-right: 1.875rem;
     }
 }
+/* sidebar header padding */
 #side-overlay .content-header,
 #sidebar .content-header {
-    padding-left: 1.25rem;
+    /* padding-left: 1.25rem; */
     padding-right: 1.25rem;
 }
 .smini-visible,
@@ -13361,9 +13362,11 @@ small {
     left: auto;
     right: 0;
 }
+/* sidebar menu background */
 #sidebar .js-sidebar-scroll {
     height: calc(100% - 4rem);
     overflow-y: auto;
+    background-color: #BB2525;
 }
 #sidebar .js-sidebar-scroll.full-height {
     height: 100%;
@@ -13578,8 +13581,9 @@ small {
     color: #e9ecef;
     background-color: #1f2937;
 }
+/* sidebar header background */
 #page-container.sidebar-dark #sidebar .content-header {
-    background-color: #232e3e;
+    background-color: #BB2525;
 }
 #page-container.side-scroll #side-overlay,
 #page-container.side-scroll #sidebar .js-sidebar-scroll {
@@ -14385,23 +14389,25 @@ a.block.block-themed .btn-block-option:focus {
 .sidebar-dark #sidebar .nav-main-heading {
     color: #7186a3;
 }
+/* sidebar menu color */
 .nav-main-dark .nav-main-link,
 .page-header-dark #page-header .nav-main-link,
 .sidebar-dark #sidebar .nav-main-link {
-    color: #9faec1;
+    color: #fff;
 }
 .nav-main-dark .nav-main-link > .nav-main-link-icon,
 .page-header-dark #page-header .nav-main-link > .nav-main-link-icon,
 .sidebar-dark #sidebar .nav-main-link > .nav-main-link-icon {
-    color: rgba(159, 174, 193, 0.5);
+    color: #fff;
 }
+/* sidebar menu color aktive & hover */
 .nav-main-dark .nav-main-link:focus,
 .nav-main-dark .nav-main-link:hover,
 .page-header-dark #page-header .nav-main-link:focus,
 .page-header-dark #page-header .nav-main-link:hover,
 .sidebar-dark #sidebar .nav-main-link:focus,
 .sidebar-dark #sidebar .nav-main-link:hover {
-    color: #90a0b7;
+    color: #fff;
     background-color: rgba(0, 0, 0, 0.2);
 }
 .nav-main-dark .nav-main-link:focus > .nav-main-link-icon,
@@ -14430,7 +14436,7 @@ a.block.block-themed .btn-block-option:focus {
 .nav-main-dark .nav-main-submenu .nav-main-link,
 .page-header-dark #page-header .nav-main-submenu .nav-main-link,
 .sidebar-dark #sidebar .nav-main-submenu .nav-main-link {
-    color: #8093ad;
+    color: #fff;
 }
 .nav-main-dark .nav-main-submenu .nav-main-link.active,
 .nav-main-dark .nav-main-submenu .nav-main-link:focus,

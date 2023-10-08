@@ -43,7 +43,7 @@ Route::get('/mcompany-{company}', function ($company) {
         "title" => "Manajemen Company",
         "title2" => $company,
     ]);
-})->where('company', 'berita|profile|sejarah|visimisi');
+})->where('company', 'berita|profil|sejarah|visimisi');
 
 Route::get('/mkelas-{kelas}', function ($kelas) {
     return view("mkelas/{$kelas}", [

@@ -9,7 +9,7 @@
                         <a class="link-fx" href="javascript:void(0)">Manajemen Kelas</a>
                     </li>
                     <li class="breadcrumb-item" aria-current="page">
-                        Pejadwalan Siswa
+                        Pejadwalan Pelajaran
                     </li>
                 </ol>
             </nav>
