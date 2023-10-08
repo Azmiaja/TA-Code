@@ -24,7 +24,7 @@
 <body>
     <div id="page-container" class="sidebar-dark side-scroll page-header-fixed page-header-dark main-content-boxed">
         <nav id="sidebar" aria-label="Main Navigation">
-            <div class="content-header bg-white-5">
+            <div class="content-header">
                 <a class="fw-semibold text-dual" href="index.html">
                     <span class="smini-visible">
                         <img style="height: 35px; padding-left: .8rem;" src="assets/media/favicons/logo-tutwuri.png">
@@ -34,42 +34,49 @@
                     </span>
                 </a>
                 <div>
-                    <a class="d-lg-none btn btn-sm btn-alt-secondary ms-1" data-toggle="layout"
-                        data-action="sidebar_close" href="javascript:void(0)">
+                    <a class="d-lg-none btn btn-sm btn-menu ms-1" data-toggle="layout" data-action="sidebar_close"
+                        href="javascript:void(0)">
                         <i class="fa fa-fw fa-times"></i>
                     </a>
                 </div>
             </div>
+            <hr class="border-light border opacity-50 mx-3 p-0">
+            {{-- navbar 2 --}}
             <div class="js-sidebar-scroll">
                 <div class="content-side">
-                    <ul class="nav-main">
+                    <ul class="nav-main nav-main-hover">
                         <li class="nav-main-item">
-                            <a class="nav-main-link active" href="gs_landing.html">
+                            <a class="nav-main-link active" href="#section-home" data-toggle="layout"
+                                data-action="sidebar_close">
                                 <i class="nav-main-link-icon si si-home"></i>
                                 <span class="nav-main-link-name">Home</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="javascript:void(0)">
-                                <i class="nav-main-link-icon si si-rocket"></i>
+                            <a class="nav-main-link" href="#section-berita" data-toggle="layout"
+                                data-action="sidebar_close">
+                                <i class="nav-main-link-icon si si-camera"></i>
                                 <span class="nav-main-link-name">Berita</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="javascript:void(0)">
-                                <i class="nav-main-link-icon si si-wallet"></i>
+                            <a class="nav-main-link" href="#section-profile" data-toggle="layout"
+                                data-action="sidebar_close">
+                                <i class="nav-main-link-icon si si-book-open"></i>
                                 <span class="nav-main-link-name">Profil</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="javascript:void(0)">
-                                <i class="nav-main-link-icon si si-envelope"></i>
+                            <a class="nav-main-link" href="#section-sejarah" data-toggle="layout"
+                                data-action="sidebar_close">
+                                <i class="nav-main-link-icon si si-flag"></i>
                                 <span class="nav-main-link-name">Sejarah</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="javascript:void(0)">
-                                <i class="nav-main-link-icon si si-envelope"></i>
+                            <a class="nav-main-link" href="#section-visimisi" data-toggle="layout"
+                                data-action="sidebar_close">
+                                <i class="nav-main-link-icon si si-fire"></i>
                                 <span class="nav-main-link-name">Visi Misi</span>
                             </a>
                         </li>
@@ -83,7 +90,7 @@
                 </div>
             </div>
         </nav>
-
+        {{-- navbar 2 end --}}
         <header id="page-header">
             <div class="content-header">
                 <div class="d-flex align-items-center">
@@ -91,36 +98,37 @@
                         SDN LEMAHBANG
                     </a>
                 </div>
+                {{-- navbar 1 --}}
                 <div class="d-flex align-items-center">
                     <div class="d-none d-lg-block">
                         <ul class="nav-main nav-main-horizontal nav-main-hover">
                             <li class="nav-main-item">
-                                <a class="nav-main-link active" href="gs_landing.html">
+                                <a class="nav-main-link active" href="#section-home">
                                     <i class="nav-main-link-icon si si-home"></i>
                                     <span class="nav-main-link-name">Home</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="javascript:void(0)">
-                                    <i class="nav-main-link-icon si si-rocket"></i>
+                                <a class="nav-main-link" href="#section-berita">
+                                    <i class="nav-main-link-icon si si-camera"></i>
                                     <span class="nav-main-link-name">Berita</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="javascript:void(0)">
-                                    <i class="nav-main-link-icon si si-wallet"></i>
+                                <a class="nav-main-link" href="#section-profile">
+                                    <i class="nav-main-link-icon si si-book-open"></i>
                                     <span class="nav-main-link-name">Profil</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="javascript:void(0)">
-                                    <i class="nav-main-link-icon si si-envelope"></i>
+                                <a class="nav-main-link" href="#section-sejarah">
+                                    <i class="nav-main-link-icon si si-flag"></i>
                                     <span class="nav-main-link-name">Sejarah</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="javascript:void(0)">
-                                    <i class="nav-main-link-icon si si-envelope"></i>
+                                <a class="nav-main-link" href="#section-visimisi">
+                                    <i class="nav-main-link-icon si si-fire"></i>
                                     <span class="nav-main-link-name">Visi Misi</span>
                                 </a>
                             </li>
@@ -132,9 +140,10 @@
                             </li>
                         </ul>
                     </div>
-                    <button type="button" class="btn btn-sm btn-alt-secondary d-lg-none ms-1" data-toggle="layout"
+                    {{-- navbar 1 end --}}
+                    <button type="button" class="btn btn-sm btn-menu d-lg-none ms-1" data-toggle="layout"
                         data-action="sidebar_toggle">
-                        <i class="fa fa-fw fa-bars"></i>
+                        <i class="fs-5 fa fa-fw fa-bars"></i>
                     </button>
                 </div>
             </div>
@@ -161,7 +170,8 @@
             </div>
         </header>
         <main id="main-container">
-            <div class="bg-image" style="background-image: url('assets/media/photos/sdnlemahbang.png');">
+            <div class="bg-image section" id="section-home"
+                style="background-image: url('assets/media/photos/sdnlemahbang.png');">
                 <div class="bg-primary-dark-op py-9 overflow-hidden">
                     <div class="content content-full text-center">
                         <h1 class="display-4 fw-semibold text-white mb-2">
@@ -173,7 +183,24 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-body-extra-light">
+            <div class="bg-body-light section" id="section-berita">
+                <div class="content content-full">
+                    <div class="py-5 text-center push">
+                        <h2 class="h1 mb-2">
+                            Berita
+                        </h2>
+                        <h3 class="fw-normal text-muted mb-0">
+                            Subtitle
+                        </h3>
+                    </div>
+                    <div class="text-center">
+                        <p>
+                            Your content..
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-body-extra-light section" id="section-profile">
                 <div class="content content-full">
                     <div class="py-5 text-center push">
                         <h2 class="h1 mb-2">
@@ -190,7 +217,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-body-light">
+            <div class="bg-body-light section" id="section-sejarah">
                 <div class="content content-full">
                     <div class="py-5 text-center push">
                         <h2 class="h1 mb-2">
@@ -207,28 +234,11 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-body-extra-light">
+            <div class="bg-body-extra-light section" id="section-visimisi">
                 <div class="content content-full">
                     <div class="py-5 text-center push">
                         <h2 class="h1 mb-2">
                             Visi - Misi
-                        </h2>
-                        <h3 class="fw-normal text-muted mb-0">
-                            Subtitle
-                        </h3>
-                    </div>
-                    <div class="text-center">
-                        <p>
-                            Your content..
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-body-light">
-                <div class="content content-full">
-                    <div class="py-5 text-center push">
-                        <h2 class="h1 mb-2">
-                            Berita
                         </h2>
                         <h3 class="fw-normal text-muted mb-0">
                             Subtitle
@@ -293,8 +303,11 @@
                     &copy; <span data-toggle="year-copy"></span>
                 </div>
             </div>
-    </div>
-    </footer>
+        </footer>
+        <button type="button" class="btn btn-danger btn-floating btn-lg" id="btn-back-to-top"
+            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Top">
+            <i class="fas fa-arrow-up"></i>
+        </button>
     </div>
     <script src="assets/js/oneui.app.min.js"></script>
 </body>

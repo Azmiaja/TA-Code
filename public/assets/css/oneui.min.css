@@ -2470,6 +2470,11 @@ textarea.form-control-lg {
     display: inline-block;
     margin-right: 1rem;
 }
+/* button menu burger */
+.content-header .btn-menu {
+    background-color: #BB2525; 
+    color: #d1d8de;
+}
 .btn-check {
     position: absolute;
     clip: rect(0, 0, 0, 0);
@@ -5612,15 +5617,15 @@ fieldset:disabled .btn {
 .tooltip {
     --bs-tooltip-zindex: 1080;
     --bs-tooltip-max-width: 200px;
-    --bs-tooltip-padding-x: 0.5rem;
-    --bs-tooltip-padding-y: 0.25rem;
+    --bs-tooltip-padding-x: 0.7rem;
+    --bs-tooltip-padding-y: 0.5rem;
     --bs-tooltip-font-size: 0.875rem;
-    --bs-tooltip-color: #fff;
-    --bs-tooltip-bg: #000;
-    --bs-tooltip-border-radius: 0.375rem;
-    --bs-tooltip-opacity: 0.9;
-    --bs-tooltip-arrow-width: 0.8rem;
-    --bs-tooltip-arrow-height: 0.4rem;
+    --bs-tooltip-color: #000;
+    /* --bs-tooltip-bg: #000; */
+    /* --bs-tooltip-border-radius: 0.375rem; */
+    --bs-tooltip-opacity: 0.5;
+--bs-tooltip-arrow-width: none;
+    --bs-tooltip-arrow-height: none; 
     z-index: var(--bs-tooltip-zindex);
     display: block;
     padding: var(--bs-tooltip-arrow-height);
@@ -5649,17 +5654,17 @@ fieldset:disabled .btn {
 .tooltip.show {
     opacity: var(--bs-tooltip-opacity);
 }
-.tooltip .tooltip-arrow {
+/* .tooltip .tooltip-arrow {
     display: block;
     width: var(--bs-tooltip-arrow-width);
     height: var(--bs-tooltip-arrow-height);
-}
-.tooltip .tooltip-arrow::before {
+} */
+/* .tooltip .tooltip-arrow::before {
     position: absolute;
     content: "";
     border-color: transparent;
     border-style: solid;
-}
+} */
 .bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow,
 .bs-tooltip-top .tooltip-arrow {
     bottom: 0;
@@ -13576,11 +13581,12 @@ small {
     }
 }
 #page-container #sidebar .content-header {
-    background-color: #f6f7f9;
+    background-color: #BB2525;
 }
+/* sidebar background */
 #page-container.sidebar-dark #sidebar {
     color: #e9ecef;
-    background-color: #1f2937;
+    background-color: #BB2525;
 }
 /* sidebar header background */
 #page-container.sidebar-dark #sidebar .content-header {
@@ -30106,3 +30112,13 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 .dark-mode .flatpickr-months .flatpickr-prev-month:hover svg {
     fill: #4c78dd;
 }
+
+/* scroll top button */
+#btn-back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+    transition: bottom 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55),opacity .3s,background-color .25s ease-in-out;
+}  
+        
