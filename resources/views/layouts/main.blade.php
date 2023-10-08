@@ -68,13 +68,13 @@
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'pegawai' ? 'active' : '' }}"
-                                        href="manajemen-pegawai">
+                                        href="muser-pegawai">
                                         <span class="nav-main-link-name">Pegawai</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'siswa' ? 'active' : '' }}"
-                                        href="manajemen-siswa">
+                                        href="muser-siswa">
                                         <span class="nav-main-link-name">Siswa</span>
                                     </a>
                                 </li>
@@ -89,22 +89,22 @@
                             </a>
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="profile-sekolah">
+                                    <a class="nav-main-link" href="mcompany-profile">
                                         <span class="nav-main-link-name">Profil Sekolah</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="sejarah">
+                                    <a class="nav-main-link" href="mcompany-sejarah">
                                         <span class="nav-main-link-name">Sejarah</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="visimisi">
+                                    <a class="nav-main-link" href="mcompany-visimisi">
                                         <span class="nav-main-link-name">Visi Misi</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="beritasekolah">
+                                    <a class="nav-main-link" href="mcompany-berita">
                                         <span class="nav-main-link-name">Berita Sekolah</span>
                                     </a>
                                 </li>
@@ -118,32 +118,32 @@
                             </a>
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="pembagianguru">
+                                    <a class="nav-main-link" href="mkelas-bagiguru">
                                         <span class="nav-main-link-name">Pembagian Guru</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="pembagiansiswa">
+                                    <a class="nav-main-link" href="mkelas-bagisiswa">
                                         <span class="nav-main-link-name">Pembagian Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="penjadwalanpelajaran">
+                                    <a class="nav-main-link" href="mkelas-penjadwalan">
                                         <span class="nav-main-link-name">Penjadwalan Pelajaran</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="penugasansiswa">
+                                    <a class="nav-main-link" href="mkelas-penugasan">
                                         <span class="nav-main-link-name">Penugasan Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="penilaiansiswa">
+                                    <a class="nav-main-link" href="mkelas-penilaian">
                                         <span class="nav-main-link-name">Penilaian Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="laporannilai">
+                                    <a class="nav-main-link" href="mkelas-laporan">
                                         <span class="nav-main-link-name">Laporan Nilai</span>
                                     </a>
                                 </li>
@@ -157,12 +157,12 @@
                             </a>
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="pemberitahuanpembayaran">
+                                    <a class="nav-main-link" href="mkeuangan-pemberitahuan">
                                         <span class="nav-main-link-name">Pemberitahuan Pembayaran</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="laporanpembayaran">
+                                    <a class="nav-main-link" href="mkeuangan-laporan">
                                         <span class="nav-main-link-name">Laporan Pembayaran</span>
                                     </a>
                                 </li>
