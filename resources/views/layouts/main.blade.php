@@ -40,10 +40,11 @@
             {{-- Sidebar header --}}
             <div class="content-header">
                 <a class="fw-semibold text-dual" href="home">
-                    <span class="smini-visible">
+                    <span class="smini-visible" style="padding-top: 1.25rem;">
                         <img style="height: 35px; padding-left: .8rem;" src="assets/media/favicons/logo-tutwuri.png">
                     </span>
-                    <span class="smini-hide fs-6 tracking-wider" style="padding-left: 1.25rem;">SDN Lemahbang</span>
+                    <span class="smini-hide fs-4 fw-bold tracking-wider" style="padding-left: 1.25rem;">SIAKAD</span><br>
+                    <span class="smini-hide tracking-wider" style="padding-left: 1.25rem;">SDN Lemahbang</span>
                 </a>
             </div>
             {{-- End Sidebar header --}}

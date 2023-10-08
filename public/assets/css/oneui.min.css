@@ -13514,9 +13514,10 @@ small {
 #page-container.main-content-boxed > #page-header .content-header {
     max-width: 1280px;
 }
+/* company profile header */
 #page-container.page-header-dark #page-header {
     color: #d1d8de;
-    background-color: #1f2937;
+    background-color: #BB2525;
 }
 #page-container.page-header-fixed #page-header {
     position: fixed;

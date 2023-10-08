@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>SDN Lemahbang</title>
     <link rel="shortcut icon" href="assets/media/favicons/logo-tutwuri.png">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/logo-tutwuri">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/logo-tutwuri.png">
@@ -27,22 +27,13 @@
             <div class="content-header bg-white-5">
                 <a class="fw-semibold text-dual" href="index.html">
                     <span class="smini-visible">
-                        <i class="fa fa-circle-notch text-primary"></i>
+                        <img style="height: 35px; padding-left: .8rem;" src="assets/media/favicons/logo-tutwuri.png">
                     </span>
-                    <span class="smini-hide fs-5 tracking-wider">
-                        One
+                    <span class="smini-hide fs-5 tracking-wider" style="padding-left: 1.25rem">
+                        SDN LEMAHBANG
                     </span>
                 </a>
                 <div>
-                    <div class="dropdown d-inline-block ms-1">
-                        <button type="button" class="btn btn-sm btn-alt-secondary" id="sidebar-themes-dropdown"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-brush"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end fs-sm smini-hide border-0"
-                            aria-labelledby="sidebar-themes-dropdown">
-                        </div>
-                    </div>
                     <a class="d-lg-none btn btn-sm btn-alt-secondary ms-1" data-toggle="layout"
                         data-action="sidebar_close" href="javascript:void(0)">
                         <i class="fa fa-fw fa-times"></i>
@@ -61,42 +52,83 @@
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="javascript:void(0)">
                                 <i class="nav-main-link-icon si si-rocket"></i>
-                                <span class="nav-main-link-name">Features</span>
+                                <span class="nav-main-link-name">Berita</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="javascript:void(0)">
                                 <i class="nav-main-link-icon si si-wallet"></i>
-                                <span class="nav-main-link-name">Pricing</span>
+                                <span class="nav-main-link-name">Profil</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="javascript:void(0)">
                                 <i class="nav-main-link-icon si si-envelope"></i>
-                                <span class="nav-main-link-name">Contact</span>
+                                <span class="nav-main-link-name">Sejarah</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="javascript:void(0)">
+                                <i class="nav-main-link-icon si si-envelope"></i>
+                                <span class="nav-main-link-name">Visi Misi</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="home">
+                                <i class="nav-main-link-icon si si-login"></i>
+                                <span class="nav-main-link-name">Login</span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+
         <header id="page-header">
             <div class="content-header">
                 <div class="d-flex align-items-center">
                     <a class="fw-semibold fs-5 tracking-wider text-dual me-3" href="index.html">
-                        Sistem Informasi Akademik
+                        SDN LEMAHBANG
                     </a>
                 </div>
                 <div class="d-flex align-items-center">
                     <div class="d-none d-lg-block">
                         <ul class="nav-main nav-main-horizontal nav-main-hover">
                             <li class="nav-main-item">
-                                <a class="nav-main-link active" href="home">
-                                    <i class="nav-main-link-icon si si-login ms-2"></i>
-                                    <span class="nav-main-link-name">Login</span>
+                                <a class="nav-main-link active" href="gs_landing.html">
+                                    <i class="nav-main-link-icon si si-home"></i>
+                                    <span class="nav-main-link-name">Home</span>
                                 </a>
                             </li>
-                                </ul>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link" href="javascript:void(0)">
+                                    <i class="nav-main-link-icon si si-rocket"></i>
+                                    <span class="nav-main-link-name">Berita</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link" href="javascript:void(0)">
+                                    <i class="nav-main-link-icon si si-wallet"></i>
+                                    <span class="nav-main-link-name">Profil</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link" href="javascript:void(0)">
+                                    <i class="nav-main-link-icon si si-envelope"></i>
+                                    <span class="nav-main-link-name">Sejarah</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link" href="javascript:void(0)">
+                                    <i class="nav-main-link-icon si si-envelope"></i>
+                                    <span class="nav-main-link-name">Visi Misi</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link" href="home">
+                                    <i class="nav-main-link-icon si si-login"></i>
+                                    <span class="nav-main-link-name">Login</span>
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -252,17 +284,17 @@
                         <h3>Contact</h3>
                         <div class="fs-sm mb-4">
                             Email : sdnlemahbang@magetan.sch.id<br>
-                            Temp  : (0351)112233<br>
+                            Temp : (0351)112233<br>
                         </div>
                     </div>
                 </div>
-                    <div class="col-sm-6 order-sm-1 py-1 text-center text-sm-start">
-                        <a class="fw-semibold" href="https://1.envato.market/AVD6j" target="_blank">SDN LEMAHBANG</a>
-                        &copy; <span data-toggle="year-copy"></span>
-                    </div>
+                <div class="col-sm-6 order-sm-1 py-1 text-center text-sm-start">
+                    <a class="fw-semibold" href="#" target="_blank">SDN LEMAHBANG</a>
+                    &copy; <span data-toggle="year-copy"></span>
                 </div>
             </div>
-        </footer>
+    </div>
+    </footer>
     </div>
     <script src="assets/js/oneui.app.min.js"></script>
 </body>
