@@ -9,6 +9,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/logo-tutwuri">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/logo-tutwuri.png">
     <link rel="stylesheet" id="css-main" href="assets/css/oneui.min.css">
+    <link rel="stylesheet" id="css-main" href="assets/js/p;igins/aos-master/dist/aos.css">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -22,7 +23,7 @@
 </head>
 
 <body>
-    <div id="page-container" class="sidebar-dark side-scroll page-header-fixed page-header-dark main-content-boxed">
+    <div id="page-container" class="sidebar side-scroll page-header-fixed page-header main-content-boxed">
         <nav id="sidebar" aria-label="Main Navigation">
             <div class="content-header">
                 <a class="fw-semibold text-dual" href="index.html">
@@ -46,7 +47,7 @@
                 <div class="content-side">
                     <ul class="nav-main nav-main-hover">
                         <li class="nav-main-item">
-                            <a class="nav-main-link active" href="#section-home" data-toggle="layout"
+                            <a class="nav-main-link active" href="#carouselExampleSlidesOnly" data-toggle="layout"
                                 data-action="sidebar_close">
                                 <i class="nav-main-link-icon si si-home"></i>
                                 <span class="nav-main-link-name">Home</span>
@@ -103,7 +104,7 @@
                     <div class="d-none d-lg-block">
                         <ul class="nav-main nav-main-horizontal nav-main-hover">
                             <li class="nav-main-item">
-                                <a class="nav-main-link active" href="#section-home">
+                                <a class="nav-main-link active" href="#carouselExampleSlidesOnly">
                                     <i class="nav-main-link-icon si si-home"></i>
                                     <span class="nav-main-link-name">Home</span>
                                 </a>
@@ -170,19 +171,50 @@
             </div>
         </header>
         <main id="main-container">
-            <div class="bg-image section" id="section-home"
-                style="background-image: url('assets/media/photos/sdnlemahbang.png');">
-                <div class="bg-primary-dark-op py-9 overflow-hidden">
-                    <div class="content content-full text-center">
-                        <h1 class="display-4 fw-semibold text-white mb-2">
-                            Sekolah Dasar Negeri Lemahbang
-                        </h1>
-                        <p class="fs-3 fw-normal text-white-50 mb-5">
-                            Desa Lemahbang, Kecamatan Bendo, Kabupaten Magetan, Jawa Timur. Kode pos 63384
-                        </p>
+            <div id="carouselExampleSlidesOnly" class="carousel slide section" data-bs-ride="carousel" style="height: 95vh;">
+                <div class="carousel-inner">
+                    <div class="carousel-item active"
+                        style="background-image: url('assets/media/photos/sdnlemahbang.png'); height: 95vh;">
+                        <div class="bg-primary-dark-op py-10 overflow-hidden">
+                            <div class="content content-full text-center">
+                                <h1 class="display-4 fw-semibold text-white mb-2">
+                                    Sekolah Dasar Negeri Lemahbang
+                                </h1>
+                                <p class="fs-3 fw-normal text-white-50 mb-5">
+                                    Desa Lemahbang, Kecamatan Bendo, Kabupaten Magetan, Jawa Timur. Kode pos 63384
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item"
+                    style="background-image: url('assets/media/photos/sdnlemahbang.png'); height: 95vh;">
+                        <div class="bg-primary-dark-op py-10 overflow-hidden">
+                            <div class="content content-full text-center">
+                                <h1 class="display-4 fw-semibold text-white mb-2">
+                                    Sekolah Dasar Negeri Lemahbang
+                                </h1>
+                                <p class="fs-3 fw-normal text-white-50 mb-5">
+                                    Desa Lemahbang, Kecamatan Bendo, Kabupaten Magetan, Jawa Timur. Kode pos 63384
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item"
+                    style="background-image: url('assets/media/photos/sdnlemahbang.png'); height: 95vh;">
+                        <div class="bg-primary-dark-op py-10 overflow-hidden">
+                            <div class="content content-full text-center">
+                                <h1 class="display-4 fw-semibold text-white mb-2">
+                                    Sekolah Dasar Negeri Lemahbang
+                                </h1>
+                                <p class="fs-3 fw-normal text-white-50 mb-5">
+                                    Desa Lemahbang, Kecamatan Bendo, Kabupaten Magetan, Jawa Timur. Kode pos 63384
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div class="bg-body-light section" id="section-berita">
                 <div class="content content-full">
                     <div class="py-5 text-center push">
@@ -310,6 +342,7 @@
         </button>
     </div>
     <script src="assets/js/oneui.app.min.js"></script>
+    <script src="assets/js/p;igins/aos-master/dist/aos.js"></script>
 </body>
 
 </html>
