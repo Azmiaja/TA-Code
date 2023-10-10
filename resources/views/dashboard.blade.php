@@ -80,7 +80,7 @@
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="home">
+                            <a class="nav-main-link" href="login">
                                 <i class="nav-main-link-icon si si-login"></i>
                                 <span class="nav-main-link-name">Login</span>
                             </a>
@@ -132,7 +132,7 @@
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="home">
+                                <a class="nav-main-link" href="login">
                                     <i class="nav-main-link-icon si si-login"></i>
                                     <span class="nav-main-link-name">Login</span>
                                 </a>
