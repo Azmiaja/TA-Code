@@ -46,6 +46,10 @@
                     <span class="smini-hide fs-4 fw-bold tracking-wider" style="padding-left: 1.25rem;">SIAKAD</span><br>
                     <span class="smini-hide tracking-wider" style="padding-left: 1.25rem;">SDN Lemahbang</span>
                 </a>
+                <a class="d-lg-none btn btn-sm ms-1 text-light" data-toggle="layout" data-action="sidebar_close"
+                    href="javascript:void(0)">
+                    <i class="fa fa-fw fa-times"></i>
+                </a>
             </div>
             {{-- End Sidebar header --}}
 

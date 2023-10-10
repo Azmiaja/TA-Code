@@ -9,7 +9,6 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/logo-tutwuri">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/logo-tutwuri.png">
     <link rel="stylesheet" id="css-main" href="assets/css/oneui.min.css">
-    <link rel="stylesheet" id="css-main" href="assets/js/p;igins/aos-master/dist/aos.css">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -35,13 +34,12 @@
                     </span>
                 </a>
                 <div>
-                    <a class="d-lg-none btn btn-sm btn-menu ms-1" data-toggle="layout" data-action="sidebar_close"
+                    <a class="d-lg-none btn btn-sm ms-1" data-toggle="layout" data-action="sidebar_close"
                         href="javascript:void(0)">
                         <i class="fa fa-fw fa-times"></i>
                     </a>
                 </div>
             </div>
-            <hr class="border-light border opacity-50 mx-3 p-0">
             {{-- navbar 2 --}}
             <div class="js-sidebar-scroll">
                 <div class="content-side">
@@ -142,7 +140,7 @@
                         </ul>
                     </div>
                     {{-- navbar 1 end --}}
-                    <button type="button" class="btn btn-sm btn-menu d-lg-none ms-1" data-toggle="layout"
+                    <button type="button" class="btn btn-sm d-lg-none ms-1" data-toggle="layout"
                         data-action="sidebar_toggle">
                         <i class="fs-5 fa fa-fw fa-bars"></i>
                     </button>
@@ -171,7 +169,8 @@
             </div>
         </header>
         <main id="main-container">
-            <div id="carouselExampleSlidesOnly" class="carousel slide section" data-bs-ride="carousel" style="height: 95vh;">
+            <div id="carouselExampleSlidesOnly" class="carousel slide section" data-bs-ride="carousel"
+                style="height: 95vh;">
                 <div class="carousel-inner">
                     <div class="carousel-item active"
                         style="background-image: url('assets/media/photos/sdnlemahbang.png'); height: 95vh;">
@@ -187,7 +186,7 @@
                         </div>
                     </div>
                     <div class="carousel-item"
-                    style="background-image: url('assets/media/photos/sdnlemahbang.png'); height: 95vh;">
+                        style="background-image: url('assets/media/photos/sdnlemahbang.png'); height: 95vh;">
                         <div class="bg-primary-dark-op py-10 overflow-hidden">
                             <div class="content content-full text-center">
                                 <h1 class="display-4 fw-semibold text-white mb-2">
@@ -200,7 +199,7 @@
                         </div>
                     </div>
                     <div class="carousel-item"
-                    style="background-image: url('assets/media/photos/sdnlemahbang.png'); height: 95vh;">
+                        style="background-image: url('assets/media/photos/sdnlemahbang.png'); height: 95vh;">
                         <div class="bg-primary-dark-op py-10 overflow-hidden">
                             <div class="content content-full text-center">
                                 <h1 class="display-4 fw-semibold text-white mb-2">
@@ -211,24 +210,6 @@
                                 </p>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-body-light section" id="section-berita">
-                <div class="content content-full">
-                    <div class="py-5 text-center push">
-                        <h2 class="h1 mb-2">
-                            Berita
-                        </h2>
-                        <h3 class="fw-normal text-muted mb-0">
-                            Subtitle
-                        </h3>
-                    </div>
-                    <div class="text-center">
-                        <p>
-                            Your content..
-                        </p>
                     </div>
                 </div>
             </div>
@@ -271,6 +252,23 @@
                     <div class="py-5 text-center push">
                         <h2 class="h1 mb-2">
                             Visi - Misi
+                        </h2>
+                        <h3 class="fw-normal text-muted mb-0">
+                            Subtitle
+                        </h3>
+                    </div>
+                    <div class="text-center">
+                        <p>
+                            Your content..
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-body-light section" id="section-berita">
+                <div class="content content-full">
+                    <div class="py-5 text-center push">
+                        <h2 class="h1 mb-2">
+                            Berita
                         </h2>
                         <h3 class="fw-normal text-muted mb-0">
                             Subtitle
@@ -342,7 +340,6 @@
         </button>
     </div>
     <script src="assets/js/oneui.app.min.js"></script>
-    <script src="assets/js/p;igins/aos-master/dist/aos.js"></script>
 </body>
 
 </html>
