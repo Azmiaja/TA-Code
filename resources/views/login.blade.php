@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>OneUI - Bootstrap 5 Admin Template &amp; UI Framework | DEMO</title>
+  <title>Login - Siakad SDN Lemahbang</title>
     <meta property="og:type" content="website">
   <meta property="og:url" content="">
   <meta property="og:image" content="">
-  <link rel="shortcut icon" href="assets/media/favicons/favicon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/favicon-192x192.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+  <link rel="shortcut icon" href="assets/media/favicons/logo-tutwuri.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/logo-tutwuri.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/logo-tutwuri.png">
     <link rel="stylesheet" id="css-main" href="assets/css/oneui.min.css">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-9HQDQJJYW7');</script>
 </head>
@@ -25,7 +25,7 @@
             SDN Lemahbang
           </a>
           <p class="text-white-75 me-xl-8 mt-2">
-            Selamat datang di website Sistem Informasi Akademik SDN Lelahbang. 
+            Selamat datang di website Sistem Informasi Akademik SDN Lemahbang. 
           </p>
         </div>
       </div>
@@ -33,23 +33,12 @@
         <p class="fw-medium text-white-50 mb-0">
           <strong>SDN Lemahbang</strong> &copy; <span data-toggle="year-copy"></span>
         </p>
-        <ul class="list list-inline mb-0 py-2">
-          <li class="list-inline-item">
-            <a class="text-white-75 fw-medium" href="javascript:void(0)">Legal</a>
-          </li>
-          <li class="list-inline-item">
-            <a class="text-white-75 fw-medium" href="javascript:void(0)">Contact</a>
-          </li>
-          <li class="list-inline-item">
-            <a class="text-white-75 fw-medium" href="javascript:void(0)">Terms</a>
-          </li>
-        </ul>
       </div>
     </div>
     <div class="hero-static col-lg-8 d-flex flex-column align-items-center bg-body-extra-light">
       <div class="p-3 w-100 d-lg-none text-center">
         <a class="link-fx fw-semibold fs-3 text-dark" href="index.html">
-          OneUI
+          Sistem Informasi Akademik <br>SDN Lemahbang
         </a>
       </div>
       <div class="p-4 w-100 flex-grow-1 d-flex align-items-center">
@@ -67,18 +56,18 @@
           </div>
           <div class="row g-0 justify-content-center">
             <div class="col-sm-8 col-xl-4">
-              <form class="js-validation-signin" action="be_pages_auth_all.html" method="POST">
-                <div class="mb-4">
+              <form class="js-validation-signin" action="#" method="POST">
+                <!-- <div class="mb-4">
                   <input type="text" class="form-control form-control-lg form-control-alt py-3" id="login-username" name="login-username" placeholder="Username">
                 </div>
                 <div class="mb-4">
                   <input type="password" class="form-control form-control-lg form-control-alt py-3" id="login-password" name="login-password" placeholder="Password">
-                </div>
+                </div> -->
                 <div class="d-flex justify-content-center align-items-center mb-4">
                   <div>
-                    <button type="submit" class="btn btn-lg btn-alt-primary">
-                      <i class="fa fa-fw fa-sign-in-alt me-1 opacity-50" href="home"></i> LOGIN
-                    </button>
+                    <a type="submit" class="btn btn-lg btn-alt-primary" href="home">
+                      <i class="fa fa-fw fa-sign-in-alt me-1 opacity-50"></i> LOGIN
+                    </a>
                   </div>
                 </div>
               </form>
@@ -88,19 +77,8 @@
       </div>
       <div class="px-4 py-3 w-100 d-lg-none d-flex flex-column flex-sm-row justify-content-between fs-sm text-center text-sm-start">
         <p class="fw-medium text-black-50 py-2 mb-0">
-          <strong>OneUI 5.7</strong> &copy; <span data-toggle="year-copy"></span>
+          <strong>SDN Lemahbang</strong> &copy; <span data-toggle="year-copy"></span>
         </p>
-        <ul class="list list-inline py-2 mb-0">
-          <li class="list-inline-item">
-            <a class="text-muted fw-medium" href="javascript:void(0)">Legal</a>
-          </li>
-          <li class="list-inline-item">
-            <a class="text-muted fw-medium" href="javascript:void(0)">Contact</a>
-          </li>
-          <li class="list-inline-item">
-            <a class="text-muted fw-medium" href="javascript:void(0)">Terms</a>
-          </li>
-        </ul>
       </div>
     </div>
   </div>
