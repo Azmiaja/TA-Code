@@ -44,7 +44,7 @@
                         <img style="height: 35px; padding-left: .8rem;" src="assets/media/favicons/logo-tutwuri.png">
                     </span>
                     <span class="smini-hide fs-4 fw-bold tracking-wider" style="padding-left: 1.25rem;">SIAKAD</span><br>
-                    <span class="smini-hide tracking-wider" style="padding-left: 1.25rem;">SDN Lemahbang</span>
+                    <small class="smini-hide tracking-wider" style="padding-left: 1.25rem;">SDN Lemahbang</small>
                 </a>
                 <a class="d-lg-none btn btn-sm ms-1 text-light" data-toggle="layout" data-action="sidebar_close"
                     href="javascript:void(0)">
@@ -87,7 +87,7 @@
                             {{-- End Sub menu manajemen user --}}
                         </li>
                         <li class="nav-main-item {{ $title === 'Manajemen Company' ? 'open' : '' }}">
-                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
+                            <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Company' ? 'active' : '' }}" data-toggle="submenu" aria-haspopup="true"
                                 aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-grid"></i>
                                 <span class="nav-main-link-name">Manajemen Company</span>
@@ -116,7 +116,7 @@
                             </ul>
                         </li>
                         <li class="nav-main-item {{ $title === 'Manajemen Kelas' ? 'open' : '' }}">
-                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
+                            <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Kelas' ? 'active' : '' }}" data-toggle="submenu" aria-haspopup="true"
                                 aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-briefcase"></i>
                                 <span class="nav-main-link-name">Manajemen Kelas</span>
@@ -155,7 +155,7 @@
                             </ul>
                         </li>
                         <li class="nav-main-item {{ $title === 'Manajemen Keuangan' ? 'open' : '' }}">
-                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
+                            <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Keuangan' ? 'active' : '' }}" data-toggle="submenu" aria-haspopup="true"
                                 aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-wallet"></i>
                                 <span class="nav-main-link-name">Manajemen Keuangan</span>
@@ -218,8 +218,8 @@
                                     <span class="fs-sm fw-medium">Profile</span> {{-- Go to profile page --}}
                                     <span class="badge rounded-pill bg-primary ms-2">1</span>
                                     <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                        href="op_auth_signin.html">
-                                        <span class="fs-sm fw-medium">Log Out</span> {{-- To log out --}}
+                                        href="login">
+                                        <span class="fs-sm fw-medium" >Log Out</span> {{-- To log out --}}
                                         <i class="si si-logout me-1"></i>
                                     </a>
                                 </a>

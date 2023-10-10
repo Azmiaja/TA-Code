@@ -22,10 +22,10 @@
       <div class="p-4 p-xl-5 flex-grow-1 d-flex align-items-center">
         <div class="w-100">
           <a class="link-fx fw-semibold fs-2 text-white" href="index.html">
-            SDN Lemahbang
+            Selamat Datang di,
           </a>
           <p class="text-white-75 me-xl-8 mt-2">
-            Selamat datang di website Sistem Informasi Akademik SDN Lemahbang. 
+            Website Resmi Sistem Informasi Akademik SDN Lemahbang. 
           </p>
         </div>
       </div>

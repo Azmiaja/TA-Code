@@ -13587,11 +13587,11 @@ small {
 /* sidebar background */
 #page-container.sidebar-dark #sidebar {
     color: #e9ecef;
-    background-color: #BB2525;
+    background-color: #537188;
 }
 /* sidebar header background */
 #page-container.sidebar-dark #sidebar .content-header {
-    background-color: #BB2525;
+    background-color: #537188;
 }
 #page-container.side-scroll #side-overlay,
 #page-container.side-scroll #sidebar .js-sidebar-scroll {
@@ -14430,6 +14430,7 @@ a.block.block-themed .btn-block-option:focus {
 .page-header-dark #page-header .nav-main-link.active,
 .sidebar-dark #sidebar .nav-main-link.active {
     color: #fff;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 .nav-main-dark .nav-main-link.active > .nav-main-link-icon,
 .page-header-dark #page-header .nav-main-link.active > .nav-main-link-icon,

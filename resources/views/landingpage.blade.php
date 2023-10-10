@@ -110,8 +110,8 @@
                     <ul class="navbar-nav ms-auto mb-2 mb-md-0">
                         <li class="nav-item">
                             <a class="nav-link link-light" aria-current="page" href="login"><i
-                                    class="fa-solid fa-right-to-bracket me-2"></i><span
-                                    class="text-login">Login</span></a>
+                                    class="fa-solid fa-right-to-bracket me-2 opacity-50"></i><span
+                                    class="text-login fw-medium">Login</span></a>
                         </li>
                     </ul>
                 </div>
