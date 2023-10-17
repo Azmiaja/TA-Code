@@ -43,7 +43,8 @@
                     <span class="smini-visible" style="padding-top: 1.25rem;">
                         <img style="height: 35px; padding-left: .8rem;" src="assets/media/favicons/logo-tutwuri.png">
                     </span>
-                    <span class="smini-hide fs-4 fw-bold tracking-wider" style="padding-left: 1.25rem;">SIAKAD</span><br>
+                    <span class="smini-hide fs-4 fw-bold tracking-wider"
+                        style="padding-left: 1.25rem;">SIAKAD</span><br>
                     <small class="smini-hide tracking-wider" style="padding-left: 1.25rem;">SDN Lemahbang</small>
                 </a>
                 <a class="d-lg-none btn btn-sm ms-1 text-light" data-toggle="layout" data-action="sidebar_close"
@@ -87,87 +88,99 @@
                             {{-- End Sub menu manajemen user --}}
                         </li>
                         <li class="nav-main-item {{ $title === 'Manajemen Company' ? 'open' : '' }}">
-                            <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Company' ? 'active' : '' }}" data-toggle="submenu" aria-haspopup="true"
-                                aria-expanded="false" href="#">
+                            <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Company' ? 'active' : '' }}"
+                                data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-grid"></i>
                                 <span class="nav-main-link-name">Manajemen Company</span>
                             </a>
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'profil' ? 'active' : '' }}" href="mcompany-profil">
+                                    <a class="nav-main-link {{ $title2 === 'profil' ? 'active' : '' }}"
+                                        href="mcompany-profil">
                                         <span class="nav-main-link-name">Profil Sekolah</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'sejarah' ? 'active' : '' }}" href="mcompany-sejarah">
+                                    <a class="nav-main-link {{ $title2 === 'sejarah' ? 'active' : '' }}"
+                                        href="mcompany-sejarah">
                                         <span class="nav-main-link-name">Sejarah</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'visimisi' ? 'active' : '' }}" href="mcompany-visimisi">
+                                    <a class="nav-main-link {{ $title2 === 'visimisi' ? 'active' : '' }}"
+                                        href="mcompany-visimisi">
                                         <span class="nav-main-link-name">Visi Misi</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'berita' ? 'active' : '' }}" href="mcompany-berita">
+                                    <a class="nav-main-link {{ $title2 === 'berita' ? 'active' : '' }}"
+                                        href="mcompany-berita">
                                         <span class="nav-main-link-name">Berita Sekolah</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-main-item {{ $title === 'Manajemen Kelas' ? 'open' : '' }}">
-                            <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Kelas' ? 'active' : '' }}" data-toggle="submenu" aria-haspopup="true"
-                                aria-expanded="false" href="#">
+                            <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Kelas' ? 'active' : '' }}"
+                                data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-briefcase"></i>
                                 <span class="nav-main-link-name">Manajemen Kelas</span>
                             </a>
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'bagiguru' ? 'active' : '' }}" href="mkelas-bagiguru">
+                                    <a class="nav-main-link {{ $title2 === 'bagiguru' ? 'active' : '' }}"
+                                        href="mkelas-bagiguru">
                                         <span class="nav-main-link-name">Pembagian Guru</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'bagisiswa' ? 'active' : '' }}" href="mkelas-bagisiswa">
+                                    <a class="nav-main-link {{ $title2 === 'bagisiswa' ? 'active' : '' }}"
+                                        href="mkelas-bagisiswa">
                                         <span class="nav-main-link-name">Pembagian Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'penjadwalan' ? 'active' : '' }}" href="mkelas-penjadwalan">
+                                    <a class="nav-main-link {{ $title2 === 'penjadwalan' ? 'active' : '' }}"
+                                        href="mkelas-penjadwalan">
                                         <span class="nav-main-link-name">Penjadwalan Pelajaran</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'penugasan' ? 'active' : '' }}" href="mkelas-penugasan">
+                                    <a class="nav-main-link {{ $title2 === 'penugasan' ? 'active' : '' }}"
+                                        href="mkelas-penugasan">
                                         <span class="nav-main-link-name">Penugasan Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'penilaian' ? 'active' : '' }}" href="mkelas-penilaian">
+                                    <a class="nav-main-link {{ $title2 === 'penilaian' ? 'active' : '' }}"
+                                        href="mkelas-penilaian">
                                         <span class="nav-main-link-name">Penilaian Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}" href="mkelas-laporan">
+                                    <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}"
+                                        href="mkelas-laporan">
                                         <span class="nav-main-link-name">Laporan Nilai</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-main-item {{ $title === 'Manajemen Keuangan' ? 'open' : '' }}">
-                            <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Keuangan' ? 'active' : '' }}" data-toggle="submenu" aria-haspopup="true"
-                                aria-expanded="false" href="#">
+                            <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Keuangan' ? 'active' : '' }}"
+                                data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-wallet"></i>
                                 <span class="nav-main-link-name">Manajemen Keuangan</span>
                             </a>
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'pemberitahuan' ? 'active' : '' }}" href="mkeuangan-pemberitahuan">
+                                    <a class="nav-main-link {{ $title2 === 'pemberitahuan' ? 'active' : '' }}"
+                                        href="mkeuangan-pemberitahuan">
                                         <span class="nav-main-link-name">Pemberitahuan Pembayaran</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}" href="mkeuangan-laporan">
+                                    <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}"
+                                        href="mkeuangan-laporan">
                                         <span class="nav-main-link-name">Laporan Pembayaran</span>
                                     </a>
                                 </li>
@@ -217,12 +230,16 @@
                                     href="be_pages_generic_profile.html">
                                     <span class="fs-sm fw-medium">Profile</span> {{-- Go to profile page --}}
                                     <span class="badge rounded-pill bg-primary ms-2">1</span>
-                                    <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                        href="login">
-                                        <span class="fs-sm fw-medium" >Log Out</span> {{-- To log out --}}
-                                        <i class="si si-logout me-1"></i>
-                                    </a>
                                 </a>
+                                <form action="/logout" method="post">
+                                    @csrf
+                                    <button
+                                        class="dropdown-item d-flex align-items-center justify-content-between">
+                                        <span class="fs-sm fw-medium">Log Out</span> {{-- To log out --}}
+                                        <i class="si si-logout me-1"></i>
+                                    </button>
+                                </form>
+
                             </div>
                         </div>
                     </div>

@@ -68,8 +68,8 @@
                                 <div class="row g-0 justify-content-center">
                                     <div class="col-sm-8 col-xl-4">
                                         {{-- form login --}}
-                                        <form class="js-validation-signin" action="/register" method="POST">
-                                          @csrf
+                                        <form class="js-validation-signin" action="/authenticate" method="POST">
+                                            @csrf
                                             <div class="mb-4">
                                                 <input type="text"
                                                     class="form-control form-control-lg form-control-alt py-3"
@@ -91,8 +91,21 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        @if ($errors->has('message'))
-                                            <p>{{ $errors->first('message') }}</p>
+                                        @if ($errors->any())
+                                            <div class="alert alert-danger">
+                                                <ul>
+                                                    @foreach ($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+                                        @if (session('loginError'))
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                {{ session('loginError') }}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                    aria-label="Close"></button>
+                                            </div>
                                         @endif
                                     </div>
                                 </div>

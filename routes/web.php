@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Node\CrapIndex;
@@ -22,6 +23,7 @@ use SebastianBergmann\CodeCoverage\Node\CrapIndex;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate');
+Route::post('/logout', [LoginController::class, 'logout']);
 Route::post('/register', [LoginController::class, 'register'])->name('register');
 
 Route::get('/', function () {
@@ -32,7 +34,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     // Route::get('/login', function () {
     //     return view('login', [
@@ -41,12 +43,12 @@ Route::middleware(['auth'])->group(function () {
     //     ]);
     // });
 
-    Route::get('/home', function () {
-        return view('home', [
-            "title" => "Home",
-            "title2" => ""
-        ]);
-    });
+    // Route::get('/home', function () {
+    //     return view('home', [
+    //         "title" => "Home",
+    //         "title2" => ""
+    //     ]);
+    // });
 
     Route::get('/muser-{user}', function ($user) {
         return view("muser/{$user}", [
