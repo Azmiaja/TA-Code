@@ -101,7 +101,7 @@
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="#">SDN Lemahbang</a>
+                <a class="navbar-brand fw-medium" href="#">SDN Lemahbang</a>
                 {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -109,9 +109,9 @@
                 <div class="navbar">
                     <ul class="navbar-nav ms-auto mb-2 mb-md-0">
                         <li class="nav-item">
-                            <a class="nav-link link-light" aria-current="page" href="login"><i
-                                    class="fa-solid fa-right-to-bracket me-2 opacity-50"></i><span
-                                    class="text-login fw-medium">Login</span></a>
+                            <a class="btn btn-lg btn-outline-secondary nav-link link-light " aria-current="page"
+                                href="login"><i class="fa-solid fa-right-to-bracket me-2 opacity-50"></i><span
+                                    class="text-login">Login</span></a>
                         </li>
                     </ul>
                 </div>
@@ -171,7 +171,7 @@
             </button>
         </div>
 
-        <div class="container marketing">
+        <div class="container marketing mb-5">
             <!-- START THE FEATURETTES -->
 
             <hr class="featurette-divider">
@@ -188,8 +188,8 @@
                         width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img"
                         aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><text x="50%"
-                            y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><text x="50%" y="50%"
+                            fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
                     </svg>
                 </div>
             </div>
@@ -208,8 +208,8 @@
                         width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img"
                         aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><text x="50%"
-                            y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><text x="50%" y="50%"
+                            fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
                     </svg>
                 </div>
             </div>
@@ -229,8 +229,8 @@
                         width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img"
                         aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><text x="50%"
-                            y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><text x="50%" y="50%"
+                            fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
                     </svg>
                 </div>
             </div>
@@ -244,8 +244,8 @@
                             xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
                             preserveAspectRatio="xMidYMid slice" focusable="false">
                             <title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c" /><text x="50%"
-                                y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%"
+                                fill="#eceeef" dy=".3em">Thumbnail</text>
                         </svg>
                         <div class="card-body">
                             <p class="card-text">This is a wider card with supporting text below as a natural
@@ -266,8 +266,8 @@
                             xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
                             preserveAspectRatio="xMidYMid slice" focusable="false">
                             <title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c" /><text x="50%"
-                                y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%"
+                                fill="#eceeef" dy=".3em">Thumbnail</text>
                         </svg>
                         <div class="card-body">
                             <p class="card-text">This is a wider card with supporting text below as a natural
@@ -287,8 +287,8 @@
                             xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
                             preserveAspectRatio="xMidYMid slice" focusable="false">
                             <title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c" /><text x="50%"
-                                y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%"
+                                fill="#eceeef" dy=".3em">Thumbnail</text>
                         </svg>
                         <div class="card-body">
                             <p class="card-text">This is a wider card with supporting text below as a natural
@@ -309,8 +309,8 @@
                             xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
                             preserveAspectRatio="xMidYMid slice" focusable="false">
                             <title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c" /><text x="50%"
-                                y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%"
+                                fill="#eceeef" dy=".3em">Thumbnail</text>
                         </svg>
                         <div class="card-body">
                             <p class="card-text">This is a wider card with supporting text below as a natural
@@ -330,8 +330,8 @@
                             xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
                             preserveAspectRatio="xMidYMid slice" focusable="false">
                             <title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c" /><text x="50%"
-                                y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%"
+                                fill="#eceeef" dy=".3em">Thumbnail</text>
                         </svg>
                         <div class="card-body">
                             <p class="card-text">This is a wider card with supporting text below as a natural
@@ -351,8 +351,8 @@
                             xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
                             preserveAspectRatio="xMidYMid slice" focusable="false">
                             <title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c" /><text x="50%"
-                                y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%"
+                                fill="#eceeef" dy=".3em">Thumbnail</text>
                         </svg>
                         <div class="card-body">
                             <p class="card-text">This is a wider card with supporting text below as a natural
@@ -373,8 +373,7 @@
         <!-- FOOTER -->
         <footer class="container">
             <p class="float-end"><a href="#">Back to top</a></p>
-            <p>&copy; 2017–2023 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a
-                    href="#">Terms</a></p>
+            <p>&copy; 2023 SDN Lemahbang.</p>
         </footer>
     </main>
     <script src="assets/js/bootstrap.bundle.js"></script>
