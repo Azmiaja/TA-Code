@@ -16,12 +16,14 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
-    <link rel="shortcut icon" href="assets/media/favicons/logo-tutwuri.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/logo-tutwuri.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/logo-tutwuri.png">
-    <link rel="stylesheet" id="css-main" href="assets/css/oneui.min.css">
-    <link rel="stylesheet" href="assets/js/plugins/fullcalendar/main.min.css">
+    <link rel="shortcut icon" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
+    <link rel="stylesheet" href="assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" id="css-main" href="{{ asset('assets/css/oneui.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/js/plugins/fullcalendar/main.min.css') }}">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script>
+    <script src="assets/js/lib/jquery.min.js"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -41,7 +43,8 @@
             <div class="content-header">
                 <a class="fw-semibold text-dual" href="home">
                     <span class="smini-visible" style="padding-top: 1.25rem;">
-                        <img style="height: 35px; padding-left: .8rem;" src="assets/media/favicons/logo-tutwuri.png">
+                        <img style="height: 35px; padding-left: .8rem;"
+                            src="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
                     </span>
                     <span class="smini-hide fs-4 fw-bold tracking-wider"
                         style="padding-left: 1.25rem;">SIAKAD</span><br>
@@ -231,15 +234,11 @@
                                     <span class="fs-sm fw-medium">Profile</span> {{-- Go to profile page --}}
                                     <span class="badge rounded-pill bg-primary ms-2">1</span>
                                 </a>
-                                <form action="/logout" method="post">
-                                    @csrf
-                                    <button
-                                        class="dropdown-item d-flex align-items-center justify-content-between">
-                                        <span class="fs-sm fw-medium">Log Out</span> {{-- To log out --}}
-                                        <i class="si si-logout me-1"></i>
-                                    </button>
-                                </form>
-
+                                <button class="dropdown-item d-flex align-items-center justify-content-between"
+                                    data-bs-toggle="modal" data-bs-target="#logoutAlert"">
+                                    <span class="fs-sm fw-medium">Log Out</span> {{-- To log out --}}
+                                    <i class="si si-logout me-1"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -279,6 +278,31 @@
             <!-- End Content -->
         </main>
         <footer id="page-footer" class="bg-body-light">
+            {{-- modal konfirmasi logout --}}
+            <div class="modal fade" id="logoutAlert" tabindex="-1" aria-labelledby="logoutModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="logoutModalLabel">Konfirmasi Logout</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Apakah Anda yakin ingin logout?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <form action="/logout" method="post">
+                                @csrf
+                                <button type="submit" class="btn btn-danger">Logout</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="content py-3">
                 <div class="row fs-sm">
                     <div class="col-sm-6 order-sm-2 py-1 text-center text-sm-end">
@@ -292,7 +316,10 @@
             </div>
         </footer>
     </div>
+
     <script src="assets/js/oneui.app.min.js"></script>
+    <script src="assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
     <script src="assets/js/plugins/fullcalendar/main.min.js"></script>
     <script src="assets/js/pages/be_comp_calendar.min.js"></script>
 </body>
