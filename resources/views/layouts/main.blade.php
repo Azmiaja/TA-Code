@@ -19,11 +19,11 @@
     <link rel="shortcut icon" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
-    <link rel="stylesheet" href="assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" id="css-main" href="{{ asset('assets/css/oneui.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/fullcalendar/main.min.css') }}">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script>
-    <script src="assets/js/lib/jquery.min.js"></script>
+    <script src="{{ asset('assets/js/lib/jquery.min.js') }}"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -62,7 +62,8 @@
                 <div class="content-side">
                     <ul class="nav-main">
                         <li class="nav-main-item">
-                            <a class="nav-main-link {{ $title === 'Home' ? 'active' : '' }}" href="home">
+                            <a class="nav-main-link {{ $title === 'Home' ? 'active' : '' }}"
+                                href="{{ route('home') }}">
                                 <i class="nav-main-link-icon si si-home"></i>
                                 <span class="nav-main-link-name">Home</span>
                             </a>
@@ -77,13 +78,13 @@
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'pegawai' ? 'active' : '' }}"
-                                        href="muser-pegawai">
+                                        href="{{ route('muser.pegawai') }}">
                                         <span class="nav-main-link-name">Pegawai</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'siswa' ? 'active' : '' }}"
-                                        href="muser-siswa">
+                                        href="{{route('muser.siswa')}}">
                                         <span class="nav-main-link-name">Siswa</span>
                                     </a>
                                 </li>
@@ -215,8 +216,8 @@
                         <button type="button" class="btn btn-sm btn-alt-secondary d-flex align-items-center"
                             id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
-                            <img class="rounded-circle" src="assets/media/avatars/avatar10.jpg" alt="Header Avatar"
-                                style="width: 21px;">
+                            <img class="rounded-circle" src="{{ asset('assets/media/avatars/avatar10.jpg') }}"
+                                alt="Header Avatar" style="width: 21px;">
                             <span class="d-none d-sm-inline-block ms-2">Syahrul</span> {{-- Username --}}
                             <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block opacity-50 ms-1 mt-1"></i>
                         </button>
@@ -224,7 +225,7 @@
                             aria-labelledby="page-header-user-dropdown">
                             <div class="p-3 text-center bg-body-light border-bottom rounded-top">
                                 <img class="img-avatar img-avatar48 img-avatar-thumb"
-                                    src="assets/media/avatars/avatar10.jpg" alt="">
+                                    src="{{ asset('assets/media/avatars/avatar10.jpg') }}" alt="">
                                 <p class="mt-2 mb-0 fw-medium">Syahrul Nur Hidayatullah</p> {{-- Nama Lengkap --}}
                                 <p class="mb-0 text-muted fs-sm fw-medium">Super Admin</p> {{-- Role --}}
                             </div>
@@ -317,11 +318,11 @@
         </footer>
     </div>
 
-    <script src="assets/js/oneui.app.min.js"></script>
-    <script src="assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="assets/js/plugins/fullcalendar/main.min.js"></script>
-    <script src="assets/js/pages/be_comp_calendar.min.js"></script>
+    <script src="{{ asset('assets/js/oneui.app.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/fullcalendar/main.min.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/be_comp_calendar.min.js') }}"></script>
 </body>
 
 </html>

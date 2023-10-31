@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Muser;
+use App\Http\Controllers\Muser\PegawaiController;
 use App\Http\Controllers\MuserController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Node\CrapIndex;
@@ -37,12 +39,18 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    Route::get('/muser-{user}', function ($user) {
-        return view("muser/{$user}", [
-            "title" => "Manajemen User",
-            "title2" => $user,
-        ]);
-    })->where('user', 'pegawai|siswa');
+    // Route::get('/muser-{user}', function ($user) {
+    //     return view("muser/{$user}", [
+    //         "title" => "Manajemen User",
+    //         "title2" => $user,
+    //     ]);
+    // })->where('user', 'pegawai|siswa');
+
+    Route::prefix('muser')->group(function () {
+        Route::get('pegawai', [Muser\PegawaiController::class, 'index'])->name('muser.pegawai');
+        Route::get('siswa', [Muser\SiswaController::class, 'index'])->name('muser.siswa');
+    });
+    
 
     Route::get('/mcompany-{company}', function ($company) {
         return view("mcompany/{$company}", [

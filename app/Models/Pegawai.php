@@ -13,4 +13,6 @@ class Pegawai extends Model
     protected $guarded = ['idPegawai'];
     protected $primaryKey = 'idPegawai';
     public $timestamps = false;
+
+    
 }
