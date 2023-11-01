@@ -57,11 +57,11 @@
                     <div class="col-6 col-lg-3">
                         <a class="block block-rounded block-link-shadow text-center" href="be_pages_ecom_dashboard.html">
                             <div class="block-content block-content-full">
-                                <div class="fs-2 fw-semibold text-dark">50</div>
+                                <div class="fs-2 fw-semibold text-dark">{{ $jumlahTU }}</div>
                             </div>
                             <div class="block-content py-2 bg-body-light">
                                 <p class="fw-medium fs-sm text-muted mb-0">
-                                    Siswa
+                                    Tata Usaha
                                 </p>
                             </div>
                         </a>
