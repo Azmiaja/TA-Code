@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" id="css-main" href="{{ asset('assets/css/oneui.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/fullcalendar/main.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/js/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.css') }}">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script>
     <script src="{{ asset('assets/js/lib/jquery.min.js') }}"></script>
     <script>
@@ -323,6 +325,12 @@
     <script src="{{ asset('assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/fullcalendar/main.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/be_comp_calendar.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script>
+        One.helpersOnLoad(['jq-select2', 'jq-maxlength', 'js-ckeditor']);
+    </script>
 </body>
 
 </html>

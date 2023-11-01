@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('content')
-<div class="bg-body-light">
+    <div class="bg-body-light">
         <div class="content content-full">
             {{-- Page title pegawai --}}
             <nav class="flex-shrink-0 my-3 mt-sm-0" aria-label="breadcrumb">
@@ -13,6 +13,11 @@
                     </li>
                 </ol>
             </nav>
+            <div class="block block-rounded">
+                <div class="mb-4">
+                    <textarea id="js-ckeditor" name="one-ecom-product-description"></textarea>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
