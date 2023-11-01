@@ -9,7 +9,7 @@
                         <a class="link-fx" href="javascript:void(0)">Manajemen Keuangan</a>
                     </li>
                     <li class="breadcrumb-item" aria-current="page">
-                        Laporan Pembayaran
+                        {{ $title2 }}
                     </li>
                 </ol>
             </nav>

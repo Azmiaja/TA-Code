@@ -84,7 +84,7 @@
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'siswa' ? 'active' : '' }}"
-                                        href="{{route('muser.siswa')}}">
+                                        href="{{ route('muser.siswa') }}">
                                         <span class="nav-main-link-name">Siswa</span>
                                     </a>
                                 </li>
@@ -100,25 +100,25 @@
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'profil' ? 'active' : '' }}"
-                                        href="mcompany-profil">
+                                        href="{{ route('mcompany.profil') }}">
                                         <span class="nav-main-link-name">Profil Sekolah</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'sejarah' ? 'active' : '' }}"
-                                        href="mcompany-sejarah">
+                                        href="{{ route('mcompany.sejarah') }}">
                                         <span class="nav-main-link-name">Sejarah</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'visimisi' ? 'active' : '' }}"
-                                        href="mcompany-visimisi">
+                                        href="{{ route('mcompany.visimisi') }}">
                                         <span class="nav-main-link-name">Visi Misi</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'berita' ? 'active' : '' }}"
-                                        href="mcompany-berita">
+                                        href="{{ route('mcompany.berita') }}">
                                         <span class="nav-main-link-name">Berita Sekolah</span>
                                     </a>
                                 </li>
@@ -133,37 +133,37 @@
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'bagiguru' ? 'active' : '' }}"
-                                        href="mkelas-bagiguru">
+                                        href="{{ route('mkelas.bagiguru') }}">
                                         <span class="nav-main-link-name">Pembagian Guru</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'bagisiswa' ? 'active' : '' }}"
-                                        href="mkelas-bagisiswa">
+                                        href="{{ route('mkelas.bagisiswa') }}">
                                         <span class="nav-main-link-name">Pembagian Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'penjadwalan' ? 'active' : '' }}"
-                                        href="mkelas-penjadwalan">
+                                        href="{{ route('mkelas.penjadwalan') }}">
                                         <span class="nav-main-link-name">Penjadwalan Pelajaran</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'penugasan' ? 'active' : '' }}"
-                                        href="mkelas-penugasan">
+                                        href="{{ route('mkelas.penugasan') }}">
                                         <span class="nav-main-link-name">Penugasan Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'penilaian' ? 'active' : '' }}"
-                                        href="mkelas-penilaian">
+                                        href="{{ route('mkelas.penilaian') }}">
                                         <span class="nav-main-link-name">Penilaian Siswa</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}"
-                                        href="mkelas-laporan">
+                                        href="{{ route('mkelas.laporan') }}">
                                         <span class="nav-main-link-name">Laporan Nilai</span>
                                     </a>
                                 </li>
@@ -178,13 +178,13 @@
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'pemberitahuan' ? 'active' : '' }}"
-                                        href="mkeuangan-pemberitahuan">
+                                        href="{{ route('mkeuangan.pemberitahuan') }}">
                                         <span class="nav-main-link-name">Pemberitahuan Pembayaran</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}"
-                                        href="mkeuangan-laporan">
+                                        href="{{ route('mkeuangan.laporan') }}">
                                         <span class="nav-main-link-name">Laporan Pembayaran</span>
                                     </a>
                                 </li>

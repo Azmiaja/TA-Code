@@ -3,10 +3,10 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Muser;
-use App\Http\Controllers\Muser\PegawaiController;
-use App\Http\Controllers\MuserController;
+use App\Http\Controllers\Mkeuangan;
+use App\Http\Controllers\Mkelas;
+use App\Http\Controllers\Mcompany;
 use Illuminate\Support\Facades\Route;
-use SebastianBergmann\CodeCoverage\Node\CrapIndex;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,39 +39,31 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    // Route::get('/muser-{user}', function ($user) {
-    //     return view("muser/{$user}", [
-    //         "title" => "Manajemen User",
-    //         "title2" => $user,
-    //     ]);
-    // })->where('user', 'pegawai|siswa');
-
     Route::prefix('muser')->group(function () {
         Route::get('pegawai', [Muser\PegawaiController::class, 'index'])->name('muser.pegawai');
         Route::get('siswa', [Muser\SiswaController::class, 'index'])->name('muser.siswa');
     });
-    
 
-    Route::get('/mcompany-{company}', function ($company) {
-        return view("mcompany/{$company}", [
-            "title" => "Manajemen Company",
-            "title2" => $company,
-        ]);
-    })->where('company', 'berita|profil|sejarah|visimisi');
+    Route::prefix('mkeuangan')->group(function () {
+        Route::get('laporan', [Mkeuangan\LaporanController::class, 'index'])->name('mkeuangan.laporan');
+        Route::get('pemberitahuan', [Mkeuangan\PemberitahuanController::class, 'index'])->name('mkeuangan.pemberitahuan');
+    });
 
-    Route::get('/mkelas-{kelas}', function ($kelas) {
-        return view("mkelas/{$kelas}", [
-            "title" => "Manajemen Kelas",
-            "title2" => $kelas,
-        ]);
-    })->where('kelas', 'bagiguru|bagisiswa|laporan|penilaian|penjadwalan|penugasan');
+    Route::prefix('mkelas')->group(function () {
+        Route::get('bagiguru', [Mkelas\BagiGuruController::class, 'index'])->name('mkelas.bagiguru');
+        Route::get('bagisiswa', [Mkelas\BagiSiswaController::class, 'index'])->name('mkelas.bagisiswa');
+        Route::get('laporan', [Mkelas\LaporanController::class, 'index'])->name('mkelas.laporan');
+        Route::get('penilaian', [Mkelas\PenilaianController::class, 'index'])->name('mkelas.penilaian');
+        Route::get('penjadwalan', [Mkelas\PenjadwalanController::class, 'index'])->name('mkelas.penjadwalan');
+        Route::get('penugasan', [Mkelas\PenugasanController::class, 'index'])->name('mkelas.penugasan');
+    });
 
-    Route::get('/mkeuangan-{keuangan}', function ($keuangan) {
-        return view("mkeuangan/{$keuangan}", [
-            "title" => "Manajemen Keuangan",
-            "title2" => $keuangan,
-        ]);
-    })->where('keuangan', 'laporan|pemberitahuan');
+    Route::prefix('mcompany')->group(function () {
+        Route::get('berita', [Mcompany\BeritaController::class, 'index'])->name('mcompany.berita');
+        Route::get('profil', [Mcompany\ProfilController::class, 'index'])->name('mcompany.profil');
+        Route::get('sejarah', [Mcompany\SejarahController::class, 'index'])->name('mcompany.sejarah');
+        Route::get('visimisi', [Mcompany\VisiMisiController::class, 'index'])->name('mcompany.visimisi');
+    });
 });
 
 

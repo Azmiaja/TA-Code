@@ -9,7 +9,7 @@
                         <a class="link-fx" href="javascript:void(0)">Manajemen Kelas</a>
                     </li>
                     <li class="breadcrumb-item" aria-current="page">
-                        Pembagian Siswa
+                        {{ $title2 }}
                     </li>
                 </ol>
             </nav>

@@ -11,7 +11,7 @@ class HomeController extends Controller
     {
         return view('home', [
             'title' => 'Home',
-            'title2' => '',
+            'title2' => 'Home',
         ]);
     }
 }

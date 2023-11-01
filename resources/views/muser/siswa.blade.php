@@ -9,7 +9,7 @@
                         <a class="link-fx" href="javascript:void(0)">Manajemen User</a>
                     </li>
                     <li class="breadcrumb-item" aria-current="page">
-                        Siswa
+                        {{ $title2 }}
                     </li>
                 </ol>
                 <div class="content">

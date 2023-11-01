@@ -9,7 +9,7 @@
                         <a class="link-fx" href="javascript:void(0)">Manajemen User</a>
                     </li>
                     <li class="breadcrumb-item" aria-current="page">
-                        Pegawai
+                        {{ $title2 }}
                     </li>
                 </ol>
             </nav>
@@ -73,7 +73,7 @@
                     <h3 class="block-title">Table Pegawai</h3>
                 </div>
                 <div class="block-content block-content-full">
-                    <table id="tabelPegawai" class="table table-bordered table-striped table-vcenter ">
+                    <table id="tabelPegawai" class="table table-bordered table-striped table-vcenter">
                         <thead>
                             <tr>
                                 <th>No</th>
