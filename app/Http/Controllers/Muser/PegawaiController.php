@@ -12,10 +12,12 @@ class PegawaiController extends Controller
     {
         $pegawai = Pegawai::all(); // Gantilah dengan model dan nama tabel yang sesuai
         $jumlahGuru = Pegawai::where('jenisPegawai', 'Guru')->count();
+        $jumlahAdmin = Pegawai::where('jenisPegawai', 'Admin')->count();
         return view('muser.pegawai', compact('pegawai'), [
             'title' => 'Manajemen User',
             'title2' => 'Pegawai',
             'jumlahGuru' => $jumlahGuru,
+            'jumlahAdmin' => $jumlahAdmin,
             
         ]);
     }

@@ -33,7 +33,7 @@
                     <div class="col-6 col-lg-3">
                         <a class="block block-rounded block-link-shadow text-center" href="javascript:void(0)">
                             <div class="block-content block-content-full">
-                                <div class="fs-2 fw-semibold text-danger">1</div>
+                                <div class="fs-2 fw-semibold text-danger">{{ $jumlahAdmin }}</div>
                             </div>
                             <div class="block-content py-2 bg-body-light">
                                 <p class="fw-medium fs-sm text-danger mb-0">
