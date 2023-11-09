@@ -11,8 +11,16 @@
                     <li class="breadcrumb-item" aria-current="page">
                         {{ $title2 }}
                     </li>
+                    <li class="breadcrumb-item" aria-current="page">
+                        {{ $title2 }}
+                    </li>
                 </ol>
             </nav>
+            <div class="block block-rounded">
+                <div class="mb-4">
+                    <textarea id="js-ckeditor" name="one-ecom-product-description"></textarea>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
