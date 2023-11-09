@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LandingController;
+use App\Http\Controllers\LihatBeritaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Muser;
 use App\Http\Controllers\Mkeuangan;
@@ -18,23 +20,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Route::get('/login', LoginController@index);
-// Route::namespace('App\Http\Controllers')->group(function () {
-//     Route::get('/login', 'LoginController@index');
-//     Route::post('/login', 'LoginController@login');
-// });
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate');
 Route::post('/logout', [LoginController::class, 'logout']);
 Route::post('/register', [LoginController::class, 'register'])->name('register');
 
-Route::get('/', function () {
-    return view('landingpage', [
-        "title" => "SDN Lemahbang",
-        "title2" => ""
-    ]);
-});
+Route::get('/berita-sekolah/{id}/{slug}', [LihatBeritaController::class, 'show'])->name('lihatberita');
+Route::get('/', [LandingController::class, 'index'])->name('landingpage');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -59,12 +52,18 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('mcompany')->group(function () {
-        Route::get('berita', [Mcompany\BeritaController::class, 'index'])->name('mcompany.berita');
+        Route::resource('berita', Mcompany\BeritaController::class);
         Route::get('profil', [Mcompany\ProfilController::class, 'index'])->name('mcompany.profil');
         Route::get('sejarah', [Mcompany\SejarahController::class, 'index'])->name('mcompany.sejarah');
         Route::get('visimisi', [Mcompany\VisiMisiController::class, 'index'])->name('mcompany.visimisi');
+        
     });
+
+    
+
+    
 });
+
 
 
 //

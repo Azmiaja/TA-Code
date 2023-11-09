@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/fullcalendar/main.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/js/plugins/flatpickr/flatpickr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/js/plugins/flatpickr/themes/material_red.css') }}">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script>
     <script src="{{ asset('assets/js/lib/jquery.min.js') }}"></script>
     <script>
@@ -35,6 +37,17 @@
         gtag('js', new Date());
         gtag('config', 'G-9HQDQJJYW7');
     </script>
+    <style>
+        .ellipse {
+            /* width: 300px; */
+            display: -webkit-box;
+            -webkit-line-clamp: 6;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
+        }
+    </style>
 </head>
 
 <body>
@@ -120,7 +133,7 @@
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'berita' ? 'active' : '' }}"
-                                        href="{{ route('mcompany.berita') }}">
+                                        href="{{ route('berita.index') }}">
                                         <span class="nav-main-link-name">Berita Sekolah</span>
                                     </a>
                                 </li>
@@ -323,13 +336,17 @@
     <script src="{{ asset('assets/js/oneui.app.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/fullcalendar/main.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/be_comp_calendar.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugins/ckeditor/ckeditor.js') }}"></script>
-    <script src="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/plugins/ckeditor/ckeditor.js') }}"></script> --}}
     <script src="{{ asset('assets/js/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/flatpickr/flatpickr.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.js') }}"></script>
+
     <script>
-        One.helpersOnLoad(['jq-select2', 'jq-maxlength', 'js-ckeditor']);
+        One.helpersOnLoad(['js-ckeditor5', 'js-flatpickr']);
     </script>
 </body>
 

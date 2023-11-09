@@ -12,60 +12,61 @@
                         {{ $title2 }}
                     </li>
                 </ol>
-                <div class="content">
-                <div class="row">
-                    <div class="col-6 col-lg-3">
-                    <a class="block block-rounded block-link-shadow text-center" href="be_pages_ecom_product_edit.html">
-                        <div class="block-content block-content-full">
+            </nav>
+        </div>
+    </div>
+    <div class="content">
+        <div class="row">
+            <div class="col-6 col-lg-3">
+                <a class="block block-rounded block-link-shadow text-center" href="be_pages_ecom_product_edit.html">
+                    <div class="block-content block-content-full">
                         <div class="fs-2 fw-semibold text-success">
                             <i class="fa fa-plus"></i>
                         </div>
-                        </div>
-                        <div class="block-content py-2 bg-body-light">
+                    </div>
+                    <div class="block-content py-2 bg-body-light">
                         <p class="fw-medium fs-sm text-success mb-0">
                             Tambah Pegawai
                         </p>
-                        </div>
-                    </a>
                     </div>
-                    <div class="col-6 col-lg-3">
-                    <a class="block block-rounded block-link-shadow text-center" href="javascript:void(0)">
-                        <div class="block-content block-content-full">
+                </a>
+            </div>
+            <div class="col-6 col-lg-3">
+                <a class="block block-rounded block-link-shadow text-center" href="javascript:void(0)">
+                    <div class="block-content block-content-full">
                         <div class="fs-2 fw-semibold text-danger">1</div>
-                        </div>
-                        <div class="block-content py-2 bg-body-light">
+                    </div>
+                    <div class="block-content py-2 bg-body-light">
                         <p class="fw-medium fs-sm text-danger mb-0">
                             Admin
                         </p>
-                        </div>
-                    </a>
                     </div>
-                    <div class="col-6 col-lg-3">
-                    <a class="block block-rounded block-link-shadow text-center">
-                        <div class="block-content block-content-full">
+                </a>
+            </div>
+            <div class="col-6 col-lg-3">
+                <a class="block block-rounded block-link-shadow text-center">
+                    <div class="block-content block-content-full">
                         <div class="fs-2 fw-semibold text-dark">15</div>
-                        </div>
-                        <div class="block-content py-2 bg-body-light">
+                    </div>
+                    <div class="block-content py-2 bg-body-light">
                         <p class="fw-medium fs-sm text-muted mb-0">
                             Guru
                         </p>
-                        </div>
-                    </a>
                     </div>
-                    <div class="col-6 col-lg-3">
-                    <a class="block block-rounded block-link-shadow text-center" href="be_pages_ecom_dashboard.html">
-                        <div class="block-content block-content-full">
+                </a>
+            </div>
+            <div class="col-6 col-lg-3">
+                <a class="block block-rounded block-link-shadow text-center" href="be_pages_ecom_dashboard.html">
+                    <div class="block-content block-content-full">
                         <div class="fs-2 fw-semibold text-dark">50</div>
-                        </div>
-                        <div class="block-content py-2 bg-body-light">
+                    </div>
+                    <div class="block-content py-2 bg-body-light">
                         <p class="fw-medium fs-sm text-muted mb-0">
                             Siswa
                         </p>
-                        </div>
-                    </a>
                     </div>
-                </div>
-            </nav>
+                </a>
+            </div>
         </div>
     </div>
 @endsection
