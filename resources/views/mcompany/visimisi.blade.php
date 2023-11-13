@@ -51,9 +51,217 @@
                     <th>Aksi</th>
                 </tr>
             </thead>
+            <tbody>
+                @foreach ($berita as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->tanggalBerita }}</td>
+                                <td>{{ $item->judulBerita }}</td>
+                                <td>
+                                    <div class="ellipse">{!! $item->isiBerita !!}</div>
+                                </td>
+                                <td class="text-center">
+                                    @if ($item->gambar)
+                                        <img src="{{ Storage::url($item->gambar) }}" height="100px">
+                                    @else
+                                        <em class="opacity-50">Gambar tidak ditemukan</em>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($item->sumberBerita)
+                                        {{ $item->sumberBerita }}
+                                    @else
+                                        <em class="opacity-50">Sumber berita tidak tercantum</em>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                            data-bs-target="#modalEdit{{ $item->idBerita }}"><i class="fa fa-edit"></i></a>
+                                        <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#deletModal{{ $item->idBerita }}">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            {{-- Modal --}}
+                            {{-- Modal Edit --}}
+                            <div class="modal fade" id="modalEdit{{ $item->idBerita }}" data-bs-backdrop="static"
+                                data-bs-keyboard="false">
+                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header text-light" style="background-color: #537188" data-bs-theme="dark">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Berita</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ route('berita.update', $item) }}" enctype="multipart/form-data"
+                                            method="POST">
+                                            @csrf
+                                            @method('put')
+                                            <div class="modal-body">
+                                                <input type="text" name="idBerita" value="{{ $item->idBerita }}" hidden>
+                                                <div class="mb-4">
+                                                    <label class="form-label" for="judulBerita">Judul Berita</label>
+                                                    <input type="text" class="form-control" id="judulBerita"
+                                                        name="judulBerita" placeholder="Judul Berita Anda.."
+                                                        value="{{ $item->judulBerita }}">
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label class="form-label" for="gambarBerita">Gambar Berita</label>
+                                                    <div class="row ms-1 mb-2 p-0">
+                                                        <div class="col-auto border rounded-2">
+                                                            <div class="m-3">
+                                                                <img src="{{ Storage::url($item->gambar) }}"
+                                                                    alt="{{ $item->gambar }}" height="150">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <input class="form-control" type="file" name="gambar"
+                                                        id="gambarBerita" accept="image/*">
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label class="form-label" for="isiBerita">Isi Berita</label>
+                                                    <textarea id="js-ckeditor5-classic-edit-{{ $item->idBerita }}" class="form-control" name="isiBerita">{{ $item->isiBerita }}</textarea>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <div class="row g-4 m-0">
+                                                        <div class="col-lg-4 col-sm-12 col-12 ps-0">
+                                                            <label class="form-label" for="tanggalBerita">Tanggal
+                                                                Berita</label>
+                                                            @php
+                                                                $carbonDate = \Carbon\Carbon::parse($item->tanggalBerita);
+                                                            @endphp
+                                                            <input type="text" class="form-control"
+                                                                id="js-flatpickr-edit-{{ $item->idBerita }}"
+                                                                name="tanggalBerita" placeholder="d-m-Y"
+                                                                data-date-format="d-m-Y"
+                                                                value="{{ $carbonDate->format('d.m.Y') }}">
+                                                        </div>
+                                                        <div class="col-lg-8 col-sm-12 col-12">
+                                                            <label class="form-label" for="sumberBerita">Sumber
+                                                                Berita</label>
+                                                            <input type="text" class="form-control" id="sumberBerita"
+                                                                name="sumberBerita" placeholder="Sumber Berita Anda.."
+                                                                value="{{ $item->sumberBerita }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal Hapus -->
+                            <div class="modal fade" id="deletModal{{ $item->idBerita }}" tabindex="-1"
+                                aria-labelledby="deletModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header text-light" style="background-color: #537188" data-bs-theme="dark">
+                                            <h1 class="modal-title fs-5" id="deletModalLabel">Hapus Berita</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ route('berita.destroy', $item->idBerita) }}" method="POST">
+                                            @csrf
+                                            @method('delete')
+                                            <div class="modal-body mt-3">
+                                                Apakah Anda ingin menghapus berita <strong>"{{ $item->judulBerita }}"
+                                                    ?</strong>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-danger">Hapus Berita</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script>
+                                $(document).ready(function() {
+                                    var dataId = {{ $item->idBerita }};
+
+                                    ClassicEditor.create(document.querySelector('#js-ckeditor5-classic-edit-' + dataId))
+                                        .then(editor => {
+                                            console.log(editor);
+                                        })
+                                        .catch(error => {
+                                            console.error(error);
+                                        });
+
+                                    $('#js-flatpickr-edit-' + dataId).flatpickr({
+                                        dateFormat: "d-m-Y",
+                                        theme: "red",
+                                    });
+
+                                });
+                            </script>
+                        @endforeach
+            </tbody>
         </table>
     </div>
 </div>
+
+<!-- Modal Insert-->
+    <div class="modal fade" id="modalInsert" tabindex="-1" data-bs-backdrop="static"
+    data-bs-keyboard="false" aria-labelledby="modalInsertLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-light" style="background-color: #537188" data-bs-theme="dark">
+                    <h1 class="modal-title fs-5" id="modalInsertLabel">Insert Berita</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('berita.store') }}" enctype="multipart/form-data" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-4">
+                            <label class="form-label" for="judulBerita">Judul Berita</label>
+                            <input type="text" class="form-control" id="judulBerita" name="judulBerita"
+                                placeholder="Judul Berita Anda..">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="gambarBerita">Gambar Berita</label>
+                            <input class="form-control" type="file" name="gambar" id="gambarBerita"
+                                accept="image/*">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="isiBerita">Isi Berita</label>
+                            <textarea id="js-ckeditor5-classic" class="form-control" name="isiBerita"></textarea>
+
+                        </div>
+                        <div class="mb-4">
+                            <div class="row m-0">
+                                <div class="col-lg-4 col-sm-12 col-12 px-0 mb-sm-0 mb-4">
+                                    <label class="form-label" for="tanggalBerita">Tanggal Berita</label>
+                                    <input type="text" class="form-control js-flatpickr" id="tanggalBerita"
+                                        name="tanggalBerita" placeholder="d-m-Y" data-date-format="d-m-Y">
+                                </div>
+                                <div class="col-lg-8 col-sm-12 col-12 px-0 ps-lg-3 ps-0">
+                                    <label class="form-label" for="sumberBerita">Sumber Berita</label>
+                                    <input type="text" class="form-control" id="sumberBerita" name="sumberBerita"
+                                        placeholder="Sumber Berita Anda..">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 <script>
     $(document).ready(function() {

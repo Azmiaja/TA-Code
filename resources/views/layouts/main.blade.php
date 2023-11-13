@@ -56,7 +56,7 @@
         <nav id="sidebar" aria-label="Main Navigation">
             {{-- Sidebar header --}}
             <div class="content-header">
-                <a class="fw-semibold text-dual" href="home">
+                <a class="fw-semibold text-dual" href="{{ route('home') }}">
                     <span class="smini-visible" style="padding-top: 1.25rem;">
                         <img style="height: 35px; padding-left: .8rem;"
                             src="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
@@ -76,6 +76,15 @@
             <div class="js-sidebar-scroll">
                 <div class="content-side">
                     <ul class="nav-main">
+                        @canany(['admin'])
+                            <li class="nav-main-item">
+                                <a class="nav-main-link {{ $title === 'Dashboard' ? 'active' : '' }}"
+                                    href="{{ route('dashboard') }}">
+                                    <i class="nav-main-link-icon si si-grid"></i>
+                                    <span class="nav-main-link-name">Dashboard</span>
+                                </a>
+                            </li>
+                        @endcanany
                         <li class="nav-main-item">
                             <a class="nav-main-link {{ $title === 'Home' ? 'active' : '' }}"
                                 href="{{ route('home') }}">
@@ -83,112 +92,145 @@
                                 <span class="nav-main-link-name">Home</span>
                             </a>
                         </li>
-                        <li class="nav-main-item {{ $title === 'Manajemen User' ? 'open' : '' }}">
-                            <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen User' ? 'active' : '' }}"
-                                data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="?#">
-                                <i class="nav-main-link-icon si si-users"></i>
-                                <span class="nav-main-link-name">Manajemen User</span>
-                            </a>
-                            {{-- Sub menu manajemen user --}}
-                            <ul class="nav-main-submenu">
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'pegawai' ? 'active' : '' }}"
-                                        href="{{ route('muser.pegawai') }}">
-                                        <span class="nav-main-link-name">Pegawai</span>
-                                    </a>
-                                </li>
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'siswa' ? 'active' : '' }}"
-                                        href="{{ route('muser.siswa') }}">
-                                        <span class="nav-main-link-name">Siswa</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            {{-- End Sub menu manajemen user --}}
-                        </li>
-                        <li class="nav-main-item {{ $title === 'Manajemen Company' ? 'open' : '' }}">
-                            <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Company' ? 'active' : '' }}"
-                                data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-                                <i class="nav-main-link-icon si si-grid"></i>
-                                <span class="nav-main-link-name">Manajemen Company</span>
-                            </a>
-                            <ul class="nav-main-submenu">
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'profil' ? 'active' : '' }}"
-                                        href="{{ route('mcompany.profil') }}">
-                                        <span class="nav-main-link-name">Profil Sekolah</span>
-                                    </a>
-                                </li>
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'sejarah' ? 'active' : '' }}"
-                                        href="{{ route('mcompany.sejarah') }}">
-                                        <span class="nav-main-link-name">Sejarah</span>
-                                    </a>
-                                </li>
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'visimisi' ? 'active' : '' }}"
-                                        href="{{ route('mcompany.visimisi') }}">
-                                        <span class="nav-main-link-name">Visi Misi</span>
-                                    </a>
-                                </li>
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'berita' ? 'active' : '' }}"
-                                        href="{{ route('berita.index') }}">
-                                        <span class="nav-main-link-name">Berita Sekolah</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        @canany(['admin'])
+                            <li class="nav-main-item {{ $title === 'Manajemen User' ? 'open' : '' }}">
+                                <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen User' ? 'active' : '' }}"
+                                    data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="?#">
+                                    <i class="nav-main-link-icon si si-users"></i>
+                                    <span class="nav-main-link-name">Manajemen User</span>
+                                </a>
+                                {{-- Sub menu manajemen user --}}
+                                <ul class="nav-main-submenu">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'Pegawai' ? 'active' : '' }}"
+                                            href="{{ route('pegawai.index') }}">
+                                            <span class="nav-main-link-name">Pegawai</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'Siswa' ? 'active' : '' }}"
+                                            href="{{ route('siswa.index') }}">
+                                            <span class="nav-main-link-name">Siswa</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                {{-- End Sub menu manajemen user --}}
+                            </li>
+                            <li class="nav-main-item {{ $title === 'Manajemen Company' ? 'open' : '' }}">
+                                <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Company' ? 'active' : '' }}"
+                                    data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                                    <i class="nav-main-link-icon si si-grid"></i>
+                                    <span class="nav-main-link-name">Manajemen Company</span>
+                                </a>
+                                <ul class="nav-main-submenu">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'profil' ? 'active' : '' }}"
+                                            href="{{ route('profil.index') }}">
+                                            <span class="nav-main-link-name">Profil Sekolah</span>
+                                        </a>
+                                    </li>
+                                    {{-- <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'sejarah' ? 'active' : '' }}"
+                                            href="{{ route('sejarah.index') }}">
+                                            <span class="nav-main-link-name">Sejarah</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'visimisi' ? 'active' : '' }}"
+                                            href="{{ route('mcompany.visimisi') }}">
+                                            <span class="nav-main-link-name">Visi Misi</span>
+                                        </a>
+                                    </li> --}}
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'berita' ? 'active' : '' }}"
+                                            href="{{ route('berita.index') }}">
+                                            <span class="nav-main-link-name">Berita Sekolah</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endcanany
                         <li class="nav-main-item {{ $title === 'Manajemen Kelas' ? 'open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Kelas' ? 'active' : '' }}"
                                 data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-briefcase"></i>
-                                <span class="nav-main-link-name">Manajemen Kelas</span>
+                                <span class="nav-main-link-name">
+                                    @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin')
+                                        Manajemen Kelas
+                                    @elseif (Auth::user()->hakAkses == 'Siswa')
+                                        Kelas {{ Auth::user()->kelas }}
+                                    @endif
+                                </span>
                             </a>
                             <ul class="nav-main-submenu">
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'bagiguru' ? 'active' : '' }}"
-                                        href="{{ route('mkelas.bagiguru') }}">
-                                        <span class="nav-main-link-name">Pembagian Guru</span>
-                                    </a>
-                                </li>
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'bagisiswa' ? 'active' : '' }}"
-                                        href="{{ route('mkelas.bagisiswa') }}">
-                                        <span class="nav-main-link-name">Pembagian Siswa</span>
-                                    </a>
-                                </li>
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'penjadwalan' ? 'active' : '' }}"
-                                        href="{{ route('mkelas.penjadwalan') }}">
-                                        <span class="nav-main-link-name">Penjadwalan Pelajaran</span>
-                                    </a>
-                                </li>
+                                @canany(['admin', 'guru'])
+                                    @canany(['admin'])
+                                        <li class="nav-main-item">
+                                            <a class="nav-main-link {{ $title2 === 'bagiguru' ? 'active' : '' }}"
+                                                href="{{ route('mkelas.bagiguru') }}">
+                                                <span class="nav-main-link-name">Pembagian Guru</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-main-item">
+                                            <a class="nav-main-link {{ $title2 === 'bagisiswa' ? 'active' : '' }}"
+                                                href="{{ route('mkelas.bagisiswa') }}">
+                                                <span class="nav-main-link-name">Pembagian Siswa</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-main-item">
+                                            <a class="nav-main-link {{ $title2 === 'penjadwalan' ? 'active' : '' }}"
+                                                href="{{ route('mkelas.penjadwalan') }}">
+                                                <span class="nav-main-link-name">Penjadwalan Pelajaran</span>
+                                            </a>
+                                        </li>
+                                    @endcanany
+
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}"
+                                            href="{{ route('mkelas.laporan') }}">
+                                            <span class="nav-main-link-name">Laporan Nilai</span>
+                                        </a>
+                                    </li>
+                                @endcanany
+                                {{-- @canany(['Siswa']) --}}
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'penugasan' ? 'active' : '' }}"
                                         href="{{ route('mkelas.penugasan') }}">
-                                        <span class="nav-main-link-name">Penugasan Siswa</span>
+                                        <span class="nav-main-link-name">
+                                            @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin')
+                                                Penugasan Siswa
+                                            @elseif (Auth::user()->hakAkses == 'Siswa')
+                                                Tugas
+                                            @endif
+                                        </span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'penilaian' ? 'active' : '' }}"
                                         href="{{ route('mkelas.penilaian') }}">
-                                        <span class="nav-main-link-name">Penilaian Siswa</span>
+                                        <span class="nav-main-link-name">
+                                            @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin')
+                                                Penilaian Siswa
+                                            @elseif (Auth::user()->hakAkses == 'Siswa')
+                                                Nilai
+                                            @endif
+                                        </span>
                                     </a>
                                 </li>
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}"
-                                        href="{{ route('mkelas.laporan') }}">
-                                        <span class="nav-main-link-name">Laporan Nilai</span>
-                                    </a>
-                                </li>
+                                {{-- @endcanany --}}
                             </ul>
                         </li>
                         <li class="nav-main-item {{ $title === 'Manajemen Keuangan' ? 'open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Keuangan' ? 'active' : '' }}"
                                 data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-wallet"></i>
-                                <span class="nav-main-link-name">Manajemen Keuangan</span>
+                                <span class="nav-main-link-name">
+                                    @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin')
+                                        Manajemen Keuangan
+                                    @elseif (Auth::user()->hakAkses == 'Siswa')
+                                        Keuangan
+                                    @endif
+                                </span>
                             </a>
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
@@ -197,12 +239,14 @@
                                         <span class="nav-main-link-name">Pemberitahuan Pembayaran</span>
                                     </a>
                                 </li>
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}"
-                                        href="{{ route('mkeuangan.laporan') }}">
-                                        <span class="nav-main-link-name">Laporan Pembayaran</span>
-                                    </a>
-                                </li>
+                                @canany(['admin', 'guru'])
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}"
+                                            href="{{ route('mkeuangan.laporan') }}">
+                                            <span class="nav-main-link-name">Laporan Pembayaran</span>
+                                        </a>
+                                    </li>
+                                @endcanany
                             </ul>
                         </li>
                     </ul>
@@ -233,7 +277,8 @@
                             aria-expanded="false">
                             <img class="rounded-circle" src="{{ asset('assets/media/avatars/avatar10.jpg') }}"
                                 alt="Header Avatar" style="width: 21px;">
-                            <span class="d-none d-sm-inline-block ms-2">Syahrul</span> {{-- Username --}}
+                            <span class="d-none d-sm-inline-block ms-2">{{ Auth::user()->username }}</span>
+                            {{-- Username --}}
                             <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block opacity-50 ms-1 mt-1"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-md dropdown-menu-end p-0 border-0"
@@ -241,8 +286,15 @@
                             <div class="p-3 text-center bg-body-light border-bottom rounded-top">
                                 <img class="img-avatar img-avatar48 img-avatar-thumb"
                                     src="{{ asset('assets/media/avatars/avatar10.jpg') }}" alt="">
-                                <p class="mt-2 mb-0 fw-medium">Syahrul Nur Hidayatullah</p> {{-- Nama Lengkap --}}
-                                <p class="mb-0 text-muted fs-sm fw-medium">Super Admin</p> {{-- Role --}}
+                                <p class="mt-2 mb-0 fw-medium">
+                                    @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin')
+                                        {{ Auth::user()->pegawai->namaPegawai }}
+                                    @elseif (Auth::user()->hakAkses == 'Siswa')
+                                        {{ Auth::user()->namaSiswa }}
+                                    @endif
+                                </p> {{-- Nama Lengkap --}}
+                                <p class="mb-0 text-muted fs-sm fw-medium">{{ Auth::user()->hakAkses }}</p>
+                                {{-- Role --}}
                             </div>
                             <div class="p-2">
                                 <a class="dropdown-item d-flex align-items-center justify-content-between"

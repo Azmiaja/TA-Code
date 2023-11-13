@@ -139,7 +139,27 @@
         .red-effect:hover {
             color: red;
         }
+
+        .tx-effect {
+            color: rgb(255, 255, 255);
+            transition: color 0.2s ease;
+        }
+
+        .tx-effect:hover {
+            color: rgb(206, 206, 206);
+        }
+
+        .img-opz {
+            opacity: 50%;
+            transition: 0.5s ease;
+        }
+
+        .img-opz:hover {
+            opacity: 100%;
+        }
     </style>
+
+    <script src="{{ asset('assets/js/bootstrap.bundle.js') }}"></script>
 </head>
 
 <body>
@@ -168,14 +188,16 @@
         </nav>
     </header>
 
-    @yield('landing')
+    <main>
+        @yield('landing')
+    </main>
 
     <!-- FOOTER -->
     <footer class="container">
         <p class="float-end"><a href="#">Back to top</a></p>
         <p>&copy; 2023 SDN Lemahbang.</p>
     </footer>
-    <script src="{{ asset('assets/js/bootstrap.bundle.js') }}"></script>
+
 </body>
 
 </html>

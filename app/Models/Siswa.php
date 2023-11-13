@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 
-class Siswa extends Model
+class Siswa extends Model implements Authenticatable
 {
-    use HasFactory;
+    use AuthenticatableTrait;
 
     protected $table = 'siswa';
     protected $guarded = ['idSiswa'];
     protected $primaryKey = 'idSiswa';
 
-    protected $fillable = ['nama']; // field yang bisa di isi
     public $timestamps = false;
 }

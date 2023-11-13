@@ -13,9 +13,9 @@
                                     <div class="col-auto tanggal-r my-auto">
                                         <div class="d-inline">
                                             <h3 class="fw-bold mt-2 lh-1">
-                                                {{ date('d', strtotime($berita->tanggalBerita)) }}</h3>
+                                                {{ date('d', strtotime($berita->waktuBerita)) }}</h3>
                                             <p class="lead text-uppercase lh-1 fs-6 text-center ">
-                                                {{ date('M', strtotime($berita->tanggalBerita)) }}</p>
+                                                {{ date('M', strtotime($berita->waktuBerita)) }}</p>
                                         </div>
                                     </div>
                                     <div class="col-auto tanggal-r p-0 my-auto">
@@ -49,7 +49,7 @@
                     {!! $berita->isiBerita !!}
                 </div>
                 <a href="{{ $berita->sumberBerita }}" class="text-body-secondary my-2">{{ $berita->sumberBerita }}</a>
-                <p class="text-body-secondary my-2">{{ $berita->tanggalBerita }}</p>
+                <p class="text-body-secondary my-2">{{ $berita->waktuBerita }}</p>
             </div>
         </div>
     </main>

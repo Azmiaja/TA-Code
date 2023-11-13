@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Siswa;
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -25,6 +27,18 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('user_all', function ($user) {
+            return $user->hakAkses == 'Guru' || $user->hakAkses == 'Admin';
+        });
+        Gate::define('admin', function ($user) {
+            return $user->hakAkses == 'Admin';
+        });
+        Gate::define('guru', function ($user) {
+            return $user->hakAkses == 'Guru';
+        });
+        Gate::define('siswa', function ($user) {
+            return $user->hakAkses == 'Siswa';
+        });
+
     }
 }

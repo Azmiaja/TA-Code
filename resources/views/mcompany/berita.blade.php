@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="content">
-                {{-- Alert --}}
+        {{-- Alert --}}
         @if (session('success') || $errors->any())
             <div class="alert alert-{{ session('success') ? 'success' : 'warning' }} alert-dismissible fade show"
                 role="alert">
@@ -56,7 +56,7 @@
                         @foreach ($berita as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->tanggalBerita }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item->waktuBerita)->format('d-m-Y') }}</td>
                                 <td>{{ $item->judulBerita }}</td>
                                 <td>
                                     <div class="ellipse">{!! $item->isiBerita !!}</div>
@@ -93,7 +93,8 @@
                                 data-bs-keyboard="false">
                                 <div class="modal-dialog modal-lg modal-dialog-scrollable">
                                     <div class="modal-content">
-                                        <div class="modal-header text-light" style="background-color: #537188" data-bs-theme="dark">
+                                        <div class="modal-header text-light" style="background-color: #537188"
+                                            data-bs-theme="dark">
                                             <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Berita</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
@@ -130,14 +131,14 @@
                                                 <div class="mb-4">
                                                     <div class="row g-4 m-0">
                                                         <div class="col-lg-4 col-sm-12 col-12 ps-0">
-                                                            <label class="form-label" for="tanggalBerita">Tanggal
+                                                            <label class="form-label" for="waktuBerita">Tanggal
                                                                 Berita</label>
                                                             @php
-                                                                $carbonDate = \Carbon\Carbon::parse($item->tanggalBerita);
+                                                                $carbonDate = \Carbon\Carbon::parse($item->waktuBerita);
                                                             @endphp
                                                             <input type="text" class="form-control"
                                                                 id="js-flatpickr-edit-{{ $item->idBerita }}"
-                                                                name="tanggalBerita" placeholder="d-m-Y"
+                                                                name="waktuBerita" placeholder="d-m-Y"
                                                                 data-date-format="d-m-Y"
                                                                 value="{{ $carbonDate->format('d.m.Y') }}">
                                                         </div>
@@ -166,7 +167,8 @@
                                 aria-labelledby="deletModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <div class="modal-header text-light" style="background-color: #537188" data-bs-theme="dark">
+                                        <div class="modal-header text-light" style="background-color: #537188"
+                                            data-bs-theme="dark">
                                             <h1 class="modal-title fs-5" id="deletModalLabel">Hapus Berita</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
@@ -201,8 +203,11 @@
                                         });
 
                                     $('#js-flatpickr-edit-' + dataId).flatpickr({
-                                        dateFormat: "d-m-Y",
+                                        dateFormat: "d-m-Y H:i",
                                         theme: "red",
+                                        minDate: "today",
+                                        defaultDate: new Date(),
+                                        enableTime: true,
                                     });
 
                                 });
@@ -215,8 +220,8 @@
     </div>
 
     <!-- Modal Insert-->
-    <div class="modal fade" id="modalInsert" tabindex="-1" data-bs-backdrop="static"
-    data-bs-keyboard="false" aria-labelledby="modalInsertLabel" aria-hidden="true">
+    <div class="modal fade" id="modalInsert" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="modalInsertLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header text-light" style="background-color: #537188" data-bs-theme="dark">
@@ -244,9 +249,9 @@
                         <div class="mb-4">
                             <div class="row m-0">
                                 <div class="col-lg-4 col-sm-12 col-12 px-0 mb-sm-0 mb-4">
-                                    <label class="form-label" for="tanggalBerita">Tanggal Berita</label>
-                                    <input type="text" class="form-control js-flatpickr" id="tanggalBerita"
-                                        name="tanggalBerita" placeholder="d-m-Y" data-date-format="d-m-Y">
+                                    <label class="form-label" for="waktuBerita">Tanggal Berita</label>
+                                    <input type="text" class="form-control js-flatpickr" id="waktuBerita"
+                                        name="waktuBerita" placeholder="d-m-Y" data-date-format="d-m-Y">
                                 </div>
                                 <div class="col-lg-8 col-sm-12 col-12 px-0 ps-lg-3 ps-0">
                                     <label class="form-label" for="sumberBerita">Sumber Berita</label>

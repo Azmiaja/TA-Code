@@ -17,7 +17,7 @@ class BeritaController extends Controller
      */
     public function index()
     {
-        $berita = Berita::orderBy('tanggalBerita', 'desc')->get();
+        $berita = Berita::orderBy('waktuBerita', 'desc')->get();
         $totalBerita = Berita::all()->count();
         return view('mcompany.berita', compact('berita', 'totalBerita'), [
             'title' => 'Manajemen Company',
@@ -48,11 +48,11 @@ class BeritaController extends Controller
             'judulBerita' => 'required',
             'gambar' => 'file|mimes:jpeg,png,jpg,gif',
             'isiBerita' => '',
-            'tanggalBerita' => 'required|date',
+            'waktuBerita' => 'required|date',
             'sumberBerita' => '',
         ]);
 
-        $validatedData['tanggalBerita'] = Carbon::createFromFormat('d-m-Y', $request->input('tanggalBerita', Carbon::now()));
+        $validatedData['waktuBerita'] = Carbon::createFromFormat('d-m-Y', $request->input('waktuBerita', Carbon::now()));
         if ($request->file('gambar')) {
             $gambarPath = $request->file('gambar')->getClientOriginalName();
             $validatedData['gambar'] = $request->file('gambar')->storeAs('gambar-berita', $gambarPath, 'public');
@@ -112,10 +112,10 @@ class BeritaController extends Controller
             'judulBerita' => 'required',
             'gambar' => 'file|mimes:jpeg,png,jpg,gif',
             'isiBerita' => '',
-            'tanggalBerita' => 'required|date',
+            'waktuBerita' => 'required|date',
             'sumberBerita' => '',
         ]);
-        $validatedData['tanggalBerita'] = Carbon::createFromFormat('d-m-Y', $request->input('tanggalBerita', Carbon::now()));
+        $validatedData['waktuBerita'] = Carbon::createFromFormat('d-m-Y', $request->input('waktuBerita', Carbon::now()));
         if ($request->file('gambar')) {
             $gambarPath = $request->file('gambar')->getClientOriginalName();
             $validatedData['gambar'] = $request->file('gambar')->storeAs('gambar-berita', $gambarPath, 'public');

@@ -27,7 +27,12 @@
                                     </div>
                                     <div class="col-md-8 col-8">
                                         <div class="card-body">
-                                            <h5 class="card-title">Selamat Datang 'Syahrul Nur</h5>
+                                            <h5 class="card-title">Selamat Datang @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin')
+                                                    {{ Auth::user()->pegawai->namaPegawai }}
+                                                @elseif (Auth::user()->hakAkses == 'Siswa')
+                                                    {{ Auth::user()->namaSiswa }}
+                                                @endif
+                                            </h5>
                                             <p class="card-text">Ayo mulai hari ini dengan basmallah</p>
                                             <p class="card-text"><small class="text-body-secondary">Last updated 3 mins
                                                     ago</small></p>

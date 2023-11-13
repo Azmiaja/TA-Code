@@ -62,23 +62,24 @@
                                         Login
                                     </h1>
                                     <p class="fw-medium text-muted">
-                                        Masukkan Username dan Password anda.
+                                        Masukkan Username dan Password Anda.
                                     </p>
                                 </div>
                                 <div class="row g-0 justify-content-center">
                                     <div class="col-sm-8 col-xl-4">
                                         {{-- form login --}}
-                                        <form class="js-validation-signin" action="/authenticate" method="POST">
+                                        <form class="js-validation-signin" action="/authenticate"
+                                            autocomplete="off" method="POST">
                                             @csrf
                                             <div class="mb-4">
                                                 <input type="text"
                                                     class="form-control form-control-lg form-control-alt py-3"
-                                                    id="username" name="username" placeholder="Username">
+                                                    id="username" name="username" placeholder="Username" required>
                                             </div>
                                             <div class="mb-4">
                                                 <input type="password"
                                                     class="form-control form-control-lg form-control-alt py-3"
-                                                    id="password" name="password" placeholder="Password">
+                                                    id="password" name="password" placeholder="Password" required>
                                             </div>
                                             <div class="justify-content-center align-items-center mb-4">
                                                 <div class="col-12 text-center">
@@ -91,18 +92,9 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        @if ($errors->any())
-                                            <div class="alert alert-danger">
-                                                <ul>
-                                                    @foreach ($errors->all() as $error)
-                                                        <li>{{ $error }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        @endif
-                                        @if (session('loginError'))
+                                        @if (session('error'))
                                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                                {{ session('loginError') }}
+                                                {{ session('error') }}
                                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                                     aria-label="Close"></button>
                                             </div>

@@ -21,48 +21,76 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
+Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest:user,siswa');
 Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate');
 Route::post('/logout', [LoginController::class, 'logout']);
-Route::post('/register', [LoginController::class, 'register'])->name('register');
+// Route::post('/register', [LoginController::class, 'register'])->name('register');
 
 Route::get('/berita-sekolah/{id}/{slug}', [LihatBeritaController::class, 'show'])->name('lihatberita');
 Route::get('/', [LandingController::class, 'index'])->name('landingpage');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth:user,siswa'])->group(function () {
+
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    Route::prefix('muser')->group(function () {
-        Route::get('pegawai', [Muser\PegawaiController::class, 'index'])->name('muser.pegawai');
-        Route::get('siswa', [Muser\SiswaController::class, 'index'])->name('muser.siswa');
+    Route::middleware('ceklevel:Admin')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('dashboard', [
+                'title' => 'Dashboard',
+                'title2' => 'Dashboard'
+            ]);
+        })->name('dashboard');
+
+        Route::prefix('mcompany')->group(function () {
+            Route::resource('berita', Mcompany\BeritaController::class);
+            Route::resource('profil', Mcompany\ProfilController::class);
+            // Route::resource('sejarah', Mcompany\SejarahController::class);
+            Route::get('visimisi', [Mcompany\VisiMisiController::class, 'index'])->name('mcompany.visimisi');
+        });
+
+        Route::prefix('muser')->group(function () {
+            Route::resource('pegawai', Muser\PegawaiController::class);
+            Route::resource('siswa', Muser\SiswaController::class);
+        });
+
+        Route::prefix('mkelas')->group(function () {
+            Route::get('bagiguru', [Mkelas\BagiGuruController::class, 'index'])->name('mkelas.bagiguru');
+            Route::get('bagisiswa', [Mkelas\BagiSiswaController::class, 'index'])->name('mkelas.bagisiswa');
+            Route::get('penjadwalan', [Mkelas\PenjadwalanController::class, 'index'])->name('mkelas.penjadwalan');
+        });
+
+        Route::prefix('mkeuangan')->group(function () {
+            Route::get('laporan', [Mkeuangan\LaporanController::class, 'index'])->name('mkeuangan.laporan');
+            Route::get('pemberitahuan', [Mkeuangan\PemberitahuanController::class, 'index'])->name('mkeuangan.pemberitahuan');
+        });
     });
 
+    // guru
+    Route::middleware('ceklevel:Guru')->group(function () {
+        Route::prefix('mkelas')->group(function () {
+            Route::get('penugasan', [Mkelas\PenugasanController::class, 'index'])->name('mkelas.penugasan');
+            Route::get('penilaian', [Mkelas\PenilaianController::class, 'index'])->name('mkelas.penilaian');
+            Route::get('laporan', [Mkelas\LaporanController::class, 'index'])->name('mkelas.laporan');
+        });
+
+        Route::prefix('mkeuangan')->group(function () {
+            Route::get('laporan', [Mkeuangan\LaporanController::class, 'index'])->name('mkeuangan.laporan');
+            Route::get('pemberitahuan', [Mkeuangan\PemberitahuanController::class, 'index'])->name('mkeuangan.pemberitahuan');
+        });
+    });
+
+    // siswa
     Route::prefix('mkeuangan')->group(function () {
-        Route::get('laporan', [Mkeuangan\LaporanController::class, 'index'])->name('mkeuangan.laporan');
         Route::get('pemberitahuan', [Mkeuangan\PemberitahuanController::class, 'index'])->name('mkeuangan.pemberitahuan');
     });
 
     Route::prefix('mkelas')->group(function () {
-        Route::get('bagiguru', [Mkelas\BagiGuruController::class, 'index'])->name('mkelas.bagiguru');
-        Route::get('bagisiswa', [Mkelas\BagiSiswaController::class, 'index'])->name('mkelas.bagisiswa');
-        Route::get('laporan', [Mkelas\LaporanController::class, 'index'])->name('mkelas.laporan');
-        Route::get('penilaian', [Mkelas\PenilaianController::class, 'index'])->name('mkelas.penilaian');
-        Route::get('penjadwalan', [Mkelas\PenjadwalanController::class, 'index'])->name('mkelas.penjadwalan');
         Route::get('penugasan', [Mkelas\PenugasanController::class, 'index'])->name('mkelas.penugasan');
+        Route::get('penilaian', [Mkelas\PenilaianController::class, 'index'])->name('mkelas.penilaian');
     });
-
-    Route::prefix('mcompany')->group(function () {
-        Route::resource('berita', Mcompany\BeritaController::class);
-        Route::get('profil', [Mcompany\ProfilController::class, 'index'])->name('mcompany.profil');
-        Route::get('sejarah', [Mcompany\SejarahController::class, 'index'])->name('mcompany.sejarah');
-        Route::get('visimisi', [Mcompany\VisiMisiController::class, 'index'])->name('mcompany.visimisi');
-        
-    });
-
-    
-
-    
 });
+
+
 
 
 
