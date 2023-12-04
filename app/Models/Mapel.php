@@ -13,4 +13,9 @@ class Mapel extends Model
     protected $guarded = ['idMapel'];
     protected $primaryKey = 'idMapel';
     public $timestamps = false;
+
+    public function pengajar()
+    {
+        return $this->hasMany(Pengajaran::class, 'idPengajran');
+    }
 }

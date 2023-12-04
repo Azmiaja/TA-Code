@@ -1,9 +1,9 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Sistem Informasi Akademik | {{ $title }}</title>
     <meta name="description"
         content="OneUI - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest  | This is the demo of OneUI! You need to purchase a license for legal use! | DEMO">
@@ -21,13 +21,14 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" id="css-main" href="{{ asset('assets/css/oneui.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/js/plugins/fullcalendar/main.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/js/plugins/fullcalendar/main.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/flatpickr/flatpickr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/flatpickr/themes/material_red.css') }}">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script>
-    <script src="{{ asset('assets/js/lib/jquery.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.css') }}">
+    {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script> --}}
+
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -48,15 +49,40 @@
             white-space: normal;
         }
     </style>
+
+    <script src="{{ asset('assets/js/lib/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 </head>
 
 <body>
+    {{-- Modal Template --}}
+    <div class="modal fade" id="modal-template" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="block block-rounded block-transparent mb-0">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title" id="judul-modal"></h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content fs-sm" id="modal-konten">
+                        {{-- content --}}
+                    </div>
+                    <div class="block-content block-content-full bg-body"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- --------------------------- CONTENT ------------------------------------------------ --}}
     <div id="page-container"
         class="sidebar-o sidebar-dark enable-page-overlay side-scroll page-header-fixed main-content-narrow">
         <nav id="sidebar" aria-label="Main Navigation">
             {{-- Sidebar header --}}
             <div class="content-header">
-                <a class="fw-semibold text-dual" href="{{ route('home') }}">
+                <a class="fw-semibold text-dual" href="#">
                     <span class="smini-visible" style="padding-top: 1.25rem;">
                         <img style="height: 35px; padding-left: .8rem;"
                             src="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
@@ -76,23 +102,53 @@
             <div class="js-sidebar-scroll">
                 <div class="content-side">
                     <ul class="nav-main">
-                        @canany(['admin'])
+                        @canany(['super.admin'])
                             <li class="nav-main-item">
                                 <a class="nav-main-link {{ $title === 'Dashboard' ? 'active' : '' }}"
-                                    href="{{ route('dashboard') }}">
+                                    href="{{ route('dashboard.super_admin') }}">
                                     <i class="nav-main-link-icon si si-grid"></i>
                                     <span class="nav-main-link-name">Dashboard</span>
                                 </a>
                             </li>
                         @endcanany
-                        <li class="nav-main-item">
-                            <a class="nav-main-link {{ $title === 'Home' ? 'active' : '' }}"
-                                href="{{ route('home') }}">
-                                <i class="nav-main-link-icon si si-home"></i>
-                                <span class="nav-main-link-name">Home</span>
-                            </a>
-                        </li>
                         @canany(['admin'])
+                            <li class="nav-main-item">
+                                <a class="nav-main-link {{ $title === 'Dashboard' ? 'active' : '' }}"
+                                    href="{{ route('dashboard.admin') }}">
+                                    <i class="nav-main-link-icon si si-grid"></i>
+                                    <span class="nav-main-link-name">Dashboard</span>
+                                </a>
+                            </li>
+                        @endcanany
+                        @canany(['guru'])
+                            <li class="nav-main-item">
+                                <a class="nav-main-link {{ $title === 'Dashboard' ? 'active' : '' }}"
+                                    href="{{ route('dashboard.guru') }}">
+                                    <i class="nav-main-link-icon si si-grid"></i>
+                                    <span class="nav-main-link-name">Dashboard</span>
+                                </a>
+                            </li>
+                        @endcanany
+                        @canany(['siswa'])
+                            <li class="nav-main-item">
+                                <a class="nav-main-link {{ $title === 'Dashboard' ? 'active' : '' }}"
+                                    href="{{ route('dashboard.siswa') }}">
+                                    <i class="nav-main-link-icon si si-grid"></i>
+                                    <span class="nav-main-link-name">Dashboard</span>
+                                </a>
+                            </li>
+                        @endcanany
+
+                        {{-- @canany(['guru', 'siswa'])
+                            <li class="nav-main-item">
+                                <a class="nav-main-link {{ $title === 'Home' ? 'active' : '' }}"
+                                    href="{{ route('home') }}">
+                                    <i class="nav-main-link-icon si si-home"></i>
+                                    <span class="nav-main-link-name">Home</span>
+                                </a>
+                            </li>
+                        @endcanany --}}
+                        @canany(['super.admin'])
                             <li class="nav-main-item {{ $title === 'Manajemen User' ? 'open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen User' ? 'active' : '' }}"
                                     data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="?#">
@@ -101,6 +157,12 @@
                                 </a>
                                 {{-- Sub menu manajemen user --}}
                                 <ul class="nav-main-submenu">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'Data User' ? 'active' : '' }}"
+                                            href="{{ route('user.index') }}">
+                                            <span class="nav-main-link-name">Data User</span>
+                                        </a>
+                                    </li>
                                     <li class="nav-main-item">
                                         <a class="nav-main-link {{ $title2 === 'Pegawai' ? 'active' : '' }}"
                                             href="{{ route('pegawai.index') }}">
@@ -116,11 +178,11 @@
                                 </ul>
                                 {{-- End Sub menu manajemen user --}}
                             </li>
-                            <li class="nav-main-item {{ $title === 'Manajemen Company' ? 'open' : '' }}">
-                                <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Company' ? 'active' : '' }}"
+                            <li class="nav-main-item {{ $title === 'Company Profil' ? 'open' : '' }}">
+                                <a class="nav-main-link nav-main-link-submenu {{ $title === 'Company Profil' ? 'active' : '' }}"
                                     data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-                                    <i class="nav-main-link-icon si si-grid"></i>
-                                    <span class="nav-main-link-name">Manajemen Company</span>
+                                    <i class="nav-main-link-icon si si-wrench"></i>
+                                    <span class="nav-main-link-name">Company Profil</span>
                                 </a>
                                 <ul class="nav-main-submenu">
                                     <li class="nav-main-item">
@@ -129,18 +191,6 @@
                                             <span class="nav-main-link-name">Profil Sekolah</span>
                                         </a>
                                     </li>
-                                    {{-- <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'sejarah' ? 'active' : '' }}"
-                                            href="{{ route('sejarah.index') }}">
-                                            <span class="nav-main-link-name">Sejarah</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'visimisi' ? 'active' : '' }}"
-                                            href="{{ route('mcompany.visimisi') }}">
-                                            <span class="nav-main-link-name">Visi Misi</span>
-                                        </a>
-                                    </li> --}}
                                     <li class="nav-main-item">
                                         <a class="nav-main-link {{ $title2 === 'berita' ? 'active' : '' }}"
                                             href="{{ route('berita.index') }}">
@@ -155,7 +205,11 @@
                                 data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-briefcase"></i>
                                 <span class="nav-main-link-name">
-                                    @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin')
+                                    @php
+                                        $allowedRoles = ['Guru', 'Admin', 'Super Admin'];
+                                    @endphp
+
+                                    @if (in_array(Auth::user()->hakAkses, $allowedRoles))
                                         Manajemen Kelas
                                     @elseif (Auth::user()->hakAkses == 'Siswa')
                                         Kelas {{ Auth::user()->kelas }}
@@ -163,24 +217,43 @@
                                 </span>
                             </a>
                             <ul class="nav-main-submenu">
-                                @canany(['admin', 'guru'])
-                                    @canany(['admin'])
+                                @canany(['super.admin', 'admin', 'guru'])
+                                    @canany(['super.admin', 'admin'])
                                         <li class="nav-main-item">
-                                            <a class="nav-main-link {{ $title2 === 'bagiguru' ? 'active' : '' }}"
-                                                href="{{ route('mkelas.bagiguru') }}">
-                                                <span class="nav-main-link-name">Pembagian Guru</span>
+                                            <a class="nav-main-link {{ $title2 === 'periode' ? 'active' : '' }}"
+                                                href="{{ route('periode.index') }}">
+                                                <span class="nav-main-link-name">Periode</span>
                                             </a>
                                         </li>
                                         <li class="nav-main-item">
+                                            <a class="nav-main-link {{ $title2 === 'data-kelas' ? 'active' : '' }}"
+                                                href="{{ route('data-kelas.index') }}">
+                                                <span class="nav-main-link-name">Data Kelas</span>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-main-item">
+                                            <a class="nav-main-link {{ $title2 === 'Pengajar' ? 'active' : '' }}"
+                                                href="{{ route('pengajaran.index') }}">
+                                                <span class="nav-main-link-name">Pengajar</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-main-item">
+                                            <a class="nav-main-link {{ $title2 === 'Mata Pelajaran' ? 'active' : '' }}"
+                                                href="{{ route('mapel.index') }}">
+                                                <span class="nav-main-link-name">Mata Pelajaran</span>
+                                            </a>
+                                        </li>
+                                        {{-- <li class="nav-main-item">
                                             <a class="nav-main-link {{ $title2 === 'bagisiswa' ? 'active' : '' }}"
                                                 href="{{ route('mkelas.bagisiswa') }}">
                                                 <span class="nav-main-link-name">Pembagian Siswa</span>
                                             </a>
-                                        </li>
+                                        </li> --}}
                                         <li class="nav-main-item">
                                             <a class="nav-main-link {{ $title2 === 'penjadwalan' ? 'active' : '' }}"
-                                                href="{{ route('mkelas.penjadwalan') }}">
-                                                <span class="nav-main-link-name">Penjadwalan Pelajaran</span>
+                                                href="{{ route('penjadwalan.index') }}">
+                                                <span class="nav-main-link-name">Jadwal Pelajaran</span>
                                             </a>
                                         </li>
                                     @endcanany
@@ -197,7 +270,7 @@
                                     <a class="nav-main-link {{ $title2 === 'penugasan' ? 'active' : '' }}"
                                         href="{{ route('mkelas.penugasan') }}">
                                         <span class="nav-main-link-name">
-                                            @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin')
+                                            @if (in_array(Auth::user()->hakAkses, $allowedRoles))
                                                 Penugasan Siswa
                                             @elseif (Auth::user()->hakAkses == 'Siswa')
                                                 Tugas
@@ -209,7 +282,7 @@
                                     <a class="nav-main-link {{ $title2 === 'penilaian' ? 'active' : '' }}"
                                         href="{{ route('mkelas.penilaian') }}">
                                         <span class="nav-main-link-name">
-                                            @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin')
+                                            @if (in_array(Auth::user()->hakAkses, $allowedRoles))
                                                 Penilaian Siswa
                                             @elseif (Auth::user()->hakAkses == 'Siswa')
                                                 Nilai
@@ -225,7 +298,7 @@
                                 data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-wallet"></i>
                                 <span class="nav-main-link-name">
-                                    @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin')
+                                    @if (in_array(Auth::user()->hakAkses, $allowedRoles))
                                         Manajemen Keuangan
                                     @elseif (Auth::user()->hakAkses == 'Siswa')
                                         Keuangan
@@ -239,7 +312,7 @@
                                         <span class="nav-main-link-name">Pemberitahuan Pembayaran</span>
                                     </a>
                                 </li>
-                                @canany(['admin', 'guru'])
+                                @canany(['super.admin', 'admin', 'guru'])
                                     <li class="nav-main-item">
                                         <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}"
                                             href="{{ route('mkeuangan.laporan') }}">
@@ -303,7 +376,7 @@
                                     <span class="badge rounded-pill bg-primary ms-2">1</span>
                                 </a>
                                 <button class="dropdown-item d-flex align-items-center justify-content-between"
-                                    data-bs-toggle="modal" data-bs-target="#logoutAlert"">
+                                    data-bs-toggle="modal" data-bs-target="#logoutAlert">
                                     <span class="fs-sm fw-medium">Log Out</span> {{-- To log out --}}
                                     <i class="si si-logout me-1"></i>
                                 </button>
@@ -385,17 +458,19 @@
         </footer>
     </div>
 
+    @stack('scripts')
+
     <script src="{{ asset('assets/js/oneui.app.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugins/fullcalendar/main.min.js') }}"></script>
-    <script src="{{ asset('assets/js/pages/be_comp_calendar.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/plugins/fullcalendar/main.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('assets/js/pages/be_comp_calendar.min.js') }}"></script> --}}
     {{-- <script src="{{ asset('assets/js/plugins/ckeditor/ckeditor.js') }}"></script> --}}
     <script src="{{ asset('assets/js/plugins/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/flatpickr/flatpickr.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 
     <script>
         One.helpersOnLoad(['js-ckeditor5', 'js-flatpickr']);

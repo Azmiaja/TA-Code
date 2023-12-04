@@ -21,12 +21,12 @@
                 <a class="block block-rounded block-link-shadow text-center" href="be_pages_ecom_product_edit.html">
                     <div class="block-content block-content-full">
                         <div class="fs-2 fw-semibold text-success">
-                            <i class="fa fa-plus"></i>
+                            {{ $jumlahPegawaiAktif }}
                         </div>
                     </div>
                     <div class="block-content py-2 bg-body-light">
                         <p class="fw-medium fs-sm text-success mb-0">
-                            Tambah Pegawai
+                            Pegawai Aktif
                         </p>
                     </div>
                 </a>
@@ -34,11 +34,11 @@
             <div class="col-6 col-lg-3">
                 <a class="block block-rounded block-link-shadow text-center" href="javascript:void(0)">
                     <div class="block-content block-content-full">
-                        <div class="fs-2 fw-semibold text-danger"></div>
+                        <div class="fs-2 fw-semibold text-danger">{{ $pegawai }}</div>
                     </div>
                     <div class="block-content py-2 bg-body-light">
                         <p class="fw-medium fs-sm text-danger mb-0">
-                            Admin
+                            Jumlah Pegawai
                         </p>
                     </div>
                 </a>
@@ -46,11 +46,11 @@
             <div class="col-6 col-lg-3">
                 <a class="block block-rounded block-link-shadow text-center">
                     <div class="block-content block-content-full">
-                        <div class="fs-2 fw-semibold text-dark"></div>
+                        <div class="fs-2 fw-semibold text-dark">{{ $siswa }}</div>
                     </div>
                     <div class="block-content py-2 bg-body-light">
                         <p class="fw-medium fs-sm text-muted mb-0">
-                            Guru
+                            Jumlah Siswa
                         </p>
                     </div>
                 </a>

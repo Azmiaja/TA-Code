@@ -73,11 +73,24 @@ class LoginController extends Controller
 
     private function getRedirectionPath($hakAkses)
     {
-        if ($hakAkses === 'Admin') {
-            return '/dashboard';
-        } elseif ($hakAkses === 'Guru' || $hakAkses === 'Siswa') {
-            return '/home';
+        switch ($hakAkses) {
+            case 'Super Admin':
+                return route('dashboard.super_admin');
+            case 'Admin':
+                return route('dashboard.admin');
+            case 'Guru':
+                return route('dashboard.guru');
+            case 'Siswa':
+                return route('dashboard.siswa');
+            // Tambahkan case lain jika perlu
+            default:
+                return '/dashboard'; // Sesuaikan dengan path default yang diinginkan
         }
+        // if ($hakAkses === 'Admin') {
+        //     return '/dashboard';
+        // } elseif ($hakAkses === 'Guru' || $hakAkses === 'Siswa') {
+        //     return '/home';
+        // }
         // Add other roles and redirections if necessary
     }
 

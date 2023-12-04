@@ -14,11 +14,22 @@ class CekLevel
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, ...$levels)
+    // public function handle(Request $request, Closure $next, ...$levels)
+    // {
+    //     if(in_array($request->user()->hakAkses, $levels)){
+    //         return $next($request);
+    //     }
+    //     return abort(404);
+    // }
+    // Cek level middleware
+    public function handle($request, Closure $next, $hakAkses)
     {
-        if(in_array($request->user()->hakAkses, $levels)){
+        $user = $request->user();
+
+        if ($user && $user->hakAkses == $hakAkses) {
             return $next($request);
         }
-        return abort(404);
+
+        abort(403, 'Unauthorized');
     }
 }

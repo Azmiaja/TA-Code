@@ -28,7 +28,11 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('user_all', function ($user) {
-            return $user->hakAkses == 'Guru' || $user->hakAkses == 'Admin';
+            $allowedRoles = ['Guru', 'Admin', 'Super Admin', 'Siswa'];
+            return in_array($user->hakAkses, $allowedRoles);
+        });
+        Gate::define('super.admin', function ($user) {
+            return $user->hakAkses == 'Super Admin';
         });
         Gate::define('admin', function ($user) {
             return $user->hakAkses == 'Admin';
@@ -39,6 +43,5 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('siswa', function ($user) {
             return $user->hakAkses == 'Siswa';
         });
-
     }
 }

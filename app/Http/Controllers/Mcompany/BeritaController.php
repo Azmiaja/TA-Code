@@ -6,142 +6,153 @@ use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class BeritaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
+        $beritaM = Berita::all();
         $berita = Berita::orderBy('waktuBerita', 'desc')->get();
         $totalBerita = Berita::all()->count();
         return view('mcompany.berita', compact('berita', 'totalBerita'), [
-            'title' => 'Manajemen Company',
+            'm_berita' => $beritaM,
+            'title' => 'Company Profil',
             'title2' => 'Berita Sekolah',
 
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function getData()
+    {
+        $data = Berita::orderBy('idBerita', 'desc')->get();
+        $data = $data->map(function ($item, $key) {
+            $item['nomor'] = $key + 1;
+            $item['waktuBerita'] = Carbon::parse($item['waktuBerita'])->format('Y-m-d');
+            return $item;
+        });
+        return response()->json(['data' => $data]);
+    }
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'judulBerita' => 'required',
-            'gambar' => 'file|mimes:jpeg,png,jpg,gif',
-            'isiBerita' => '',
-            'waktuBerita' => 'required|date',
-            'sumberBerita' => '',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'judulBerita' => 'required',
+                'gambar' => 'file|mimes:jpeg,png,jpg',
+                'isiBerita' => '',
+                'waktuBerita' => 'required|date',
+                'sumberBerita' => '',
+            ]);
 
-        $validatedData['waktuBerita'] = Carbon::createFromFormat('d-m-Y', $request->input('waktuBerita', Carbon::now()));
-        if ($request->file('gambar')) {
-            $gambarPath = $request->file('gambar')->getClientOriginalName();
-            $validatedData['gambar'] = $request->file('gambar')->storeAs('gambar-berita', $gambarPath, 'public');
+            // Logging for debugging
+            Log::info('Received data:', $request->all());
+            Log::info('Validated data:', $validatedData);
+
+            if ($request->file('gambar')) {
+                $gambarPath = $request->file('gambar')->getClientOriginalName();
+                $validatedData['gambar'] = $request->file('gambar')->storeAs('gambar-berita', $gambarPath, 'public');
+            }
+
+            Berita::create($validatedData);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil menyimpan data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error storing data.',
+            ], 422);
         }
-        Berita::create($validatedData);
-
-        return back()
-            ->with('success', 'Berhasil menyimpan 1 berita.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
-        //
+        $data = Berita::findOrFail($id);
+        return view('layouts.modals.edit-berita', ['berita' => $data]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function edit($id)
     {
         $berita = Berita::find($id);
         if (!$berita) {
             // Handle jika berita tidak ditemukan
-            return back()->with('error', 'Berita tidak ditemukan.');
+            return response()->json(['status' => 'error', 'message' => 'Data tidak ditemukan.']);
         }
 
-        return view(compact('berita'));
+        return response()->json(['berita' => $berita]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $berita = Berita::find($id);
 
         if (!$berita) {
-            // Handle jika berita tidak ditemukan
-            return redirect()->route('data-berita.berita')->with('error', 'Berita tidak ditemukan.');
+            return response()->json(['status' => 'error', 'message' => 'Data berita tidak ditemukan.']);
         }
 
-        // Validasi input
         $validatedData = $request->validate([
             'judulBerita' => 'required',
-            'gambar' => 'file|mimes:jpeg,png,jpg,gif',
             'isiBerita' => '',
-            'waktuBerita' => 'required|date',
+            'waktuBerita' => 'required',
             'sumberBerita' => '',
+            'gambar' => '',
         ]);
-        $validatedData['waktuBerita'] = Carbon::createFromFormat('d-m-Y', $request->input('waktuBerita', Carbon::now()));
-        if ($request->file('gambar')) {
+
+        if ($request->hasFile('gambar')) {
             $gambarPath = $request->file('gambar')->getClientOriginalName();
             $validatedData['gambar'] = $request->file('gambar')->storeAs('gambar-berita', $gambarPath, 'public');
 
             Storage::delete('public/' . $berita->gambar);
         }
 
-        // Perbarui data berita
         $berita->update($validatedData);
 
-        return back()->with('success', 'Berhasil memperbarui 1 berita.');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Berhasil mengubah data.'
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+
+
+
+
+
+    public function showDelete($id)
+    {
+        $data = Berita::findOrFail($id);
+        return view('layouts.modals.hapus-berita', compact('data'));
+    }
+
     public function destroy($id)
     {
         $berita = Berita::find($id);
         $berita->delete();
-        Storage::delete('public/' . $berita->dokumen);
+        // Storage::delete('public/' . $berita->dokumen);
         Storage::delete('public/' . $berita->gambar);
 
-        return back()->with('success', 'Berhasil menghapus 1 berita.');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Berhasil menghapus data.'
+        ]);
     }
 }

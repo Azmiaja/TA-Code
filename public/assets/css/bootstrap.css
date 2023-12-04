@@ -4493,12 +4493,13 @@ textarea.form-control-lg {
 
 .card-img-overlay {
   position: absolute;
-  top: 0;
+  /* height: auto; */
+ top: 0; /* Mengatur overlay menjadi dibawah */
   right: 0;
   bottom: 0;
   left: 0;
   padding: var(--bs-card-img-overlay-padding);
-  border-radius: var(--bs-card-inner-border-radius);
+  /* border-radius: var(--bs-card-inner-border-radius); */
 }
 
 .card-img,

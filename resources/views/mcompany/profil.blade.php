@@ -2,17 +2,25 @@
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
-            {{-- Page title pegawai --}}
-            <nav class="flex-shrink-0 my-3 mt-sm-0" aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-alt">
-                    <li class="breadcrumb-item">
-                        <a class="link-fx" href="javascript:void(0)">Manajemen Company</a>
-                    </li>
-                    <li class="breadcrumb-item" aria-current="page">
-                        {{ $title2 }}
-                    </li>
-                </ol>
-            </nav>
+            <div class="row p-0">
+                <div class="col-6">
+                    {{-- Page title profil --}}
+                    <nav class="flex-shrink-0 my-3 mt-sm-0" aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-alt">
+                            <li class="breadcrumb-item">
+                                <a class="link-fx" href="javascript:void(0)">{{ $title }}</a>
+                            </li>
+                            <li class="breadcrumb-item" aria-current="page">
+                                {{ $title2 }}
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-6 text-end">
+                    <button class="btn btn-sm btn-alt-success" data-bs-toggle="modal" data-bs-target="#modalInsert"><i
+                            class="fa fa-plus mx-2"></i>Tambah Data</button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="content">
@@ -23,237 +31,358 @@
                 @if (session('success'))
                     {{ session('success') }}
                 @else
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+                    @foreach ($errors->all() as $error)
+                        {{ $error }}
+                    @endforeach
                 @endif
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <div class="block block-rounded">
-            <div class="block-header block-header-default">
-                <h3 class="block-title">Table Profil</h3>
-            </div>
-            <div class="block-content block-content-full">
-                <table id="tabelProfil"
-                    class="d-inline table table-responsive table-bordered table-striped table-vcenter desktop tablet-p mobile-p"
-                    style="width:100%">
-                    <thead class="text-light" style="background-color: #537188">
-                        <tr>
-                            <th>No</th>
-                            <th>Tahun</th>
-                            <th>Nama Sekolah</th>
-                            <th>Profil</th>
-                            <th>Sejarah</th>
-                            <th>Visi</th>
-                            <th>Misi</th>
-                            {{-- <th>Gambar</th> --}}
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($profil as $item)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->tahun }}</td>
-                                <td>{{ $item->namaSekolah }}</td>
-                                <td>
-                                    <div class="ellipse">{!! $item->deskripsiProfil !!}</div>
-                                </td>
-                                <td>
-                                    <div class="ellipse">{!! $item->deskripsiSejarah !!}</div>
-                                </td>
-                                <td>{!! $item->visi !!}</td>
-                                <td>{!! $item->misi !!}</td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-warning px-4" data-bs-toggle="modal"
-                                            data-bs-target="#modalEdit{{ $item->idProfil }}"><i class="fa fa-edit"></i></a>
-                                </td>
-                            </tr>
 
-                            {{-- Modal --}}
-                            {{-- Modal Edit --}}
-                            <div class="modal fade" id="modalEdit{{ $item->idProfil }}" data-bs-backdrop="static"
-                                data-bs-keyboard="false">
-                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                                    <div class="modal-content">
-                                        <div class="modal-header text-light" style="background-color: #537188"
-                                            data-bs-theme="dark">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Berita</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
+        <div class="row items-push">
+            {{-- Data Profil --}}
+            <div class="col-lg-4">
+                @foreach ($profil as $profils)
+                    <div class="block block-rounded block-link-pop overflow-hidden">
+                        <img class="img-fluid" src="{{ Storage::url($profils->gambarProfil) }}" alt="">
+                        <div class="block-content">
+                            <div class="position-relative">
+                                <div class="position-absolute top-0 end-0 block-options">
+                                    <button type="button" class="btn-block-option" title="Edit Profil"><i
+                                            class="fa fa-fw fa-pencil-alt" data-bs-toggle="modal"
+                                            data-bs-target="#modalEditProfil{{ $profils->idProfil }}"></i></button>
+                                </div>
+                            </div>
+                            <h4 class="mb-1">
+                                Profil
+                            </h4>
+                            <p class="fs-sm fw-medium mb-2">Update at
+                                <span
+                                    class="text-muted">{{ \Carbon\Carbon::parse($profils->timestampProfil)->format('d-m-Y H:i') }}</span>
+                            </p>
+                            <div class="fs-sm text-muted">
+                                {!! $profils->deskripsiProfil !!}
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Modal edit profil --}}
+                    <div class="modal fade" id="modalEditProfil{{ $profils->idProfil }}" data-bs-backdrop="static"
+                        data-bs-keyboard="false">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="block block-rounded block-transparent mb-0">
+                                    <div class="block-header block-header-default">
+                                        <h3 class="block-title">Edit Peofil</h3>
+                                        <div class="block-options">
+                                            <button type="button" class="btn-block-option" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                                <i class="fa fa-fw fa-times"></i>
+                                            </button>
                                         </div>
-                                        <form action="{{ route('profil.update', $item) }}" enctype="multipart/form-data"
-                                            method="POST">
+                                    </div>
+                                    <div class="block-content fs-sm">
+                                        <form action="{{ route('profil.updateProfil', $profils) }}"
+                                            enctype="multipart/form-data" method="POST">
                                             @csrf
                                             @method('put')
-                                            <div class="modal-body">
-                                                <input type="text" name="idProfil" value="{{ $item->idProfil }}" hidden>
-                                                <div class="mb-4">
-                                                    <label class="form-label" for="namaSekolah">Nama Sekolah</label>
-                                                    <input type="text" class="form-control" id="namaSekolah"
-                                                        name="namaSekolah" placeholder="Nama Sekolah.."
-                                                        value="{{ $item->namaSekolah }}">
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label class="form-label" for="deskripsiProfil">Deskripsi Profil</label>
-                                                    <textarea id="ck-deskripsi" class="form-control" name="deskripsiProfil">{{ $item->deskripsiProfil }}</textarea>
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label class="form-label" for="deskripsiSejarah">Deskripsi
-                                                        Sejarah</label>
-                                                    <textarea id="ck-deskripsi" class="form-control" name="deskripsiSejarah">{{ $item->deskripsiSejarah }}</textarea>
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label class="form-label" for="visi">Visi</label>
-                                                    <textarea id="ck-deskripsi" class="form-control" name="visi">{{ $item->visi }}</textarea>
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label class="form-label" for="misi">Misi</label>
-                                                    <textarea id="ck-deskripsi" class="form-control" name="misi">{{ $item->misi }}</textarea>
-                                                </div>
-                                                <div class="mb-4">
-                                                    <div class="row g-4 m-0">
-                                                        <div class="col-lg-4 col-sm-12 col-12 ps-0">
-                                                            <label class="form-label" for="tahun">Tahun</label>
-                                                            <select class="form-select" id="tahun" name="tahun">
-                                                                <option value="{{ $item->tahun }}">{{ $item->tahun }}
-                                                                </option>
-                                                                @php
-                                                                    $currentYear = date('Y');
-                                                                @endphp
-                                                                @for ($year = 2020; $year <= $currentYear; $year++)
-                                                                    <option value="{{ $year }}">
-                                                                        {{ $year }}</option>
-                                                                @endfor
-                                                            </select>
+                                            <input type="text" name="idProfil" value="{{ $profils->idProfil }}" hidden>
+                                            <div class="mb-4">
+                                                <label class="form-label" for="gambarProfil">Gambar</label>
+                                                <div class="row ms-1 mb-2 p-0">
+                                                    <div class="col-auto border rounded-2">
+                                                        <div class="m-3">
+                                                            <img src="{{ Storage::url($profils->gambarProfil) }}"
+                                                                alt="{{ $profils->gambarProfil }}" height="150">
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <input class="form-control" type="file" name="gambarProfil"
+                                                    id="gambarProfil" accept=".jpg, .jpeg, .svg">
                                             </div>
-                                            <div class="modal-footer">
+                                            <div class="mb-4">
+                                                <label class="form-label" for="deskripsiProfil">Deskripsi</label>
+                                                <textarea id="js-ckeditor5-classic-edit-profil" class="form-control" name="deskripsiProfil">{{ $profils->deskripsiProfil }}</textarea>
+                                            </div>
+                                            <input type="datetime-local" id="timestamp" name="timestampProfil"
+                                                class="form-control" hidden>
+                                            <div class="mb-4 text-end">
                                                 <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                                    data-bs-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-primary"
+                                                    data-bs-dismiss="modal">Simpan</button>
                                             </div>
                                         </form>
                                     </div>
+                                    <div class="block-content block-content-full bg-body"></div>
                                 </div>
                             </div>
-
-                            <!-- Modal Hapus -->
-                            {{-- <div class="modal fade" id="deletModal{{ $item->idProfil }}" tabindex="-1"
-                                aria-labelledby="deletModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header text-light" style="background-color: #537188"
-                                            data-bs-theme="dark">
-                                            <h1 class="modal-title fs-5" id="deletModalLabel">Hapus Berita</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            {{-- Data Sejarah --}}
+            <div class="col-lg-4">
+                @foreach ($profil as $sejarah)
+                    <div class="block block-rounded block-link-pop overflow-hidden">
+                        <img class="img-fluid" src="{{ Storage::url($sejarah->gambarSejarah) }}" alt="">
+                        <div class="block-content">
+                            <div class="position-relative">
+                                <div class="position-absolute top-0 end-0 block-options">
+                                    <button type="button" class="btn-block-option" title="Edit Sejarah"><i
+                                            class="fa fa-fw fa-pencil-alt" data-bs-toggle="modal"
+                                            data-bs-target="#modalEditSejarah{{ $sejarah->idProfil }}"></i></button>
+                                </div>
+                            </div>
+                            <h4 class="mb-1">
+                                Sejarah
+                            </h4>
+                            <p class="fs-sm fw-medium mb-2">Update at
+                                <span
+                                    class="text-muted">{{ \Carbon\Carbon::parse($sejarah->timestampSejarah)->format('d-m-Y H:i') }}</span>
+                            </p>
+                            <div class="fs-sm text-muted">
+                                {!! $sejarah->deskripsiSejarah !!}
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Modal edit Sejarah --}}
+                    <div class="modal fade" id="modalEditSejarah{{ $sejarah->idProfil }}" data-bs-backdrop="static"
+                        data-bs-keyboard="false">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="block block-rounded block-transparent mb-0">
+                                    <div class="block-header block-header-default">
+                                        <h3 class="block-title">Edit Sejarah</h3>
+                                        <div class="block-options">
+                                            <button type="button" class="btn-block-option" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                                <i class="fa fa-fw fa-times"></i>
+                                            </button>
                                         </div>
-                                        <form action="{{ route('profil.destroy', $item->idProfil) }}" method="POST">
+                                    </div>
+                                    <div class="block-content fs-sm">
+                                        <form action="{{ route('profil.updateSejarah', $sejarah) }}"
+                                            enctype="multipart/form-data" method="POST">
                                             @csrf
-                                            @method('delete')
-                                            <div class="modal-body mt-3">
-                                                Apakah Anda ingin menghapus profil ?
+                                            @method('put')
+                                            <input type="text" name="idProfil" value="{{ $sejarah->idProfil }}"
+                                                hidden>
+                                            <div class="mb-4">
+                                                <label class="form-label" for="gambarSejarah">Gambar</label>
+                                                <div class="row ms-1 mb-2 p-0">
+                                                    <div class="col-auto border rounded-2">
+                                                        <div class="m-3">
+                                                            <img src="{{ Storage::url($sejarah->gambarSejarah) }}"
+                                                                alt="{{ $sejarah->gambarSejarah }}" height="150">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input class="form-control" type="file" name="gambar"
+                                                    id="gambarSejarah" accept=".jpg, .jpeg, .svg">
                                             </div>
-                                            <div class="modal-footer">
+                                            <div class="mb-4">
+                                                <label class="form-label" for="deskripsiSejarah">Deskripsi</label>
+                                                <textarea id="js-ckeditor5-classic-edit-sejarah" class="form-control" name="deskripsiSejarah">{{ $sejarah->deskripsiSejarah }}</textarea>
+                                            </div>
+                                            <input type="datetime-local" id="timestamp2" name="timestampSejarah"
+                                                class="form-control" hidden>
+                                            <div class="mb-4 text-end">
                                                 <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-danger">Hapus Profil</button>
+                                                    data-bs-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-primary"
+                                                    data-bs-dismiss="modal">Simpan</button>
                                             </div>
                                         </form>
                                     </div>
+                                    <div class="block-content block-content-full bg-body"></div>
                                 </div>
-                            </div> --}}
-
-                            <script>
-                                $(document).ready(function() {
-                                    var dataId = {{ $item->idProfil }};
-
-                                    // ClassicEditor.create(document.querySelector('#js-ckeditor5-classic-edit-' + dataId))
-                                    document.querySelectorAll('#ck-deskripsi').forEach(function(element) {
-                                        ClassicEditor
-                                            .create(element)
-                                    });
-                                    $('#js-flatpickr-edit-' + dataId).flatpickr({
-                                        dateFormat: "d-m-Y",
-                                        theme: "red",
-                                    });
-
-                                });
-                            </script>
-                        @endforeach
-                    </tbody>
-                </table>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            {{-- Data Visi Misi --}}
+            <div class="col-lg-4">
+                @foreach ($profil as $visimisi)
+                    <div class="block block-rounded block-link-pop overflow-hidden">
+                        <img class="img-fluid" src="{{ Storage::url($visimisi->gambarVisiMisi) }}" alt="">
+                        <div class="block-content">
+                            <div class="position-relative">
+                                <div class="position-absolute top-0 end-0 block-options">
+                                    <button type="button" class="btn-block-option" title="Edit Visi Misi"><i
+                                            class="fa fa-fw fa-pencil-alt" data-bs-toggle="modal"
+                                            data-bs-target="#modalEditVisiMisi{{ $visimisi->idProfil }}"></i></button>
+                                </div>
+                            </div>
+                            <h4 class="mb-1">
+                                Visi Misi
+                            </h4>
+                            <p class="fs-sm fw-medium mb-2">Update at
+                                <span
+                                    class="text-muted">{{ \Carbon\Carbon::parse($visimisi->timestampVisiMisi)->format('d-m-Y H:i') }}</span>
+                            </p>
+                            <div class="fs-sm text-muted">
+                                {!! $visimisi->visiMisi !!}
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Modal edit VisiMisi --}}
+                    <div class="modal fade" id="modalEditVisiMisi{{ $visimisi->idProfil }}" data-bs-backdrop="static"
+                        data-bs-keyboard="false">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="block block-rounded block-transparent mb-0">
+                                    <div class="block-header block-header-default">
+                                        <h3 class="block-title">Edit Visi Misi</h3>
+                                        <div class="block-options">
+                                            <button type="button" class="btn-block-option" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                                <i class="fa fa-fw fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="block-content fs-sm">
+                                        <form action="{{ route('profil.updateVisiMisi', $visimisi) }}"
+                                            enctype="multipart/form-data" method="POST">
+                                            @csrf
+                                            @method('put')
+                                            <input type="text" name="idProfil" value="{{ $visimisi->idProfil }}"
+                                                hidden>
+                                            <div class="mb-4">
+                                                <label class="form-label" for="gambarVisiMisi">Gambar</label>
+                                                <div class="row ms-1 mb-2 p-0">
+                                                    <div class="col-auto border rounded-2">
+                                                        <div class="m-3">
+                                                            <img src="{{ Storage::url($visimisi->gambarVisiMisi) }}"
+                                                                alt="{{ $visimisi->gambarVisiMisi }}" height="150">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input class="form-control" type="file" name="gambar"
+                                                    id="gambarVisiMisi" accept=".jpg, .jpeg, .svg">
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label" for="visiMisi">Deskripsi</label>
+                                                <textarea id="js-ckeditor5-classic-edit-visimisi" class="form-control" name="visiMisi">{{ $visimisi->visiMisi }}</textarea>
+                                            </div>
+                                            <input type="datetime-local" id="timestamp3" name="timestampVisiMisi"
+                                                class="form-control" hidden>
+                                            <div class="mb-4 text-end">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-primary"
+                                                    data-bs-dismiss="modal">Simpan</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="block-content block-content-full bg-body"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
+    </div>
 
-        <!-- Modal Insert-->
-        {{-- <div class="modal fade" id="modalInsert" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-            aria-labelledby="modalInsertLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header text-light" style="background-color: #537188" data-bs-theme="dark">
-                        <h1 class="modal-title fs-5" id="modalInsertLabel">Insert Berita</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- Modal Insert-->
+    <div class="modal fade" id="modalInsert" tabindex="-1" role="dialog" aria-labelledby="modalInsert"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="block block-rounded block-transparent mb-0">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title">Insert Profil</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
                     </div>
-                    <form action="{{ route('profil.store') }}" enctype="multipart/form-data" method="POST">
-                        @csrf
-                        <div class="modal-body">
+                    <div class="block-content fs-sm">
+                        <form action="{{ route('profil.store') }}" enctype="multipart/form-data" method="POST">
+                            @csrf
                             <div class="mb-4">
                                 <label class="form-label" for="namaSekolah">Nama Sekolah</label>
                                 <input type="text" class="form-control" id="namaSekolah" name="namaSekolah"
-                                    placeholder="Nama Sekolah Anda..">
+                                    placeholder="Nama Sekolah..">
                             </div>
-                            {{-- <div class="mb-4">
-                                <label class="form-label" for="gambarProfil">Gambar</label>
-                                <input class="form-control" type="file" name="gambar" id="gambarProfil"
-                                    accept="image/*">
-                            </div> --}}
-                            {{-- <div class="mb-4">
-                                <label class="form-label" for="deskripsiProfil">Deskripsi Profil</label>
-                                <textarea id="deskripsiProfil" class="form-control" name="deskripsiProfil"></textarea>
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="deskripsiSejarah">Deskripsi Sejarah</label>
-                                <textarea id="deskripsiSejarah" class="form-control" name="deskripsiSejarah"></textarea>
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="visi">Visi</label>
-                                <textarea id="visi" class="form-control" name="visi"></textarea>
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="misi">Misi</label>
-                                <textarea id="misi" class="form-control" name="misi"></textarea>
-                            </div>
-                            <div class="mb-4">
-                                <div class="row m-0">
-                                    <div class="col-lg-4 col-sm-12 col-12 px-0 mb-sm-0 mb-4">
-                                        <label class="form-label" for="tahun">Tahun</label>
-                                        <select class="form-select" id="tahun" name="tahun">
-                                            <option value="">Pilih Tahun</option>
-                                            @php
-                                                $currentYear = date('Y');
-                                            @endphp
-                                            @for ($year = 2020; $year <= $currentYear; $year++)
-                                                <option value="{{ $year }}">{{ $year }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
+                            <div class="mb-4 row">
+                                <div class="col-12 mb-2">
+                                    <label class="form-label" for="deskripsiProfil">Deskripsi Profil</label>
+                                    <textarea id="deskripsiProfil" class="form-control" name="deskripsiProfil" placeholder="Deskripsi profil.."></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Upload gambar profil</label>
+                                    <input type="file" name="gambarProfil" class="form-control"
+                                        accept=".jpg, .jpeg, .svg">
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Simpan</button>
-                        </div>
-                    </form>
+                            <div class="mb-4 row">
+                                <div class="col-12 mb-2">
+                                    <label class="form-label" for="deskripsiSejarah">Deskripsi Sejarah</label>
+                                    <textarea id="deskripsiSejarah" class="form-control" name="deskripsiSejarah" placeholder="Deskripsi sejarah.."></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Upload gambar sejarah</label>
+                                    <input type="file" name="gambarSejarah" class="form-control"
+                                        accept=".jpg, .jpeg, .svg">
+                                </div>
+                            </div>
+                            <div class="mb-4 row">
+                                <div class="col-12 mb-2">
+                                    <label class="form-label" for="visiMisi">Deskripsi Visi Misi</label>
+                                    <textarea id="visiMisi" class="form-control" name="visiMisi" placeholder="Deskripsi visi misi.."></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Upload gambar visi misi</label>
+                                    <input type="file" name="gambarVisiMisi" class="form-control"
+                                        accept=".jpg, .jpeg, .svg">
+                                </div>
+                            </div>
+                            <div class="mb-4 text-end">
+                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="block-content block-content-full bg-body"></div>
                 </div>
             </div>
-        </div>  --}}
+        </div>
+    </div>
 
-    @endsection
+    @foreach ($profil as $item)
+        <script>
+            $(document).ready(function() {
+                var dataId = {{ $item->idProfil }};
+
+                ClassicEditor.create(document.querySelector('#js-ckeditor5-classic-edit-profil'));
+                ClassicEditor.create(document.querySelector('#js-ckeditor5-classic-edit-sejarah'));
+                ClassicEditor.create(document.querySelector('#js-ckeditor5-classic-edit-visimisi'));
+
+                $('#js-flatpickr-edit-' + dataId).flatpickr({
+                    dateFormat: "d-m-Y H:i",
+                    theme: "red",
+                    minDate: "today",
+                    defaultDate: new Date(),
+                    enableTime: true,
+                });
+
+                function setTimestampValue(elementId) {
+                    var timestampInput = document.getElementById(elementId);
+
+                    var sekarang = new Date();
+                    sekarang.setMinutes(sekarang.getMinutes() - sekarang.getTimezoneOffset());
+
+                    timestampInput.value = sekarang.toISOString().slice(0, 16);
+                }
+
+                // Panggil fungsi untuk mengatur nilai untuk setiap input
+                setTimestampValue('timestamp');
+                setTimestampValue('timestamp2');
+                setTimestampValue('timestamp3');
+
+            });
+        </script>
+    @endforeach
+@endsection

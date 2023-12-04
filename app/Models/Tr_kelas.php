@@ -13,4 +13,14 @@ class Tr_kelas extends Model
     protected $guarded = ['idtrKelas'];
     protected $primaryKey = 'idtrKelas';
     public $timestamps = false;
+
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class, 'idKelas', 'idKelas');
+    }
+
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class, 'idSiswa', 'idSiswa');
+    }
 }

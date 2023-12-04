@@ -13,27 +13,14 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'user';
-    protected $guarded = [
-        'idUser',
-        'idPegawai'
-    ];
+    protected $guarded = ['idUser']; 
     protected $primaryKey = 'idUser';
-
-    protected $fillable = [
-        'username',
-        'password',
-    ];
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        // 'password' => 'hashed',
-    ];
+    protected $fillable = ['username', 'password', 'hakAkses', 'idPegawai'];
+    protected $hidden = ['password', 'remember_token'];
+    public $timestamps = false;
 
     public function pegawai()
     {
-        return $this->belongsTo(Pegawai::class, 'idPegawai');
+        return $this->hasOne(Pegawai::class, 'idPegawai', 'idPegawai');
     }
 }

@@ -13,4 +13,12 @@ class Berita extends Model
     protected $guarded = ['idBerita'];
     protected $primaryKey = 'idBerita';
     public $timestamps = false;
+
+    protected $fillable =[
+        'judulBerita',
+        'isiBerita',
+        'waktuBerita',
+        'sumberBerita',
+        'gambar'
+    ];
 }

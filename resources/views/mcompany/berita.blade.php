@@ -2,324 +2,367 @@
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
-            {{-- Page title berita --}}
-            <nav class="flex-shrink-0 my-3 mt-sm-0" aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-alt">
-                    <li class="breadcrumb-item">
-                        <a class="link-fx" href="javascript:void(0)">Manajemen Company</a>
-                    </li>
-                    <li class="breadcrumb-item" aria-current="page">
-                        {{ $title2 }}
-                    </li>
-                </ol>
-            </nav>
+            <div class="row p-0">
+                <div class="col-6">
+                    {{-- Page title berita --}}
+                    <nav class="flex-shrink-0 my-3 mt-sm-0" aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-alt">
+                            <li class="breadcrumb-item">
+                                <a class="link-fx" href="javascript:void(0)">{{ $title }}</a>
+                            </li>
+                            <li class="breadcrumb-item" aria-current="page">
+                                {{ $title2 }}
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-6 text-end">
+                    <button class="btn btn-sm btn-alt-success" id="insertBerita"><i class="fa fa-plus mx-2"></i>Tambah
+                        Data</button>
+                </div>
+                {{-- data-bs-target="#modal-tambahBerita" --}}
+                {{-- data-bs-toggle="modal" --}}
+            </div>
         </div>
     </div>
     <div class="content">
-        {{-- Alert --}}
-        @if (session('success') || $errors->any())
-            <div class="alert alert-{{ session('success') ? 'success' : 'warning' }} alert-dismissible fade show"
-                role="alert">
-                @if (session('success'))
-                    {{ session('success') }}
-                @else
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                @endif
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
 
         <div class="block block-rounded">
             <div class="block-header block-header-default">
                 <h3 class="block-title">Table Berita</h3>
             </div>
             <div class="block-content block-content-full">
-                <table id="tabelBerita"
-                    class="d-inline table table-responsive table-bordered table-striped table-vcenter desktop tablet-p mobile-p"
-                    style="width:800px">
-                    <thead class="text-light" style="background-color: #537188">
+                <table id="tabelBerita" class="table table-bordered table-striped table-vcenter js-dataTable-responsive">
+                    <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Tanggal Berita</th>
+                            <th style="width: 5%" class="text-center">No</th>
+                            <th style="width: 16%;">Tanggal Berita</th>
                             <th>Judul Berita</th>
-                            <th>Isi Berita</th>
-                            <th>Gambar</th>
-                            <th>Sumber Berita</th>
+                            <th style="width: 25%">Sumber Berita</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($berita as $item)
+                        {{-- @foreach ($berita as $item)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ \Carbon\Carbon::parse($item->waktuBerita)->format('d-m-Y') }}</td>
-                                <td>{{ $item->judulBerita }}</td>
-                                <td>
-                                    <div class="ellipse">{!! $item->isiBerita !!}</div>
+                                <td class="text-center fs-sm">{{ $loop->iteration }}</tde=>
+                                <td class="fw-semibold fs-sm">
+                                    {{ \Carbon\Carbon::parse($item->waktuBerita)->format('d-m-Y') }}</td>
+                                <td class="fs-sm">{{ $item->judulBerita }}</td>
+                                <td class="fs-sm" style="max-width: 220px;">
+                                    <div class="ellipse">
+                                        @if ($item->sumberBerita)
+                                            {{ $item->sumberBerita }}
+                                        @else
+                                            <em class="opacity-50">Sumber berita tidak tercantum</em>
+                                        @endif
+                                    </div>
                                 </td>
                                 <td class="text-center">
-                                    @if ($item->gambar)
-                                        <img src="{{ Storage::url($item->gambar) }}" height="100px">
-                                    @else
-                                        <em class="opacity-50">Gambar tidak ditemukan</em>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($item->sumberBerita)
-                                        {{ $item->sumberBerita }}
-                                    @else
-                                        <em class="opacity-50">Sumber berita tidak tercantum</em>
-                                    @endif
-                                </td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                                            data-bs-target="#modalEdit{{ $item->idBerita }}"><i class="fa fa-edit"></i></a>
-                                        <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                            data-bs-target="#deletModal{{ $item->idBerita }}">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-alt-primary" title="Edit"
+                                            onclick="showBeritaEdit({{ $item->idBerita }})"><i
+                                                class="fa fa-fw fa-pencil-alt"></i></button>
+                                        <button type="button" class="btn btn-sm btn-alt-danger" title="Delete"
+                                            onclick="showBeritaDelete({{ $item->idBerita }})">
+                                            <i class="fa fa-fw fa-times"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
-
-                            {{-- Modal --}}
-                            {{-- Modal Edit --}}
-                            <div class="modal fade" id="modalEdit{{ $item->idBerita }}" data-bs-backdrop="static"
-                                data-bs-keyboard="false">
-                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                                    <div class="modal-content">
-                                        <div class="modal-header text-light" style="background-color: #537188"
-                                            data-bs-theme="dark">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Berita</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <form action="{{ route('berita.update', $item) }}" enctype="multipart/form-data"
-                                            method="POST">
-                                            @csrf
-                                            @method('put')
-                                            <div class="modal-body">
-                                                <input type="text" name="idBerita" value="{{ $item->idBerita }}" hidden>
-                                                <div class="mb-4">
-                                                    <label class="form-label" for="judulBerita">Judul Berita</label>
-                                                    <input type="text" class="form-control" id="judulBerita"
-                                                        name="judulBerita" placeholder="Judul Berita Anda.."
-                                                        value="{{ $item->judulBerita }}">
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label class="form-label" for="gambarBerita">Gambar Berita</label>
-                                                    <div class="row ms-1 mb-2 p-0">
-                                                        <div class="col-auto border rounded-2">
-                                                            <div class="m-3">
-                                                                <img src="{{ Storage::url($item->gambar) }}"
-                                                                    alt="{{ $item->gambar }}" height="150">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <input class="form-control" type="file" name="gambar"
-                                                        id="gambarBerita" accept="image/*">
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label class="form-label" for="isiBerita">Isi Berita</label>
-                                                    <textarea id="js-ckeditor5-classic-edit-{{ $item->idBerita }}" class="form-control" name="isiBerita">{{ $item->isiBerita }}</textarea>
-                                                </div>
-                                                <div class="mb-4">
-                                                    <div class="row g-4 m-0">
-                                                        <div class="col-lg-4 col-sm-12 col-12 ps-0">
-                                                            <label class="form-label" for="waktuBerita">Tanggal
-                                                                Berita</label>
-                                                            @php
-                                                                $carbonDate = \Carbon\Carbon::parse($item->waktuBerita);
-                                                            @endphp
-                                                            <input type="text" class="form-control"
-                                                                id="js-flatpickr-edit-{{ $item->idBerita }}"
-                                                                name="waktuBerita" placeholder="d-m-Y"
-                                                                data-date-format="d-m-Y"
-                                                                value="{{ $carbonDate->format('d.m.Y') }}">
-                                                        </div>
-                                                        <div class="col-lg-8 col-sm-12 col-12">
-                                                            <label class="form-label" for="sumberBerita">Sumber
-                                                                Berita</label>
-                                                            <input type="text" class="form-control" id="sumberBerita"
-                                                                name="sumberBerita" placeholder="Sumber Berita Anda.."
-                                                                value="{{ $item->sumberBerita }}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Modal Hapus -->
-                            <div class="modal fade" id="deletModal{{ $item->idBerita }}" tabindex="-1"
-                                aria-labelledby="deletModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header text-light" style="background-color: #537188"
-                                            data-bs-theme="dark">
-                                            <h1 class="modal-title fs-5" id="deletModalLabel">Hapus Berita</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <form action="{{ route('berita.destroy', $item->idBerita) }}" method="POST">
-                                            @csrf
-                                            @method('delete')
-                                            <div class="modal-body mt-3">
-                                                Apakah Anda ingin menghapus berita <strong>"{{ $item->judulBerita }}"
-                                                    ?</strong>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-danger">Hapus Berita</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <script>
-                                $(document).ready(function() {
-                                    var dataId = {{ $item->idBerita }};
-
-                                    ClassicEditor.create(document.querySelector('#js-ckeditor5-classic-edit-' + dataId))
-                                        .then(editor => {
-                                            console.log(editor);
-                                        })
-                                        .catch(error => {
-                                            console.error(error);
-                                        });
-
-                                    $('#js-flatpickr-edit-' + dataId).flatpickr({
-                                        dateFormat: "d-m-Y H:i",
-                                        theme: "red",
-                                        minDate: "today",
-                                        defaultDate: new Date(),
-                                        enableTime: true,
-                                    });
-
-                                });
-                            </script>
-                        @endforeach
+                        @endforeach --}}
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- Modal Insert-->
-    <div class="modal fade" id="modalInsert" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="modalInsertLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header text-light" style="background-color: #537188" data-bs-theme="dark">
-                    <h1 class="modal-title fs-5" id="modalInsertLabel">Insert Berita</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('berita.store') }}" enctype="multipart/form-data" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="mb-4">
-                            <label class="form-label" for="judulBerita">Judul Berita</label>
-                            <input type="text" class="form-control" id="judulBerita" name="judulBerita"
-                                placeholder="Judul Berita Anda..">
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="gambarBerita">Gambar Berita</label>
-                            <input class="form-control" type="file" name="gambar" id="gambarBerita"
-                                accept="image/*">
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="isiBerita">Isi Berita</label>
-                            <textarea id="js-ckeditor5-classic" class="form-control" name="isiBerita"></textarea>
-
-                        </div>
-                        <div class="mb-4">
-                            <div class="row m-0">
-                                <div class="col-lg-4 col-sm-12 col-12 px-0 mb-sm-0 mb-4">
-                                    <label class="form-label" for="waktuBerita">Tanggal Berita</label>
-                                    <input type="text" class="form-control js-flatpickr" id="waktuBerita"
-                                        name="waktuBerita" placeholder="d-m-Y" data-date-format="d-m-Y">
-                                </div>
-                                <div class="col-lg-8 col-sm-12 col-12 px-0 ps-lg-3 ps-0">
-                                    <label class="form-label" for="sumberBerita">Sumber Berita</label>
-                                    <input type="text" class="form-control" id="sumberBerita" name="sumberBerita"
-                                        placeholder="Sumber Berita Anda..">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    {{-- MOAL --}}
+    @include('mcompany/modal-berita')
 
 
     <script>
         $(document).ready(function() {
-            var tableBerita = $('#tabelBerita').DataTable({
-                dom: "<'row mb-2 py-2'<'col-12 col-sm-12 col-md-6 py-2'l><'col-12 col-sm-12 col-md-6 py-2 d-flex justify-content-end gap-4'fB>>" +
-                    "<'row my-2 '<'col-12 col-sm-12 overvlow-x-auto'tr>>" +
-                    "<'row'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-                responsive: true,
-                autoWidth: false,
-                columnDefs: [{
-                    targets: 0,
-                    className: 'text-center'
-                }, {
-                    targets: 2,
-                    width: "15%"
-                }, {
-                    targets: 1,
-                    width: "10%"
-                }, {
-                    targets: 5,
-                    width: "10%"
-                }, {
-                    targets: 6,
-                    width: "7%"
-                }],
-                fixedColumns: true,
-                lengthMenu: [10, 25],
-                buttons: [{
-                    text: '<i class="fa fa-plus"></i> Tambah Berita',
-                    className: 'btn btn-alt-success',
-                    action: function() {
-                        $('#modalInsert').modal('show');
-                    }
-                }]
+
+            // Setup CSRF Token
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
 
+            $('#tabelBerita').DataTable({
+                ajax: "{{ route('berita.get-data') }}",
+                columns: [{
+                        data: 'nomor',
+                        name: 'nomor',
+                        className: 'text-center fw-medium fs-sm'
+                    },
+                    {
+                        data: 'waktuBerita',
+                        name: 'waktuBerita',
+                        className: 'text-center  fs-sm'
+                    },
+                    {
+                        data: 'judulBerita',
+                        name: 'judulBerita',
+                        className: 'fs-sm'
+                    },
+                    {
+                        data: 'sumberBerita',
+                        render: function(data, type, row) {
+                            if (data) {
+                                return '<td class="fs-sm" style="max-width: 220px;">' +
+                                    '<div class="ellipse">' + data + '</div>' +
+                                    '</td>';
+                            } else {
+                                return '<td class="fs-sm" style="max-width: 220px;">' +
+                                    '<div class="ellipse">' +
+                                    '<em class="opacity-50">Sumber berita tidak tercantum</em>' +
+                                    '</div>' +
+                                    '</td>';
+                            }
+                        },
+                        name: 'sumberBerita',
+                        className: 'fs-sm'
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            return '<div class="btn-group">' +
+                                '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editBerita" value="' +
+                                data.idBerita + '">' +
+                                '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
+                                '<button type="button" class="btn btn-sm btn-alt-danger" id="action-hapusBerita" title="Delete" value="' +
+                                data.idBerita + '" data-nama-judul="' + data.judulBerita + '">' +
+                                '<i class="fa fa-fw fa-times"></i></button>' +
+                                '</div>';
+                        }
+                    }
+                ],
+                dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'l><'col-12 col-sm-12 col-md-6'f>>" +
+                    "<'row my-2 '<'col-12 col-sm-12'tr>>" +
+                    "<'row'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                lengthMenu: [10, 25],
+            });
+            // show modal berita tambah
+            $('#insertBerita').click(function() {
+                $('#modalBerita').modal('show');
+                $('#formBerita :input').val('');
+                $("#modal-title").text('Tambah Berita');
+                $("#btn-form").html(
+                    `<button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" id="btn-storeBerita">Simpan</button>`
+                );
+            });
 
-            // var beritaData = {!! json_encode($berita) !!}; // Mengambil data dari Blade ke JavaScript
+            $(document).on('click', '#btn-storeBerita', function(e) {
+                e.preventDefault();
 
-            // beritaData.forEach(function(berita) {
-            //     var dataId = berita.idBerita;
+                var data = new FormData($('#formBerita')[0]);
+                var isiBerita = myEditor.getData();
+                data.append('isiBerita', isiBerita);
 
-            //     ClassicEditor.create(document.querySelector('#js-ckeditor5-classic-edit-' + dataId))
-            //         .then(editor => {
-            //             console.log(editor);
-            //         })
-            //         .catch(error => {
-            //             console.error(error);
-            //         });
-            // });
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('berita.store') }}",
+                    data: data,
+                    contentType: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.message,
+                        });
+                        $('#modalBerita').modal('hide');
+                        $('#tabelBerita').DataTable().ajax.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                        // Menampilkan pesan error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON.message,
+                        });
+                    }
+                });
+            });
+
+            // FUNGSI CLASSIC EDITOR 1
+            var myEditor;
+            ClassicEditor
+                .create(document.querySelector('.clasic-editor'))
+                .then(editor => {
+                    myEditor = editor;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+            // Fungsi untuk mendapatkan konten CKEditor
+            function getEditorContent() {
+                return myEditor.getData();
+            }
+
+            // Fungsi untuk mengatur konten CKEditor
+            function setEditorContent(content) {
+                myEditor.setData(content);
+            }
+
+            // menampilkan gambar setelah gambar di input
+            $('#gambarBerita').change(function() {
+                var reader = new FileReader();
+
+                reader.onload = (e) => {
+                    $('#preview-img').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(this.files[0]);
+            });
+
+            $(document).on('click', '#action-editBerita', function(e) {
+                e.preventDefault();
+                $('#modalBerita').modal('show');
+                $("#modal-title").text('Edit Berita');
+                $("#btn-form").html(
+                    `<button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" id="btn-updateBerita">Simpan</button>`
+                );
+
+                var id = $(this).val();
+
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('berita/edit') }}/" + id,
+                    headers: {
+                        "Cache-Control": "no-cache, no-store, must-revalidate",
+                        "Pragma": "no-cache"
+                    },
+                    success: function(response) {
+                        $('#idBerita').val(response.berita.idBerita);
+                        $('#judulBerita').val(response.berita.judulBerita);
+                        $('#waktuBerita').val(response.berita.waktuBerita);
+                        $('#sumberBerita').val(response.berita.sumberBerita);
+                        var isiBerita = response.berita.isiBerita ? response.berita.isiBerita :
+                            null;
+                        if (isiBerita != null) {
+                            setEditorContent(isiBerita);
+                        }
+                        setEditorContent(response.berita.isiBerita);
+                        // myEditor.setData(isiBerita);
+
+                        var gambarPath = response.berita.gambar ?
+                            "{{ asset(Storage::url('')) }}/" + response.berita.gambar : null;
+
+                        if (gambarPath) {
+                            $('#preview-img').attr('src', gambarPath);
+                        } else {
+                            $('#preview-img').removeAttr('src');
+                            $('#preview-img').attr('alt', 'Gambar tidak tersedia');
+                        }
+
+                    }
+                });
+            });
+
+            $(document).on('click', '#btn-updateBerita', function(e) {
+                e.preventDefault();
+
+                var id = $('#idBerita').val();
+                var judulBerita = $('#judulBerita').val();
+                var waktuBerita = $('#waktuBerita').val();
+                var sumberBerita = $('#sumberBerita').val();
+                // var gambarBerita = $('#gambarBerita')[0].files[0];
+                var isiBerita = myEditor.getData();
+                // data.append('isiBerita', isiBerita);
+
+                // console.log(gambarBerita);
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: "PUT",
+                    url: "{{ url('berita/update') }}/" + id,
+                    data: {
+                        'judulBerita': judulBerita,
+                        'isiBerita': isiBerita,
+                        'waktuBerita': waktuBerita,
+                        'sumberBerita': sumberBerita,
+                        // 'gambar': gambarBerita,
+
+                    },
+                    // contentType: false,
+                    // processData: false,
+                    dataType: "json",
+                    success: function(response) {
+                        // $(".btn-block-option").click();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.message,
+                        });
+                        $('#modalBerita').modal('hide');
+                        $('#tabelBerita').DataTable().ajax.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON.message,
+                        });
+                    }
+                });
+            });
+
+            $(document).on('click', '#action-hapusBerita', function(e) {
+                e.preventDefault();
+                var id = $(this).val();
+                var nama = $(this).data('nama-judul');
+
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: 'Menghapus data ' + nama + '',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Hapus!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+                        $.ajax({
+                            type: "DELETE",
+                            url: "{{ url('berita/destroy') }}/" + id,
+                            dataType: 'json',
+                            success: function(response) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Dihapus!',
+                                    text: response.message,
+                                });
+                                $('#tabelBerita').DataTable().ajax.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Data gagal dihapus.',
+                                });
+                            }
+                        });
+                    }
+                });
+            });
         });
     </script>
 @endsection

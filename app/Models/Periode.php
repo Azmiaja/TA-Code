@@ -13,4 +13,20 @@ class Periode extends Model
     protected $guarded = ['idPeriode'];
     protected $primaryKey = 'idPeriode';
     public $timestamps = false;
+
+    // Define the relationship with the Pegawai model
+    public function pegawai()
+    {
+        return $this->kelas->belongsTo(Pegawai::class, 'idPegawai');
+    }
+
+    // Define the relationship with the Kelas model
+    public function kelas()
+    {
+        return $this->hasMany(Kelas::class, 'idPeriode');
+    }
+    public function pengajar()
+    {
+        return $this->hasMany(Pengajaran::class, 'idPengajaran');
+    }
 }

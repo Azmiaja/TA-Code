@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class LaporanController extends Controller
 {
-    public function index()
+    public function indexLaporanNilai()
     {
         return view('mkelas.laporan', [
             'title' => 'Manajemen Kelas',

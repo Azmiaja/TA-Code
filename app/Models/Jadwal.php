@@ -13,4 +13,26 @@ class Jadwal extends Model
     protected $guarded = ['idJadwal'];
     protected $primaryKey = 'idJadwal';
     public $timestamps = false;
+
+    public function pengajaran()
+    {
+        return $this->belongsTo(Pengajaran::class, 'idPengajaran');
+    }
+    
+    public function pegawai()
+    {
+        return $this->pengajaran->belongsTo(Pegawai::class, 'idPegawai');
+    }
+    public function mapel()
+    {
+        return $this->pengajaran->belongsTo(Mapel::class, 'idMapel');
+    }
+    public function periode()
+    {
+        return $this->pengajaran->belongsTo(Periode::class, 'idPeriode');
+    }
+    public function kelas()
+    {
+        return $this->periode->belongsTo(Kelas::class, 'idKelas');
+    }
 }

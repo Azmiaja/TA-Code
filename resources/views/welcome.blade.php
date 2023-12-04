@@ -130,3 +130,245 @@
         </div>
     </body>
 </html>
+
+<tbody>
+    @foreach ($siswa as $item)
+        <tr>
+            <td>{{ $loop->iteration }}</td>
+            <td>{{ $item->nisn }}</td>
+            <td>{{ $item->namaSiswa }}</td>
+            <td>
+                <span
+                    class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill {{ $item->status === 'Aktif' ? 'bg-success-light text-success' : 'bg-danger-light text-danger' }}">
+                    {{ $item->status }}
+                </span>
+            </td>
+            <td>
+                <div class="d-flex gap-2">
+                    <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                        data-bs-target="#modalEdit{{ $item->idSiswa }}"><i
+                            class="fa fa-edit"></i></a>
+                    <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                        data-bs-target="#deletModal{{ $item->idSiswa }}"><i
+                            class="fa fa-trash"></i></a>
+                    <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#detailModal{{ $item->idSiswa }}"><i
+                            class="px-1 fa fa-info"></i></a>
+                </div>
+            </td>
+        </tr>
+
+        {{-- Modal Edit --}}
+        <div class="modal fade" id="modalEdit{{ $item->idSiswa }}" tabindex="-1"
+            data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modalEditLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header text-light" style="background-color: #537188"
+                        data-bs-theme="dark">
+                        <h1 class="modal-title fs-5" id="modalEditLabel">Edit Siswa</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('siswa.update', $item) }}" enctype="multipart/form-data"
+                        method="POST">
+                        @csrf
+                        @method('put')
+                        <div class="modal-body">
+                            <input type="text" name="idSiswa" hidden
+                                value="{{ $item->idSiswa }}">
+                            <div class="mb-4">
+                                <label class="form-label" for="nisn">NISN</label>
+                                <input type="text" class="form-control" id="nisn" name="nisn"
+                                    placeholder="NISN Siswa.." value="{{ $item->nisn }}">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="namaSiswa">Nama Siswa</label>
+                                <input type="text" class="form-control" id="namaSiswa"
+                                    name="namaSiswa" placeholder="Nama Siswa.."
+                                    value="{{ $item->namaSiswa }}">
+                            </div>
+                            <div class="mb-4">
+                                <div class="row m-0">
+                                    <div
+                                        class="col-lg-6 col-sm-12 col-12 px-0 pe-lg-2 pe-0 mb-lg-0 mb-sm-4 mb-4">
+                                        <label class="form-label" for="tempatLahir">Tempat
+                                            Lahir</label>
+                                        <input type="text" class="form-control" id="tempatLahir"
+                                            name="tempatLahir" placeholder="Tempat Lahir Siswa.."
+                                            value="{{ $item->tempatLahir }}">
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12 col-12 px-0 ps-lg-2 ps-0">
+                                        <label class="form-label" for="tanggalLahir">Tanggal
+                                            Lahir</label>
+                                        <input type="date" class="form-control flatpickr-input"
+                                            id="tgl-lahir-fltpickr-{{ $item->idSiswa }}"
+                                            name="tanggalLahir" placeholder="Tanggal Lahir Siswa.."
+                                            value="{{ $item->tanggalLahir }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="alamat">Alamat</label>
+                                <textarea id="alamat" class="form-control" name="alamat" placeholder="Alamat Siswa..">{{ $item->alamat }}</textarea>
+                            </div>
+                            <div class="mb-4">
+                                <div class="row m-0">
+                                    <div
+                                        class="col-lg-6 col-sm-12 col-12 px-0 pe-lg-2 pe-0 mb-lg-0 mb-sm-4 mb-4">
+                                        <label class="form-label" for="jenisKelamin">Jenis
+                                            Kelamin</label>
+                                        <select name="jenisKelamin" id="jenisKelamin"
+                                            class="form-select">
+                                            <option value="" disabled>-- Pilih Jenis
+                                                Kelamin --</option>
+                                            @foreach (['Laki-Laki', 'Perempuan'] as $gender)
+                                                <option value="{{ $gender }}"
+                                                    {{ $item->jenisKelamin === $gender ? 'selected' : '' }}>
+                                                    {{ $gender }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div
+                                        class="col-lg-6 col-sm-12 col-12 px-0 ps-lg-2 ps-0">
+                                        <label class="form-label" for="agama">Agama</label>
+                                        <select name="agama" id="agama" class="form-select">
+                                            <option value="" selected>-- Pilih Agama --</option>
+                                            @foreach (['Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha', 'Konghuchu'] as $agama)
+                                                <option value="{{ $agama }}"
+                                                    {{ $item->agama === $agama ? 'selected' : '' }}>
+                                                    {{ $agama }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="row m-0">
+                                    <div
+                                        class="col-lg-6 col-sm-12 col-12 px-0 pe-lg-2 pe-0 mb-lg-0 mb-sm-4 mb-4">
+                                        <label class="form-label" for="noHpOrtu">No Handphone Wali</label>
+                                        <input type="number" name="noHpOrtu" id="noHP"
+                                            class="form-control" placeholder="No Hp Siswa.."
+                                            value="{{ $item->noHpOrtu }}">
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12 col-12 px-0 ps-lg-2 ps-0">
+                                        <label class="form-label" for="status">Status</label>
+                                        <select name="status" id="status" class="form-select">
+                                            <option value="" selected>-- Pilih Status --</option>
+                                            @foreach (['Aktif', 'Tidak Aktif'] as $status)
+                                                <option value="{{ $status }}"
+                                                    {{ $item->status === $status ? 'selected' : '' }}>
+                                                    {{ $status }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Hapus -->
+        <div class="modal fade" id="deletModal{{ $item->idSiswa }}" tabindex="-1"
+            aria-labelledby="deletModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header text-light" style="background-color: #537188"
+                        data-bs-theme="dark">
+                        <h1 class="modal-title fs-5" id="deletModalLabel">Hapus Berita</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('siswa.destroy', $item->idSiswa) }}" method="POST">
+                        @csrf
+                        @method('delete')
+                        <div class="modal-body mt-3">
+                            Apakah ingin menghapus data <strong>"{{ $item->namaSiswa }}"
+                                ?</strong>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Hapus Berita</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Detai -->
+        <div class="modal fade" id="detailModal{{ $item->idSiswa }}" tabindex="-1"
+            aria-labelledby="detailModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header text-light" style="background-color: #537188"
+                        data-bs-theme="dark">
+                        <h1 class="modal-title fs-5" id="detailModalLabel">Detail Siswa</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body mt-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <p><strong>NISN : </strong>{{ $item->nisn }}</p>
+                                <p><strong>Nama : </strong>{{ $item->namaSiswa }}</p>
+                                <p><strong>Tempat Lahir : </strong>{{ $item->tempatLahir }}</p>
+                                <p><strong>Tanggal Lahir : </strong>{{ $item->tanggalLahir }}</p>
+                                <p><strong>Alamat : </strong>{{ $item->alamat }}</p>
+                                <p><strong>Jenis Kelamin : </strong>{{ $item->jenisKelamin }}</p>
+                                <p><strong>Agama : </strong>{{ $item->agama }}</p>
+                                <p><strong>No Handphone Wali : </strong>{{ $item->noHpOrtu }}</p>
+                                <p><strong>Status : </strong>{{ $item->status }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                var dataId = {{ $item->idSiswa }};
+                $('#tgl-lahir-fltpickr-' + dataId).flatpickr({
+                    dateFormat: "d-m-Y",
+                    theme: "red"
+                });
+            });
+        </script>
+    @endforeach
+</tbody>
+
+// $('#idPegawai').on('change', function() {
+    //     // Mendapatkan nilai nip, nama, dan tanggalLahir dari data atribut
+    //     // var nip = $(this).find(':selected').data('nip');
+    //     var nama = $(this).find(':selected').data('nama');
+    //     var tanggalLahir = $(this).find(':selected').data('tanggal-lahir');
+
+    //     // Format tanggal lahir menjadi ddmmYY
+    //     var formattedDate = formatDate(tanggalLahir);
+
+    //     // Mengambil inisial dari nama depan
+    //     var namaDepan = nama.split(' ')[0].toLowerCase();
+
+    //     // Menghasilkan 3 angka acak
+    //     var angkaAcak = Math.floor(100 + Math.random() * 900);
+
+    //     // Menggabungkan inisial nama dan angka acak
+    //     var username = namaDepan + angkaAcak;
+
+    //     // Mengisi nilai pada input username dan password
+    //     $('.username').val(username);
+    //     $('.password').val(formattedDate);
+    // });

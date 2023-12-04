@@ -7,6 +7,7 @@
     <title>{{ $title }}</title>
 
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/oneui.min.css') }}">
 
     <link href="{{ asset('assets/css/carousel.css') }}" rel="stylesheet">
 
@@ -160,9 +161,10 @@
     </style>
 
     <script src="{{ asset('assets/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/oneui.app.min.js') }}"></script>
 </head>
 
-<body>
+<body class="m-0 p-0">
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div class="container">
@@ -193,9 +195,18 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="container">
-        <p class="float-end"><a href="#">Back to top</a></p>
-        <p>&copy; 2023 SDN Lemahbang.</p>
+    <footer id="page-footer" class="container-fluid">
+        <div class="container py-3">
+            <div class="row fs-sm">
+                <div class="col-sm-6 order-sm-2 py-1 text-center text-sm-end float-end">
+                     <a class="fw-semibold" href="#">Back to top</a>
+                </div>
+                <div class="col-sm-6 order-sm-1 py-1 text-center text-sm-start">
+                    <a class="fw-semibold" href="{{ route('landingpage') }}" target="_blank">SDN Lemahbang</a> &copy;
+                    <span data-toggle="year-copy">2023</span>
+                </div>
+            </div>
+        </div>
     </footer>
 
 </body>

@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <div class="container">
+            <div class="container pb-3 my-2">
                 <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
                     aria-label="breadcrumb">
                     <ol class="breadcrumb mt-3">
@@ -44,12 +44,12 @@
                     </ol>
                 </nav>
             </div>
-            <div class="container pb-5" style="max-width: 860px;">
-                <div class="fs-6 mb-5">
+            <div class="container py-3" style="max-width: 860px;">
+                <div class="fs-6 mb-5 lead">
                     {!! $berita->isiBerita !!}
                 </div>
                 <a href="{{ $berita->sumberBerita }}" class="text-body-secondary my-2">{{ $berita->sumberBerita }}</a>
-                <p class="text-body-secondary my-2">{{ $berita->waktuBerita }}</p>
+                <p class="text-body-secondary my-2">{{ \Carbon\Carbon::parse($berita->waktuBerita)->format('d-m-Y')  }}</p>
             </div>
         </div>
     </main>
