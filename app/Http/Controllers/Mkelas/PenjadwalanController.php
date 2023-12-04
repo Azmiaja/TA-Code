@@ -9,6 +9,7 @@ use App\Models\Pegawai;
 use App\Models\Pengajaran;
 use App\Models\Periode;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -25,22 +26,14 @@ class PenjadwalanController extends Controller
 
     public function getJPkelas1(Request $request)
     {
-        $periode_id = $request->input('periode_id');
-
-        $data = Jadwal::select(
-            'jadwal.*',
-            'pegawai.namaPegawai',
-            'mapel.namaMapel',
-            DB::raw('TIME_TO_SEC(TIMEDIFF(jadwal.jamSelesai, jadwal.jamMulai)) / 60 AS durasi_total_in_minutes')
-        )
-            ->join('pengajaran', 'jadwal.idPengajaran', '=', 'pengajaran.idPengajaran')
-            ->join('pegawai', 'pengajaran.idPegawai', '=', 'pegawai.idPegawai')
-            ->join('mapel', 'pengajaran.idMapel', '=', 'mapel.idMapel')
-            ->join('periode', 'pengajaran.idPeriode', '=', 'periode.idPeriode')
-            ->join('kelas', 'kelas.idPeriode', '=', 'periode.idPeriode')
-            ->where('pegawai.jenisPegawai', '=', 'Guru')
-            ->where('kelas.namaKelas', '=', '1')
-            ->where('periode.idPeriode', '=', $periode_id)
+        $data = Jadwal::selectRaw('*, TIME_TO_SEC(TIMEDIFF(jadwal.jamSelesai, jadwal.jamMulai)) / 60 AS durasi_total_in_minutes')
+            ->with(['pengajaran.mapel', 'pengajaran.guru', 'pengajaran.periode', 'pengajaran.kelas'])
+            ->whereHas('pengajaran.periode', function ($query) use ($request) {
+                $query->where('idPeriode', $request->periode_id);
+            })
+            ->whereHas('pengajaran.kelas', function ($query) use ($request) {
+                $query->where('namaKelas', $request->kelas_id);
+            })
             ->get();
 
         return DataTables::of($data)->toJson();
@@ -50,21 +43,34 @@ class PenjadwalanController extends Controller
     {
     }
 
-    public function getTeachers(Request $request)
+    public function getForm(Request $request)
     {
-        // Get selected values from the request
-        $selectedPeriode = $request->input('periode');
-        $selectedKelas = $request->input('kelas');
+        $periodeId = $request->input('periode_id');
+        $kelasId = $request->input('kelas_id');
 
-        // Fetch teachers based on the selected values
-        $teachers = Kelas::with('guru')
-        ->join('pengajaran')
-            ->where('idPeriode', $selectedPeriode)
-            ->where('idKelas', $selectedKelas)
-            ->get();
+        $periode = $this->getFormattedPeriode();
+        $kelas = $this->getKelasWithGuru($periodeId);
+        $pengajaran = $this->getPengajaran($kelasId);
 
-        // Return the list of teachers as JSON
-        return response()->json($teachers);
+        return response()->json(['periode' => $periode, 'kelas' => $kelas, 'pengajaran' => $pengajaran]);
+    }
+
+    private function getFormattedPeriode(): Collection
+    {
+        return Periode::orderBy('idPeriode', 'desc')->get()->map(function ($periode) {
+            $periode->formattedTanggalMulai = $periode->semester . '/' . date('Y', strtotime($periode->tanggalMulai));
+            return $periode;
+        });
+    }
+
+    private function getKelasWithGuru($periodeId): Collection
+    {
+        return Kelas::where('idPeriode', $periodeId)->orderBy('namaKelas', 'asc')->with('guru')->get();
+    }
+
+    private function getPengajaran($kelasId): Collection
+    {
+        return Pengajaran::where('idKelas', $kelasId)->with('kelas', 'mapel')->get();
     }
 
     public function store(Request $request)
@@ -90,5 +96,41 @@ class PenjadwalanController extends Controller
                 'message' => $e->errors(),
             ], 422);
         }
+    }
+
+    public function edit($id)
+    {
+        $jadwal = Jadwal::with(['pengajaran.mapel', 'pengajaran.guru', 'pengajaran.periode', 'pengajaran.kelas'])
+            ->find($id);
+
+        return response()->json(['jadwal' => $jadwal]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $jadwal = Jadwal::find($id);
+
+        if (!$jadwal) {
+            return response()->json(['status' => 'error', 'message' => 'Data jadwal tidak ditemukan.']);
+        }
+
+        $jadwal->update($request->all());
+
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Berhasil mengubah data.'
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $jadwal = Jadwal::find($id);
+        $jadwal->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Berhasil mengapus data.'
+        ]);
     }
 }

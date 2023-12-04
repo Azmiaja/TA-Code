@@ -32,16 +32,40 @@
             <div class="row p-0 m-0">
                 <ul class="nav nav-tabs nav-tabs-block" role="tablist">
                     <li class="nav-item">
-                        <button class="nav-link active data-kelas-tab" id="data-kelas-tab" data-bs-toggle="tab"
-                            data-bs-target="#data-kelas1" data-nama-kelas="1" role="tab" aria-controls="data-kelas1"
+                        <button class="nav-link active data-kelas-tab" id="data-kelas-1-tab" data-bs-toggle="tab"
+                            data-bs-target="#data-kelas" data-nama-kelas="1" role="tab" aria-controls="data-kelas"
                             aria-selected="true">Kelas
                             1</button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link data-kelas-tab" id="data-siswa-tab" data-bs-toggle="tab"
-                            data-bs-target="#data-kelas1" role="tab" aria-controls="data-siswa" data-nama-kelas="2"
+                        <button class="nav-link data-kelas-tab" id="data-kelas-2-tab" data-bs-toggle="tab"
+                            data-bs-target="#data-kelas" role="tab" aria-controls="data-kelas" data-nama-kelas="2"
                             aria-selected="false">Kelas
                             2</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link  data-kelas-tab" id="data-kelas-3-tab" data-bs-toggle="tab"
+                            data-bs-target="#data-kelas" data-nama-kelas="3" role="tab" aria-controls="data-kelas"
+                            aria-selected="true">Kelas
+                            3</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link data-kelas-tab" id="data-kelas-4-tab" data-bs-toggle="tab"
+                            data-bs-target="#data-kelas" role="tab" aria-controls="data-kelas" data-nama-kelas="4"
+                            aria-selected="false">Kelas
+                            4</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link  data-kelas-tab" id="data-kelas-5-tab" data-bs-toggle="tab"
+                            data-bs-target="#data-kelas" data-nama-kelas="5" role="tab" aria-controls="data-kelas"
+                            aria-selected="true">Kelas
+                            5</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link data-kelas-tab" id="data-kelas-6-tab" data-bs-toggle="tab"
+                            data-bs-target="#data-kelas" role="tab" aria-controls="data-kelas" data-nama-kelas="6"
+                            aria-selected="false">Kelas
+                            6</button>
                     </li>
                     <li class="nav-item ms-auto">
                         <div class="row pt-1 m-0 text-end">
@@ -68,8 +92,8 @@
                     </li>
                 </ul>
                 <div class="block-content tab-content overflow-hidden">
-                    <div class="tab-pane fade show active" id="data-kelas1" role="tabpanel"
-                        aria-labelledby="data-kelas1-tab" tabindex="0">
+                    <div class="tab-pane fade show active" id="data-kelas" role="tabpanel"
+                        aria-labelledby="data-kelas-tab" tabindex="0">
                         <table id="tabelPengajar" style="width: 100%"
                             class="table table-bordered table-striped table-vcenter">
                             <thead>
@@ -86,32 +110,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade" id="data-siswa" role="tabpanel" aria-labelledby="data-siswa-tab"
-                        tabindex="0">
-                        <table id="tabel-PeriodeSiswa" style="width: 100%;"
-                            class="table tabel-responsive table-bordered table-striped table-vcenter">
-                            <thead>
-                                <tr>
-                                    <th style="max-width: 5%;" class="text-center">No</th>
-                                    <th style="width: auto">Kelas</th>
-                                    <th>Semester</th>
-                                    <th>Nama Siswa</th>
-                                    {{-- <th>Guru Kelas</th> --}}
-                                    <th style="width: 15%;" class="text-center">Status</th>
-                                    <th style="width: 10%;" class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{-- conten --}}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="btabs-animated-fade-settings" role="tabpanel"
-                        aria-labelledby="btabs-animated-fade-settings-tab" tabindex="0">
-                        <h4 class="fw-normal">Settings Content</h4>
-                        <p>Content fades in..</p>
-                    </div>
-                </div>
+                                    </div>
             </div>
         </div>
 
@@ -158,12 +157,6 @@
                                         <option value="" disabled selected>-- Pilih Mapel --</option>
                                     </select>
                                 </div>
-                                {{-- <div class="mb-4">
-                                    <label class="form-label" for="idPeriode">Semester</label>
-                                    <select name="idPeriode" id="idPeriode" class="form-select periode-id">
-                                        <option value="" disabled selected>-- Pilih Periode --</option>
-                                    </select>
-                                </div> --}}
                                 <div class="mb-4 text-end" id="cn-btn">
                                     {{-- conten button --}}
                                 </div>
@@ -197,6 +190,7 @@
                             $('.periode-id').append('<option value="' + value.idPeriode +
                                 '">Semester ' + value.formattedTanggalMulai + '</option>');
                         });
+
                         $('.periode-id').on('change', function() {
                             var selectedPeriodeId = $(this).val();
 
@@ -227,16 +221,6 @@
                                 }
                             });
                         });
-                        // console.log(data);
-                        // $('#idKelas').empty();
-                        // $('#idKelas').append(
-                        //     '<option value="" disabled selected>-- Pilih Kelas --</option>');
-
-                        // $.each(data.kelas, function(key, value) {
-                        //     // console.log(value.idKelas);
-                        //     $('#idKelas').append('<option value="' + value.Kelas +
-                        //         '">Kelas ' + value.namaKelas + '</option>');
-                        // });
 
                         $('.guru-id').empty();
                         $('.guru-id').append(
@@ -302,7 +286,7 @@
                         data: function(d) {
                             d.periode_id = $('#periode').val();
                             d.nama_kls = $(".data-kelas-tab.active").data('nama-kelas');
-                            console.log(d.nama_kls);
+                            // console.log(d.nama_kls);
                         }
                     },
                     columns: [{

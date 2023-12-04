@@ -32,15 +32,37 @@
             <div class="row p-0 m-0">
                 <ul class="nav nav-tabs nav-tabs-block" role="tablist">
                     <li class="nav-item">
-                        <button class="nav-link active" id="data-kelas1-tab" data-bs-toggle="tab"
-                            data-bs-target="#data-kelas1" role="tab" aria-controls="data-kelas1"
-                            aria-selected="true">Kelas
+                        <button class="nav-link active data-kelas-tab" id="data-kelas-1-tab" data-bs-toggle="tab"
+                            data-bs-target="#data-kelas" role="tab" aria-controls="data-kelas"
+                            aria-selected="true" data-nama-kelas="1">Kelas
                             1</button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link" id="data-siswa-tab" data-bs-toggle="tab" data-bs-target="#data-siswa"
-                            role="tab" aria-controls="data-siswa" aria-selected="false">Kelas
+                        <button class="nav-link data-kelas-tab" id="data-kelas-2-tab" data-bs-toggle="tab" data-bs-target="#data-kelas"
+                            role="tab" aria-controls="data-kelas" aria-selected="false" data-nama-kelas="2">Kelas
                             2</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link  data-kelas-tab" id="data-kelas-3-tab" data-bs-toggle="tab"
+                            data-bs-target="#data-kelas" role="tab" aria-controls="data-kelas"
+                            aria-selected="true" data-nama-kelas="3">Kelas
+                            3</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link data-kelas-tab" id="data-kelas-4-tab" data-bs-toggle="tab" data-bs-target="#data-kelas"
+                            role="tab" aria-controls="data-kelas" aria-selected="false" data-nama-kelas="4">Kelas
+                            4</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link  data-kelas-tab" id="data-kelas-5-tab" data-bs-toggle="tab"
+                            data-bs-target="#data-kelas" role="tab" aria-controls="data-kelas"
+                            aria-selected="true" data-nama-kelas="5">Kelas
+                            5</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link data-kelas-tab" id="data-kelas-6-tab" data-bs-toggle="tab" data-bs-target="#data-kelas"
+                            role="tab" aria-controls="data-kelas" aria-selected="false" data-nama-kelas="6">Kelas
+                            6</button>
                     </li>
                     <li class="nav-item ms-auto">
                         <div class="row pt-1 m-0 text-end">
@@ -67,9 +89,9 @@
                     </li>
                 </ul>
                 <div class="block-content tab-content overflow-hidden">
-                    <div class="tab-pane fade show active" id="data-kelas1" role="tabpanel"
-                        aria-labelledby="data-kelas1-tab" tabindex="0">
-                        <table id="tabel-JPkelas1" style="width: 100%;"
+                    <div class="tab-pane fade show active" id="data-kelas" role="tabpanel"
+                        aria-labelledby="data-kelas-tab" tabindex="0">
+                        <table id="tabel-JPkelas" style="width: 100%;"
                             class="table tabel-responsive table-bordered table-striped table-vcenter js-dataTable-responsive">
                             <thead>
                                 <tr>
@@ -87,31 +109,6 @@
                                 {{-- conten --}}
                             </tbody>
                         </table>
-                    </div>
-                    <div class="tab-pane fade" id="data-siswa" role="tabpanel" aria-labelledby="data-siswa-tab"
-                        tabindex="0">
-                        <table id="tabel-PeriodeSiswa" style="width: 100%;"
-                            class="table tabel-responsive table-bordered table-striped table-vcenter">
-                            <thead>
-                                <tr>
-                                    <th style="max-width: 5%;" class="text-center">No</th>
-                                    <th style="width: auto">Kelas</th>
-                                    <th>Semester</th>
-                                    <th>Nama Siswa</th>
-                                    {{-- <th>Guru Kelas</th> --}}
-                                    <th style="width: 15%;" class="text-center">Status</th>
-                                    <th style="width: 10%;" class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{-- conten --}}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="btabs-animated-fade-settings" role="tabpanel"
-                        aria-labelledby="btabs-animated-fade-settings-tab" tabindex="0">
-                        <h4 class="fw-normal">Settings Content</h4>
-                        <p>Content fades in..</p>
                     </div>
                 </div>
             </div>
@@ -135,7 +132,7 @@
                     </div>
                     <div class="block-content fs-sm">
                         {{-- FORM --}}
-                        <input type="text" name="idMapel" id="idMapel" class="id-pengajar" hidden>
+                        <input type="hidden" name="idJadwal" id="idJadwal">
                         <div class="mb-4">
                             <label class="form-label" for="idPeriode">Semester</label>
                             <select name="idPeriode" id="idPeriode" class="form-select pilih-periode">
@@ -151,7 +148,7 @@
                         <div class="mb-4">
                             <label class="form-label" for="idPengajaran">Mapel</label>
                             <select name="idPengajaran" id="idPengajaran" class="form-select pilih-mapel">
-                                <option value="" disabled selected>-- Pilih MApel --</option>
+                                <option value="" disabled selected>-- Pilih Mapel --</option>
                             </select>
                         </div>
                         {{-- isian form --}}
@@ -163,11 +160,11 @@
                                 <option value="Selasa">Selasa</option>
                                 <option value="Rabu">Rabu</option>
                                 <option value="Kamis">Kamis</option>
-                                <option value="Jum'at">Jum'at</option>
-                                <option value="Sabtu">Sabtu-</option>
+                                <option value="Jumat">Jumat</option>
+                                <option value="Sabtu">Sabtu</option>
                             </select>
                         </div>
-                        
+
                         <div class="mb-4">
                             <label class="form-label" for="jamMulai">Jam Mulai</label>
                             <input type="time" class="form-control jam-mulai" id="jamMulai" name="jamMulai">
@@ -186,51 +183,134 @@
             </div>
         </div>
     </div>
-    </div>
 
     @push('scripts')
         <script>
+            // form selection opsi
             function loadDropdownOptionsJadwal() {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-
+                // Periode
                 $.ajax({
                     type: 'GET',
-                    url: "{{ url('data-kelas/kelas/form') }}",
+                    url: "{{ url('penjadwalan/get-form') }}",
                     success: function(data) {
                         $('.pilih-periode').empty();
                         $('.pilih-periode').append(
                             '<option value="" disabled selected>-- Pilih Periode --</option>');
 
                         $.each(data.periode, function(key, value) {
-                            $('.pilih-periode').append('<option value="' + value.idPeriode + '">' + value
-                                .formattedTanggalMulai + '</option>');
+                            // console.log(value);
+                            $('.pilih-periode').append('<option value="' + value.idPeriode + '">Semester ' +
+                                value.formattedTanggalMulai + '</option>');
                         });
-
-                        
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
                     }
                 });
+
+                // Kelas berdasarkan periode
+                $('.pilih-periode').on('change', function() {
+                    var selectedPeriodeId = $(this).val();
+
+                    // Fetch classes based on the selected period
+                    $.ajax({
+                        type: 'GET',
+                        url: "{{ url('penjadwalan/get-form') }}", // You need to define a route for this
+                        data: {
+                            periode_id: selectedPeriodeId
+                        },
+                        success: function(classesData) {
+                            // console.log(classesData);
+                            // Populate the classes dropdown based on the fetched data
+                            $('#idKelas').empty();
+                            $('#idKelas').append(
+                                '<option value="" disabled selected>-- Pilih Kelas --</option>'
+                            );
+
+                            $.each(classesData.kelas, function(key, value) {
+                                $('#idKelas').append('<option value="' + value
+                                    .idKelas +
+                                    '">Kelas ' + value.namaKelas +
+                                    '</option>');
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                });
+
+                // mapel berdaarkan kelas 
+                $('#idKelas').on('change', function() {
+                    var selectedKelasId = $(this).val();
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "{{ url('penjadwalan/get-form') }}", // You need to define a route for this
+                        data: {
+                            kelas_id: selectedKelasId
+                        },
+                        success: function(classesData) {
+                            // console.log(classesData);
+                            // Populate the classes dropdown based on the fetched data
+                            $('#idPengajaran').empty();
+                            $('#idPengajaran').append(
+                                '<option value="" disabled selected>-- Pilih Mapel --</option>'
+                            );
+
+                            $.each(classesData.pengajaran, function(key, value) {
+                                // console.log(value);
+                                $('#idPengajaran').append(
+                                    '<option value="' +
+                                    value.idPengajaran +
+                                    '">' +
+                                    value.mapel.namaMapel +
+                                    '</option>'
+                                );
+                            });
+                        }
+                    });
+                });
             }
 
+            // clear form
+            function clearFormJadawl() {
+                $('#idPeriode').val('');
+                $('#idKelas').val('');
+                $('#idPengajaran').val('');
+                $('#hari').val('');
+                $('#jamMulai').val('');
+                $('#jamSelesai').val('');
+            }
             $(document).ready(function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $('#btn-close').click(function() {
+                    clearFormJadawl();
+                });
                 loadDropdownOptionsJadwal();
 
                 $('#periode').change(function() {
-                    $('#tabel-JPkelas1').DataTable().ajax.reload();
+                    $('#tabel-JPkelas').DataTable().ajax.reload();
                 });
-                $('#tabel-JPkelas1').DataTable({
+
+                $(document).on('click', '.data-kelas-tab', function(e) {
+                    e.preventDefault();
+                    $('#tabel-JPkelas').DataTable().ajax.reload();
+                });
+
+                $('#tabel-JPkelas').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
                         url: "{{ url('penjadwalan/get-data') }}",
                         data: function(d) {
                             d.periode_id = $('#periode').val();
+                            d.kelas_id = $(".data-kelas-tab.active").data('nama-kelas');
+                            // console.log(d.kelas_id);
                         }
                     },
                     columns: [{
@@ -248,12 +328,12 @@
                             name: 'hari',
                         },
                         {
-                            data: 'namaMapel',
-                            name: 'namaMapel'
+                            data: 'pengajaran.mapel.namaMapel',
+                            name: 'pengajaran.mapel.namaMapel'
                         },
                         {
-                            data: 'namaPegawai',
-                            name: 'namaPegawai',
+                            data: 'pengajaran.guru.namaPegawai',
+                            name: 'pengajaran.guru.namaPegawai',
                         },
                         {
                             data: "durasi_total_in_minutes",
@@ -275,11 +355,13 @@
                             searchable: false,
                             render: function(data, type, row) {
                                 return '<div class="btn-group">' +
-                                    '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editPengajar" value="' +
-                                    data.idPengajaran + '">' +
+                                    '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editJadwal" value="' +
+                                    data.idJadwal + '">' +
                                     '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
-                                    '<button type="button" class="btn btn-sm btn-alt-danger"  id="action-hapusPengajar" title="Delete" value="' +
-                                    data.idPengajaran + '" data-nama-pengajar="' + data.namaPegawai +
+                                    '<button type="button" class="btn btn-sm btn-alt-danger" id="action-hapusJadwal" title="Delete" value="' +
+                                    data.idJadwal + '" data-nama-jadwal=" Hari ' + data.hari +
+                                    ' Mapel ' + data
+                                    .namaMapel +
                                     '">' +
                                     '<i class="fa fa-fw fa-times"></i></button>' +
                                     '</div>';
@@ -287,74 +369,226 @@
                         }
                     ],
                     order: [
-                        [1, 'asc']
+                        [1, 'desc']
                     ],
                     dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'l><'col-12 col-sm-12 col-md-6'f>>" +
                         "<'row my-2 '<'col-12 col-sm-12'tr>>" +
                         "<'row mb-2'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
                     lengthMenu: [10, 25],
                 });
-                // $('.tabel-JPkelas2').DataTable({});
-                // $('.tabel-JPkelas3').DataTable({});
-                // $('.tabel-JPkelas4').DataTable({});
-                // $('.tabel-JPkelas5').DataTable({});
-                // $('.tabel-JPkelas6').DataTable({});
 
                 $(document).on('click', '#tambah-jadwal', function(e) {
                     e.preventDefault();
                     $("#modal-Jadwal").modal('show');
-                    $("#title-modal").text('Tambah Jadawa');
+                    $("#title-modal").text('Tambah Jadawal');
                     $("#cn-btn").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary" id="btn-tbhJadwal">Simpan</button>`);
-                    $('.pilih-periode').val('');
-                    $('.pilih-kelas').val('');
-                    $('.pilih-hari').val('');
-                    $('.pilih-guru').val('');
-                    $('.jamMulai').val('');
-                    $('.jamSelesai').val('');
+
                 });
 
-                $(document).on('click', '#btn-tbhJadwal', function(e) {
+                $(document).on('click', '#action-editJadwal', function(e) {
                     e.preventDefault();
-                    var data = {
-                        'idPengajaran': $('.pilih-guru').val(),
-                        'hari': $('.pilih-hari').val(),
-                        'jamMulai': $('.jamMulai').val(),
-                        'jamSelesai': $('.jamSelesai').val(),
-                    }
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        type: "POST",
-                        url: "{{ route('penjadwalan.store') }}",
-                        data: data,
-                        dataType: "json",
-                        success: function(response) {
-                            // console.log(response);
-                            $(".btn-block-option").click();
+                    $("#modal-Jadwal").modal('show');
+                    $("#title-modal").text('Edit Jadawal');
+                    $("#cn-btn").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" id="btn-edtJadwal">Simpan</button>`);
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.message,
-                            });
-                            $('#tabel-JPkelas1').DataTable().ajax.reload();
-                            // loadOptionPengajaran();
-                            $('.pilih-periode').val('');
-                            $('.pilih-kelas').val('');
-                            $('.pilih-hari').val('');
-                            $('.pilih-guru').val('');
-                            $('.jamMulai').val('');
-                            $('.jamSelesai').val('');
+                    var id = $(this).val();
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url('penjadwalan/edit') }}/" + id,
+                        success: function(response) {
+                            $('#idPeriode').val(response.jadwal.pengajaran.periode.idPeriode);
+                            loadKelasDropdown(response.jadwal.pengajaran.periode.idPeriode, response
+                                .jadwal.pengajaran.kelas.idKelas, response.jadwal.pengajaran
+                                .mapel.idMapel);
+
+
+                            // $('#idPengajaran').val(response.jadwal.pengajaran.mapel.idMapel);
+                            $('#hari').val(response.jadwal.hari);
+                            $('#jamMulai').val(response.jadwal.jamMulai);
+                            $('#jamSelesai').val(response.jadwal.jamSelesai);
+                            $('#idJadwal').val(response.jadwal.idJadwal);
+
+                            // loadDropdownOptionsJadwal();
                         },
                         error: function(xhr, status, error) {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
                                 text: xhr.responseJSON.message,
+                            });
+                        }
+                    });
+
+                });
+
+                function loadKelasDropdown(periodeId, selectedKelasId, selectedPengajarId) {
+                    // Fetch classes based on the selected period
+                    $.ajax({
+                        type: 'GET',
+                        url: "{{ url('penjadwalan/get-form') }}",
+                        data: {
+                            periode_id: periodeId
+                        },
+                        success: function(classesData) {
+                            // Populate the classes dropdown based on the fetched data
+                            $('#idKelas').empty();
+                            $('#idKelas').append(
+                                '<option value="" disabled selected>-- Pilih Kelas --</option>'
+                            );
+
+                            $.each(classesData.kelas, function(key, value) {
+                                var selected = (value.idKelas == selectedKelasId) ? 'selected' : '';
+                                $('#idKelas').append('<option value="' + value.idKelas + '" ' +
+                                    selected +
+                                    '>Kelas ' + value.namaKelas +
+                                    '</option>');
+                            });
+
+                            // Setelah memuat opsi kelas, panggil fungsi untuk memuat opsi pengajaran
+                            loadPengajaranDropdown(selectedKelasId, selectedPengajarId);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+
+                // Fungsi untuk memuat opsi dropdown Pengajaran
+                function loadPengajaranDropdown(selectedKelasId, selectedPengajarId) {
+                    // Fetch teaching based on the selected class
+                    $.ajax({
+                        type: 'GET',
+                        url: "{{ url('penjadwalan/get-form') }}",
+                        data: {
+                            kelas_id: selectedKelasId
+                        },
+                        success: function(classesData) {
+                            // Populate the teaching dropdown based on the fetched data
+                            $('#idPengajaran').empty();
+                            $('#idPengajaran').append(
+                                '<option value="" disabled>-- Pilih Mapel --</option>'
+                            );
+
+                            $.each(classesData.pengajaran, function(key, value) {
+                                var selected = (value.mapel.idMapel == selectedPengajarId) ?
+                                    'selected' : '';
+                                $('#idPengajaran').append('<option value="' + value.idPengajaran +
+                                    '" ' +
+                                    selected +
+                                    '>' + value.mapel.namaMapel +
+                                    '</option>');
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+
+                $(document).on('click', '#btn-tbhJadwal', function(e) {
+                    e.preventDefault();
+                    var data = {
+                        'idPengajaran': $('#idPengajaran').val(),
+                        'hari': $('#hari').val(),
+                        'jamMulai': $('#jamMulai').val(),
+                        'jamSelesai': $('#jamSelesai').val(),
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('penjadwalan.store') }}",
+                        data: data,
+                        dataType: "json",
+                        success: function(response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                            });
+                            $('#tabel-JPkelas').DataTable().ajax.reload();
+                            $('#modal-Jadwal').modal('hide');
+                            clearFormJadawl();
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: xhr.responseJSON.message,
+                            });
+                        }
+                    });
+                });
+
+                $(document).on('click', '#btn-edtJadwal', function(e) {
+                    e.preventDefault();
+                    var id = $('#idJadwal').val();
+                    var data = {
+                        'idPengajaran': $('#idPengajaran').val(),
+                        'hari': $('#hari').val(),
+                        'jamMulai': $('#jamMulai').val(),
+                        'jamSelesai': $('#jamSelesai').val(),
+                    }
+                    $.ajax({
+                        type: "PUT",
+                        url: "{{ url('penjadwalan/update') }}/" + id,
+                        data: data,
+                        dataType: "json",
+                        success: function(response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                            });
+                            $('#tabel-JPkelas').DataTable().ajax.reload();
+                            $('#modal-Jadwal').modal('hide');
+                            clearFormJadawl();
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: xhr.responseJSON.message,
+                            });
+                        }
+                    });
+                });
+
+                $(document).on('click', '#action-hapusJadwal', function(e) {
+                    e.preventDefault();
+                    var id = $(this).val();
+                    var nama = $(this).data('nama-jadwal');
+
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: 'Menghapus data ' + nama + '',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Hapus!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "DELETE",
+                                url: "{{ url('penjadwalan/destroy') }}/" + id,
+                                dataType: 'json',
+                                success: function(response) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Dihapus!',
+                                        text: response.message,
+                                    });
+                                    $('#tabel-JPkelas').DataTable().ajax.reload();
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'Data gagal dihapus.',
+                                    });
+                                }
                             });
                         }
                     });

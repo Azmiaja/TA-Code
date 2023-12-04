@@ -231,19 +231,19 @@
                                                 <span class="nav-main-link-name">Data Kelas</span>
                                             </a>
                                         </li>
-
-                                        <li class="nav-main-item">
-                                            <a class="nav-main-link {{ $title2 === 'Pengajar' ? 'active' : '' }}"
-                                                href="{{ route('pengajaran.index') }}">
-                                                <span class="nav-main-link-name">Pengajar</span>
-                                            </a>
-                                        </li>
                                         <li class="nav-main-item">
                                             <a class="nav-main-link {{ $title2 === 'Mata Pelajaran' ? 'active' : '' }}"
                                                 href="{{ route('mapel.index') }}">
                                                 <span class="nav-main-link-name">Mata Pelajaran</span>
                                             </a>
                                         </li>
+                                        <li class="nav-main-item">
+                                            <a class="nav-main-link {{ $title2 === 'Pengajar' ? 'active' : '' }}"
+                                                href="{{ route('pengajaran.index') }}">
+                                                <span class="nav-main-link-name">Pengajar</span>
+                                            </a>
+                                        </li>
+
                                         {{-- <li class="nav-main-item">
                                             <a class="nav-main-link {{ $title2 === 'bagisiswa' ? 'active' : '' }}"
                                                 href="{{ route('mkelas.bagisiswa') }}">
@@ -257,6 +257,18 @@
                                             </a>
                                         </li>
                                     @endcanany
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
+                                            href="{{ route('penilaian.index') }}">
+                                            <span class="nav-main-link-name">
+                                                @if (in_array(Auth::user()->hakAkses, $allowedRoles))
+                                                    Penilaian Siswa
+                                                @elseif (Auth::user()->hakAkses == 'Siswa')
+                                                    Nilai
+                                                @endif
+                                            </span>
+                                        </a>
+                                    </li>
 
                                     <li class="nav-main-item">
                                         <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}"
@@ -266,7 +278,7 @@
                                     </li>
                                 @endcanany
                                 {{-- @canany(['Siswa']) --}}
-                                <li class="nav-main-item">
+                                {{-- <li class="nav-main-item">
                                     <a class="nav-main-link {{ $title2 === 'penugasan' ? 'active' : '' }}"
                                         href="{{ route('mkelas.penugasan') }}">
                                         <span class="nav-main-link-name">
@@ -277,23 +289,12 @@
                                             @endif
                                         </span>
                                     </a>
-                                </li>
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'penilaian' ? 'active' : '' }}"
-                                        href="{{ route('mkelas.penilaian') }}">
-                                        <span class="nav-main-link-name">
-                                            @if (in_array(Auth::user()->hakAkses, $allowedRoles))
-                                                Penilaian Siswa
-                                            @elseif (Auth::user()->hakAkses == 'Siswa')
-                                                Nilai
-                                            @endif
-                                        </span>
-                                    </a>
-                                </li>
+                                </li> --}}
+                                
                                 {{-- @endcanany --}}
                             </ul>
                         </li>
-                        <li class="nav-main-item {{ $title === 'Manajemen Keuangan' ? 'open' : '' }}">
+                        {{-- <li class="nav-main-item {{ $title === 'Manajemen Keuangan' ? 'open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Keuangan' ? 'active' : '' }}"
                                 data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-wallet"></i>
@@ -321,7 +322,7 @@
                                     </li>
                                 @endcanany
                             </ul>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
             </div>

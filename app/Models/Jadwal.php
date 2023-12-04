@@ -19,7 +19,7 @@ class Jadwal extends Model
         return $this->belongsTo(Pengajaran::class, 'idPengajaran');
     }
     
-    public function pegawai()
+    public function guru()
     {
         return $this->pengajaran->belongsTo(Pegawai::class, 'idPegawai');
     }
@@ -33,6 +33,6 @@ class Jadwal extends Model
     }
     public function kelas()
     {
-        return $this->periode->belongsTo(Kelas::class, 'idKelas');
+        return $this->pengajaran->belongsTo(Kelas::class, 'idKelas');
     }
 }

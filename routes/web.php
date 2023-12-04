@@ -118,7 +118,10 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
     Route::delete('pengajar/destroy/{id}', [Mkelas\PengajarController::class, 'destroy']);
 
     Route::get('penjadwalan/get-data', [Mkelas\PenjadwalanController::class, 'getJPkelas1']);
-    Route::get('data-guru/form', [Mkelas\PenjadwalanController::class, 'getTeachers']);
+    Route::get('penjadwalan/get-form', [Mkelas\PenjadwalanController::class, 'getForm']);
+    Route::get('penjadwalan/edit/{id}', [Mkelas\PenjadwalanController::class, 'edit']);
+    Route::put('penjadwalan/update/{id}', [Mkelas\PenjadwalanController::class, 'update']);
+    Route::delete('penjadwalan/destroy/{id}', [Mkelas\PenjadwalanController::class, 'destroy']);
 
     Route::prefix('manajemen-kelas')->group(function () {
         Route::resource('data-kelas', KelasController::class)->except(['index']);
@@ -128,13 +131,14 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
         // Route::get('bagiguru', [Mkelas\BagiGuruController::class, 'index'])->name('mkelas.bagiguru');
         // Route::get('bagisiswa', [Mkelas\BagiSiswaController::class, 'index'])->name('mkelas.bagisiswa');
         Route::resource('penjadwalan', Mkelas\PenjadwalanController::class);
-        Route::get('penugasan', [Mkelas\PenugasanController::class, 'index'])->name('mkelas.penugasan');
-        Route::get('penilaian', [Mkelas\PenilaianController::class, 'index'])->name('mkelas.penilaian');
+        // Route::get('penugasan', [Mkelas\PenugasanController::class, 'index'])->name('mkelas.penugasan');
+       
         Route::get('laporan', [Mkelas\LaporanController::class, 'indexLaporanNilai'])->name('mkelas.laporan');
         Route::resource('periode', Mkelas\PeriodeController::class);
         Route::resource('kelas', Mkelas\KelasController::class);
         Route::resource('mapel', Mkelas\MapelController::class);
         Route::resource('pengajaran', Mkelas\PengajarController::class);
+        Route::resource('penilaian', Mkelas\PenilaianController::class);
     });
     //manajemen keuangan
     Route::prefix('keuangan')->group(function () {
@@ -154,8 +158,9 @@ Route::middleware(['auth:user', 'ceklevel:Admin'])->group(function () {
         // Route::get('bagisiswa', [Mkelas\BagiSiswaController::class, 'index'])->name('mkelas.bagisiswa');
         // Route::get('penjadwalan', [Mkelas\PenjadwalanController::class, 'index'])->name('mkelas.penjadwalan');
         Route::get('penugasan', [Mkelas\PenugasanController::class, 'index'])->name('mkelas.penugasan');
-        Route::get('penilaian', [Mkelas\PenilaianController::class, 'index'])->name('mkelas.penilaian');
+        // Route::get('penilaian', [Mkelas\PenilaianController::class, 'index'])->name('mkelas.penilaian');
         Route::get('laporan', [Mkelas\LaporanController::class, 'indexLaporanNilai'])->name('mkelas.laporan');
+        // Route::resource('penilaian', Mkelas\PenilaianController::class);
     });
     //manajemen keuangan
     //manajemen keuangan
@@ -172,8 +177,9 @@ Route::middleware('auth:user', 'ceklevel:Guru')->group(function () {
     //kelas
     Route::prefix('manajemen-kelas')->group(function () {
         Route::get('penugasan', [Mkelas\PenugasanController::class, 'index'])->name('mkelas.penugasan');
-        Route::get('penilaian', [Mkelas\PenilaianController::class, 'index'])->name('mkelas.penilaian');
+        // Route::get('penilaian', [Mkelas\PenilaianController::class, 'index'])->name('mkelas.penilaian');
         Route::get('laporan', [Mkelas\LaporanController::class, 'indexLaporanNilai'])->name('mkelas.laporan');
+        // Route::resource('penilaian', Mkelas\PenilaianController::class);
     });
     //keuangan
     Route::prefix('keuangan')->group(function () {
@@ -189,7 +195,8 @@ Route::middleware('auth:siswa', 'ceklevel:Siswa')->group(function () {
     //kelas
     Route::prefix('kelas')->group(function () {
         Route::get('penugasan', [Mkelas\PenugasanController::class, 'index'])->name('mkelas.penugasan');
-        Route::get('penilaian', [Mkelas\PenilaianController::class, 'index'])->name('mkelas.penilaian');
+        // Route::get('penilaian', [Mkelas\PenilaianController::class, 'index'])->name('mkelas.penilaian');
+        // Route::resource('penilaian', Mkelas\PenilaianController::class);
     });
     //keuangan
     Route::prefix('keuangan')->group(function () {
