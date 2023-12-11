@@ -15,4 +15,14 @@ class Siswa extends Model implements Authenticatable
     protected $primaryKey = 'idSiswa';
 
     public $timestamps = false;
+
+    public function tr_kelas()
+    {
+        return $this->hasMany(Tr_kelas::class, 'idSiswa', 'idSiswa');
+    }
+    public function nilai()
+    {
+        return $this->hasMany(Nilai::class, 'idSiswa');
+    }
+
 }

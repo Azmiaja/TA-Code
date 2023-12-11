@@ -19,7 +19,7 @@ class KelasController extends Controller
         $pegawai = Pegawai::all();
         $guru = Pegawai::where('jenisPegawai', 'Guru')->get();
         $kelas = Kelas::orderBy('idKelas', 'desc')->get();
-        $periode = Periode::orderBy('idPeriode', 'desc')->get();
+        $periode = Periode::orderBy('tanggalMulai', 'asc')->get();
         $siswa = Siswa::orderBy('idSiswa', 'desc')->get();
         return view('mkelas.data-kelas', compact('periode', 'kelas', 'pegawai', 'guru', 'siswa'), [
             "title" => "Manajemen Kelas",
@@ -109,6 +109,15 @@ class KelasController extends Controller
             'idSiswa' => 'required',
         ]);
 
+        $siswa = Tr_kelas::where('idSiswa', $validatedData['idSiswa'])->first();
+
+        if ($siswa) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Suswa sudah ada.'
+            ]);
+        }
+
         Tr_kelas::create($validatedData);
 
         return response()->json([
@@ -125,6 +134,15 @@ class KelasController extends Controller
             'idPegawai' => 'required',
             'namaKelas' => 'required',
         ]);
+
+        $kelas = Kelas::where('namaKelas', $validatedData['namaKelas'])->first();
+
+        if ($kelas) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Kelas sudah ada.'
+            ]);
+        }
 
         Kelas::create($validatedData);
 

@@ -21,6 +21,17 @@ class PenjadwalanController extends Controller
         return view('mkelas.penjadwalan', compact('periode'), [
             'title' => 'Manajemen Kelas',
             'title2' => 'Penjadwalan',
+            'title3' => 'Kelas',
+        ]);
+    }
+
+    public function index_siswa()
+    {
+        $periode = Periode::orderBy('idPeriode', 'desc')->get();
+        return view('mkelas.penjadwalan', compact('periode'), [
+            'title' => 'Manajemen Kelas',
+            'title3' => 'Kelas',
+            'title2' => 'Jadwal',
         ]);
     }
 
@@ -132,5 +143,71 @@ class PenjadwalanController extends Controller
             'status' => 'success',
             'message' => 'Berhasil mengapus data.'
         ]);
+    }
+
+    // Siswa
+    public function getJadwalSiswa(Request $request)
+    {
+        $data = Jadwal::selectRaw("
+            CONCAT(DATE_FORMAT(jadwal.jamMulai, '%H:%i'), ' - ', DATE_FORMAT(jadwal.jamSelesai, '%H:%i')) AS waktu,
+            GROUP_CONCAT(DISTINCT
+                CASE WHEN hari = 'Senin' THEN mapel.namaMapel END SEPARATOR '<br>'
+            ) AS Senin,
+            GROUP_CONCAT(DISTINCT
+                CASE WHEN hari = 'Selasa' THEN mapel.namaMapel END SEPARATOR '<br>'
+            ) AS Selasa,
+            GROUP_CONCAT(DISTINCT
+                CASE WHEN hari = 'Rabu' THEN mapel.namaMapel END SEPARATOR '<br>'
+            ) AS Rabu,
+            GROUP_CONCAT(DISTINCT
+                CASE WHEN hari = 'Kamis' THEN mapel.namaMapel END SEPARATOR '<br>'
+            ) AS Kamis,
+            GROUP_CONCAT(DISTINCT
+                CASE WHEN hari = 'Jumat' THEN mapel.namaMapel END SEPARATOR '<br>'
+            ) AS Jumat,
+            GROUP_CONCAT(DISTINCT
+                CASE WHEN hari = 'Sabtu' THEN mapel.namaMapel END SEPARATOR '<br>'
+            ) AS Sabtu
+        ")
+            ->join('pengajaran', 'jadwal.idPengajaran', '=', 'pengajaran.idPengajaran')
+            ->join('kelas', 'pengajaran.idKelas', '=', 'kelas.idKelas')
+            ->join('mapel', 'pengajaran.idMapel', '=', 'mapel.idMapel')
+            ->join('periode', 'pengajaran.idPeriode', '=', 'periode.idPeriode')
+            ->where('kelas.namaKelas', $request->kelas)
+            ->where('periode.idPeriode', $request->idPeriode)
+            ->groupBy('jamMulai', 'jamSelesai')
+            ->orderBy('jamMulai')
+            ->get();
+
+        return Datatables::of($data)
+            ->make(true);
+    }
+
+    // Guru
+
+    public function getJadwalPGuru(Request $request)
+    {
+        $data = DB::table('jadwal')
+            ->select(
+                DB::raw('CONCAT(DATE_FORMAT(jadwal.jamMulai, "%H:%i"), " - ", DATE_FORMAT(jadwal.jamSelesai, "%H:%i")) AS waktu'),
+                DB::raw('TRIM(BOTH "," FROM GROUP_CONCAT(IF(jadwal.hari = "Senin", CONCAT(mapel.namaMapel, " - Kelas ", kelas.namaKelas), ""))) AS senin'),
+                DB::raw('TRIM(BOTH "," FROM GROUP_CONCAT(IF(jadwal.hari = "Selasa", CONCAT(mapel.namaMapel, " - Kelas ", kelas.namaKelas), ""))) AS selasa'),
+                DB::raw('TRIM(BOTH "," FROM GROUP_CONCAT(IF(jadwal.hari = "Rabu", CONCAT(mapel.namaMapel, " - Kelas ", kelas.namaKelas), ""))) AS rabu'),
+                DB::raw('TRIM(BOTH "," FROM GROUP_CONCAT(IF(jadwal.hari = "Kamis", CONCAT(mapel.namaMapel, " - Kelas ", kelas.namaKelas), ""))) AS kamis'),
+                DB::raw('TRIM(BOTH "," FROM GROUP_CONCAT(IF(jadwal.hari = "Jumat", CONCAT(mapel.namaMapel, " - Kelas ", kelas.namaKelas), ""))) AS jumat'),
+                DB::raw('TRIM(BOTH "," FROM GROUP_CONCAT(IF(jadwal.hari = "Sabtu", CONCAT(mapel.namaMapel, " - Kelas ", kelas.namaKelas), ""))) AS sabtu')
+            )
+            ->join('pengajaran', 'jadwal.idPengajaran', '=', 'pengajaran.idPengajaran')
+            ->join('pegawai', 'pengajaran.idPegawai', '=', 'pegawai.idPegawai')
+            ->join('mapel', 'pengajaran.idMapel', '=', 'mapel.idMapel')
+            ->join('kelas', 'pengajaran.idKelas', '=', 'kelas.idKelas')
+            ->join('periode', 'pengajaran.idPeriode', '=', 'periode.idPeriode')
+            ->where('pegawai.idPegawai', '=', $request->id_nama)
+            ->where('periode.idPeriode', '=', $request->id_periode)
+            ->groupBy('jamMulai', 'jamSelesai')
+            ->orderBy('jamMulai')
+            ->get();
+
+        return Datatables::of($data)->make(true);
     }
 }

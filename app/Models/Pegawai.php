@@ -23,7 +23,12 @@ class Pegawai extends Model
     // Define the relationship with the Kelas model
     public function kelas()
     {
-        return $this->belongsTo(Kelas::class, 'idPegawai');
+        return $this->hasMany(Kelas::class, 'idPegawai');
+    }
+
+    public function pp_guru()
+    {
+        return $this->hasMany(PPGuru::class, 'idPegawai');
     }
 
     // Define the relationship with the Periode model

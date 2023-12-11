@@ -18,34 +18,7 @@ class LoginController extends Controller
         return view('login');
     }
 
-    // fungsi login
-    // public function authenticate(Request $request)
-    // {
-    //     $request->validate([
-    //         'username' => 'required',
-    //         'password' => 'required|min:3|max:12',
-    //     ]);
 
-    //     $credentials = $request->only('username', 'password');
-
-    //     if (Auth::guard('user')->attempt($credentials)) {
-    //         $user = Auth::guard('user')->user();
-
-    //         if ($user->hakAkses == 'Admin') {
-    //             return redirect()->intended('/dashboard');
-    //         } elseif ($user->hakAkses == 'Guru') {
-    //             return redirect()->intended('/home');
-    //         }
-    //     } elseif (Auth::guard('siswa')->attempt($credentials)) {
-    //         $siswa = Auth::guard('siswa')->user();
-
-    //         if ($siswa->hakAkses == 'Siswa') {
-    //             return redirect()->intended('/home');
-    //         }
-    //     } else {
-    //         return redirect('/login')->with('error', 'Username atau Password salah!');
-    //     }
-    // }
     public function authenticate(Request $request)
     {
         $request->validate([
@@ -82,16 +55,10 @@ class LoginController extends Controller
                 return route('dashboard.guru');
             case 'Siswa':
                 return route('dashboard.siswa');
-            // Tambahkan case lain jika perlu
+                // Tambahkan case lain jika perlu
             default:
-                return '/dashboard'; // Sesuaikan dengan path default yang diinginkan
+                abort(404); // Sesuaikan dengan path default yang diinginkan
         }
-        // if ($hakAkses === 'Admin') {
-        //     return '/dashboard';
-        // } elseif ($hakAkses === 'Guru' || $hakAkses === 'Siswa') {
-        //     return '/home';
-        // }
-        // Add other roles and redirections if necessary
     }
 
 

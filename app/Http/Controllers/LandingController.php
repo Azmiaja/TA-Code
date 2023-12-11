@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Berita;
+use App\Models\Pegawai;
+use App\Models\PPGuru;
 use App\Models\Profil;
+use App\Models\Siswa;
 use Illuminate\Http\Request;
 
 
@@ -13,15 +16,16 @@ class LandingController extends Controller
     public function index()
     {
 
-        $profil = Profil::orderBy('idProfil', 'desc')->take(1)->get();
-        $berita = Berita::orderBy('waktuBerita', 'desc')
-            ->skip(1)
-            ->take(6) 
+        $profil = Profil::all();
+        $berita = Berita::orderBy('waktuBerita', 'desc')->take(3)
             ->get();
-        $beritaUtama = Berita::orderBy('waktuBerita', 'desc')->take(1)->get();
-        return view('landingpage', compact('berita', 'beritaUtama', 'profil'), [
+        $guru = Pegawai::where('jenisPegawai', 'Guru')->count();
+        $siswa = Siswa::all()->count();
+        $ppguru = PPGuru::all();
+        return view('landingpage', compact('berita', 'guru', 'profil', 'siswa'), [
             "title" => "SDN Lemahbang",
             "title2" => "",
+            'pguru' => $ppguru
         ]);
     }
 }

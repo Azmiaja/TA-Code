@@ -19,7 +19,7 @@ class PeriodeController extends Controller
 
     public function getPeriode()
     {
-        $data = Periode::orderBy("idPeriode", "DESC")->get();
+        $data = Periode::orderBy("tanggalMulai", "asc")->get();
         $data = $data->map(function ($item, $key) {
             $item['nomor'] = $key + 1;
             return $item;
@@ -61,21 +61,21 @@ class PeriodeController extends Controller
     public function update(Request $request, $id)
     {
         $periode = Periode::find($id);
+
         if (!$periode) {
             return response()->json(['status' => 'error', 'message' => 'Data periode tidak ditemukan.']);
         }
         // Validasi input
-        $validatedData = $request->validate([
-            'semester' => 'required',
-            'tanggalMulai' => 'required|date',
-            'tanggalSelesai' => 'required|date',
-        ]);
+        // $validatedData = $request->all([
+        //     'semester' => 'required',
+        //     'tanggalMulai' => 'required|date',
+        //     'tanggalSelesai' => 'required|date',
+        // ]);
 
         // Perbarui data periode
-        $periode->update($validatedData);
+        $periode->update($request->all());
 
         return response()->json([
-            'periode' => $periode,
             'status' => 'success',
             'message' => 'Berhasil mengubah data.'
         ]);

@@ -13,4 +13,9 @@ class Kategori_nilai extends Model
     protected $guarded = ['idKategoriNilai'];
     protected $primaryKey = 'idKategoriNilai';
     public $timestamps = false;
+
+    public function nilai()
+    {
+        return $this->hasMany(Nilai::class, 'idKategoriNilai');
+    }
 }

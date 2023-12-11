@@ -45,18 +45,18 @@ class ProfilController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'namaSekolah' => 'required',
+            'slogan' => 'required',
             'gambarProfil' => 'required|file|mimes:jpg,jpeg,svg|max:2048',
             'gambarSejarah' => 'required|file|mimes:jpg,jpeg,svg|max:2048',
-            'gambarVisiMisi' => 'required|file|mimes:jpg,jpeg,svg|max:2048',
             'deskripsiProfil' => 'required',
             'deskripsiSejarah' => 'required',
-            'visiMisi' => 'required',
+            'visi' => 'required',
+            'misi' => 'required',
 
         ]);
 
         // $validatedData['tahun'] = Carbon::createFromFormat('d-m-Y', $request->input('tahun', Carbon::now()));
-        $gambarFields = ['gambarProfil', 'gambarSejarah', 'gambarVisiMisi'];
+        $gambarFields = ['gambarProfil', 'gambarSejarah'];
 
         foreach ($gambarFields as $field) {
             if ($request->hasFile($field)) {
@@ -154,26 +154,48 @@ class ProfilController extends Controller
     }
 
     // fungsi update visi misi
-    public function updateVisiMisi(Request $request, $id)
+    public function updateVisi(Request $request, $id)
     {
         $profil = Profil::find($id);
 
         $validatedData = $request->validate([
-            'gambarVisiMisi' => 'file|mimes:jpg,jpeg,svg|max:2048',
-            'visiMisi' => 'required',
-            'timestampVisiMisi' => 'required',
+            'visi' => 'required',
+            'timestampVisi' => 'required',
 
         ]);
-        $validatedData = $request->only(['visiMisi', 'timestampVisiMisi']);
-        if ($request->file('gambarVisiMisi')) {
-            $gambarPath = $request->file('gambarVisiMisi')->getClientOriginalName();
-            $validatedData['gambarVisiMisi'] = $request->file('gambarVisiMisi')->storeAs('gambar-profil', $gambarPath, 'public');
-
-            Storage::delete('public/' . $profil->gambarVisiMisi);
-        }
+        
         $profil->update($validatedData);
 
-        return redirect()->route('profil.index')->with('success', 'Data Visi Misi berhasil diperbarui.');
+        return redirect()->route('profil.index')->with('success', 'Data Visi berhasil diperbarui.');
+    }
+
+    public function updateMisi(Request $request, $id)
+    {
+        $profil = Profil::find($id);
+
+        $validatedData = $request->validate([
+            'misi' => 'required',
+            'timestampMisi' => 'required',
+
+        ]);
+        
+        $profil->update($validatedData);
+
+        return redirect()->route('profil.index')->with('success', 'Data Misi berhasil diperbarui.');
+    }
+
+    public function updateSlogan(Request $request, $id)
+    {
+        $profil = Profil::find($id);
+
+        $validatedData = $request->validate([
+            'slogan' => 'required',
+
+        ]);
+        
+        $profil->update($validatedData);
+
+        return redirect()->route('profil.index')->with('success', 'Data Slogan berhasil diperbarui.');
     }
 
     /**

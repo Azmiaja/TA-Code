@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Mcompany;
 
 use App\Http\Controllers\Controller;
 use App\Models\Berita;
+use App\Models\PPGuru;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
@@ -100,39 +101,39 @@ class BeritaController extends Controller
         return response()->json(['berita' => $berita]);
     }
 
+    // BeritaController.php
+
     public function update(Request $request, $id)
     {
+        // Find Berita data by ID
         $berita = Berita::find($id);
-
-        if (!$berita) {
-            return response()->json(['status' => 'error', 'message' => 'Data berita tidak ditemukan.']);
-        }
 
         $validatedData = $request->validate([
             'judulBerita' => 'required',
+            'gambar' => 'file|mimes:jpeg,png,jpg',
             'isiBerita' => '',
-            'waktuBerita' => 'required',
+            'waktuBerita' => 'required|date',
             'sumberBerita' => '',
-            'gambar' => '',
         ]);
 
+        // If there is a new image file
         if ($request->hasFile('gambar')) {
             $gambarPath = $request->file('gambar')->getClientOriginalName();
             $validatedData['gambar'] = $request->file('gambar')->storeAs('gambar-berita', $gambarPath, 'public');
 
-            Storage::delete('public/' . $berita->gambar);
+            // Delete the old image
+            if ($berita->gambar) {
+                Storage::delete('public/' . $berita->gambar);
+            }
         }
 
+        // Update Berita data
         $berita->update($validatedData);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Berhasil mengubah data.'
-        ]);
+        // Successfully updated data, send JSON response
+        return back()
+            ->with('success', 'Berhasil memperbarui data.');
     }
-
-
-
 
 
 
@@ -155,4 +156,5 @@ class BeritaController extends Controller
             'message' => 'Berhasil menghapus data.'
         ]);
     }
+
 }

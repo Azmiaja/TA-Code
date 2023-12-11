@@ -23,6 +23,7 @@
             </div>
         </div>
     </div>
+    
     <div class="content">
         {{-- Alert --}}
         @if (session('success') || $errors->any())
@@ -39,29 +40,98 @@
             </div>
         @endif
 
-        <div class="row items-push">
+        <div class="row">
             {{-- Data Profil --}}
-            <div class="col-lg-4">
-                @foreach ($profil as $profils)
+            <div class="col-12">
+                @foreach ($profil as $slogan)
                     <div class="block block-rounded block-link-pop overflow-hidden">
-                        <img class="img-fluid" src="{{ Storage::url($profils->gambarProfil) }}" alt="">
-                        <div class="block-content">
+                        <div class="block-content p-4">
                             <div class="position-relative">
                                 <div class="position-absolute top-0 end-0 block-options">
-                                    <button type="button" class="btn-block-option" title="Edit Profil"><i
+                                    <button type="button" class="btn-block-option" title="Edit Slogan"><i
                                             class="fa fa-fw fa-pencil-alt" data-bs-toggle="modal"
-                                            data-bs-target="#modalEditProfil{{ $profils->idProfil }}"></i></button>
+                                            data-bs-target="#modalSlogan{{ $slogan->idProfil }}"></i></button>
                                 </div>
                             </div>
                             <h4 class="mb-1">
-                                Profil
+                                Slogan
                             </h4>
-                            <p class="fs-sm fw-medium mb-2">Update at
-                                <span
-                                    class="text-muted">{{ \Carbon\Carbon::parse($profils->timestampProfil)->format('d-m-Y H:i') }}</span>
-                            </p>
                             <div class="fs-sm text-muted">
-                                {!! $profils->deskripsiProfil !!}
+                                {!! $slogan->slogan !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Modal edit VisiMisi --}}
+                    <div class="modal fade" id="modalSlogan{{ $slogan->idProfil }}" data-bs-backdrop="static"
+                        data-bs-keyboard="false">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="block block-rounded block-transparent mb-0">
+                                    <div class="block-header block-header-default">
+                                        <h3 class="block-title">Edit Slogan</h3>
+                                        <div class="block-options">
+                                            <button type="button" class="btn-block-option" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                                <i class="fa fa-fw fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="block-content fs-sm">
+                                        <form action="{{ route('profil.updateSlogan', $slogan) }}"
+                                            enctype="multipart/form-data" method="POST">
+                                            @csrf
+                                            @method('put')
+                                            <input type="text" name="idProfil" value="{{ $slogan->idProfil }}"
+                                                hidden>
+                                            <div class="mb-4">
+                                                <label class="form-label" for="slogan">Slogan</label>
+                                                <textarea id="js-ckeditor5-classic-edit-slogan" class="form-control" name="slogan">{{ $slogan->slogan }}</textarea>
+                                            </div>
+                                            <div class="mb-4 text-end">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-primary"
+                                                    data-bs-dismiss="modal">Simpan</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="block-content block-content-full bg-body"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="col-12">
+                @foreach ($profil as $profils)
+                    <div class="block block-rounded block-link-pop overflow-hidden">
+                        <div class="row m-0">
+                            <div class="col-4 p-2">
+                                <img class="img-fluid" src="{{ Storage::url($profils->gambarProfil) }}" alt=""
+                                    height="300">
+                            </div>
+                            <div class="col-8">
+                                <div class="block-content">
+                                    <div class="position-relative">
+                                        <div class="position-absolute top-0 end-0 block-options">
+                                            <button type="button" class="btn-block-option" title="Edit Profil"><i
+                                                    class="fa fa-fw fa-pencil-alt" data-bs-toggle="modal"
+                                                    data-bs-target="#modalEditProfil{{ $profils->idProfil }}"></i></button>
+                                        </div>
+                                    </div>
+                                    <h4 class="mb-1">
+                                        Profil
+                                    </h4>
+                                    <p class="fs-sm fw-medium mb-2">Update at
+                                        <span
+                                            class="text-muted">{{ \Carbon\Carbon::parse($profils->timestampProfil)->format('d-m-Y H:i') }}</span>
+                                    </p>
+                                    <div class="fs-sm text-muted">
+                                        {!! $profils->deskripsiProfil !!}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -120,28 +190,36 @@
                     </div>
                 @endforeach
             </div>
+
             {{-- Data Sejarah --}}
-            <div class="col-lg-4">
+            <div class="col-12">
                 @foreach ($profil as $sejarah)
                     <div class="block block-rounded block-link-pop overflow-hidden">
-                        <img class="img-fluid" src="{{ Storage::url($sejarah->gambarSejarah) }}" alt="">
-                        <div class="block-content">
-                            <div class="position-relative">
-                                <div class="position-absolute top-0 end-0 block-options">
-                                    <button type="button" class="btn-block-option" title="Edit Sejarah"><i
-                                            class="fa fa-fw fa-pencil-alt" data-bs-toggle="modal"
-                                            data-bs-target="#modalEditSejarah{{ $sejarah->idProfil }}"></i></button>
-                                </div>
+                        <div class="row m-0">
+                            <div class="col-4 p-2">
+                                <img class="img-fluid" src="{{ Storage::url($sejarah->gambarSejarah) }}" alt=""
+                                    height="300">
                             </div>
-                            <h4 class="mb-1">
-                                Sejarah
-                            </h4>
-                            <p class="fs-sm fw-medium mb-2">Update at
-                                <span
-                                    class="text-muted">{{ \Carbon\Carbon::parse($sejarah->timestampSejarah)->format('d-m-Y H:i') }}</span>
-                            </p>
-                            <div class="fs-sm text-muted">
-                                {!! $sejarah->deskripsiSejarah !!}
+                            <div class="col-8">
+                                <div class="block-content">
+                                    <div class="position-relative">
+                                        <div class="position-absolute top-0 end-0 block-options">
+                                            <button type="button" class="btn-block-option" title="Edit Sejarah"><i
+                                                    class="fa fa-fw fa-pencil-alt" data-bs-toggle="modal"
+                                                    data-bs-target="#modalEditSejarah{{ $sejarah->idProfil }}"></i></button>
+                                        </div>
+                                    </div>
+                                    <h4 class="mb-1">
+                                        Sejarah
+                                    </h4>
+                                    <p class="fs-sm fw-medium mb-2">Update at
+                                        <span
+                                            class="text-muted">{{ \Carbon\Carbon::parse($sejarah->timestampSejarah)->format('d-m-Y H:i') }}</span>
+                                    </p>
+                                    <div class="fs-sm text-muted">
+                                        {!! $sejarah->deskripsiSejarah !!}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -201,39 +279,39 @@
                     </div>
                 @endforeach
             </div>
+
             {{-- Data Visi Misi --}}
-            <div class="col-lg-4">
-                @foreach ($profil as $visimisi)
+            <div class="col-12">
+                @foreach ($profil as $visi)
                     <div class="block block-rounded block-link-pop overflow-hidden">
-                        <img class="img-fluid" src="{{ Storage::url($visimisi->gambarVisiMisi) }}" alt="">
-                        <div class="block-content">
+                        <div class="block-content p-4">
                             <div class="position-relative">
                                 <div class="position-absolute top-0 end-0 block-options">
-                                    <button type="button" class="btn-block-option" title="Edit Visi Misi"><i
+                                    <button type="button" class="btn-block-option" title="Edit Visi"><i
                                             class="fa fa-fw fa-pencil-alt" data-bs-toggle="modal"
-                                            data-bs-target="#modalEditVisiMisi{{ $visimisi->idProfil }}"></i></button>
+                                            data-bs-target="#modalVisi{{ $visi->idProfil }}"></i></button>
                                 </div>
                             </div>
                             <h4 class="mb-1">
-                                Visi Misi
+                                Visi
                             </h4>
                             <p class="fs-sm fw-medium mb-2">Update at
                                 <span
-                                    class="text-muted">{{ \Carbon\Carbon::parse($visimisi->timestampVisiMisi)->format('d-m-Y H:i') }}</span>
+                                    class="text-muted">{{ \Carbon\Carbon::parse($visi->timestampVisi)->format('d-m-Y H:i') }}</span>
                             </p>
                             <div class="fs-sm text-muted">
-                                {!! $visimisi->visiMisi !!}
+                                {!! $visi->visi !!}
                             </div>
                         </div>
                     </div>
                     {{-- Modal edit VisiMisi --}}
-                    <div class="modal fade" id="modalEditVisiMisi{{ $visimisi->idProfil }}" data-bs-backdrop="static"
+                    <div class="modal fade" id="modalVisi{{ $visi->idProfil }}" data-bs-backdrop="static"
                         data-bs-keyboard="false">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="block block-rounded block-transparent mb-0">
                                     <div class="block-header block-header-default">
-                                        <h3 class="block-title">Edit Visi Misi</h3>
+                                        <h3 class="block-title">Edit Visi</h3>
                                         <div class="block-options">
                                             <button type="button" class="btn-block-option" data-bs-dismiss="modal"
                                                 aria-label="Close">
@@ -242,30 +320,17 @@
                                         </div>
                                     </div>
                                     <div class="block-content fs-sm">
-                                        <form action="{{ route('profil.updateVisiMisi', $visimisi) }}"
+                                        <form action="{{ route('profil.updateVisi', $visi) }}"
                                             enctype="multipart/form-data" method="POST">
                                             @csrf
                                             @method('put')
-                                            <input type="text" name="idProfil" value="{{ $visimisi->idProfil }}"
+                                            <input type="text" name="idProfil" value="{{ $visi->idProfil }}"
                                                 hidden>
                                             <div class="mb-4">
-                                                <label class="form-label" for="gambarVisiMisi">Gambar</label>
-                                                <div class="row ms-1 mb-2 p-0">
-                                                    <div class="col-auto border rounded-2">
-                                                        <div class="m-3">
-                                                            <img src="{{ Storage::url($visimisi->gambarVisiMisi) }}"
-                                                                alt="{{ $visimisi->gambarVisiMisi }}" height="150">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <input class="form-control" type="file" name="gambar"
-                                                    id="gambarVisiMisi" accept=".jpg, .jpeg, .svg">
+                                                <label class="form-label" for="visi">Deskripsi</label>
+                                                <textarea id="js-ckeditor5-classic-edit-visi" class="form-control" name="visi">{{ $visi->visi }}</textarea>
                                             </div>
-                                            <div class="mb-4">
-                                                <label class="form-label" for="visiMisi">Deskripsi</label>
-                                                <textarea id="js-ckeditor5-classic-edit-visimisi" class="form-control" name="visiMisi">{{ $visimisi->visiMisi }}</textarea>
-                                            </div>
-                                            <input type="datetime-local" id="timestamp3" name="timestampVisiMisi"
+                                            <input type="datetime-local" id="timestamp33" name="timestampVisi"
                                                 class="form-control" hidden>
                                             <div class="mb-4 text-end">
                                                 <button type="button" class="btn btn-secondary"
@@ -282,6 +347,74 @@
                     </div>
                 @endforeach
             </div>
+            
+            <div class="col-12">
+                @foreach ($profil as $misi)
+                    <div class="block block-rounded block-link-pop overflow-hidden">
+                        <div class="block-content p-4">
+                            <div class="position-relative">
+                                <div class="position-absolute top-0 end-0 block-options">
+                                    <button type="button" class="btn-block-option" title="Edit Misi"><i
+                                            class="fa fa-fw fa-pencil-alt" data-bs-toggle="modal"
+                                            data-bs-target="#modalEditMisi{{ $misi->idProfil }}"></i></button>
+                                </div>
+                            </div>
+                            <h4 class="mb-1">
+                                Misi
+                            </h4>
+                            <p class="fs-sm fw-medium mb-2">Update at
+                                <span
+                                    class="text-muted">{{ \Carbon\Carbon::parse($misi->timestampMisi)->format('d-m-Y H:i') }}</span>
+                            </p>
+                            <div class="fs-sm text-muted">
+                                {!! $misi->misi !!}
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Modal edit Misi --}}
+                    <div class="modal fade" id="modalEditMisi{{ $misi->idProfil }}" data-bs-backdrop="static"
+                        data-bs-keyboard="false">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="block block-rounded block-transparent mb-0">
+                                    <div class="block-header block-header-default">
+                                        <h3 class="block-title">Edit Misi</h3>
+                                        <div class="block-options">
+                                            <button type="button" class="btn-block-option" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                                <i class="fa fa-fw fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="block-content fs-sm">
+                                        <form action="{{ route('profil.updateMisi', $misi) }}"
+                                            enctype="multipart/form-data" method="POST">
+                                            @csrf
+                                            @method('put')
+                                            <input type="text" name="idProfil" value="{{ $misi->idProfil }}"
+                                                hidden>
+                                            <div class="mb-4">
+                                                <label class="form-label" for="Misi">Deskripsi</label>
+                                                <textarea id="js-ckeditor5-classic-edit-misi" class="form-control" name="misi">{{ $misi->misi }}</textarea>
+                                            </div>
+                                            <input type="datetime-local" id="timestamp4" name="timestampMisi"
+                                                class="form-control" hidden>
+                                            <div class="mb-4 text-end">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-primary"
+                                                    data-bs-dismiss="modal">Simpan</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="block-content block-content-full bg-body"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
         </div>
     </div>
 
@@ -303,9 +436,9 @@
                         <form action="{{ route('profil.store') }}" enctype="multipart/form-data" method="POST">
                             @csrf
                             <div class="mb-4">
-                                <label class="form-label" for="namaSekolah">Nama Sekolah</label>
-                                <input type="text" class="form-control" id="namaSekolah" name="namaSekolah"
-                                    placeholder="Nama Sekolah..">
+                                <label class="form-label" for="slogan">Slogan Sekolah</label>
+                                <input type="text" class="form-control" id="slogan" name="slogan"
+                                    placeholder="Slogan Sekolah..">
                             </div>
                             <div class="mb-4 row">
                                 <div class="col-12 mb-2">
@@ -315,7 +448,7 @@
                                 <div class="col-12">
                                     <label class="form-label">Upload gambar profil</label>
                                     <input type="file" name="gambarProfil" class="form-control"
-                                        accept=".jpg, .jpeg, .svg">
+                                        accept=".jpg, .jpeg, .svg, .png">
                                 </div>
                             </div>
                             <div class="mb-4 row">
@@ -326,18 +459,19 @@
                                 <div class="col-12">
                                     <label class="form-label">Upload gambar sejarah</label>
                                     <input type="file" name="gambarSejarah" class="form-control"
-                                        accept=".jpg, .jpeg, .svg">
+                                        accept=".jpg, .jpeg, .svg, .png">
                                 </div>
                             </div>
                             <div class="mb-4 row">
                                 <div class="col-12 mb-2">
-                                    <label class="form-label" for="visiMisi">Deskripsi Visi Misi</label>
-                                    <textarea id="visiMisi" class="form-control" name="visiMisi" placeholder="Deskripsi visi misi.."></textarea>
+                                    <label class="form-label" for="visi">Deskripsi Visi</label>
+                                    <textarea id="visi" class="form-control" name="visi" placeholder="Deskripsi visi.."></textarea>
                                 </div>
-                                <div class="col-12">
-                                    <label class="form-label">Upload gambar visi misi</label>
-                                    <input type="file" name="gambarVisiMisi" class="form-control"
-                                        accept=".jpg, .jpeg, .svg">
+                            </div>
+                            <div class="mb-4 row">
+                                <div class="col-12 mb-2">
+                                    <label class="form-label" for="misi">Deskripsi Misi</label>
+                                    <textarea id="misi" class="form-control" name="misi" placeholder="Deskripsi misi.."></textarea>
                                 </div>
                             </div>
                             <div class="mb-4 text-end">
@@ -358,7 +492,9 @@
 
                 ClassicEditor.create(document.querySelector('#js-ckeditor5-classic-edit-profil'));
                 ClassicEditor.create(document.querySelector('#js-ckeditor5-classic-edit-sejarah'));
-                ClassicEditor.create(document.querySelector('#js-ckeditor5-classic-edit-visimisi'));
+                ClassicEditor.create(document.querySelector('#js-ckeditor5-classic-edit-visi'));
+                ClassicEditor.create(document.querySelector('#js-ckeditor5-classic-edit-misi'));
+                ClassicEditor.create(document.querySelector('#js-ckeditor5-classic-edit-slogan'));
 
                 $('#js-flatpickr-edit-' + dataId).flatpickr({
                     dateFormat: "d-m-Y H:i",
@@ -380,7 +516,8 @@
                 // Panggil fungsi untuk mengatur nilai untuk setiap input
                 setTimestampValue('timestamp');
                 setTimestampValue('timestamp2');
-                setTimestampValue('timestamp3');
+                setTimestampValue('timestamp33');
+                setTimestampValue('timestamp4');
 
             });
         </script>

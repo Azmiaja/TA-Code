@@ -20,6 +20,8 @@
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css') }}">
     <link rel="stylesheet" id="css-main" href="{{ asset('assets/css/oneui.min.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('assets/js/plugins/fullcalendar/main.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/select2/css/select2.min.css') }}">
@@ -27,6 +29,10 @@
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/flatpickr/flatpickr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/flatpickr/themes/material_red.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('assets/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
     {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script> --}}
 
     <script>
@@ -49,33 +55,17 @@
             white-space: normal;
         }
     </style>
+    @stack('style')
 
     <script src="{{ asset('assets/js/lib/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
 </head>
 
 <body>
-    {{-- Modal Template --}}
-    <div class="modal fade" id="modal-template" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="block block-rounded block-transparent mb-0">
-                    <div class="block-header block-header-default">
-                        <h3 class="block-title" id="judul-modal"></h3>
-                        <div class="block-options">
-                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
-                                <i class="fa fa-fw fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="block-content fs-sm" id="modal-konten">
-                        {{-- content --}}
-                    </div>
-                    <div class="block-content block-content-full bg-body"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+
     {{-- --------------------------- CONTENT ------------------------------------------------ --}}
     <div id="page-container"
         class="sidebar-o sidebar-dark enable-page-overlay side-scroll page-header-fixed main-content-narrow">
@@ -138,16 +128,6 @@
                                 </a>
                             </li>
                         @endcanany
-
-                        {{-- @canany(['guru', 'siswa'])
-                            <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title === 'Home' ? 'active' : '' }}"
-                                    href="{{ route('home') }}">
-                                    <i class="nav-main-link-icon si si-home"></i>
-                                    <span class="nav-main-link-name">Home</span>
-                                </a>
-                            </li>
-                        @endcanany --}}
                         @canany(['super.admin'])
                             <li class="nav-main-item {{ $title === 'Manajemen User' ? 'open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen User' ? 'active' : '' }}"
@@ -192,6 +172,12 @@
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'Profil Guru' ? 'active' : '' }}"
+                                            href="{{ route('profil-guru.index') }}">
+                                            <span class="nav-main-link-name">Profil Guru</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
                                         <a class="nav-main-link {{ $title2 === 'berita' ? 'active' : '' }}"
                                             href="{{ route('berita.index') }}">
                                             <span class="nav-main-link-name">Berita Sekolah</span>
@@ -212,117 +198,105 @@
                                     @if (in_array(Auth::user()->hakAkses, $allowedRoles))
                                         Manajemen Kelas
                                     @elseif (Auth::user()->hakAkses == 'Siswa')
-                                        Kelas {{ Auth::user()->kelas }}
+                                        Kelas
                                     @endif
                                 </span>
                             </a>
                             <ul class="nav-main-submenu">
-                                @canany(['super.admin', 'admin', 'guru'])
-                                    @canany(['super.admin', 'admin'])
-                                        <li class="nav-main-item">
-                                            <a class="nav-main-link {{ $title2 === 'periode' ? 'active' : '' }}"
-                                                href="{{ route('periode.index') }}">
-                                                <span class="nav-main-link-name">Periode</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-main-item">
-                                            <a class="nav-main-link {{ $title2 === 'data-kelas' ? 'active' : '' }}"
-                                                href="{{ route('data-kelas.index') }}">
-                                                <span class="nav-main-link-name">Data Kelas</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-main-item">
-                                            <a class="nav-main-link {{ $title2 === 'Mata Pelajaran' ? 'active' : '' }}"
-                                                href="{{ route('mapel.index') }}">
-                                                <span class="nav-main-link-name">Mata Pelajaran</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-main-item">
-                                            <a class="nav-main-link {{ $title2 === 'Pengajar' ? 'active' : '' }}"
-                                                href="{{ route('pengajaran.index') }}">
-                                                <span class="nav-main-link-name">Pengajar</span>
-                                            </a>
-                                        </li>
+                                @canany(['super.admin', 'admin'])
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'periode' ? 'active' : '' }}"
+                                            href="{{ route('periode.index') }}">
+                                            <span class="nav-main-link-name">Periode</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'data-kelas' ? 'active' : '' }}"
+                                            href="{{ route('data-kelas.index') }}">
+                                            <span class="nav-main-link-name">Data Kelas</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'Mata Pelajaran' ? 'active' : '' }}"
+                                            href="{{ route('mapel.index') }}">
+                                            <span class="nav-main-link-name">Mata Pelajaran</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'Pengajar' ? 'active' : '' }}"
+                                            href="{{ route('pengajaran.index') }}">
+                                            <span class="nav-main-link-name">Pengajar</span>
+                                        </a>
+                                    </li>
 
-                                        {{-- <li class="nav-main-item">
+                                    {{-- <li class="nav-main-item">
                                             <a class="nav-main-link {{ $title2 === 'bagisiswa' ? 'active' : '' }}"
                                                 href="{{ route('mkelas.bagisiswa') }}">
                                                 <span class="nav-main-link-name">Pembagian Siswa</span>
                                             </a>
                                         </li> --}}
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'penjadwalan' ? 'active' : '' }}"
+                                            href="{{ route('penjadwalan.index') }}">
+                                            <span class="nav-main-link-name">Jadwal Pelajaran</span>
+                                        </a>
+                                    </li>
+                                    {{-- <li class="nav-main-item">
+                                            <a class="nav-main-link {{ $title2 === 'Kategori Nilai' ? 'active' : '' }}"
+                                                href="{{ route('kategori-nilai.index') }}">
+                                                <span class="nav-main-link-name">Kategori Nilai</span>
+                                            </a>
+                                        </li> --}}
+                                    @can('guru')
                                         <li class="nav-main-item">
-                                            <a class="nav-main-link {{ $title2 === 'penjadwalan' ? 'active' : '' }}"
-                                                href="{{ route('penjadwalan.index') }}">
-                                                <span class="nav-main-link-name">Jadwal Pelajaran</span>
+                                            <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
+                                                href="{{ route('penilaian.index') }}">
+                                                <span class="nav-main-link-name">Penilaian Siswa
+                                                </span>
                                             </a>
                                         </li>
-                                    @endcanany
+                                    @endcan
+
                                     <li class="nav-main-item">
                                         <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
                                             href="{{ route('penilaian.index') }}">
-                                            <span class="nav-main-link-name">
-                                                @if (in_array(Auth::user()->hakAkses, $allowedRoles))
-                                                    Penilaian Siswa
-                                                @elseif (Auth::user()->hakAkses == 'Siswa')
-                                                    Nilai
-                                                @endif
+                                            <span class="nav-main-link-name">Penilaian Siswa
                                             </span>
                                         </a>
                                     </li>
-
+                                @endcanany
+                                @can('siswa')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}"
-                                            href="{{ route('mkelas.laporan') }}">
-                                            <span class="nav-main-link-name">Laporan Nilai</span>
+                                        <a class="nav-main-link {{ $title2 === 'Jadwal' ? 'active' : '' }}"
+                                            href="{{ route('jadwal.siswa') }}">
+                                            <span class="nav-main-link-name">Jadwal</span>
                                         </a>
                                     </li>
-                                @endcanany
-                                {{-- @canany(['Siswa']) --}}
-                                {{-- <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'penugasan' ? 'active' : '' }}"
-                                        href="{{ route('mkelas.penugasan') }}">
-                                        <span class="nav-main-link-name">
-                                            @if (in_array(Auth::user()->hakAkses, $allowedRoles))
-                                                Penugasan Siswa
-                                            @elseif (Auth::user()->hakAkses == 'Siswa')
-                                                Tugas
-                                            @endif
-                                        </span>
-                                    </a>
-                                </li> --}}
-                                
-                                {{-- @endcanany --}}
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
+                                            href="{{ route('penilaian.siswa') }}">
+                                            <span class="nav-main-link-name">Nilai
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('guru')
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'Jadwal' ? 'active' : '' }}"
+                                            href="{{ route('jadwal.guru') }}">
+                                            <span class="nav-main-link-name">Jadwal</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
+                                            href="{{ route('penilaian.guru') }}">
+                                            <span class="nav-main-link-name">Penilaian Siswa
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endcan
                             </ul>
                         </li>
-                        {{-- <li class="nav-main-item {{ $title === 'Manajemen Keuangan' ? 'open' : '' }}">
-                            <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Keuangan' ? 'active' : '' }}"
-                                data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-                                <i class="nav-main-link-icon si si-wallet"></i>
-                                <span class="nav-main-link-name">
-                                    @if (in_array(Auth::user()->hakAkses, $allowedRoles))
-                                        Manajemen Keuangan
-                                    @elseif (Auth::user()->hakAkses == 'Siswa')
-                                        Keuangan
-                                    @endif
-                                </span>
-                            </a>
-                            <ul class="nav-main-submenu">
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'pemberitahuan' ? 'active' : '' }}"
-                                        href="{{ route('mkeuangan.pemberitahuan') }}">
-                                        <span class="nav-main-link-name">Pemberitahuan Pembayaran</span>
-                                    </a>
-                                </li>
-                                @canany(['super.admin', 'admin', 'guru'])
-                                    <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'laporan' ? 'active' : '' }}"
-                                            href="{{ route('mkeuangan.laporan') }}">
-                                            <span class="nav-main-link-name">Laporan Pembayaran</span>
-                                        </a>
-                                    </li>
-                                @endcanany
-                            </ul>
-                        </li> --}}
                     </ul>
                 </div>
             </div>
@@ -360,9 +334,10 @@
                             <div class="p-3 text-center bg-body-light border-bottom rounded-top">
                                 <img class="img-avatar img-avatar48 img-avatar-thumb"
                                     src="{{ asset('assets/media/avatars/avatar10.jpg') }}" alt="">
-                                <p class="mt-2 mb-0 fw-medium">
-                                    @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin')
-                                        {{ Auth::user()->pegawai->namaPegawai }}
+                                <p class="mt-2 mb-0 fw-medium" id="HD_idSiswa"
+                                    data-id-siswa={{ Auth::user()->idSiswa }}>
+                                    @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin' || Auth::user()->hakAkses == 'Super Admin')
+                                        {{ ucwords(Auth::user()->pegawai->namaPegawai) }}
                                     @elseif (Auth::user()->hakAkses == 'Siswa')
                                         {{ Auth::user()->namaSiswa }}
                                     @endif
@@ -371,11 +346,6 @@
                                 {{-- Role --}}
                             </div>
                             <div class="p-2">
-                                <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                    href="be_pages_generic_profile.html">
-                                    <span class="fs-sm fw-medium">Profile</span> {{-- Go to profile page --}}
-                                    <span class="badge rounded-pill bg-primary ms-2">1</span>
-                                </a>
                                 <button class="dropdown-item d-flex align-items-center justify-content-between"
                                     data-bs-toggle="modal" data-bs-target="#logoutAlert">
                                     <span class="fs-sm fw-medium">Log Out</span> {{-- To log out --}}
@@ -385,31 +355,6 @@
                         </div>
                     </div>
                     {{-- End Profile user --}}
-                    <div class="dropdown d-inline-block ms-2">
-                        {{-- Button notification --}}
-                        <button type="button" class="btn btn-sm btn-alt-secondary"
-                            id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                            <i class="fa fa-fw fa-bell"></i>
-                            <span class="text-primary">•</span>
-                        </button>
-                        {{-- End Button notification --}}
-                        {{-- Notification dropdown --}}
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 border-0 fs-sm"
-                            aria-labelledby="page-header-notifications-dropdown">
-                            <div class="p-2 bg-body-light border-bottom text-center rounded-top">
-                                {{-- Notification view --}}
-                                <h5 class="dropdown-header text-uppercase">Notifications</h5>
-                                {{-- End Notification view --}}
-                            </div>
-                            <div class="p-2 border-top text-center">
-                                <a class="d-inline-block fw-medium" href="javascript:void(0)">
-                                    <i class="fa fa-fw fa-arrow-down me-1 opacity-50"></i> Load More..
-                                </a>
-                            </div>
-                        </div>
-                        {{-- End Notification dropdown --}}
-                    </div>
                 </div>
             </div>
         </header>
@@ -419,6 +364,7 @@
             @yield('content')
             <!-- End Content -->
         </main>
+
         <footer id="page-footer" class="bg-body-light">
             {{-- modal konfirmasi logout --}}
             <div class="modal fade" id="logoutAlert" tabindex="-1" aria-labelledby="logoutModalLabel"
@@ -435,7 +381,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <form action="/logout" method="post">
+                            <form action="{{ route('logout') }}" method="post">
                                 @csrf
                                 <button type="submit" class="btn btn-danger">Logout</button>
                             </form>
@@ -448,8 +394,10 @@
             <div class="content py-3">
                 <div class="row fs-sm">
                     <div class="col-sm-6 order-sm-2 py-1 text-center text-sm-end">
-                        <a class="fw-semibold" href="home" target="_blank">SDN LEMAHBANG</a> &copy;
-                        <span data-toggle="year-copy"></span>
+                        <a class="fw-semibold" href="#" target="_blank">SDN LEMAHBANG</a> &copy;
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
                     </div>
                     <div class="col-sm-6 order-sm-1 py-1 text-center text-sm-start">
 
@@ -472,6 +420,14 @@
     <script src="{{ asset('assets/js/plugins/flatpickr/flatpickr.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.id.min.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/chart.js/chart.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
 
     <script>
         One.helpersOnLoad(['js-ckeditor5', 'js-flatpickr']);

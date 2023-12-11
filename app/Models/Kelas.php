@@ -28,6 +28,10 @@ class Kelas extends Model
     {
         return $this->hasMany(Pengajaran::class, 'idKelas');
     }
+    public function tr_kelas()
+    {
+        return $this->hasMany(Tr_kelas::class, 'idKelas');
+    }
 
     // public function pengajaran()
     // {

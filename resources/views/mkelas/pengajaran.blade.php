@@ -168,7 +168,6 @@
                 </div>
             </div>
         </div>
-    </div>
     @push('scripts')
         <script>
             function loadOptionPengajaran() {

@@ -83,8 +83,6 @@
                                         <th style="width: auto">Kelas</th>
                                         <th>Semester</th>
                                         <th>Nama Guru</th>
-                                        {{-- <th>Guru Kelas</th> --}}
-                                        <th style="width: 15%;" class="text-center">Status</th>
                                         <th style="width: 10%;" class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -139,8 +137,6 @@
                                         <th style="width: auto">Kelas</th>
                                         <th>Semester</th>
                                         <th>Nama Siswa</th>
-                                        {{-- <th>Guru Kelas</th> --}}
-                                        <th style="width: 15%;" class="text-center">Status</th>
                                         <th style="width: 10%;" class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -362,18 +358,6 @@
                         name: 'guru.namaPegawai'
                     },
                     {
-                        data: 'guru.status',
-                        name: 'guru.status',
-                        className: 'text-center',
-                        render: function(data, type, row) {
-                            var statusClass = row.guru.status === 'Aktif' ?
-                                'bg-success-light text-success' : 'bg-danger-light text-danger';
-
-                            return `<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill ${statusClass}">
-                    ${row.guru.status}
-                </span>`;
-                        }
-                    }, {
                         data: null,
                         render: function(data, type, row) {
                             return '<div class="btn-group">' +
@@ -390,11 +374,46 @@
                 order: [
                     [1, 'asc']
                 ],
-                dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'l><'col-12 col-sm-12 col-md-6'f>>" +
+                dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'l><'col-12 col-sm-12 col-md-6'<'row float-end' <'col' f><'col text-end'B>>>>" +
                     "<'row my-2 '<'col-12 col-sm-12'tr>>" +
                     "<'row mb-2'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-                lengthMenu: [10, 25],
+                lengthMenu: [10, 25, 50, 100],
+                buttons: [{
+                        extend: 'print',
+                        title: '<h2>Data Guru Kelas</h2>',
+                        className: 'btn-sm btn btn-alt-primary',
+                        filename: 'Data Guru Kelas',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3],
+                        },
+                        messageTop: null,
+                        messageBottom: null,
+                        customize: function(win) {
+                            $(win.document.body).css('text-align', 'center');
+                        },
+
+                    },
+                    {
+                        extend: 'excel',
+                        title: 'Data Guru Kelas',
+                        className: 'btn-sm btn btn-alt-success',
+                        sheetName: 'Data Guru Kelas',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3],
+                        },
+                        action: function(e, dt, button, config) {
+                            var confirmation = window.confirm(
+                                'Apakah Anda yakin ingin mengekspor data ke Excel?');
+
+                            if (confirmation) {
+                                $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt,
+                                    button, config);
+                            }
+                        },
+                    }
+                ],
             });
+
             // Siswa
             $('#tabel-PeriodeSiswa').DataTable({
                 processing: true,
@@ -432,18 +451,6 @@
                         name: 'namaSiswa'
                     },
                     {
-                        data: 'status',
-                        name: 'status',
-                        className: 'text-center',
-                        render: function(data, type, row) {
-                            var statusClass = row.status === 'Aktif' ?
-                                'bg-success-light text-success' : 'bg-danger-light text-danger';
-
-                            return `<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill ${statusClass}">
-                    ${row.status}
-                </span>`;
-                        }
-                    }, {
                         data: null,
                         className: 'text-center',
                         searchable: false,
@@ -462,11 +469,46 @@
                 order: [
                     [1, 'asc']
                 ],
-                dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'l><'col-12 col-sm-12 col-md-6'f>>" +
+                dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'l><'col-12 col-sm-12 col-md-6'<'row float-end' <'col' f><'col text-end'B>>>>" +
                     "<'row my-2 '<'col-12 col-sm-12'tr>>" +
                     "<'row mb-2'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-                lengthMenu: [10, 25],
+                lengthMenu: [10, 25, 50, 100],
+                buttons: [{
+                        extend: 'print',
+                        title: '<h2>Data Siswa Kelas</h2>',
+                        className: 'btn-sm btn btn-alt-primary',
+                        filename: 'Data Siswa Kelas',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3],
+                        },
+                        messageTop: null,
+                        messageBottom: null,
+                        customize: function(win) {
+                            $(win.document.body).css('text-align', 'center');
+                        },
+
+                    },
+                    {
+                        extend: 'excel',
+                        title: 'Data Siswa Kelas',
+                        className: 'btn-sm btn btn-alt-success',
+                        sheetName: 'Data Siswa Kelas',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3],
+                        },
+                        action: function(e, dt, button, config) {
+                            var confirmation = window.confirm(
+                                'Apakah Anda yakin ingin mengekspor data ke Excel?');
+
+                            if (confirmation) {
+                                $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt,
+                                    button, config);
+                            }
+                        },
+                    }
+                ],
             });
+
 
             // FUNGSI PERIODE
             $('#periode').change(function() {
@@ -514,8 +556,8 @@
                         $(".btn-block-option").click();
 
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
+                            icon: response.status,
+                            title: response.status,
                             text: response.message,
                         });
                         $('#tabel-PeriodeGuru').DataTable().ajax.reload();
@@ -636,7 +678,8 @@
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error',
-                                    text: 'Data kelas gagal dihapus. Kelas memiliki siswa.',
+                                    text: 'Data kelas gagal dihapus.' + xhr
+                                        .responseJSON.message,
                                 });
                             }
                         });
@@ -677,8 +720,8 @@
                         $(".btn-block-option").click();
 
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
+                            icon: response.status,
+                            title: response.status,
                             text: response.message,
                         });
                         $('#tabel-PeriodeSiswa').DataTable().ajax.reload();

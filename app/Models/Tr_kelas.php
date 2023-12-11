@@ -21,6 +21,6 @@ class Tr_kelas extends Model
 
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class, 'idSiswa', 'idSiswa');
+        return $this->belongsTo(Siswa::class, 'idSiswa');
     }
 }

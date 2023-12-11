@@ -14,6 +14,8 @@ class Periode extends Model
     protected $primaryKey = 'idPeriode';
     public $timestamps = false;
 
+    protected $fillable = ['semester', 'tanggalMulai', 'tanggalSelesai'];
+
     // Define the relationship with the Pegawai model
     public function pegawai()
     {

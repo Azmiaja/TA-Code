@@ -9,7 +9,8 @@
         "ignore": [
           "-moz-user-select",
           "-webkit-text-size-adjust",
-          "text-align: -webkit-match-parent"
+          "text-align: -webkit-match-parent",
+          "-ms-touch-action"
         ]
       }
     ]

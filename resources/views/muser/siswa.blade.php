@@ -210,6 +210,7 @@
                         "<'row my-2 '<'col-12 col-sm-12'tr>>" +
                         "<'row mb-2'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
                     lengthMenu: [10, 25, 50, 100],
+                    responsive: true,
                 });
                 $(document).on("click", "#tambah-siswa", function(e) {
                     e.preventDefault();
