@@ -104,28 +104,21 @@ class KelasController extends Controller
     // store Periode
     public function storeSiswa(Request $request)
     {
-        $validatedData = $request->validate([
-            'idKelas' => 'required',
-            'idSiswa' => 'required',
-        ]);
-
-        $siswa = Tr_kelas::where('idSiswa', $validatedData['idSiswa'])->first();
-
-        if ($siswa) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Suswa sudah ada.'
-            ]);
+        
+        $idKelas = $request->idKelas;
+        $idSiswa = $request->idSiswa;
+        $insert = [];
+        for ($i = 0; $i < count($idSiswa); $i++) {
+            array_push($insert, ['idKelas' => $idKelas, 'idSiswa'=>$idSiswa[$i]]);
         }
-
-        Tr_kelas::create($validatedData);
+        Tr_kelas::insertOrIgnore($insert);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Berhasil menyimpan data.'
         ]);
     }
-
+    
     //store Kelas
     public function store(Request $request)
     {
@@ -135,22 +128,23 @@ class KelasController extends Controller
             'namaKelas' => 'required',
         ]);
 
-        $kelas = Kelas::where('namaKelas', $validatedData['namaKelas'])->first();
+        $kelas = Kelas::where('idPeriode', $validatedData['idPeriode'])->where('namaKelas', $validatedData['namaKelas'])->first();
 
         if ($kelas) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Kelas sudah ada.'
             ]);
+        } else {
+            Kelas::create($validatedData);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil menyimpan data.'
+            ]);
         }
-
-        Kelas::create($validatedData);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Berhasil menyimpan data.'
-        ]);
     }
+
 
     public function show($id)
     {

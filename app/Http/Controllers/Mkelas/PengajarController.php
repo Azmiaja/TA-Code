@@ -70,14 +70,25 @@ class PengajarController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'idPeriode' => 'required',
-            'idMapel' => 'required',
-            'idPegawai' => 'required',
-            'idKelas' => 'required',
-        ]);
+        // $validatedData = $request->validate([
+        //     'idPeriode' => 'required',
+        //     'idMapel' => 'required',
+        //     'idPegawai' => 'required',
+        //     'idKelas' => 'required',
+        // ]);
 
-        Pengajaran::create($validatedData);
+        $idPeriode = $request->idPeriode;
+        $idMapel = $request->idMapel;
+        $idPegawai = $request->idPegawai;
+        $idKelas = $request->idKelas;
+
+        $insertPengajar = [];
+        for ($i = 0; $i < count($idMapel); $i++) {
+            array_push($insertPengajar, ['idKelas' => $idKelas, 'idPegawai'=>$idPegawai, 'idPeriode'=>$idPeriode, 'idMapel'=>$idMapel[$i]]);
+        }
+
+        Pengajaran::insertOrIgnore($insertPengajar);
+
 
         return response()->json([
             'status' => 'success',

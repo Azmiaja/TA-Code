@@ -176,7 +176,7 @@
                         <input type="text" name="idKelas" class="id-kelas" hidden>
                         <div class="mb-4">
                             <label class="form-label" for="periode">Perode</label>
-                            <select name="periode" id="periode" class="form-select pilih-periode">
+                            <select name="periode" id="periode_klas" class="form-select pilih-periode">
                                 <option value="" disabled selected>-- Pilih Periode --</option>
                             </select>
                         </div>
@@ -229,8 +229,14 @@
                         {{-- FORM --}}
                         <input type="text" name="idKelas" class="id-tr-kelas" hidden>
                         <div class="mb-4">
+                            <label class="form-label" for="periode">Perode</label>
+                            <select name="periode" id="periode_klas_siswa" class="form-select pilih-periode-siswa">
+                                <option value="" disabled selected>-- Pilih Periode --</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
                             <label class="form-label" for="namaKelas">Kelas</label>
-                            <select name="namaKelas" id="namaKelas" class="form-select pilih-kelas-siswa">
+                            <select name="namaKelas" id="namaKelas_siswa" class="form-select pilih-kelas-siswa">
                                 <option value="" disabled selected>-- Pilih Kelas --</option>
                                 <!-- Data akan ditambahkan dengan Ajax di sini -->
                             </select>
@@ -238,8 +244,8 @@
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="idSiswa">Nama Siswa</label>
-                            <select name="idSiswa" id="idSiswa" class="form-select pilih-siswa">
-                                <option value="" disabled selected>-- Pilih Siswa --</option>
+                            <select name="idSiswa[]" multiple="multiple" id="idSiswa" class="form-select pilih-siswa">
+                                {{-- <option value="" disabled selected>-- Pilih Siswa --</option> --}}
                             </select>
                         </div>
 
@@ -283,12 +289,8 @@
                         '<option value="" disabled selected>-- Pilih Guru --</option>');
 
                     $('.pilih-siswa').empty();
-                    $('.pilih-siswa').append(
-                        '<option value="" disabled selected>-- Pilih Siswa --</option>');
 
-                    $('.pilih-kelas-siswa').empty();
-                    $('.pilih-kelas-siswa').append(
-                        '<option value="" disabled selected>-- Pilih Kelas --</option>');
+
                     $.each(data.periode, function(key, value) {
                         // console.log(value.idKelas);
                         $('.pilih-periode').append('<option value="' + value.idPeriode +
@@ -301,12 +303,12 @@
                             '">' + value.namaPegawai + '</option>');
                     });
 
-                    $.each(data.kelas, function(key, value) {
-                        // console.log(value.idKelas);
-                        $('.pilih-kelas-siswa').append('<option value="' + value.idKelas +
-                            '">Kelas ' + value.namaKelas +
-                            ' Semester ' + value.periode.formattedTanggalMulai + '</option>');
-                    });
+                    // $.each(data.kelas, function(key, value) {
+                    //     // console.log(value.idKelas);
+                    //     $('.pilih-kelas-siswa').append('<option value="' + value.idKelas +
+                    //         '">Kelas ' + value.namaKelas +
+                    //         ' Semester ' + value.periode.formattedTanggalMulai + '</option>');
+                    // });
 
                     $.each(data.siswa, function(key, value) {
                         // console.log(value.idKelas);
@@ -318,9 +320,72 @@
                     console.error(xhr.responseText);
                 }
             });
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('pengajar/get-form') }}",
+                success: function(data) {
+                    // PERIODE
+                    $('.pilih-periode-siswa').empty();
+                    $('.pilih-periode-siswa').append(
+                        '<option value="" disabled selected>-- Pilih Periode --</option>');
+
+                    $.each(data.periode, function(key, value) {
+                        $('.pilih-periode-siswa').append('<option value="' + value.idPeriode +
+                            '">Semester ' + value.formattedTanggalMulai + '</option>');
+                    });
+
+                    $('.pilih-periode-siswa').on('change', function() {
+                        var selectedPeriodeId = $(this).val();
+
+                        // Fetch classes based on the selected period
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ url('pengajar/get-form') }}", // You need to define a route for this
+                            data: {
+                                periode_id: selectedPeriodeId
+                            },
+                            success: function(classesData) {
+                                // Populate the classes dropdown based on the fetched data
+                                $('.pilih-kelas-siswa').empty();
+                                $('.pilih-kelas-siswa').append(
+                                    '<option value="" disabled selected>-- Pilih Kelas --</option>'
+                                );
+
+                                $.each(classesData.kelas, function(key, value) {
+                                    $('.pilih-kelas-siswa').append(
+                                        '<option value="' + value
+                                        .idKelas +
+                                        '">Kelas ' + value.namaKelas +
+                                        '</option>');
+                                });
+                            },
+                        });
+                    });
+                }
+            });
         }
 
         $(document).ready(function() {
+            function initSelect2(selector, placeholder, dropdownParent) {
+                $(selector).select2({
+                    placeholder,
+                    allowClear: true,
+                    width: "100%",
+                    cache: false,
+                    dropdownParent,
+                    theme: "bootstrap",
+                });
+            }
+
+            initSelect2('#idPrgawai', "Pilih Guru", $('#modal-bagiKelasGuru'));
+            initSelect2('#idSiswa', '', $('#modal-bagiKelasSiswa'));
+
+
+
+
+
+
             loadDropdownOptions()
             // Guru
             $('#tabel-PeriodeGuru').DataTable({
@@ -365,7 +430,8 @@
                                 data.idKelas + '">' +
                                 '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
                                 '<button type="button" class="btn btn-sm btn-alt-danger" id="action-hapusGuru" title="Delete" value="' +
-                                data.idKelas + '" data-nama-guru="' + data.guru.namaPegawai + '">' +
+                                data.idKelas + '" data-nama-guru="' + data.guru
+                                .namaPegawai + '">' +
                                 '<i class="fa fa-fw fa-times"></i></button>' +
                                 '</div>';
                         }
@@ -406,7 +472,8 @@
                                 'Apakah Anda yakin ingin mengekspor data ke Excel?');
 
                             if (confirmation) {
-                                $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt,
+                                $.fn.dataTable.ext.buttons.excelHtml5.action.call(this,
+                                    e, dt,
                                     button, config);
                             }
                         },
@@ -460,7 +527,8 @@
                                 row.idtrKelas + '">' +
                                 '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
                                 '<button type="button" class="btn btn-sm btn-alt-danger" id="action-hapusSiswa" title="Delete" value="' +
-                                data.idtrKelas + '" data-nama-siswa="' + data.namaSiswa + '">' +
+                                data.idtrKelas + '" data-nama-siswa="' + data
+                                .namaSiswa + '">' +
                                 '<i class="fa fa-fw fa-times"></i></button>' +
                                 '</div>';
                         }
@@ -501,7 +569,8 @@
                                 'Apakah Anda yakin ingin mengekspor data ke Excel?');
 
                             if (confirmation) {
-                                $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt,
+                                $.fn.dataTable.ext.buttons.excelHtml5.action.call(this,
+                                    e, dt,
                                     button, config);
                             }
                         },
@@ -590,9 +659,15 @@
                     url: "{{ url('data-kelas/edit/guru') }}/" + id,
                     success: function(response) {
                         $('.pilih-periode').val(response.kelas.idPeriode);
-                        $('.pilih-guru').val(response.kelas.idPegawai);
+                        // $('.pilih-guru').val(response.kelas.idPegawai);
                         $('.pilih-kelas').val(response.kelas.namaKelas);
                         $('.id-kelas').val(response.kelas.idKelas);
+
+                        var selectGuru = $(".pilih-guru");
+                        var optionGuru = selectGuru.find("option[value='" + response
+                            .kelas
+                            .idPegawai + "']");
+                        selectGuru.val(optionGuru.val()).trigger('change');
                     },
                     error: function(xhr, status, error) {
                         Swal.fire({
@@ -659,7 +734,8 @@
                     if (result.isConfirmed) {
                         $.ajaxSetup({
                             headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]')
+                                    .attr('content')
                             }
                         });
                         $.ajax({
@@ -672,13 +748,15 @@
                                     title: 'Dihapus!',
                                     text: response.message,
                                 });
-                                $('#tabel-PeriodeGuru').DataTable().ajax.reload();
+                                $('#tabel-PeriodeGuru').DataTable().ajax
+                                    .reload();
                             },
                             error: function(xhr, status, error) {
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error',
-                                    text: 'Data kelas gagal dihapus.' + xhr
+                                    text: 'Data kelas gagal dihapus.' +
+                                        xhr
                                         .responseJSON.message,
                                 });
                             }
@@ -697,7 +775,6 @@
                                     <button type="submit" class="btn btn-primary" id="btn-tbhSiswa">Simpan</button>`);
                 $('.pilih-siswa').val('');
                 $('.pilih-kelas').val('');
-
             });
 
             $(document).on('click', '#btn-tbhSiswa', function(e) {
@@ -715,6 +792,8 @@
                     type: "POST",
                     url: "{{ route('data-kelas.store.siswa') }}",
                     data: data,
+                    // contentType: false,
+                    // processData: false,
                     dataType: "json",
                     success: function(response) {
                         $(".btn-block-option").click();
@@ -752,9 +831,13 @@
                     type: "GET",
                     url: "{{ url('data-kelas/edit/siswa') }}/" + id,
                     success: function(response) {
-                        $('.pilih-siswa').val(response.tr_kelas.idSiswa);
+                        // $('.pilih-siswa').val(response.tr_kelas.idSiswa);
                         $('.pilih-kelas-siswa').val(response.tr_kelas.idKelas);
                         $('.id-tr-kelas').val(response.tr_kelas.idtrKelas);
+
+                        var selectSiswa = $(".pilih-siswa");
+                        var optionSiswa = selectSiswa.find("option[value='" + response.tr_kelas.idSiswa + "']");
+                        selectSiswa.val(optionSiswa.val()).trigger('change');
                     },
                     error: function(xhr, status, error) {
                         Swal.fire({
@@ -821,7 +904,8 @@
                     if (result.isConfirmed) {
                         $.ajaxSetup({
                             headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]')
+                                    .attr('content')
                             }
                         });
                         $.ajax({
@@ -834,7 +918,8 @@
                                     title: 'Dihapus!',
                                     text: response.message,
                                 });
-                                $('#tabel-PeriodeSiswa').DataTable().ajax.reload();
+                                $('#tabel-PeriodeSiswa').DataTable().ajax
+                                    .reload();
                             },
                             error: function(xhr, status, error) {
                                 Swal.fire({

@@ -260,41 +260,6 @@
         @endcan
     </div>
 
-    {{-- Modal kaategori --}}
-    <div class="modal fade" id="modal-Kategori" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="modalMapeltLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="block block-rounded block-transparent mb-0">
-                    <div class="block-header block-header-default">
-                        <h3 class="block-title" id="title-modal">Tambah Data</h3>
-                        <div class="block-options">
-                            <button type="button" id="btn-close" class="btn-block-option" data-bs-dismiss="modal"
-                                aria-label="Close">
-                                <i class="fa fa-fw fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="block-content fs-sm">
-                        {{-- FORM --}}
-                        <form action="POST" enctype="multipart/form-data" id="form-kategori">
-                            <input type="text" name="idKategori" id="idKategori"hidden>
-                            <div class="mb-4">
-                                <label class="form-label" for="kategori">Kategori</label>
-                                <input type="text" class="form-control" id="kategori" placeholder="Kategori Nilai">
-                            </div>
-                            <div class="mb-4 text-end" id="btn-form-kategori">
-                                {{-- conten button --}}
-                            </div>
-                        </form>
-                    </div>
-                    <div class="block-content block-content-full bg-body">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     @push('scripts')
         @canany(['super.admin', 'admin'])
             <script>

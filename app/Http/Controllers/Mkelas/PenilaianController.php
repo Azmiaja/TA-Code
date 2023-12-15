@@ -24,7 +24,6 @@ class PenilaianController extends Controller
             ->get();
         $periode = Periode::orderBy('idPeriode', 'desc')->get();
         $mapel = Mapel::orderBy('idMapel', 'desc')->get();
-        // $kategori = Kategori_nilai::orderBy('idKategoriNilai', 'desc')->get();
         return view('mkelas.penilaian', compact('periode', 'mapel', 'kelas'), [
             'title' => 'Manajemen Kelas',
             'title2' => 'Penilaian',
@@ -65,8 +64,7 @@ class PenilaianController extends Controller
             ->get();
         $periode = Periode::orderBy('idPeriode', 'desc')->get();
         $mapel = Mapel::orderBy('idMapel', 'desc')->get();
-        // $kategori = Kategori_nilai::orderBy('idKategoriNilai', 'desc')->get();
-        return view('mkelas.penilaian', compact('periode', 'mapel', 'kategori', 'kelas'), [
+        return view('mkelas.penilaian', compact('periode', 'mapel', 'kelas'), [
             'title' => 'Manajemen Kelas',
             'title3' => 'Kelas',
             'title2' => 'Penilaian',
@@ -100,8 +98,7 @@ class PenilaianController extends Controller
             ->get();
         $periode = Periode::orderBy('idPeriode', 'desc')->get();
         $mapel = Mapel::orderBy('idMapel', 'desc')->get();
-        // $kategori = Kategori_nilai::orderBy('idKategoriNilai', 'desc')->get();
-        return view('mkelas.penilaian', compact('periode', 'mapel', 'kategori', 'kelas'), [
+        return view('mkelas.penilaian', compact('periode', 'mapel', 'kelas'), [
             'title' => 'Manajemen Kelas',
             'title3' => 'Kelas',
             'title2' => 'Penilaian Siswa',

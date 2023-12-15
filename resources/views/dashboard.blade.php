@@ -288,7 +288,8 @@
                                 <div
                                     class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
                                     <dl class="mb-0">
-                                        <dt class="fs-3 fw-bold lh-2" id="wali_kelas">Kelas {{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}</dt>
+                                        <dt class="fs-3 fw-bold lh-2" id="wali_kelas">Kelas
+                                            {{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}</dt>
                                     </dl>
                                     <div class="item item-rounded-lg bg-body-light">
                                         <i class="fa-solid fa-graduation-cap fs-2 text-primary"></i>
@@ -319,7 +320,8 @@
                                 <div class="bg-body-light rounded-bottom">
                                     <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
                                         href="javascript:void(0)">
-                                        <span>Jumlah Siswa Kelas {{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}</span>
+                                        <span>Jumlah Siswa Kelas
+                                            {{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}</span>
                                         <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
                                     </a>
                                 </div>
@@ -336,7 +338,7 @@
                         <div class="block block-rounded">
                             <div class="block-header block-header-default">
                                 <h3 class="block-title data-kelas">Kalender Jadwal</h3>
-                                @can('super.admin')
+                                @canany(['super.admin', 'admin'])
                                     <div class="block-options">
                                         <select id="kelas-nama" class="form-select form-select-sm">
                                             <option selected value="1">Kelas 1</option>
@@ -347,7 +349,7 @@
                                             <option value="6">Kelas 6</option>
                                         </select>
                                     </div>
-                                @endcan
+                                @endcanany
                             </div>
                             <div class="block-content p-0 datepicker-container">
                                 <div class="row m-0 justify-content-center">

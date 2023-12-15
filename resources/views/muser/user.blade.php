@@ -169,7 +169,7 @@
         </div>
     </div>
     {{-- MODAL SISWA --}}
-    <div class="modal fade" id="modal-UsrSiswa" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    <div class="modal fade z-1" id="modal-UsrSiswa" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="modal-tambahUserLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -189,7 +189,7 @@
                         <div class="mb-4 sh-ussis">
                             <label class="form-label" for="idSiswa">Nama Siswa</label>
                             <input type="text" class="form-control nama-siswa" disabled id="nama-siswa">
-                            <select class="form-select id-siswa" id="idSiswa" name="idSiswa" required>
+                            <select class="form-select id-siswa" id="idSiswa" name="idSiswa">
                                 <option value="" disabled selected>-- Pilih Siswa --</option>
                                 @foreach ($siswaList as $ls)
                                     <option value="{{ $ls->idSiswa }}" data-nisn="{{ $ls->nisn }}"
@@ -238,7 +238,7 @@
                 $('.username-siswa').val('');
                 $('.password-siswa').val('');
                 $('.hak-akses-siswa').val('');
-                $("#idSiswa").val('');
+                $('#idSiswa').val(null).trigger('change');
             }
 
             // clear form siswa
@@ -246,7 +246,7 @@
                 $('.username').val('');
                 $('.password').val('');
                 $('.hak-akses').val('');
-                $("#idPegawai").val('');
+                $('#idPegawai').val(null).trigger('change');
             }
 
             // reload tabel siswa
@@ -344,7 +344,7 @@
                     $("#nama-siswa").prop('hidden', true);
                     $("#idSiswa").prop('hidden', false);
                     $("#modal-title-siswa").text('Tambah User Siswa');
-                    $("#bt-form-siswa").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    $("#bt-form-siswa").html(`<button type="button" class="btn btn-secondary" onclick="clearSiswaForm()" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary"
                                 id="btn-tbhSubmitSiswa">Simpan</button>`);
 
@@ -356,7 +356,7 @@
                     $("#modal-UsrSiswa").modal("show");
                     $("#modal-title-siswa").text('Edit User Siswa');
                     $("#nama-siswa").prop('hidden', false);
-                    $("#idSiswa").prop('hidden', true);
+                    $("#idSiswa").prop('disabled', true);
                     $("#bt-form-siswa").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary"
                                 id="btn-edtSubmitSiswa">Simpan</button>`);
@@ -388,7 +388,7 @@
                 // store data siswa
                 $(document).on('click', '#btn-tbhSubmitSiswa', function(e) {
                     e.preventDefault();
-                    var idSiswa = $('.id-siswa').val();
+                    var idSiswa = $('#idSiswa').val();
                     var data = {
                         'username': $('.username-siswa').val(),
                         'password': $('.password-siswa').val(),
@@ -600,7 +600,7 @@
                     $("#modal-title-pegawai").text('Tambah User Pegawai');
                     $("#nama-pegawai").prop('hidden', true);
                     $("#idPegawai").prop('hidden', false);
-                    $("#bt-form-pegawai").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    $("#bt-form-pegawai").html(`<button type="button" class="btn btn-secondary" onclick="clearPegawaiForm()" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary"
                             id="btn-submitTbhUsrPegawai">Simpan</button>`);
                 });
@@ -663,7 +663,7 @@
                     $("#modal-UserPegawai").modal("show");
                     $("#modal-title-pegawai").text('Edit User Pegawai');
                     $("#nama-pegawai").prop('hidden', false);
-                    $("#idPegawai").prop('hidden', true);
+                    $("#idPegawai").prop('disabled', true);
                     $("#bt-form-pegawai").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary"
                             id="btn-submitEdtUsrPegawai">Simpan</button>`);
@@ -786,6 +786,25 @@
                             });
                         }
                     });
+                });
+
+                // select2UsrSiswa();
+                $('#idSiswa').select2({
+                    placeholder: "Pilih Siswa",
+                    allowClear: true,
+                    width: "100%",
+                    cache: false,
+                    dropdownParent: $('#modal-UsrSiswa'),
+                    theme: "bootstrap",
+                });
+
+                $('#idPegawai').select2({
+                    placeholder: "Pilih Pegawai",
+                    allowClear: true,
+                    width: "100%",
+                    cache: false,
+                    dropdownParent: $('#modal-UserPegawai'),
+                    theme: "bootstrap"
                 });
 
             });

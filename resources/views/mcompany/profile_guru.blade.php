@@ -352,6 +352,14 @@
                     });
                 });
 
+                $('#idPegawai').select2({
+                    placeholder: "Pilih Guru",
+                    allowClear: true,
+                    width: "100%",
+                    cache: false,
+                    dropdownParent: $('#modal-ppguru'),
+                    theme: "bootstrap",
+                });
 
             });
         </script>

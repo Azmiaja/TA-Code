@@ -62,7 +62,6 @@
                             </div>
                         </div>
                         <div class="block-content fs-sm">
-                            <div id="panduan-input-periode"></div>
                             {{-- FORM --}}
                             <form action="POST" enctype="multipart/form-data" id="form-periode">
                                 <input type="text" name="idPeriode" id="idPeriode" class="id-periode" hidden>
@@ -153,16 +152,6 @@
                                 <button type="submit" class="btn btn-primary btn-tambah"
                                     id="btn-tambahPeriode">Simpan</button>`);
 
-                    $('#panduan-input-periode').html(`<div class="alert alert-success p-2">
-                                <p class="lh-1 fw-bold">Panduan Insert Periode!</p>
-                                <ul>
-                                    <li class="nav"><span>1. Pilih semester <b>Ganjil/Genap.</b></span></li>
-                                    <li class="nav"><span>2. Atur tangal mulai semester.</span></li>
-                                    <li class="nav"><span>3. Atur tangal selesai semester.</span></li>
-                                    <li class="nav"><span>3. Tekan tombol <b>Simpan</b>.</span></li>
-                                </ul>
-                            </div>`);
-
                 });
 
                 // STORE DATA
@@ -189,7 +178,7 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: xhr.responseJSON.message,
+                                text: 'Gagal menambahkan data.',
                             });
                         }
                     });
@@ -214,13 +203,6 @@
                             $('.add-tanggal-selesai').val(response.periode.tanggalSelesai);
                             $('.id-periode').val(response.periode.idPeriode);
                         },
-                        error: function(xhr, status, error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: xhr.responseJSON.message,
-                            });
-                        }
                     });
                 });
 
@@ -251,7 +233,7 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: xhr.responseJSON.message,
+                                text: 'Gagal mengedit data.',
                             });
                         }
                     });
@@ -298,7 +280,7 @@
                                     Swal.fire({
                                         icon: 'error',
                                         title: 'Error',
-                                        text: xhr.responseJSON.message,
+                                        text: 'Gagal menghapus data.',
                                     });
                                 }
                             });

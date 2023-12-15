@@ -33,6 +33,7 @@
         href="{{ asset('assets/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}">
     <link rel="stylesheet"
         href="{{ asset('assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css">
     {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script> --}}
 
     <script>
@@ -228,25 +229,12 @@
                                             <span class="nav-main-link-name">Pengajar</span>
                                         </a>
                                     </li>
-
-                                    {{-- <li class="nav-main-item">
-                                            <a class="nav-main-link {{ $title2 === 'bagisiswa' ? 'active' : '' }}"
-                                                href="{{ route('mkelas.bagisiswa') }}">
-                                                <span class="nav-main-link-name">Pembagian Siswa</span>
-                                            </a>
-                                        </li> --}}
                                     <li class="nav-main-item">
                                         <a class="nav-main-link {{ $title2 === 'penjadwalan' ? 'active' : '' }}"
                                             href="{{ route('penjadwalan.index') }}">
                                             <span class="nav-main-link-name">Jadwal Pelajaran</span>
                                         </a>
                                     </li>
-                                    {{-- <li class="nav-main-item">
-                                            <a class="nav-main-link {{ $title2 === 'Kategori Nilai' ? 'active' : '' }}"
-                                                href="{{ route('kategori-nilai.index') }}">
-                                                <span class="nav-main-link-name">Kategori Nilai</span>
-                                            </a>
-                                        </li> --}}
                                     @can('guru')
                                         <li class="nav-main-item">
                                             <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
@@ -416,6 +404,7 @@
     {{-- <script src="{{ asset('assets/js/pages/be_comp_calendar.min.js') }}"></script> --}}
     {{-- <script src="{{ asset('assets/js/plugins/ckeditor/ckeditor.js') }}"></script> --}}
     <script src="{{ asset('assets/js/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/select2/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/flatpickr/flatpickr.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.js') }}"></script>

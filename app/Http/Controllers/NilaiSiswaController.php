@@ -41,15 +41,8 @@ class NilaiSiswaController extends Controller
                 $query->where('namaKelas', $kelas_id);
             })
             ->get();
-
-        // $kategori = Kategori_nilai::all();
-
-        // $dynamicColumns = DB::table('kategori_nilai')
-        //     ->pluck('kategori')
-        //     ->toArray();
         $kelas = Kelas::where('namaKelas', $kelas_id)->get();
 
-        // $kategoris = Kategori_nilai::with('nilai')->get();
         return view('mkelas.nilai_siswa', compact('periode', 'mapel', 'siswa', 'nilai'), [
             'title' => 'Manajemen Kelas',
             'title2' => 'Penilaian Siswa',

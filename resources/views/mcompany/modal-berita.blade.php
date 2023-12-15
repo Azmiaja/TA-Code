@@ -45,7 +45,7 @@
                                 </div>
                                 <div class="col-lg-8 col-sm-12 col-12 px-0 ps-lg-3 ps-0">
                                     <label class="form-label" for="sumberBerita">Sumber Berita</label>
-                                    <input type="url" class="form-control" id="sumberBerita" name="sumberBerita">
+                                    <input type="text" class="form-control" id="sumberBerita" name="sumberBerita">
                                 </div>
                             </div>
                         </div>
@@ -111,7 +111,7 @@
                                 </div>
                                 <div class="col-lg-8 col-sm-12 col-12 px-0 ps-lg-3 ps-0">
                                     <label class="form-label" for="sumberBerita">Sumber Berita</label>
-                                    <input type="url" class="form-control" id="sumberBerita_update"
+                                    <input type="text" class="form-control" id="sumberBerita_update"
                                         name="sumberBerita">
                                 </div>
                             </div>
