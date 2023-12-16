@@ -128,6 +128,8 @@
                 $('#insertBerita').click(function() {
                     $('#modalBerita').modal('show');
                     $('#formBerita :input').val('');
+                    $('#preview-img').attr('src', '');
+                    myEditor.setData('');
                     $("#modal-title").text('Tambah Berita');
                     $("#btn-form").html(
                         `<button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
@@ -180,6 +182,7 @@
                     .catch(error => {
                         console.error(error);
                     });
+
                 var myEditor_update;
                 ClassicEditor
                     .create(document.querySelector('#isiBerita_update'))
@@ -321,6 +324,8 @@
                         }
                     });
                 });
+
+                
             });
         </script>
     @endpush

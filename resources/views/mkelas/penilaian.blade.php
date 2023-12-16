@@ -348,7 +348,7 @@
 
 
                         // Bentuk URL rute dengan menggunakan variabel
-                        var url = "{{ url('manajemen-kelas/nilai_siswa') }}/" + slug + "/" + idMapel + "/" +
+                        var url = "{{ url('nilai_siswa') }}/" + slug + "/" + idMapel + "/" +
                             kelas_id + "/" + periode_id;
 
                         // Redirect ke halaman lain

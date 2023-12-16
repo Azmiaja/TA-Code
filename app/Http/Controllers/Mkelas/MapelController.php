@@ -15,6 +15,13 @@ class MapelController extends Controller
             'title2' => 'Mata Pelajaran'
         ]);
     }
+    public function index_admin()
+    {
+        return view('mkelas.mapel', [
+            'title' => 'Manajemen Kelas',
+            'title2' => 'Mata Pelajaran'
+        ]);
+    }
 
     public function getMapel()
     {

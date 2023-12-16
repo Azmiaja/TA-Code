@@ -50,7 +50,7 @@ class BeritaController extends Controller
         try {
             $validatedData = $request->validate([
                 'judulBerita' => 'required',
-                'gambar' => 'file|mimes:jpeg,png,jpg',
+                'gambar' => 'file|image|max:2048',
                 'isiBerita' => '',
                 'waktuBerita' => 'required|date',
                 'sumberBerita' => '',
@@ -110,7 +110,7 @@ class BeritaController extends Controller
 
         $validatedData = $request->validate([
             'judulBerita' => 'required',
-            'gambar' => 'file|mimes:jpeg,png,jpg',
+            'gambar' => 'file|image|max:2048',
             'isiBerita' => '',
             'waktuBerita' => 'required|date',
             'sumberBerita' => '',

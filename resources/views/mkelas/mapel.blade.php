@@ -147,7 +147,7 @@
                 });
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('mapel.store') }}",
+                    url: "{{ url('mapel/store') }}",
                     data: data,
                     dataType: "json",
                     success: function(response) {

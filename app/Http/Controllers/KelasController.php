@@ -59,8 +59,9 @@ class KelasController extends Controller
             return $periode;
         });
         $guru = Pegawai::orderBy('idPegawai', 'desc')->where('jenisPegawai', 'Guru')->get();
+        $pegawai = Pegawai::orderBy('idPegawai', 'desc')->get();
 
-        return response()->json(['kelas' => $kelas, 'siswa' => $siswa, 'periode' => $periode, 'guru' => $guru]);
+        return response()->json(['kelas' => $kelas, 'siswa' => $siswa, 'periode' => $periode, 'guru' => $guru, 'pegawai' => $pegawai]);
     }
 
     public function getPeriodeSiswa(Request $request)
@@ -104,12 +105,12 @@ class KelasController extends Controller
     // store Periode
     public function storeSiswa(Request $request)
     {
-        
+
         $idKelas = $request->idKelas;
         $idSiswa = $request->idSiswa;
         $insert = [];
         for ($i = 0; $i < count($idSiswa); $i++) {
-            array_push($insert, ['idKelas' => $idKelas, 'idSiswa'=>$idSiswa[$i]]);
+            array_push($insert, ['idKelas' => $idKelas, 'idSiswa' => $idSiswa[$i]]);
         }
         Tr_kelas::insertOrIgnore($insert);
 
@@ -118,7 +119,7 @@ class KelasController extends Controller
             'message' => 'Berhasil menyimpan data.'
         ]);
     }
-    
+
     //store Kelas
     public function store(Request $request)
     {

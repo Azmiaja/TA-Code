@@ -26,10 +26,10 @@
                                     <img id="preview-img" alt="preview_img" style="max-height: 200px;">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <input class="form-control" type="file" name="gambar" id="gambarBerita"
-                                    accept="image/*">
-                                <button class="btn btn-primary">Submit Gambar</button>
+                            <input class="form-control gambar-berita" type="file" name="gambar" id="gambarBerita"
+                                accept="image/jpeg, image/jpg, image/png, image/svg+xml" onchange="handleImageChange()">
+                            <div class="gambarBeritaWarning" style="color: red; display: none;">
+                                Ukuran gambar tidak boleh lebih dari 2 MB.
                             </div>
                         </div>
                         <div class="mb-4">
@@ -92,11 +92,10 @@
                                     <img id="preview-img_update" alt="preview_img" style="max-height: 200px;">
                                 </div>
                             </div>
-                            {{-- <div class="form-group"> --}}
-                            <input class="form-control" type="file" name="gambar" id="gambarBerita_update"
-                                accept="image/*">
-                            {{-- <button class="btn btn-primary">Submit Gambar</button> --}}
-                            {{-- </div> --}}
+                            <small class="text-danger">*Ukuran gambar tidak boleh lebih dari 2 MB.</small>
+                            <input class="form-control gambar-berita" type="file" name="gambar" id="gambarBerita_update"
+                                accept="image/jpeg, image/jpg, image/png, image/svg+xml">
+
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="isiBerita">Isi Berita</label>
@@ -126,3 +125,32 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+    <script>
+        function toggleWarning(visible) {
+            const warningElement = document.querySelector('.gambarBeritaWarning');
+            warningElement.style.display = visible ? 'block' : 'none';
+        }
+
+        // Fungsi untuk menangani perubahan pada input gambar
+        function handleImageChange() {
+            const inputElement = document.querySelector('.gambar-berita');
+            const warningElement = document.querySelector('.gambarBeritaWarning');
+
+            // Periksa ukuran gambar saat dipilih
+            if (inputElement.files.length > 0) {
+                const fileSize = inputElement.files[0].size;
+                const maxSize = 2 * 1024 * 1024; // 2 MB
+
+                if (fileSize > maxSize) {
+                    // Tampilkan peringatan jika ukuran gambar melebihi 2 MB
+                    toggleWarning(true);
+                } else {
+                    // Sembunyikan peringatan jika ukuran gambar sesuai atau di bawah 2 MB
+                    toggleWarning(false);
+                }
+            }
+        }
+    </script>
+@endpush

@@ -176,7 +176,7 @@
         #hero {
             width: 100%;
             height: 100vh;
-            background: url('{{ asset('assets/media/photos/sdnlemahbang.png') }}') top center no-repeat;
+            background: url('{{ Storage::url($profil->first()->gambarProfil) }}') top center no-repeat;
             background-size: cover;
             position: relative;
             padding-top: 82px;

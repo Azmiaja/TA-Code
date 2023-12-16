@@ -382,7 +382,7 @@
                         });
                         $.ajax({
                             type: "POST",
-                            url: "{{ route('pengajaran.store') }}",
+                            url: "{{ url('pengajaran/store') }}",
                             data: data,
                             dataType: "json",
                             success: function(response) {

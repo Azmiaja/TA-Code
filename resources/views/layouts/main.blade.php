@@ -33,7 +33,8 @@
         href="{{ asset('assets/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}">
     <link rel="stylesheet"
         href="{{ asset('assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css">
     {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script> --}}
 
     <script>
@@ -206,32 +207,49 @@
                             <ul class="nav-main-submenu">
                                 @canany(['super.admin', 'admin'])
                                     <li class="nav-main-item">
+                                        @php
+                                            $routePeriode = Auth::user()->hakAkses == 'Super Admin' ? route('periode.index') : route('periode-admin.index');
+                                        @endphp
+
                                         <a class="nav-main-link {{ $title2 === 'periode' ? 'active' : '' }}"
-                                            href="{{ route('periode.index') }}">
+                                            href="{{ $routePeriode }}">
                                             <span class="nav-main-link-name">Periode</span>
                                         </a>
+
                                     </li>
                                     <li class="nav-main-item">
+                                        @php
+                                            $routeKelas = Auth::user()->hakAkses == 'Super Admin' ? route('data-kelas.index') : route('data-kelas-admin.index');
+                                        @endphp
                                         <a class="nav-main-link {{ $title2 === 'data-kelas' ? 'active' : '' }}"
-                                            href="{{ route('data-kelas.index') }}">
+                                            href="{{ $routeKelas }}">
                                             <span class="nav-main-link-name">Data Kelas</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
+                                        @php
+                                            $routeMapel = Auth::user()->hakAkses == 'Super Admin' ? route('mapel.index') : route('mapel-admin.index');
+                                        @endphp
                                         <a class="nav-main-link {{ $title2 === 'Mata Pelajaran' ? 'active' : '' }}"
-                                            href="{{ route('mapel.index') }}">
+                                            href="{{ $routeMapel }}">
                                             <span class="nav-main-link-name">Mata Pelajaran</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
+                                        @php
+                                            $routePengajar = Auth::user()->hakAkses == 'Super Admin' ? route('pengajaran.index') : route('pengajaran-admin.index');
+                                        @endphp
                                         <a class="nav-main-link {{ $title2 === 'Pengajar' ? 'active' : '' }}"
-                                            href="{{ route('pengajaran.index') }}">
+                                            href="{{ $routePengajar }}">
                                             <span class="nav-main-link-name">Pengajar</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
+                                        @php
+                                            $routeJadwal = Auth::user()->hakAkses == 'Super Admin' ? route('penjadwalan.index') : route('penjadwalan-admin.index');
+                                        @endphp
                                         <a class="nav-main-link {{ $title2 === 'penjadwalan' ? 'active' : '' }}"
-                                            href="{{ route('penjadwalan.index') }}">
+                                            href="{{ $routeJadwal }}">
                                             <span class="nav-main-link-name">Jadwal Pelajaran</span>
                                         </a>
                                     </li>
@@ -246,8 +264,11 @@
                                     @endcan
 
                                     <li class="nav-main-item">
+                                        @php
+                                        $routeNilai = Auth::user()->hakAkses == 'Super Admin' ? route('penilaian.index') : route('penilaian-admin.index');
+                                    @endphp
                                         <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
-                                            href="{{ route('penilaian.index') }}">
+                                            href="{{ $routeNilai }}">
                                             <span class="nav-main-link-name">Penilaian Siswa
                                             </span>
                                         </a>
@@ -330,7 +351,9 @@
                                         {{ Auth::user()->namaSiswa }}
                                     @endif
                                 </p> {{-- Nama Lengkap --}}
-                                <p class="mb-0 text-muted fs-sm fw-medium">{{ Auth::user()->hakAkses }}</p>
+                                <p class="mb-0
+                                            text-muted fs-sm fw-medium">
+                                    {{ Auth::user()->hakAkses }}</p>
                                 {{-- Role --}}
                             </div>
                             <div class="p-2">
@@ -400,16 +423,12 @@
     <script src="{{ asset('assets/js/oneui.app.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
-    {{-- <script src="{{ asset('assets/js/plugins/fullcalendar/main.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/pages/be_comp_calendar.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/plugins/ckeditor/ckeditor.js') }}"></script> --}}
     <script src="{{ asset('assets/js/plugins/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/select2/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/flatpickr/flatpickr.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-    {{-- <script src="{{ asset('assets/js/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.id.min.js') }}"></script> --}}
     <script src="{{ asset('assets/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/chart.js/chart.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>

@@ -124,13 +124,13 @@
                         <input type="text" hidden id="for-id-pegawai">
                         <div class="mb-4 sh-uspeg">
                             <label class="form-label" for="idPegawai">Nama Pegawai</label>
-                            <input type="text" class="form-control nama-pegawai" disabled id="nama-pegawai">
+                            {{-- <input type="text" class="form-control nama-pegawai" disabled id="nama-pegawai"> --}}
                             <select class="form-select pegawai-id" id="idPegawai" name="idPegawai" required>
                                 <option value="" disabled selected>-- Pilih Pegawai --</option>
-                                @foreach ($pegawaiList as $ls)
+                                {{-- @foreach ($pegawaiList as $ls)
                                     <option data-nip="{{ $ls->nip }}" data-tanggal-lahir="{{ $ls->tanggalLahir }}"
                                         value="{{ $ls->idPegawai }}">{{ $ls->namaPegawai }}</option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
                         </div>
                         <div class="mb-4">
@@ -142,8 +142,15 @@
                                 </div>
                                 <div class="col-lg-6 col-sm-12 col-12 px-0 ps-lg-2 ps-0">
                                     <label class="form-label" for="password">Password</label>
-                                    <input type="password" class="form-control password" id="password" required
-                                        name="password" placeholder="Masukan Password">
+                                    <div class="input-group">
+                                        <input type="password" class="form-control password" id="password"
+                                            placeholder="Password">
+                                        <button class="btn btn-alt-secondary" type="button" id="togglePassword">
+                                            <i class="fa fa-eye-slash"></i>
+                                        </button>
+                                    </div>
+                                    {{-- <input type="password" class="form-control password" id="password" required
+                                        name="password" placeholder="Masukan Password"> --}}
                                 </div>
                             </div>
                         </div>
@@ -188,13 +195,13 @@
                         <input type="text" hidden id="for-id-siswa">
                         <div class="mb-4 sh-ussis">
                             <label class="form-label" for="idSiswa">Nama Siswa</label>
-                            <input type="text" class="form-control nama-siswa" disabled id="nama-siswa">
+                            {{-- <input type="text" class="form-control nama-siswa" disabled id="nama-siswa"> --}}
                             <select class="form-select id-siswa" id="idSiswa" name="idSiswa">
                                 <option value="" disabled selected>-- Pilih Siswa --</option>
-                                @foreach ($siswaList as $ls)
+                                {{-- @foreach ($siswaList as $ls)
                                     <option value="{{ $ls->idSiswa }}" data-nisn="{{ $ls->nisn }}"
                                         data-tanggal-lahir="{{ $ls->tanggalLahir }}">{{ $ls->namaSiswa }}</option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
                         </div>
                         <div class="mb-4">
@@ -206,8 +213,15 @@
                                 </div>
                                 <div class="col-lg-6 col-sm-12 col-12 px-0 ps-lg-2 ps-0">
                                     <label class="form-label" for="password">Password</label>
-                                    <input type="password" class="form-control password-siswa" id="password_siswa"
-                                        required name="password" placeholder="Masukan Password">
+                                    <div class="input-group">
+                                        <input type="password" class="form-control password-siswa" id="password_siswa"
+                                            placeholder="Password">
+                                        <button class="btn btn-alt-secondary" type="button" id="togglePassword-siswa">
+                                            <i class="fa fa-eye-slash"></i>
+                                        </button>
+                                    </div>
+                                    {{-- <input type="password" class="form-control password-siswa" id="password_siswa"
+                                        required name="password" placeholder="Masukan Password"> --}}
                                 </div>
                             </div>
                         </div>
@@ -269,21 +283,65 @@
                 return day + month + year;
             }
 
+            function loadDropdownOptions() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: 'GET',
+                    url: "{{ url('data-kelas/kelas/form') }}",
+                    success: function(data) {
+
+                        $('.pegawai-id').empty();
+                        $('.pegawai-id').append(
+                            '<option value="" disabled selected>-- Pilih User Pegawai --</option>');
+
+                        $('.id-siswa').empty();
+                        $('.id-siswa').append(
+                            '<option value="" disabled selected>-- Pilih User Siswa --</option>');
+
+
+                        $.each(data.periode, function(key, value) {
+                            // console.log(value.idKelas);
+                            $('.pilih-periode').append('<option value="' + value.idPeriode +
+                                '">' + value.formattedTanggalMulai + '</option>');
+                        });
+
+                        $.each(data.pegawai, function(key, value) {
+                            // console.log(value.idKelas);
+                            $('.pegawai-id').append('<option data-nip="' + value.nip +
+                                '" data-tanggal-lahir="' + value.tanggalLahir + '" value="' + value
+                                .idPegawai +
+                                '">' + value.namaPegawai + '</option>');
+                        });
+
+
+                        $.each(data.siswa, function(key, value) {
+                            // console.log(value.idKelas);
+                            $('.id-siswa').append('<option data-nisn="' + value.nisn +
+                                '" data-tanggal-lahir="' + value.tanggalLahir + '" value="' + value
+                                .idSiswa +
+                                '">' + value.namaSiswa + '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
+
             $(document).ready(function() {
+                loadDropdownOptions();
                 // =========================== SISWA ============================
                 // CONFIG USER PASS SISWA
-                $('#idSiswa').on('change', function() {
-                    // Mendapatkan nilai nisn dan tanggalLahir dari data atribut
-                    var nisn = $(this).find(':selected').data('nisn');
-                    var tanggalLahir = $(this).find(':selected').data('tanggal-lahir');
-
-                    // Format tanggal lahir menjadi ddmmYY
-                    var formattedDate = formatDate(tanggalLahir);
-
-                    // Mengisi nilai pada input username dan password
-                    $('.username-siswa').val(nisn);
-                    $('.password-siswa').val(formattedDate);
-                    $('#ops_siswa').prop('selected', true);
+                $('#togglePassword-siswa').on('click', function() {
+                    const passwordInput = $('#password_siswa');
+                    const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
+                    passwordInput.attr('type', type);
+                    $(this).find('i').toggleClass('fa-eye fa-eye-slash');
                 });
 
                 // tabel siswa
@@ -348,6 +406,20 @@
                             <button type="submit" class="btn btn-primary"
                                 id="btn-tbhSubmitSiswa">Simpan</button>`);
 
+                    $('#idSiswa').on('change', function() {
+                        // Mendapatkan nilai nisn dan tanggalLahir dari data atribut
+                        var nisn = $(this).find(':selected').data('nisn');
+                        var tanggalLahir = $(this).find(':selected').data('tanggal-lahir');
+
+                        // Format tanggal lahir menjadi ddmmYY
+                        var formattedDate = formatDate(tanggalLahir);
+
+                        // Mengisi nilai pada input username dan password
+                        $('.username-siswa').val(nisn);
+                        $('.password-siswa').val(formattedDate);
+                        $('#ops_siswa').prop('selected', true);
+                    });
+
                 });
 
                 // show modal edit siswa
@@ -374,6 +446,11 @@
                             $('.password-siswa').val();
                             $('.hak-akses-siswa').val(response.user.hakAkses);
                             $('#for-id-siswa').val(response.user.idSiswa);
+
+                            var selectSiswa = $(".id-siswa");
+                            var optionSiswa = selectSiswa.find("option[value='" + response.user
+                                .idSiswa + "']");
+                            selectSiswa.val(optionSiswa.val()).trigger('change');
                         },
                         error: function(xhr, status, error) {
                             Swal.fire({
@@ -529,17 +606,13 @@
 
                 // ============================== PEGAWAI =============================
                 // CONFIG USER PASS Pegawai
-                $('#idPegawai').on('change', function() {
-                    // Mendapatkan nilai nisn dan tanggalLahir dari data atribut
-                    var nip = $(this).find(':selected').data('nip');
-                    var tanggalLahir = $(this).find(':selected').data('tanggal-lahir');
 
-                    // Format tanggal lahir menjadi ddmmYY
-                    var formattedDate = formatDate(tanggalLahir);
 
-                    // Mengisi nilai pada input username dan password
-                    $('.username').val(nip);
-                    $('.password').val(formattedDate);
+                $('#togglePassword').on('click', function() {
+                    const passwordInput = $('#password');
+                    const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
+                    passwordInput.attr('type', type);
+                    $(this).find('i').toggleClass('fa-eye fa-eye-slash');
                 });
 
                 // tabel user pegawai
@@ -598,11 +671,22 @@
                     e.preventDefault();
                     $("#modal-UserPegawai").modal("show");
                     $("#modal-title-pegawai").text('Tambah User Pegawai');
-                    $("#nama-pegawai").prop('hidden', true);
-                    $("#idPegawai").prop('hidden', false);
                     $("#bt-form-pegawai").html(`<button type="button" class="btn btn-secondary" onclick="clearPegawaiForm()" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary"
                             id="btn-submitTbhUsrPegawai">Simpan</button>`);
+
+                    $('#idPegawai').on('change', function() {
+                        // Mendapatkan nilai nisn dan tanggalLahir dari data atribut
+                        var nip = $(this).find(':selected').data('nip');
+                        var tanggalLahir = $(this).find(':selected').data('tanggal-lahir');
+
+                        // Format tanggal lahir menjadi ddmmYY
+                        var formattedDate = formatDate(tanggalLahir);
+
+                        // Mengisi nilai pada input username dan password
+                        $('.username').val(nip);
+                        $('.password').val(formattedDate);
+                    });
                 });
 
                 // STORE DATA 
@@ -661,9 +745,8 @@
                 $(document).on('click', '#action-editUsrPegawai', function(e) {
                     e.preventDefault();
                     $("#modal-UserPegawai").modal("show");
-                    $("#modal-title-pegawai").text('Edit User Pegawai');
-                    $("#nama-pegawai").prop('hidden', false);
                     $("#idPegawai").prop('disabled', true);
+                    $("#modal-title-pegawai").text('Edit User Pegawai');
                     $("#bt-form-pegawai").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary"
                             id="btn-submitEdtUsrPegawai">Simpan</button>`);
@@ -672,11 +755,18 @@
                         type: "GET",
                         url: "{{ url('user/edit/pegawai') }}/" + idUser,
                         success: function(response) {
-                            $('.nama-pegawai').val(response.user.pegawai.namaPegawai);
+                            // $('.nama-pegawai').val(response.user.pegawai.namaPegawai);
                             $('.username').val(response.user.username);
                             $('.password').val();
                             $('.hak-akses').val(response.user.hakAkses);
                             $('#for-id-pegawai').val(response.user.idUser);
+
+                            var selectPeg = $(".pegawai-id");
+                            var optionPeg = selectPeg.find("option[value='" + response.user
+                                .pegawai.idPegawai + "']");
+                            selectPeg.val(optionPeg.val()).trigger('change');
+                            console.log(response.user.pegawai.idPegawai);
+
                         },
                         error: function(xhr, status, error) {
                             Swal.fire({
@@ -788,24 +878,19 @@
                     });
                 });
 
-                // select2UsrSiswa();
-                $('#idSiswa').select2({
-                    placeholder: "Pilih Siswa",
-                    allowClear: true,
-                    width: "100%",
-                    cache: false,
-                    dropdownParent: $('#modal-UsrSiswa'),
-                    theme: "bootstrap",
-                });
+                function initSelect2(selector, placeholder, dropdownParent) {
+                    $(selector).select2({
+                        placeholder,
+                        allowClear: true,
+                        width: "100%",
+                        cache: false,
+                        dropdownParent,
+                        theme: "bootstrap",
+                    });
+                }
 
-                $('#idPegawai').select2({
-                    placeholder: "Pilih Pegawai",
-                    allowClear: true,
-                    width: "100%",
-                    cache: false,
-                    dropdownParent: $('#modal-UserPegawai'),
-                    theme: "bootstrap"
-                });
+                initSelect2('#idPegawai', 'Pilih User Pegawai', $('#modal-UserPegawai'));
+                initSelect2('#idSiswa', 'Pilih User Siswa', $('#modal-UsrSiswa'));
 
             });
         </script>

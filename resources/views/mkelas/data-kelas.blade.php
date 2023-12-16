@@ -381,11 +381,6 @@
             initSelect2('#idPrgawai', "Pilih Guru", $('#modal-bagiKelasGuru'));
             initSelect2('#idSiswa', '', $('#modal-bagiKelasSiswa'));
 
-
-
-
-
-
             loadDropdownOptions()
             // Guru
             $('#tabel-PeriodeGuru').DataTable({

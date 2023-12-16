@@ -567,7 +567,7 @@
                         }
                         $.ajax({
                             type: "POST",
-                            url: "{{ route('penjadwalan.store') }}",
+                            url: "{{ url('penjadwalan/store') }}",
                             data: data,
                             dataType: "json",
                             success: function(response) {

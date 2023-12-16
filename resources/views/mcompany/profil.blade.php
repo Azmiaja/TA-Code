@@ -166,8 +166,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <small class="text-danger">*Ukuran gambar tidak boleh lebih dari 2 MB.</small>
                                                 <input class="form-control" type="file" name="gambarProfil"
-                                                    id="gambarProfil" accept=".jpg, .jpeg, .svg">
+                                                    id="gambarProfil" accept=".jpg, .jpeg, .svg, .png">
                                             </div>
                                             <div class="mb-4">
                                                 <label class="form-label" for="deskripsiProfil">Deskripsi</label>
@@ -255,8 +256,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <small class="text-danger">*Ukuran gambar tidak boleh lebih dari 2 MB.</small>
                                                 <input class="form-control" type="file" name="gambar"
-                                                    id="gambarSejarah" accept=".jpg, .jpeg, .svg">
+                                                    id="gambarSejarah" accept=".jpg, .jpeg, .svg, .png">
                                             </div>
                                             <div class="mb-4">
                                                 <label class="form-label" for="deskripsiSejarah">Deskripsi</label>
@@ -447,6 +449,7 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Upload gambar profil</label>
+                                    <small class="text-danger">*Ukuran gambar tidak boleh lebih dari 2 MB.</small>
                                     <input type="file" name="gambarProfil" class="form-control"
                                         accept=".jpg, .jpeg, .svg, .png">
                                 </div>
@@ -458,6 +461,7 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Upload gambar sejarah</label>
+                                    <small class="text-danger">*Ukuran gambar tidak boleh lebih dari 2 MB.</small>
                                     <input type="file" name="gambarSejarah" class="form-control"
                                         accept=".jpg, .jpeg, .svg, .png">
                                 </div>

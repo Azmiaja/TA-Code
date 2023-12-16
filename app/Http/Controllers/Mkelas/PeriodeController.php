@@ -19,7 +19,7 @@ class PeriodeController extends Controller
 
     public function getPeriode()
     {
-        $data = Periode::orderBy("tanggalMulai", "asc")->get();
+        $data = Periode::orderBy("idPeriode", "asc")->get();
         $data = $data->map(function ($item, $key) {
             $item['nomor'] = $key + 1;
             return $item;

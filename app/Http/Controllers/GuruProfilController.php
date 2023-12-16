@@ -128,7 +128,7 @@ class GuruProfilController extends Controller
         $validatedData = $request->validate([
             'idPegawai' => 'required',
             'jabatan' => 'required',
-            'gambarPP' => 'file|mimes:jpeg,png,jpg,svg'
+            'gambarPP' => 'file|image|max:2048'
         ]);
 
         // If there is a new image file

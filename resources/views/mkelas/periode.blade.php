@@ -160,7 +160,7 @@
                     var data = new FormData($('#form-periode')[0]);
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('periode.store') }}",
+                        url: "{{ url('periode/store') }}",
                         data: data,
                         contentType: false,
                         processData: false,
