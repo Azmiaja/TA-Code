@@ -129,7 +129,7 @@
                                         <option value="Katolik">Katolik</option>
                                         <option value="Hindu">Hindu</option>
                                         <option value="Budha">Budha</option>
-                                        <option value="Konghuchu">Konghuchu</option>
+                                        <option value="Konghucu">Konghucu</option>
                                     </select>
                                 </div>
                                 <!-- Jenis Pegawai -->

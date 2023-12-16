@@ -281,7 +281,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('profil-guru.store') }}",
+                        url: "{{ url('profil-gurustore') }}",
                         data: data,
                         contentType: false,
                         processData: false,

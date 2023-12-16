@@ -146,7 +146,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('berita.store') }}",
+                        url: "{{ url('berita/store') }}",
                         data: data,
                         contentType: false,
                         processData: false,

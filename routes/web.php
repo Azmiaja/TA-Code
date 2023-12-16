@@ -7,7 +7,6 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LihatBeritaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Muser;
-use App\Http\Controllers\Mkeuangan;
 use App\Http\Controllers\Mkelas;
 use App\Http\Controllers\Mcompany;
 use App\Http\Controllers\NilaiSiswaController;
@@ -37,6 +36,7 @@ Route::middleware(['auth:user,siswa'])->group(function () {
     Route::get('siswa/get-data', [Muser\SiswaController::class, 'getData'])->name('siswa.get-data');
     Route::get('siswa/edit/{id}', [Muser\SiswaController::class, 'edit'])->name('siswa.edit');
     Route::put('siswa/update/{id}', [Muser\SiswaController::class, 'update'])->name('siswa.update');
+    Route::post('siswa/store', [Muser\SiswaController::class, 'store'])->name('siswa.store');
     Route::delete('siswa/destroy/{id}', [Muser\SiswaController::class, 'destroy'])->name('siswa.destroy');
 
     // PEGAWAI.BLADE
@@ -50,11 +50,13 @@ Route::middleware(['auth:user,siswa'])->group(function () {
     Route::get('berita/edit/{id}', [Mcompany\BeritaController::class, 'edit']);
     Route::get('berita/showDelete/{id}', [Mcompany\BeritaController::class, 'showDelete']);
     Route::put('berita/update/{id}', [Mcompany\BeritaController::class, 'update'])->name('berita.update');
+    Route::post('berita/store', [Mcompany\BeritaController::class, 'store'])->name('berita.store');
     Route::delete('berita/destroy/{id}', [Mcompany\BeritaController::class, 'destroy']);
 
     // Route::put('profil/guru/update/{id}', [Mcompany\BeritaController::class, 'updateDataPP']);
     Route::get('profil-guru/edit/{id}', [GuruProfilController::class, 'edit'])->name('profil-guru.edit');
     Route::delete('profil-guru/destroy/{id}', [GuruProfilController::class, 'destroy'])->name('profil-guru.destroy');
+    // Route::post('profil-guru/store', [GuruProfilController::class, 'store'])->name('profil-guru.store');
 
     // MASTER DATA
     Route::get('periode/guru/get-data', [KelasController::class, 'getPeriodeGuru']);
@@ -149,15 +151,17 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
 
     Route::prefix('manajemen-user')->group(function () {
         Route::resource('pegawai', Muser\PegawaiController::class);
-        Route::resource('siswa', Muser\SiswaController::class);
+        // Route::resource('siswa', Muser\SiswaController::class);
+        Route::get('siswa', [Muser\SiswaController::class, 'index'])->name('siswa.index');
         Route::resource('user', Muser\UserController::class);
     });
 
     //manajemen profil sekolah
     Route::prefix('company-profil')->group(function () {
-        Route::resource('berita', Mcompany\BeritaController::class);
+        // Route::resource('berita', Mcompany\BeritaController::class);
+        Route::get('berita', [Mcompany\BeritaController::class, 'index'])->name('berita.index');
         Route::resource('profil', Mcompany\ProfilController::class);
-        Route::resource('profil-guru', GuruProfilController::class);
+        Route::get('profil-guru', [GuruProfilController::class, 'index'])->name('profil-guru.index');
         Route::put('profil/updateProfil/{id}', [Mcompany\ProfilController::class, 'updateProfil'])->name('profil.updateProfil');
         Route::put('profil/updateSejarah/{id}', [Mcompany\ProfilController::class, 'updateSejarah'])->name('profil.updateSejarah');
         Route::put('profil/updateVisi/{id}', [Mcompany\ProfilController::class, 'updateVisi'])->name('profil.updateVisi');
