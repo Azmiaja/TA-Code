@@ -5,16 +5,10 @@ namespace App\Http\Controllers\Mcompany;
 use App\Http\Controllers\Controller;
 use App\Models\Profil;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class ProfilController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $profil = Profil::orderBy('idProfil', 'desc')->take(1)->get();
@@ -26,24 +20,14 @@ class ProfilController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+        // Validasi data
         $validatedData = $request->validate([
             'slogan' => 'required',
             'gambarProfil' => 'required|file|mimes:jpg,jpeg,svg|max:2048',
@@ -52,42 +36,43 @@ class ProfilController extends Controller
             'deskripsiSejarah' => 'required',
             'visi' => 'required',
             'misi' => 'required',
-
         ]);
 
-        // $validatedData['tahun'] = Carbon::createFromFormat('d-m-Y', $request->input('tahun', Carbon::now()));
+        // Field-file yang akan dicek dan dihapus jika data baru ditambahkan
         $gambarFields = ['gambarProfil', 'gambarSejarah'];
 
+        // Loop melalui field-file
         foreach ($gambarFields as $field) {
+            // Cek apakah ada file lama
             if ($request->hasFile($field)) {
+                // Hapus file lama sebelum menyimpan yang baru
+                $oldFile = Profil::whereNotNull($field)->value($field);
+                if ($oldFile) {
+                    // Hapus file lama dari storage
+                    Storage::delete('public/' . $oldFile);
+                }
+
+                // Simpan file baru
                 $gambarPath = $request->file($field)->getClientOriginalName();
                 $validatedData[$field] = $request->file($field)->storeAs('gambar-profil', $gambarPath, 'public');
             }
         }
 
-        Profil::create($validatedData);
+        // Hapus semua data yang ada di tabel Profil
+        Profil::truncate();
 
-        return back()
-            ->with('success', 'Berhasil menyimpan 1 data.');
+        // Buat atau update profil baru
+        Profil::updateOrCreate([], $validatedData);
+
+        return back()->with('success', 'Berhasil menyimpan data.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $profil = Profil::find($id);
@@ -98,14 +83,6 @@ class ProfilController extends Controller
 
         return view(compact('profil'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
 
     //  fungsi update profil
     public function updateProfil(Request $request, $id)
@@ -163,7 +140,7 @@ class ProfilController extends Controller
             'timestampVisi' => 'required',
 
         ]);
-        
+
         $profil->update($validatedData);
 
         return redirect()->route('profil.index')->with('success', 'Data Visi berhasil diperbarui.');
@@ -178,7 +155,7 @@ class ProfilController extends Controller
             'timestampMisi' => 'required',
 
         ]);
-        
+
         $profil->update($validatedData);
 
         return redirect()->route('profil.index')->with('success', 'Data Misi berhasil diperbarui.');
@@ -192,18 +169,12 @@ class ProfilController extends Controller
             'slogan' => 'required',
 
         ]);
-        
+
         $profil->update($validatedData);
 
         return redirect()->route('profil.index')->with('success', 'Data Slogan berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $profil = Profil::find($id);

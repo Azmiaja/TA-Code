@@ -362,7 +362,8 @@
                             `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary" id="btn-tbhPengajar">Simpan</button>`
                         );
-                        $('.mapel-two').prop('hidden', true)
+                        $('.mapel-two').prop('hidden', true);
+                        $('#multi-mapel').prop('hidden', false);
                         clearForm();
 
                     });
@@ -382,11 +383,10 @@
                         });
                         $.ajax({
                             type: "POST",
-                            url: "{{ url('pengajaran/store') }}",
+                            url: "{{ url('pengajar/store') }}",
                             data: data,
                             dataType: "json",
                             success: function(response) {
-                                // console.log(response);
                                 $(".btn-block-option").click();
 
                                 Swal.fire({
@@ -420,6 +420,13 @@
                             `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary" id="btn-edtPengajar">Simpan</button>`
                         );
+
+                        $('.guru-id').val(null).trigger('change');
+                        $('#idMapel_select_two').val(null).trigger('change');
+                        $('.periode-id').val('');
+                        $('.kelas-id').val('')
+                        $('#idKelas').val('');
+
                         $('.mapel-two').prop('hidden', false);
                         $('#multi-mapel').prop('hidden', true);
 
@@ -429,9 +436,7 @@
                             success: function(response) {
                                 // console.log(response);
                                 $('.guru-id').val(response.pengajar.idPegawai);
-                                // $('.mapel-id').val(response.pengajar.idMapel);
                                 $('.periode-id').val(response.pengajar.idPeriode).trigger('change');
-                                $('.kelas-id').val(response.pengajar.idKelas);
                                 $('.id-pengajar').val(response.pengajar.idPengajaran);
 
                                 var selectPengajar = $(".guru-id");
@@ -439,10 +444,27 @@
                                     .pengajar.idPegawai + "']");
                                 selectPengajar.val(optionPengajar.val()).trigger('change');
 
-                                var selectMapel = $(".mapel-id");
+                                var selectMapel = $("#idMapel_select_two");
                                 var optionMapel = selectMapel.find("option[value='" + response.pengajar
                                     .idMapel + "']");
                                 selectMapel.val(optionMapel.val()).trigger('change');
+
+
+                                $.ajax({
+                                    type: 'GET',
+                                    url: "{{ url('pengajar/get-form') }}", // Sesuaikan dengan URL yang benar
+                                    data: {
+                                        periode_id: response.pengajar.idPeriode
+                                    },
+                                    success: function(classesData) {
+                                        // Setelah data kelas berhasil dimuat, baru atur nilai pada elemen select kelas
+                                        $('.kelas-id').val(response.pengajar
+                                            .idKelas).trigger('change');
+
+                                        console.log(response.pengajar.idKelas);
+                                        // $('.id-tr-kelas').val(response.tr_kelas.idtrKelas);
+                                    },
+                                });
                             },
                             error: function(xhr, status, error) {
                                 Swal.fire({
@@ -461,7 +483,8 @@
                             'idPegawai': $('.guru-id').val(),
                             'idMapel': $('#idMapel_select_two').val(),
                             'idPeriode': $('.periode-id').val(),
-                        }
+                            'idKelas': $('.kelas-id').val(),
+                        };
                         $.ajaxSetup({
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

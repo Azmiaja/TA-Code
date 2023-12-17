@@ -11,18 +11,7 @@
                                 <a class="link-fx" href="javascript:void(0)">{{ $title }}</a>
                             </li>
                             <li class="breadcrumb-item" aria-current="page">
-                                @can('siswa')
-                                    Dashboard Siswa
-                                @endcan
-                                @can('admin')
-                                    Dashboard Admin
-                                @endcan
-                                @can('guru')
-                                    Dashboard Guru
-                                @endcan
-                                @can('super.admin')
-                                    Dashboard
-                                @endcan
+                                Dashboard
                             </li>
                         </ol>
                     </nav>

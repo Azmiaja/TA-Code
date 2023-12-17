@@ -332,6 +332,26 @@
                 });
             }
 
+            $('#idSiswa').on('change', function() {
+                // Periksa apakah tombol tambah sudah diklik
+                if (tambahSiswaClicked) {
+                    // Mendapatkan nilai nisn dan tanggalLahir dari data atribut
+                    var nisn = $(this).find(':selected').data('nisn');
+                    var tanggalLahir = $(this).find(':selected').data('tanggal-lahir');
+
+                    // Format tanggal lahir menjadi ddmmYY
+                    var formattedDate = formatDate(tanggalLahir);
+
+                    // Mengisi nilai pada input username dan password
+                    $('.username-siswa').val(nisn);
+                    $('.password-siswa').val(formattedDate);
+                    $('#ops_siswa').prop('selected', true);
+
+                    // Set ulang status tombol tambahSiswaClicked menjadi false
+                    tambahSiswaClicked = false;
+                }
+            });
+
 
             $(document).ready(function() {
                 loadDropdownOptions();
@@ -395,6 +415,8 @@
 
                 });
 
+                var tambahSiswaClicked = false;
+
                 // show modal tambah siswa
                 $(document).on('click', '#btn-tambahUserSiswa', function(e) {
                     e.preventDefault();
@@ -406,19 +428,7 @@
                             <button type="submit" class="btn btn-primary"
                                 id="btn-tbhSubmitSiswa">Simpan</button>`);
 
-                    $('#idSiswa').on('change', function() {
-                        // Mendapatkan nilai nisn dan tanggalLahir dari data atribut
-                        var nisn = $(this).find(':selected').data('nisn');
-                        var tanggalLahir = $(this).find(':selected').data('tanggal-lahir');
-
-                        // Format tanggal lahir menjadi ddmmYY
-                        var formattedDate = formatDate(tanggalLahir);
-
-                        // Mengisi nilai pada input username dan password
-                        $('.username-siswa').val(nisn);
-                        $('.password-siswa').val(formattedDate);
-                        $('#ops_siswa').prop('selected', true);
-                    });
+                    tambahSiswaClicked = true;
 
                 });
 

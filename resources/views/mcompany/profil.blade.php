@@ -23,7 +23,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="content">
         {{-- Alert --}}
         @if (session('success') || $errors->any())
@@ -82,8 +82,7 @@
                                             enctype="multipart/form-data" method="POST">
                                             @csrf
                                             @method('put')
-                                            <input type="text" name="idProfil" value="{{ $slogan->idProfil }}"
-                                                hidden>
+                                            <input type="text" name="idProfil" value="{{ $slogan->idProfil }}" hidden>
                                             <div class="mb-4">
                                                 <label class="form-label" for="slogan">Slogan</label>
                                                 <textarea id="js-ckeditor5-classic-edit-slogan" class="form-control" name="slogan">{{ $slogan->slogan }}</textarea>
@@ -155,7 +154,8 @@
                                             enctype="multipart/form-data" method="POST">
                                             @csrf
                                             @method('put')
-                                            <input type="text" name="idProfil" value="{{ $profils->idProfil }}" hidden>
+                                            <input type="text" name="idProfil" value="{{ $profils->idProfil }}"
+                                                hidden>
                                             <div class="mb-4">
                                                 <label class="form-label" for="gambarProfil">Gambar</label>
                                                 <div class="row ms-1 mb-2 p-0">
@@ -166,7 +166,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <small class="text-danger">*Ukuran gambar tidak boleh lebih dari 2 MB.</small>
+                                                <small class="text-danger">*Ukuran gambar tidak boleh lebih dari 2
+                                                    MB.</small>
                                                 <input class="form-control" type="file" name="gambarProfil"
                                                     id="gambarProfil" accept=".jpg, .jpeg, .svg, .png">
                                             </div>
@@ -251,12 +252,13 @@
                                                 <div class="row ms-1 mb-2 p-0">
                                                     <div class="col-auto border rounded-2">
                                                         <div class="m-3">
-                                                            <img src="{{ Storage::url($sejarah->gambarSejarah) }}"
+                                                            <img id="prev_gambar_sejarah" src="{{ Storage::url($sejarah->gambarSejarah) }}"
                                                                 alt="{{ $sejarah->gambarSejarah }}" height="150">
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <small class="text-danger">*Ukuran gambar tidak boleh lebih dari 2 MB.</small>
+                                                <small class="text-danger">*Ukuran gambar tidak boleh lebih dari 2
+                                                    MB.</small>
                                                 <input class="form-control" type="file" name="gambar"
                                                     id="gambarSejarah" accept=".jpg, .jpeg, .svg, .png">
                                             </div>
@@ -326,8 +328,7 @@
                                             enctype="multipart/form-data" method="POST">
                                             @csrf
                                             @method('put')
-                                            <input type="text" name="idProfil" value="{{ $visi->idProfil }}"
-                                                hidden>
+                                            <input type="text" name="idProfil" value="{{ $visi->idProfil }}" hidden>
                                             <div class="mb-4">
                                                 <label class="form-label" for="visi">Deskripsi</label>
                                                 <textarea id="js-ckeditor5-classic-edit-visi" class="form-control" name="visi">{{ $visi->visi }}</textarea>
@@ -349,7 +350,7 @@
                     </div>
                 @endforeach
             </div>
-            
+
             <div class="col-12">
                 @foreach ($profil as $misi)
                     <div class="block block-rounded block-link-pop overflow-hidden">
@@ -393,8 +394,7 @@
                                             enctype="multipart/form-data" method="POST">
                                             @csrf
                                             @method('put')
-                                            <input type="text" name="idProfil" value="{{ $misi->idProfil }}"
-                                                hidden>
+                                            <input type="text" name="idProfil" value="{{ $misi->idProfil }}" hidden>
                                             <div class="mb-4">
                                                 <label class="form-label" for="Misi">Deskripsi</label>
                                                 <textarea id="js-ckeditor5-classic-edit-misi" class="form-control" name="misi">{{ $misi->misi }}</textarea>

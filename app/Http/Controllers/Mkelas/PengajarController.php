@@ -138,6 +138,7 @@ class PengajarController extends Controller
             'idPeriode' => 'required',
             'idMapel' => 'required',
             'idPegawai' => 'required',
+            'idKelas' => 'required',
         ]);
 
         // Perbarui data pengajar

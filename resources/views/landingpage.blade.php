@@ -1,7 +1,7 @@
 @extends('layouts.landing')
 @section('landing')
     <!-- ======= Hero Section ======= -->
-    <section id="hero" class="d-flex align-items-center">
+    <section id="hero" style="background: url('{{ Storage::url($profil->first()->gambarProfil) }}') top center no-repeat;" class="d-flex align-items-center">
 
         <div class="container" data-aos="zoom-out" data-aos-delay="100">
             <div class="row">
@@ -179,7 +179,7 @@
                                     <h4>{{ $bt->judulBerita }}</h4>
                                     <p>{{ \Carbon\Carbon::parse($bt->waktuBerita)->format('d-m-Y') }}</p>
                                     <a href="{{ route('lihatberita', [$bt->idBerita, Str::slug($bt->judulBerita)]) }}"
-                                        class="mt-1 btn btn-sm btn-danger">More</a>
+                                        class="mt-1 btn btn-sm" style="background: #2b4e68; color: #fff;">More</a>
                                 </div>
                             </div>
                         </div>

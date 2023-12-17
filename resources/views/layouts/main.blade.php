@@ -94,42 +94,14 @@
             <div class="js-sidebar-scroll">
                 <div class="content-side">
                     <ul class="nav-main">
-                        @canany(['super.admin'])
-                            <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title === 'Dashboard' ? 'active' : '' }}"
-                                    href="{{ route('dashboard.super_admin') }}">
-                                    <i class="nav-main-link-icon si si-grid"></i>
-                                    <span class="nav-main-link-name">Dashboard</span>
-                                </a>
-                            </li>
-                        @endcanany
-                        @canany(['admin'])
-                            <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title === 'Dashboard' ? 'active' : '' }}"
-                                    href="{{ route('dashboard.admin') }}">
-                                    <i class="nav-main-link-icon si si-grid"></i>
-                                    <span class="nav-main-link-name">Dashboard</span>
-                                </a>
-                            </li>
-                        @endcanany
-                        @canany(['guru'])
-                            <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title === 'Dashboard' ? 'active' : '' }}"
-                                    href="{{ route('dashboard.guru') }}">
-                                    <i class="nav-main-link-icon si si-grid"></i>
-                                    <span class="nav-main-link-name">Dashboard</span>
-                                </a>
-                            </li>
-                        @endcanany
-                        @canany(['siswa'])
-                            <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title === 'Dashboard' ? 'active' : '' }}"
-                                    href="{{ route('dashboard.siswa') }}">
-                                    <i class="nav-main-link-icon si si-grid"></i>
-                                    <span class="nav-main-link-name">Dashboard</span>
-                                </a>
-                            </li>
-                        @endcanany
+                        {{-- Dashboard menu --}}
+                        <li class="nav-main-item">
+                            <a class="nav-main-link {{ $title === 'Dashboard' ? 'active' : '' }}"
+                                href="{{ route('dashboard.index') }}">
+                                <i class="nav-main-link-icon si si-grid"></i>
+                                <span class="nav-main-link-name">Dashboard</span>
+                            </a>
+                        </li>
                         @canany(['super.admin'])
                             <li class="nav-main-item {{ $title === 'Manajemen User' ? 'open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen User' ? 'active' : '' }}"
@@ -265,8 +237,8 @@
 
                                     <li class="nav-main-item">
                                         @php
-                                        $routeNilai = Auth::user()->hakAkses == 'Super Admin' ? route('penilaian.index') : route('penilaian-admin.index');
-                                    @endphp
+                                            $routeNilai = Auth::user()->hakAkses == 'Super Admin' ? route('penilaian.index') : route('penilaian-admin.index');
+                                        @endphp
                                         <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
                                             href="{{ $routeNilai }}">
                                             <span class="nav-main-link-name">Penilaian Siswa
@@ -392,7 +364,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <form action="{{ route('logout') }}" method="post">
+                            <form action="{{ route('logout') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-danger">Logout</button>
                             </form>
@@ -430,7 +402,7 @@
     <script src="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugins/chart.js/chart.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/chartjs/Chart.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>

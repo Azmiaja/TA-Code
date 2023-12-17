@@ -30,6 +30,15 @@
     @stack('style')
 
     <style>
+        .opacity-50 {
+            opacity: 0.50 !important;
+        }
+
+        .object-fit-cover {
+            -o-object-fit: cover !important;
+            object-fit: cover !important;
+        }
+
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -176,15 +185,12 @@
         #hero {
             width: 100%;
             height: 100vh;
-            background: url('{{ Storage::url($profil->first()->gambarProfil) }}') top center no-repeat;
             background-size: cover;
             position: relative;
             padding-top: 82px;
         }
     </style>
 
-    {{-- <script src="{{ asset('assets/js/bootstrap.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/oneui.app.min.js') }}"></script> --}}
 </head>
 
 <body class="m-0 p-0">

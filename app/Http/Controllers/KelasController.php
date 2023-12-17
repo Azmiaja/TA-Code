@@ -165,7 +165,8 @@ class KelasController extends Controller
 
     public function editSiswa($id)
     {
-        $data = Tr_kelas::find($id);
+        $data = Tr_kelas::with('kelas')->find($id);
+
         if (!$data) {
             // Handle jika berita tidak ditemukan
             return response()->json(['status' => 'error', 'message' => 'Data kelas tidak ditemukan.']);

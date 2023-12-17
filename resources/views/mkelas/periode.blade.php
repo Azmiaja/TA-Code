@@ -97,7 +97,7 @@
     @push('scripts')
         <script>
             function clearForm() {
-                $('#form-periode input').val('');
+                $('#form-periode :input').val('');
             }
             $(document).ready(function() {
                 $.ajaxSetup({
@@ -151,6 +151,8 @@
                     $('#btn-form').html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary btn-tambah"
                                     id="btn-tambahPeriode">Simpan</button>`);
+
+                    clearForm();
 
                 });
 

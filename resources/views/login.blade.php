@@ -32,7 +32,7 @@
                     <div class="hero-static col-lg-4 d-none d-lg-flex flex-column justify-content-center">
                         <div class="p-4 p-xl-5 flex-grow-1 d-flex align-items-center">
                             <div class="w-100">
-                                <a class="link-fx fw-semibold fs-2 text-white" href="index.html">
+                                <a class="link-fx fw-semibold fs-2 text-white" href="#">
                                     Selamat Datang di,
                                 </a>
                                 <p class="text-white-75 me-xl-8 mt-2">
@@ -48,7 +48,7 @@
                     </div>
                     <div class="hero-static col-lg-8 d-flex flex-column align-items-center bg-body-extra-light">
                         <div class="p-3 w-100 d-lg-none text-center">
-                            <a class="link-fx fw-semibold fs-3 text-dark" href="index.html">
+                            <a class="link-fx fw-semibold fs-3 text-dark" href="#">
                                 Sistem Informasi Akademik <br>SDN Lemahbang
                             </a>
                         </div>

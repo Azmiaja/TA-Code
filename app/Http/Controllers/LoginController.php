@@ -28,12 +28,12 @@ class LoginController extends Controller
 
         $credentials = $request->only('username', 'password');
 
-        if ($this->attemptUserLogin($credentials, 'user')) {
-            return redirect()->intended($this->getRedirectionPath(Auth::guard('user')->user()->hakAkses));
-        }
+        $guards = ['user', 'siswa'];
 
-        if ($this->attemptUserLogin($credentials, 'siswa')) {
-            return redirect()->intended($this->getRedirectionPath(Auth::guard('siswa')->user()->hakAkses));
+        foreach ($guards as $guard) {
+            if ($this->attemptUserLogin($credentials, $guard)) {
+                return redirect()->intended('/dashboard');
+            }
         }
 
         return back()->with('error', 'Username atau password salah.');
@@ -44,22 +44,6 @@ class LoginController extends Controller
         return Auth::guard($guard)->attempt($credentials);
     }
 
-    private function getRedirectionPath($hakAkses)
-    {
-        switch ($hakAkses) {
-            case 'Super Admin':
-                return route('dashboard.super_admin');
-            case 'Admin':
-                return route('dashboard.admin');
-            case 'Guru':
-                return route('dashboard.guru');
-            case 'Siswa':
-                return route('dashboard.siswa');
-                // Tambahkan case lain jika perlu
-            default:
-                abort(404); // Sesuaikan dengan path default yang diinginkan
-        }
-    }
 
 
     // fungsi regist

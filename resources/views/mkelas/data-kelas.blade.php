@@ -242,10 +242,16 @@
                             </select>
 
                         </div>
-                        <div class="mb-4">
+                        <div class="mb-4" id="namesis">
                             <label class="form-label" for="idSiswa">Nama Siswa</label>
-                            <select name="idSiswa[]" multiple="multiple" id="idSiswa" class="form-select pilih-siswa">
-                                {{-- <option value="" disabled selected>-- Pilih Siswa --</option> --}}
+                            <select name="idSiswa" multiple="multiple" id="idSiswa" class="form-select pilih-siswa">
+                                <option value="" disabled selected>-- Pilih Siswa --</option>
+                            </select>
+                        </div>
+                        <div class="mb-4 namesis-two">
+                            <label class="form-label" for="idSiswa">Nama Siswa</label>
+                            <select name="idSiswa" id="idSiswa-two" class="form-select pilih-siswa">
+                                <option value="" disabled selected>-- Pilih Siswa --</option>
                             </select>
                         </div>
 
@@ -303,15 +309,7 @@
                             '">' + value.namaPegawai + '</option>');
                     });
 
-                    // $.each(data.kelas, function(key, value) {
-                    //     // console.log(value.idKelas);
-                    //     $('.pilih-kelas-siswa').append('<option value="' + value.idKelas +
-                    //         '">Kelas ' + value.namaKelas +
-                    //         ' Semester ' + value.periode.formattedTanggalMulai + '</option>');
-                    // });
-
                     $.each(data.siswa, function(key, value) {
-                        // console.log(value.idKelas);
                         $('.pilih-siswa').append('<option value="' + value.idSiswa +
                             '">' + value.namaSiswa + '</option>');
                     });
@@ -348,9 +346,9 @@
                             success: function(classesData) {
                                 // Populate the classes dropdown based on the fetched data
                                 $('.pilih-kelas-siswa').empty();
-                                $('.pilih-kelas-siswa').append(
-                                    '<option value="" disabled selected>-- Pilih Kelas --</option>'
-                                );
+                                // $('.pilih-kelas-siswa').append(
+                                //     '<option value="" disabled selected>-- Pilih Kelas --</option>'
+                                // );
 
                                 $.each(classesData.kelas, function(key, value) {
                                     $('.pilih-kelas-siswa').append(
@@ -366,6 +364,17 @@
             });
         }
 
+        function clearform() {
+            $('.pilih-periode').val('');
+            $('.pilih-periode-siswa').val('');
+            $('.pilih-kelas').val('');
+            $('.pilih-kelas-siswa').val('');
+            $('#idSiswa').val('');
+            $('.pilih-siswa').val('');
+            $('#idPegawai').val('');
+        }
+
+
         $(document).ready(function() {
             function initSelect2(selector, placeholder, dropdownParent) {
                 $(selector).select2({
@@ -380,6 +389,7 @@
 
             initSelect2('#idPrgawai', "Pilih Guru", $('#modal-bagiKelasGuru'));
             initSelect2('#idSiswa', '', $('#modal-bagiKelasSiswa'));
+            initSelect2('#idSiswa-two', '', $('#modal-bagiKelasSiswa'));
 
             loadDropdownOptions()
             // Guru
@@ -593,8 +603,8 @@
                 $("#cn-btn").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary" id="btn-tbhGuru">Simpan</button>`);
                 $('.pilih-periode').val('');
-                $('.pilih-guru').val('');
                 $('.pilih-kelas').val('');
+                $('.pilih-guru').val(null).trigger('change');
 
             });
 
@@ -768,8 +778,12 @@
                 $("#title-modal-siswa").text('Tambah Siswa Kelas');
                 $("#cn-btn-siswa").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary" id="btn-tbhSiswa">Simpan</button>`);
-                $('.pilih-siswa').val('');
-                $('.pilih-kelas').val('');
+                $('#idSiswa').val(null).trigger('change');
+                $('.pilih-kelas-siswa').val('');
+                $('.pilih-periode-siswa').val('');
+
+                $('.namesis-two').prop('hidden', true);
+                $('#namesis').prop('hidden', false);
             });
 
             $(document).on('click', '#btn-tbhSiswa', function(e) {
@@ -802,6 +816,7 @@
                         loadDropdownOptions();
                         $('.pilih-kelas-siswa').val('');
                         $('.pilih-siswa').val('');
+                        $('.pilih-periode-siswa').val('');
 
                     },
                     error: function(xhr, status, error) {
@@ -822,17 +837,35 @@
                 $("#cn-btn-siswa").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary" id="btn-edtSiswa">Simpan</button>`);
 
+                $('.namesis-two').prop('hidden', false);
+                $('#namesis').prop('hidden', true);
+
                 $.ajax({
                     type: "GET",
                     url: "{{ url('data-kelas/edit/siswa') }}/" + id,
                     success: function(response) {
-                        // $('.pilih-siswa').val(response.tr_kelas.idSiswa);
-                        $('.pilih-kelas-siswa').val(response.tr_kelas.idKelas);
-                        $('.id-tr-kelas').val(response.tr_kelas.idtrKelas);
+                        $('#idSiswa-two').val(response.tr_kelas.idSiswa);
+                        $('.pilih-periode-siswa').val(response.tr_kelas.kelas.idPeriode)
+                            .trigger('change');
 
-                        var selectSiswa = $(".pilih-siswa");
+                        var selectSiswa = $("#idSiswa-two");
                         var optionSiswa = selectSiswa.find("option[value='" + response.tr_kelas.idSiswa + "']");
                         selectSiswa.val(optionSiswa.val()).trigger('change');
+
+                        // Ajax untuk mengambil data kelas
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ url('pengajar/get-form') }}", // Sesuaikan dengan URL yang benar
+                            data: {
+                                periode_id: response.tr_kelas.kelas.idPeriode
+                            },
+                            success: function(classesData) {
+                                // Setelah data kelas berhasil dimuat, baru atur nilai pada elemen select kelas
+                                $('.pilih-kelas-siswa').val(response.tr_kelas
+                                    .idKelas).trigger('change');
+                                $('.id-tr-kelas').val(response.tr_kelas.idtrKelas);
+                            },
+                        });
                     },
                     error: function(xhr, status, error) {
                         Swal.fire({
@@ -842,16 +875,16 @@
                         });
                     }
                 });
+
             });
 
             $(document).on('click', '#btn-edtSiswa', function(e) {
                 e.preventDefault();
                 var id = $('.id-tr-kelas').val();
                 var data = {
-                    'idSiswa': $('.pilih-siswa').val(),
+                    'idSiswa': $('#idSiswa-two').val(),
                     'idKelas': $('.pilih-kelas-siswa').val(),
                 }
-                console.log(id);
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

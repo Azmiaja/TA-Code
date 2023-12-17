@@ -9,7 +9,7 @@ class PPGuru extends Model
 {
     use HasFactory;
 
-    protected $table = 'ppGuru';
+    protected $table = 'ppguru';
     protected $guarded = ['idppGuru'];
     protected $primaryKey = 'idppGuru';
     public $timestamps = false;
@@ -19,3 +19,4 @@ class PPGuru extends Model
         return $this->belongsTo(Pegawai::class, 'idPegawai');
     }
 }
+

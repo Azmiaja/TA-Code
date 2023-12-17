@@ -6,8 +6,8 @@
             <div class="row p-0">
                 <div class="col-lg p-0">
                     <div class="card text-bg-dark rounded-0 border-0">
-                        <img src="{{ Storage::url($berita->gambar) }}" class="card-img object-fit-cover opacity-75"
-                            height="400px" alt="Background-Judul">
+                        <img src="{{ Storage::url($berita->gambar) }}" class="object-fit-cover"
+                            height="500px" alt="Background-Judul">
                         <div class="card-img-overlay">
                             <div class="container h-100">
                                 <div class="row align-items-center gap-1 h-100">

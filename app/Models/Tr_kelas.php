@@ -14,6 +14,8 @@ class Tr_kelas extends Model
     protected $primaryKey = 'idtrKelas';
     public $timestamps = false;
 
+    protected $fillable = ['idSiswa', 'idKelas'];
+
     public function kelas()
     {
         return $this->belongsTo(Kelas::class, 'idKelas', 'idKelas');
