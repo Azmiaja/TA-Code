@@ -38,7 +38,7 @@ class HomeController extends Controller
         $jumlahUser = User::count() + Siswa::whereNotNull('username')->count();
 
 
-        return view('dashboard', compact('pegawai', 'siswa', 'periode', 'jumlahPegawaiAktif', 'jumlahSiswaAktif', 'jumlahUser'), [
+        return view('siakad.content.dashboard.index', compact('pegawai', 'siswa', 'periode', 'jumlahPegawaiAktif', 'jumlahSiswaAktif', 'jumlahUser'), [
             'title' => 'Dashboard',
             'title2' => 'Dashboard',
         ]);

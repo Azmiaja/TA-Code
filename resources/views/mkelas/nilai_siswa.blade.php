@@ -1,5 +1,5 @@
-@extends('layouts.main')
-@section('content')
+@extends('siakad.layouts.app')
+@section('siakad')
     <div class="bg-body-light">
         <div class="content content-full">
             {{-- Page title pegawai --}}
@@ -251,7 +251,9 @@
                             d.kelas_id = $("#kelas_id").data('id-kelas');
                             d.pengajaran_id = $('#pengajaran_id').val();
 
-                            // console.log(d.nama_kls);
+                            // console.log(d.periode_id);
+                            // console.log(d.kelas_id);
+                            // console.log(d.pengajaran_id);
                         }
                     },
                     order: [

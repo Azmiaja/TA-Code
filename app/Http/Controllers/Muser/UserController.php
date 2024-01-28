@@ -20,7 +20,7 @@ class UserController extends Controller
     {
         $pegawaiList = Pegawai::all();
         $siswaList = Siswa::all();
-        return view('muser.user', compact('pegawaiList', 'siswaList'), [
+        return view('siakad.content.m_user.index', compact('pegawaiList', 'siswaList'), [
             'title' => 'Manajemen User',
             'title2' => 'Data User',
         ]);

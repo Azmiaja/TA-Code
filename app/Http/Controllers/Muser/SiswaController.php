@@ -13,8 +13,8 @@ class SiswaController extends Controller
     public function index()
     {
         $siswa = Siswa::all();
-        return view('muser.siswa', compact('siswa'), [
-            'title' => 'Manajemen User',
+        return view('siakad.content.m_sekolah.siswa.index', compact('siswa'), [
+            'title' => 'Manajemen Sekolah',
             'title2' => 'Siswa',
         ]);
     }

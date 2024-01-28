@@ -14248,7 +14248,7 @@ a.block.block-themed .btn-block-option:focus {
 .nav-main-submenu .nav-main-link:focus,
 .nav-main-submenu .nav-main-link:hover {
     color: #000;
-    background-color: transparent;
+    background-color: #069fba;  
 }
 .nav-main-submenu .nav-main-submenu {
     padding-left: 0.75rem;
@@ -14401,13 +14401,14 @@ a.block.block-themed .btn-block-option:focus {
 .nav-main-dark .nav-main-link,
 .page-header-dark #page-header .nav-main-link,
 .sidebar-dark #sidebar .nav-main-link {
-    color: #fff;
+    color: #E1D7C6;
 }
 .nav-main-dark .nav-main-link > .nav-main-link-icon,
 .page-header-dark #page-header .nav-main-link > .nav-main-link-icon,
 .sidebar-dark #sidebar .nav-main-link > .nav-main-link-icon {
-    color: #fff;
+    color: #E1D7C6;
 }
+
 /* sidebar menu color aktive & hover */
 .nav-main-dark .nav-main-link:focus,
 .nav-main-dark .nav-main-link:hover,
@@ -14430,7 +14431,7 @@ a.block.block-themed .btn-block-option:focus {
 .page-header-dark #page-header .nav-main-link.active,
 .sidebar-dark #sidebar .nav-main-link.active {
     color: #fff;
-    background-color: rgba(0, 0, 0, 0.2);
+    /* background-color: rgba(0, 0, 0, 0.2); */
 }
 .nav-main-dark .nav-main-link.active > .nav-main-link-icon,
 .page-header-dark #page-header .nav-main-link.active > .nav-main-link-icon,
@@ -14445,7 +14446,7 @@ a.block.block-themed .btn-block-option:focus {
 .nav-main-dark .nav-main-submenu .nav-main-link,
 .page-header-dark #page-header .nav-main-submenu .nav-main-link,
 .sidebar-dark #sidebar .nav-main-submenu .nav-main-link {
-    color: #fff;
+    color: #E1D7C6;
 }
 .nav-main-dark .nav-main-submenu .nav-main-link.active,
 .nav-main-dark .nav-main-submenu .nav-main-link:focus,

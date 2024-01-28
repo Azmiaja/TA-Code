@@ -14775,6 +14775,7 @@ a.block.block-themed .btn-block-option:focus,
 .nav-main-item.open > .nav-main-submenu > .nav-main-item {
   opacity: 1;
   transform: translateX(0);
+  
 }
 
 .nav-main-submenu .nav-main-item.open .nav-main-link {

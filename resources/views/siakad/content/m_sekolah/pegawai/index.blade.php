@@ -1,5 +1,5 @@
-@extends('layouts.main')
-@section('content')
+@extends('siakad.layouts.app')
+@section('siakad')
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="row p-0">
@@ -37,7 +37,7 @@
                             <th>No</th>
                             <th>NIP</th>
                             <th>Nama</th>
-                            <th>Jenis Pegawai</th>
+                            <th>Jenis Kelamin</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>

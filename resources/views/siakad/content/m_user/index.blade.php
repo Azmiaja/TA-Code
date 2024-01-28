@@ -1,5 +1,5 @@
-@extends('layouts.main')
-@section('content')
+@extends('siakad.layouts.app')
+@section('siakad')
     {{-- header --}}
     <div class="bg-body-light">
         <div class="content content-full">

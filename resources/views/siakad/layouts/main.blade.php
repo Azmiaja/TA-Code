@@ -5,17 +5,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Sistem Informasi Akademik | {{ $title }}</title>
-    <meta name="description"
-        content="OneUI - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest  | This is the demo of OneUI! You need to purchase a license for legal use! | DEMO">
-    <meta name="author" content="pixelcave">
-    <meta name="robots" content="noindex, nofollow">
-    <meta property="og:title" content="OneUI - Bootstrap 5 Admin Template &amp; UI Framework | DEMO">
-    <meta property="og:site_name" content="OneUI">
-    <meta property="og:description"
-        content="OneUI - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest  | This is the demo of OneUI! You need to purchase a license for legal use! | DEMO">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
     <link rel="shortcut icon" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
@@ -103,6 +92,40 @@
                             </a>
                         </li>
                         @canany(['super.admin'])
+                            <li class="nav-main-item">
+                                <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Sekolah' ? 'active' : '' }}"
+                                    data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                                    <i class="nav-main-link-icon si si-bulb"></i>
+                                    <span class="nav-main-link-name">Manajemen Sekolah</span>
+                                </a>
+                                <ul class="nav-main-submenu">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'Sekolah' ? 'active' : '' }}"
+                                            href="{{ route('pegawai.index') }}">
+                                            <span class="nav-main-link-name">Sekolah</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'Pegawai' ? 'active' : '' }}"
+                                            href="{{ route('pegawai.index') }}">
+                                            <span class="nav-main-link-name">Pegawai</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ $title2 === 'Siswa' ? 'active' : '' }}"
+                                            href="{{ route('siswa.index') }}">
+                                            <span class="nav-main-link-name">Siswa</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link {{ $title === 'Manajemen User' ? 'active' : '' }}"
+                                    href="{{ route('user.index') }}">
+                                    <i class="nav-main-link-icon si si-users"></i>
+                                    <span class="nav-main-link-name">Manajemen User</span>
+                                </a>
+                            </li>
                             <li class="nav-main-item {{ $title === 'Manajemen User' ? 'open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen User' ? 'active' : '' }}"
                                     data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="?#">

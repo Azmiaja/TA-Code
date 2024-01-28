@@ -10,6 +10,7 @@ use App\Http\Controllers\Muser;
 use App\Http\Controllers\Mkelas;
 use App\Http\Controllers\Mcompany;
 use App\Http\Controllers\NilaiSiswaController;
+use App\Http\Controllers\Sekolah;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,10 +30,15 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 
 Route::get('/berita-sekolah/{id}/{slug}', [LihatBeritaController::class, 'show'])->name('lihatberita')->middleware('guest:user,siswa');
 Route::get('/', [LandingController::class, 'index'])->name('landingpage')->middleware('guest:user,siswa');
+Route::get('/home', function(){
+    return view('company_profil/layouts/app');
+});
 
 Route::middleware(['auth:user,siswa'])->group(function () {
     //dashboard
     Route::get('/dashboard', [HomeController::class, 'indexDashboard'])->name('dashboard.index');
+
+    Route::get('/sekolah', [Sekolah::class, 'index'])->name('sekolah.index');
 
     // SISWA.BLADE
     Route::get('siswa/get-data', [Muser\SiswaController::class, 'getData'])->name('siswa.get-data');
@@ -146,6 +152,7 @@ Route::middleware(['auth:user,siswa'])->group(function () {
 // --------------------------------------------- SUPER ADMIN -------------------------------------------------------------
 Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
 
+    Route::get('/absensi', [Mkelas\Absensi::class, 'index'])->name('absensi.index');
 
     //manajemen user
     Route::get('user/pegawai/get-data', [Muser\UserController::class, 'getUsrPegawai'])->name('get-user.pegawai');
