@@ -192,7 +192,7 @@
 </head>
 
 <body class="m-0 p-0">
-    <nav class="navbar navbar-expand-sm sticky-top navbar-dark py-3 bg-secondary">
+    <nav class="navbar navbar-expand-lg sticky-top navbar-dark py-3 bg-secondary">
         <div class="container">
             <a class="fw-semibold fs-4 tracking-wider text-light me-3" href="#">SDN LEMAHBANG</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myList"

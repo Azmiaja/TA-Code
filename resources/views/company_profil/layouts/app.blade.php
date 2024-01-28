@@ -1,8 +1,7 @@
-@extends('company_profil/layouts/partial/header')
+@include('company_profil/layouts/partial/header')
 
-<main>
+<main class="container">
     @yield('app')
-    {{-- <h1>profil</h1> --}}
 </main>
 
-@extends('company_profil/layouts/partial/footer')
+@include('company_profil/layouts/partial/footer')

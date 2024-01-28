@@ -31,7 +31,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 Route::get('/berita-sekolah/{id}/{slug}', [LihatBeritaController::class, 'show'])->name('lihatberita')->middleware('guest:user,siswa');
 Route::get('/', [LandingController::class, 'index'])->name('landingpage')->middleware('guest:user,siswa');
 Route::get('/home', function(){
-    return view('company_profil/layouts/app');
+    return view('company_profil/content/home/index');
 });
 
 Route::middleware(['auth:user,siswa'])->group(function () {
