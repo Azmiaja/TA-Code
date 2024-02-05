@@ -11,6 +11,7 @@ use App\Http\Controllers\Mkelas;
 use App\Http\Controllers\Mcompany;
 use App\Http\Controllers\NilaiSiswaController;
 use App\Http\Controllers\Sekolah;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,10 +30,20 @@ Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('au
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth:user,siswa');
 
 Route::get('/berita-sekolah/{id}/{slug}', [LihatBeritaController::class, 'show'])->name('lihatberita')->middleware('guest:user,siswa');
-Route::get('/', [LandingController::class, 'index'])->name('landingpage')->middleware('guest:user,siswa');
-Route::get('/home', function(){
-    return view('company_profil/content/home/index');
-});
+Route::get('/a', [LandingController::class, 'index'])->name('landingpage')->middleware('guest:user,siswa');
+// halaman utama
+Route::get('/', [Controller::class, 'indexHome'])->name('home');
+Route::get('/berita', [Controller::class, 'indexBerita'])->name('berita');
+Route::get('/baca-berita', [Controller::class, 'bacaBerita'])->name('baca_berita');
+Route::get('/profil-sekolah', [Controller::class, 'tentangProfil'])->name('profil');
+Route::get('/sejarah-sekolah', [Controller::class, 'tentangSejarah'])->name('sejarah');
+Route::get('/visi-misi-sekolah', [Controller::class, 'tentangVisiMisi'])->name('visi_misi');
+Route::get('/struktur-organisasi-sekolah', [Controller::class, 'tentangOrg'])->name('struktur_org');
+Route::get('/keuangan-sekolah', [Controller::class, 'tentangKeuangan'])->name('keuangan');
+Route::get('/foto-kegiatan', [Controller::class, 'galeriFoto'])->name('galeri_foto');
+Route::get('/video-kegiatan', [Controller::class, 'galeriVideo'])->name('galeri_video');
+Route::get('/guru', [Controller::class, 'kategoriGuru'])->name('kt_guru');
+Route::get('/hubungi-kami', [Controller::class, 'kontak'])->name('kontak');
 
 Route::middleware(['auth:user,siswa'])->group(function () {
     //dashboard

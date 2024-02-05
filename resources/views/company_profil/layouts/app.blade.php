@@ -1,7 +1,8 @@
 @include('company_profil/layouts/partial/header')
 
-<main class="container">
-    @yield('app')
-</main>
+    <div class="container">
+        @yield('app')
+    </div>
+
 
 @include('company_profil/layouts/partial/footer')
