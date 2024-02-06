@@ -1,13 +1,12 @@
-<nav id="sidebar" aria-label="Main Navigation">
+<nav id="sidebar" aria-label="Main Navigation" class="bg-city">
     {{-- Sidebar header --}}
-    <div class="content-header">
-        <a class="fw-semibold text-dual" href="#">
-            <span class="smini-visible" style="padding-top: 1.25rem;">
-                <img style="height: 35px; padding-left: .8rem;"
-                    src="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
+    <div class="content-header bg-city p-0 shadow-sm">
+        <a class="fw-bold text-dual" href="#">
+            <span class="smini-visible d-inline">
+                <img height="35" style="margin-left: .8rem;" src="{{ asset('assets/media/favicons/logo_sd.png') }}">
+                {{-- <i class="fa-solid fa-book fs-2 text-info"></i> --}}
             </span>
-            <span class="smini-hide fs-4 fw-bold tracking-wider" style="padding-left: 1.25rem;">SIAKAD</span><br>
-            <small class="smini-hide tracking-wider" style="padding-left: 1.25rem;">SDN Lemahbang</small>
+            <span class="smini-hide tracking-wider fs-4 border-bottom border-2">SDN LEMAHBANG</span>
         </a>
         <a class="d-lg-none btn btn-sm ms-1 text-light" data-toggle="layout" data-action="sidebar_close"
             href="javascript:void(0)">
@@ -17,7 +16,7 @@
     {{-- End Sidebar header --}}
 
     {{-- Sidebar menu --}}
-    <div class="js-sidebar-scroll">
+    <div class="js-sidebar-scroll bg-dark bg-opacity-10">
         <div class="content-side">
             <ul class="nav-main">
                 {{-- Dashboard menu --}}

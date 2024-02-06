@@ -14882,24 +14882,24 @@ a.block.block-themed .btn-block-option:focus,
 .nav-main-dark .nav-main-heading,
 .sidebar-dark #sidebar .nav-main-heading,
 .page-header-dark #page-header .nav-main-heading {
-  color: #7186a3;
+  color: #ced4da;
 }
 .nav-main-dark .nav-main-link,
 .sidebar-dark #sidebar .nav-main-link,
 .page-header-dark #page-header .nav-main-link {
-  color: #9faec1;
+  color: #ced4da;
 }
 .nav-main-dark .nav-main-link > .nav-main-link-icon,
 .sidebar-dark #sidebar .nav-main-link > .nav-main-link-icon,
 .page-header-dark #page-header .nav-main-link > .nav-main-link-icon {
-  color: rgba(159, 174, 193, 0.5);
+  color: #ced4da;
 }
 .nav-main-dark .nav-main-link:hover, .nav-main-dark .nav-main-link:focus,
 .sidebar-dark #sidebar .nav-main-link:hover,
 .sidebar-dark #sidebar .nav-main-link:focus,
 .page-header-dark #page-header .nav-main-link:hover,
 .page-header-dark #page-header .nav-main-link:focus {
-  color: #90a0b7;
+  color: #fff;
   background-color: rgba(0, 0, 0, 0.2);
 }
 .nav-main-dark .nav-main-link:hover > .nav-main-link-icon, .nav-main-dark .nav-main-link:focus > .nav-main-link-icon,
@@ -14927,7 +14927,7 @@ a.block.block-themed .btn-block-option:focus,
 .nav-main-dark .nav-main-submenu .nav-main-link,
 .sidebar-dark #sidebar .nav-main-submenu .nav-main-link,
 .page-header-dark #page-header .nav-main-submenu .nav-main-link {
-  color: #8093ad;
+  color: #ced4da;
 }
 .nav-main-dark .nav-main-submenu .nav-main-link:hover, .nav-main-dark .nav-main-submenu .nav-main-link:focus, .nav-main-dark .nav-main-submenu .nav-main-link.active,
 .sidebar-dark #sidebar .nav-main-submenu .nav-main-link:hover,
