@@ -7,10 +7,10 @@
                 <ol class="breadcrumb breadcrumb-alt">
                     <li class="breadcrumb-item">
                         @can('guru')
-                            <a class="link-fx" href="{{ route('penilaian.guru') }}">{{ $title2 }}</a>
+                            <a class="link-fx" href="{{ route('penilaian.guru') }}">{{ $sub_judul }}</a>
                         @endcan
                         @cannot('guru')
-                            <a class="link-fx" href="{{ route('penilaian.index') }}">{{ $title2 }}</a>
+                            <a class="link-fx" href="{{ route('penilaian.index') }}">{{ $sub_judul }}</a>
                         @endcannot
                     </li>
                     <li class="breadcrumb-item" aria-current="page">

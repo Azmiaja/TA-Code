@@ -26,7 +26,7 @@ class HomeController extends Controller
     }
 
     // for Dashboard
-    public function indexDashboard()
+    public function indexBeranda()
     {
         $pegawai = Pegawai::all()->count();
         $siswa = Siswa::all()->count();
@@ -38,9 +38,10 @@ class HomeController extends Controller
         $jumlahUser = User::count() + Siswa::whereNotNull('username')->count();
 
 
-        return view('siakad.content.dashboard.index', compact('pegawai', 'siswa', 'periode', 'jumlahPegawaiAktif', 'jumlahSiswaAktif', 'jumlahUser'), [
-            'title' => 'Dashboard',
-            'title2' => 'Dashboard',
+        return view('siakad.content.beranda.index', compact('pegawai', 'siswa', 'periode', 'jumlahPegawaiAktif', 'jumlahSiswaAktif', 'jumlahUser'), [
+            'judul' => 'Beranda',
+            'sub_judul' => 'Beranda',
+            'text_singkat' => 'Sistem Informasi Akademik SD Negeri Lemahbang',
         ]);
     }
 

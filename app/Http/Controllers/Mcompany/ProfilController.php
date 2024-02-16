@@ -13,9 +13,10 @@ class ProfilController extends Controller
     {
         $profil = Profil::orderBy('idProfil', 'desc')->take(1)->get();
         // $totalProfil = Profil::all()->count();
-        return view('mcompany.profil', compact('profil'), [
-            'title' => 'Company Profil',
-            'title2' => 'Profil Sekolah',
+        return view('siakad.content.profil_sekolah.sekolah.index', compact('profil'), [
+            'judul' => 'Profil Sekolah',
+            'sub_judul' => 'Sekolah',
+            'text_singkat' => 'Mengelola informasi profil sekolah!',
 
         ]);
     }

@@ -8,10 +8,10 @@
                     <nav class="flex-shrink-0 my-3 mt-sm-0" aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-alt">
                             <li class="breadcrumb-item">
-                                <a class="link-fx" href="javascript:void(0)">{{ $title }}</a>
+                                <a class="link-fx" href="javascript:void(0)">{{ $judul }}</a>
                             </li>
                             <li class="breadcrumb-item" aria-current="page">
-                                {{ $title2 }}
+                                {{ $sub_judul }}
                             </li>
                         </ol>
                     </nav>
@@ -84,8 +84,8 @@
                             className: 'text-center fw-medium fs-sm'
                         },
                         {
-                            data: 'waktuBerita',
-                            name: 'waktuBerita',
+                            data: 'waktu',
+                            name: 'waktu',
                             className: 'text-center  fs-sm'
                         },
                         {
@@ -256,7 +256,7 @@
                             // Set the form fields with the fetched data
                             $('#idBerita_update').val(response.berita.idBerita);
                             $('#judulBerita_update').val(response.berita.judulBerita);
-                            $('#waktuBerita_update').val(response.berita.waktuBerita);
+                            $('#waktu_update').val(response.berita.waktu);
                             $('#sumberBerita_update').val(response.berita.sumberBerita);
 
                             // Set the editor content

@@ -9,16 +9,16 @@
                         <ol class="breadcrumb breadcrumb-alt">
                             @canany(['super.admin', 'admin'])
                                 <li class="breadcrumb-item">
-                                    <a class="link-fx" href="javascript:void(0)">{{ $title }}</a>
+                                    <a class="link-fx" href="javascript:void(0)">{{ $judul }}</a>
                                 </li>
                             @endcanany
                             @canany(['siswa', 'guru'])
                                 <li class="breadcrumb-item">
-                                    <a class="link-fx" href="javascript:void(0)">{{ $title3 }}</a>
+                                    <a class="link-fx" href="javascript:void(0)">{{ $judul3 }}</a>
                                 </li>
                             @endcanany
                             <li class="breadcrumb-item" aria-current="page">
-                                {{ $title2 }}
+                                {{ $sub_judul }}
                             </li>
                         </ol>
                     </nav>

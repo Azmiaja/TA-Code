@@ -17,7 +17,7 @@ class LandingController extends Controller
     {
 
         $profil = Profil::all();
-        $berita = Berita::orderBy('waktuBerita', 'desc')->take(3)
+        $berita = Berita::orderBy('waktu', 'desc')->take(3)
             ->get();
         $guru = Pegawai::where('jenisPegawai', 'Guru')->count();
         $siswa = Siswa::all()->count();

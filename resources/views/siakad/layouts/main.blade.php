@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Sistem Informasi Akademik | {{ $title }}</title>
+    <title>Sistem Informasi Akademik | {{ $judul }}</title>
     <link rel="shortcut icon" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
@@ -85,7 +85,7 @@
                     <ul class="nav-main">
                         {{-- Dashboard menu --}}
                         <li class="nav-main-item">
-                            <a class="nav-main-link {{ $title === 'Dashboard' ? 'active' : '' }}"
+                            <a class="nav-main-link {{ $judul === 'Dashboard' ? 'active' : '' }}"
                                 href="{{ route('dashboard.index') }}">
                                 <i class="nav-main-link-icon si si-grid"></i>
                                 <span class="nav-main-link-name">Dashboard</span>
@@ -93,26 +93,26 @@
                         </li>
                         @canany(['super.admin'])
                             <li class="nav-main-item">
-                                <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Sekolah' ? 'active' : '' }}"
+                                <a class="nav-main-link nav-main-link-submenu {{ $judul === 'Manajemen Sekolah' ? 'active' : '' }}"
                                     data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                                     <i class="nav-main-link-icon si si-bulb"></i>
                                     <span class="nav-main-link-name">Manajemen Sekolah</span>
                                 </a>
                                 <ul class="nav-main-submenu">
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'Sekolah' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Sekolah' ? 'active' : '' }}"
                                             href="{{ route('pegawai.index') }}">
                                             <span class="nav-main-link-name">Sekolah</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'Pegawai' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Pegawai' ? 'active' : '' }}"
                                             href="{{ route('pegawai.index') }}">
                                             <span class="nav-main-link-name">Pegawai</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'Siswa' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Siswa' ? 'active' : '' }}"
                                             href="{{ route('siswa.index') }}">
                                             <span class="nav-main-link-name">Siswa</span>
                                         </a>
@@ -120,14 +120,14 @@
                                 </ul>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title === 'Manajemen User' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $judul === 'Manajemen User' ? 'active' : '' }}"
                                     href="{{ route('user.index') }}">
                                     <i class="nav-main-link-icon si si-users"></i>
                                     <span class="nav-main-link-name">Manajemen User</span>
                                 </a>
                             </li>
-                            <li class="nav-main-item {{ $title === 'Manajemen User' ? 'open' : '' }}">
-                                <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen User' ? 'active' : '' }}"
+                            <li class="nav-main-item {{ $judul === 'Manajemen User' ? 'open' : '' }}">
+                                <a class="nav-main-link nav-main-link-submenu {{ $judul === 'Manajemen User' ? 'active' : '' }}"
                                     data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="?#">
                                     <i class="nav-main-link-icon si si-users"></i>
                                     <span class="nav-main-link-name">Manajemen User</span>
@@ -135,19 +135,19 @@
                                 {{-- Sub menu manajemen user --}}
                                 <ul class="nav-main-submenu">
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'Data User' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Data User' ? 'active' : '' }}"
                                             href="{{ route('user.index') }}">
                                             <span class="nav-main-link-name">Data User</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'Pegawai' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Pegawai' ? 'active' : '' }}"
                                             href="{{ route('pegawai.index') }}">
                                             <span class="nav-main-link-name">Pegawai</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'Siswa' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Siswa' ? 'active' : '' }}"
                                             href="{{ route('siswa.index') }}">
                                             <span class="nav-main-link-name">Siswa</span>
                                         </a>
@@ -155,27 +155,27 @@
                                 </ul>
                                 {{-- End Sub menu manajemen user --}}
                             </li>
-                            <li class="nav-main-item {{ $title === 'Company Profil' ? 'open' : '' }}">
-                                <a class="nav-main-link nav-main-link-submenu {{ $title === 'Company Profil' ? 'active' : '' }}"
+                            <li class="nav-main-item {{ $judul === 'Company Profil' ? 'open' : '' }}">
+                                <a class="nav-main-link nav-main-link-submenu {{ $judul === 'Company Profil' ? 'active' : '' }}"
                                     data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                                     <i class="nav-main-link-icon si si-wrench"></i>
                                     <span class="nav-main-link-name">Company Profil</span>
                                 </a>
                                 <ul class="nav-main-submenu">
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'profil' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'profil' ? 'active' : '' }}"
                                             href="{{ route('profil.index') }}">
                                             <span class="nav-main-link-name">Profil Sekolah</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'Profil Guru' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Profil Guru' ? 'active' : '' }}"
                                             href="{{ route('profil-guru.index') }}">
                                             <span class="nav-main-link-name">Profil Guru</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'berita' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'berita' ? 'active' : '' }}"
                                             href="{{ route('berita.index') }}">
                                             <span class="nav-main-link-name">Berita Sekolah</span>
                                         </a>
@@ -183,8 +183,8 @@
                                 </ul>
                             </li>
                         @endcanany
-                        <li class="nav-main-item {{ $title === 'Manajemen Kelas' ? 'open' : '' }}">
-                            <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Kelas' ? 'active' : '' }}"
+                        <li class="nav-main-item {{ $judul === 'Manajemen Kelas' ? 'open' : '' }}">
+                            <a class="nav-main-link nav-main-link-submenu {{ $judul === 'Manajemen Kelas' ? 'active' : '' }}"
                                 data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon si si-briefcase"></i>
                                 <span class="nav-main-link-name">
@@ -206,7 +206,7 @@
                                             $routePeriode = Auth::user()->hakAkses == 'Super Admin' ? route('periode.index') : route('periode-admin.index');
                                         @endphp
 
-                                        <a class="nav-main-link {{ $title2 === 'periode' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'periode' ? 'active' : '' }}"
                                             href="{{ $routePeriode }}">
                                             <span class="nav-main-link-name">Periode</span>
                                         </a>
@@ -216,7 +216,7 @@
                                         @php
                                             $routeKelas = Auth::user()->hakAkses == 'Super Admin' ? route('data-kelas.index') : route('data-kelas-admin.index');
                                         @endphp
-                                        <a class="nav-main-link {{ $title2 === 'data-kelas' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'data-kelas' ? 'active' : '' }}"
                                             href="{{ $routeKelas }}">
                                             <span class="nav-main-link-name">Data Kelas</span>
                                         </a>
@@ -225,7 +225,7 @@
                                         @php
                                             $routeMapel = Auth::user()->hakAkses == 'Super Admin' ? route('mapel.index') : route('mapel-admin.index');
                                         @endphp
-                                        <a class="nav-main-link {{ $title2 === 'Mata Pelajaran' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Mata Pelajaran' ? 'active' : '' }}"
                                             href="{{ $routeMapel }}">
                                             <span class="nav-main-link-name">Mata Pelajaran</span>
                                         </a>
@@ -234,7 +234,7 @@
                                         @php
                                             $routePengajar = Auth::user()->hakAkses == 'Super Admin' ? route('pengajaran.index') : route('pengajaran-admin.index');
                                         @endphp
-                                        <a class="nav-main-link {{ $title2 === 'Pengajar' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Pengajar' ? 'active' : '' }}"
                                             href="{{ $routePengajar }}">
                                             <span class="nav-main-link-name">Pengajar</span>
                                         </a>
@@ -243,14 +243,14 @@
                                         @php
                                             $routeJadwal = Auth::user()->hakAkses == 'Super Admin' ? route('penjadwalan.index') : route('penjadwalan-admin.index');
                                         @endphp
-                                        <a class="nav-main-link {{ $title2 === 'penjadwalan' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'penjadwalan' ? 'active' : '' }}"
                                             href="{{ $routeJadwal }}">
                                             <span class="nav-main-link-name">Jadwal Pelajaran</span>
                                         </a>
                                     </li>
                                     @can('guru')
                                         <li class="nav-main-item">
-                                            <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
+                                            <a class="nav-main-link {{ $sub_judul === 'Penilaian' ? 'active' : '' }}"
                                                 href="{{ route('penilaian.index') }}">
                                                 <span class="nav-main-link-name">Penilaian Siswa
                                                 </span>
@@ -262,7 +262,7 @@
                                         @php
                                             $routeNilai = Auth::user()->hakAkses == 'Super Admin' ? route('penilaian.index') : route('penilaian-admin.index');
                                         @endphp
-                                        <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Penilaian' ? 'active' : '' }}"
                                             href="{{ $routeNilai }}">
                                             <span class="nav-main-link-name">Penilaian Siswa
                                             </span>
@@ -271,13 +271,13 @@
                                 @endcanany
                                 @can('siswa')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'Jadwal' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Jadwal' ? 'active' : '' }}"
                                             href="{{ route('jadwal.siswa') }}">
                                             <span class="nav-main-link-name">Jadwal</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Penilaian' ? 'active' : '' }}"
                                             href="{{ route('penilaian.siswa') }}">
                                             <span class="nav-main-link-name">Nilai
                                             </span>
@@ -286,13 +286,13 @@
                                 @endcan
                                 @can('guru')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'Jadwal' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Jadwal' ? 'active' : '' }}"
                                             href="{{ route('jadwal.guru') }}">
                                             <span class="nav-main-link-name">Jadwal</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
+                                        <a class="nav-main-link {{ $sub_judul === 'Penilaian' ? 'active' : '' }}"
                                             href="{{ route('penilaian.guru') }}">
                                             <span class="nav-main-link-name">Penilaian Siswa
                                             </span>

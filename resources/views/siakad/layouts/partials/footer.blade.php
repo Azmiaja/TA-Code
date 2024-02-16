@@ -47,11 +47,10 @@
 <script src="{{ asset('assets/js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/select2/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/select2/js/select2.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/js/plugins/ckeditor5/build/ckeditor5-dll.js') }}"></script> --}}
 <script src="{{ asset('assets/js/plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
-<script src="{{ asset('assets/js/plugins/flatpickr/flatpickr.min.js') }}"></script>
-<script src="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-<script src="{{ asset('assets/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script> --}}
 <script src="{{ asset('assets/js/plugins/chartjs/Chart.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>

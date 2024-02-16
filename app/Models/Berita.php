@@ -14,4 +14,9 @@ class Berita extends Model
     protected $primaryKey = 'idBerita';
     public $timestamps = false;
 
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'idUser', 'idUser');
+    }
 }

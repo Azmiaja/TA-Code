@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Absensi;
 use App\Http\Controllers\GuruProfilController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KelasController;
@@ -47,7 +48,7 @@ Route::get('/hubungi-kami', [Controller::class, 'kontak'])->name('kontak');
 
 Route::middleware(['auth:user,siswa'])->group(function () {
     //dashboard
-    Route::get('/dashboard', [HomeController::class, 'indexDashboard'])->name('dashboard.index');
+    Route::get('/beranda', [HomeController::class, 'indexBeranda'])->name('beranda.index');
 
     Route::get('/sekolah', [Sekolah::class, 'index'])->name('sekolah.index');
 
@@ -163,7 +164,12 @@ Route::middleware(['auth:user,siswa'])->group(function () {
 // --------------------------------------------- SUPER ADMIN -------------------------------------------------------------
 Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
 
-    Route::get('/absensi', [Mkelas\Absensi::class, 'index'])->name('absensi.index');
+    // Route::get('/absensi', [Mkelas\Absensi::class, 'index'])->name('absensi.index');
+    Route::resource('/absensi', Absensi::class);
+
+    // berita
+    Route::post('/posts/upload', [MCompany\BeritaController::class, 'upload'])->name('posts.upload');
+    Route::post('/ckberita/upload', [MCompany\BeritaController::class, 'ck_upload'])->name('ckberita.upload');
 
     //manajemen user
     Route::get('user/pegawai/get-data', [Muser\UserController::class, 'getUsrPegawai'])->name('get-user.pegawai');
@@ -183,7 +189,7 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
     });
 
     //manajemen profil sekolah
-    Route::prefix('company-profil')->group(function () {
+    Route::prefix('profil-sekolah')->group(function () {
         Route::get('berita', [Mcompany\BeritaController::class, 'index'])->name('berita.index');
         Route::resource('profil', Mcompany\ProfilController::class);
         Route::get('profil-guru', [GuruProfilController::class, 'index'])->name('profil-guru.index');

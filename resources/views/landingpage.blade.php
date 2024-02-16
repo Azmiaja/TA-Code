@@ -177,7 +177,7 @@
                                 <img src="{{ Storage::url($bt->gambar) }}" class="" height="300" alt="">
                                 <div class="portfolio-info text-start">
                                     <h4>{{ $bt->judulBerita }}</h4>
-                                    <p>{{ \Carbon\Carbon::parse($bt->waktuBerita)->format('d-m-Y') }}</p>
+                                    <p>{{ \Carbon\Carbon::parse($bt->waktu)->format('d-m-Y') }}</p>
                                     <a href="{{ route('lihatberita', [$bt->idBerita, Str::slug($bt->judulBerita)]) }}"
                                         class="mt-1 btn btn-sm" style="background: #2b4e68; color: #fff;">More</a>
                                 </div>

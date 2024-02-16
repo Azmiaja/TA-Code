@@ -21,77 +21,78 @@
             <ul class="nav-main">
                 {{-- Dashboard menu --}}
                 <li class="nav-main-item">
-                    <a class="nav-main-link {{ $title === 'Dashboard' ? 'active' : '' }}"
-                        href="{{ route('dashboard.index') }}">
+                    <a class="nav-main-link {{ Request::routeIs('beranda.index') ? 'active' : '' }}"
+                        href="{{ route('beranda.index') }}">
                         <i class="nav-main-link-icon si si-grid"></i>
-                        <span class="nav-main-link-name">Dashboard</span>
+                        <span class="nav-main-link-name">Beranda</span>
                     </a>
                 </li>
                 @canany(['super.admin'])
                     <li class="nav-main-item">
-                        <a class="nav-main-link {{ $title === 'Manajemen User' ? 'active' : '' }}"
+                        <a class="nav-main-link {{ $judul === 'Manajemen User' ? 'active' : '' }}"
                             href="{{ route('user.index') }}">
                             <i class="nav-main-link-icon si si-users"></i>
                             <span class="nav-main-link-name">Manajemen User</span>
                         </a>
                     </li>
-                    <li class="nav-main-item {{ $title === 'Manajemen Sekolah' ? 'open' : '' }}">
-                        <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Sekolah' ? 'active' : '' }}"
+                    <li class="nav-main-item {{ $judul === 'Manajemen Sekolah' ? 'open' : '' }}">
+                        <a class="nav-main-link nav-main-link-submenu {{ $judul === 'Manajemen Sekolah' ? 'active' : '' }}"
                             data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="?#">
                             <i class="nav-main-link-icon si si-bulb"></i>
                             <span class="nav-main-link-name">Manajemen Sekolah</span>
                         </a>
                         <ul class="nav-main-submenu">
                             <li class="nav-main-item p-0">
-                                <a class="nav-main-link {{ $title2 === 'Sekolah' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $sub_judul === 'Sekolah' ? 'active' : '' }}"
                                     href="{{ route('sekolah.index') }}">
                                     <span class="nav-main-link-name">Sekolah</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title2 === 'Pegawai' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $sub_judul === 'Pegawai' ? 'active' : '' }}"
                                     href="{{ route('pegawai.index') }}">
                                     <span class="nav-main-link-name">Pegawai</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title2 === 'Siswa' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $sub_judul === 'Siswa' ? 'active' : '' }}"
                                     href="{{ route('siswa.index') }}">
                                     <span class="nav-main-link-name">Siswa</span>
                                 </a>
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-main-item {{ $title === 'Company Profil' ? 'open' : '' }}">
-                        <a class="nav-main-link nav-main-link-submenu {{ $title === 'Company Profil' ? 'active' : '' }}"
+                    <li class="nav-main-heading">Profil Sekolah</li>
+                    <li class="nav-main-item {{ Request::routeIs('berita.index', 'tentang.index', 'profil.index', 'galeri.index', 'profil-guru.index','kontak.index') ? 'open' : '' }}{{ $judul === 'Company Profil' ? 'open' : '' }}">
+                        <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('berita.index', 'profil.index', 'tentang.index', 'galeri.index', 'profil-guru.index','kontak.index') ? 'active' : '' }}"
                             data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                             <i class="nav-main-link-icon si si-wrench"></i>
-                            <span class="nav-main-link-name">Company Profil</span>
+                            <span class="nav-main-link-name">Profil Sekolah</span>
                         </a>
                         <ul class="nav-main-submenu">
                             <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title2 === 'profil' ? 'active' : '' }}"
-                                    href="{{ route('profil.index') }}">
-                                    <span class="nav-main-link-name">Profil Sekolah</span>
+                                <a class="nav-main-link {{ Request::routeIs('berita.index') ? 'active' : '' }}"
+                                    href="{{ route('berita.index') }}">
+                                    <span class="nav-main-link-name">Berita</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title2 === 'Profil Guru' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ Request::routeIs('profil.index') ? 'active' : '' }}"
+                                    href="{{ route('profil.index') }}">
+                                    <span class="nav-main-link-name">Sekolah</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link {{ $sub_judul === 'Profil Guru' ? 'active' : '' }}"
                                     href="{{ route('profil-guru.index') }}">
                                     <span class="nav-main-link-name">Profil Guru</span>
-                                </a>
-                            </li>
-                            <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title2 === 'berita' ? 'active' : '' }}"
-                                    href="{{ route('berita.index') }}">
-                                    <span class="nav-main-link-name">Berita Sekolah</span>
                                 </a>
                             </li>
                         </ul>
                     </li>
                 @endcanany
-                <li class="nav-main-item {{ $title === 'Manajemen Kelas' ? 'open' : '' }}">
-                    <a class="nav-main-link nav-main-link-submenu {{ $title === 'Manajemen Kelas' ? 'active' : '' }}"
+                <li class="nav-main-item {{ $judul === 'Manajemen Kelas' ? 'open' : '' }}">
+                    <a class="nav-main-link nav-main-link-submenu {{ $judul === 'Manajemen Kelas' ? 'active' : '' }}"
                         data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                         <i class="nav-main-link-icon si si-briefcase"></i>
                         <span class="nav-main-link-name">
@@ -113,7 +114,7 @@
                                     $routePeriode = Auth::user()->hakAkses == 'Super Admin' ? route('periode.index') : route('periode-admin.index');
                                 @endphp
 
-                                <a class="nav-main-link {{ $title2 === 'periode' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $sub_judul === 'periode' ? 'active' : '' }}"
                                     href="{{ $routePeriode }}">
                                     <span class="nav-main-link-name">Periode</span>
                                 </a>
@@ -123,7 +124,7 @@
                                 @php
                                     $routeKelas = Auth::user()->hakAkses == 'Super Admin' ? route('data-kelas.index') : route('data-kelas-admin.index');
                                 @endphp
-                                <a class="nav-main-link {{ $title2 === 'data-kelas' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $sub_judul === 'data-kelas' ? 'active' : '' }}"
                                     href="{{ $routeKelas }}">
                                     <span class="nav-main-link-name">Data Kelas</span>
                                 </a>
@@ -132,7 +133,7 @@
                                 @php
                                     $routeMapel = Auth::user()->hakAkses == 'Super Admin' ? route('mapel.index') : route('mapel-admin.index');
                                 @endphp
-                                <a class="nav-main-link {{ $title2 === 'Mata Pelajaran' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $sub_judul === 'Mata Pelajaran' ? 'active' : '' }}"
                                     href="{{ $routeMapel }}">
                                     <span class="nav-main-link-name">Mata Pelajaran</span>
                                 </a>
@@ -141,7 +142,7 @@
                                 @php
                                     $routePengajar = Auth::user()->hakAkses == 'Super Admin' ? route('pengajaran.index') : route('pengajaran-admin.index');
                                 @endphp
-                                <a class="nav-main-link {{ $title2 === 'Pengajar' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $sub_judul === 'Pengajar' ? 'active' : '' }}"
                                     href="{{ $routePengajar }}">
                                     <span class="nav-main-link-name">Pengajar</span>
                                 </a>
@@ -150,14 +151,14 @@
                                 @php
                                     $routeJadwal = Auth::user()->hakAkses == 'Super Admin' ? route('penjadwalan.index') : route('penjadwalan-admin.index');
                                 @endphp
-                                <a class="nav-main-link {{ $title2 === 'penjadwalan' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $sub_judul === 'penjadwalan' ? 'active' : '' }}"
                                     href="{{ $routeJadwal }}">
                                     <span class="nav-main-link-name">Jadwal Pelajaran</span>
                                 </a>
                             </li>
                             @can('guru')
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
+                                    <a class="nav-main-link {{ $sub_judul === 'Penilaian' ? 'active' : '' }}"
                                         href="{{ route('penilaian.index') }}">
                                         <span class="nav-main-link-name">Penilaian Siswa
                                         </span>
@@ -169,7 +170,7 @@
                                 @php
                                     $routeNilai = Auth::user()->hakAkses == 'Super Admin' ? route('penilaian.index') : route('penilaian-admin.index');
                                 @endphp
-                                <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $sub_judul === 'Penilaian' ? 'active' : '' }}"
                                     href="{{ $routeNilai }}">
                                     <span class="nav-main-link-name">Penilaian Siswa
                                     </span>
@@ -178,13 +179,13 @@
                         @endcanany
                         @can('siswa')
                             <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title2 === 'Jadwal' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $sub_judul === 'Jadwal' ? 'active' : '' }}"
                                     href="{{ route('jadwal.siswa') }}">
                                     <span class="nav-main-link-name">Jadwal</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $sub_judul === 'Penilaian' ? 'active' : '' }}"
                                     href="{{ route('penilaian.siswa') }}">
                                     <span class="nav-main-link-name">Nilai
                                     </span>
@@ -193,13 +194,13 @@
                         @endcan
                         @can('guru')
                             <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title2 === 'Jadwal' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $sub_judul === 'Jadwal' ? 'active' : '' }}"
                                     href="{{ route('jadwal.guru') }}">
                                     <span class="nav-main-link-name">Jadwal</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link {{ $title2 === 'Penilaian' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ $sub_judul === 'Penilaian' ? 'active' : '' }}"
                                     href="{{ route('penilaian.guru') }}">
                                     <span class="nav-main-link-name">Penilaian Siswa
                                     </span>
@@ -210,7 +211,7 @@
                 </li>
                 @cannot('siswa')
                     <li class="nav-main-item">
-                        <a class="nav-main-link {{ $title === 'Absensi' ? 'active' : '' }}"
+                        <a class="nav-main-link {{ Request::routeIs('absensi.index') ? 'active' : '' }}"
                             href="{{ route('absensi.index') }}">
                             <i class="nav-main-link-icon si si-note"></i>
                             <span class="nav-main-link-name">Absensi</span>
