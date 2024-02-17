@@ -15,15 +15,15 @@
                     </div>
                     <div class="carousel-inner rounded-3" style="max-height: 500px;">
                         <div class="carousel-item active border">
-                            <img src="https://i.pinimg.com/originals/cf/55/2d/cf552de6e2abbbf8f3c9c5825cd0cedf.jpg"
+                        <img src="{{ asset('assets/media/img/tmb.svg') }}"
                                 class="object-fit-cover w-100" alt="Carousel Image 1">
                         </div>
                         <div class="carousel-item rounded-3">
-                            <img src="https://i.pinimg.com/originals/71/cb/d6/71cbd6fd7e5bbbecf40263f73af4a3e1.jpg"
+                            <img src="{{ asset('assets/media/img/tmb.svg') }}"
                                 class="object-fit-cover w-100" alt="Carousel Image 2">
                         </div>
                         <div class="carousel-item rounded-3">
-                            <img src="https://i.pinimg.com/originals/12/97/a4/1297a454d516f4f0952f471f7eafc323.jpg"
+                            <img src="{{ asset('assets/media/img/tmb.svg') }}"
                                 class="object-fit-cover w-100" alt="Carousel Image 3">
                         </div>
                     </div>
