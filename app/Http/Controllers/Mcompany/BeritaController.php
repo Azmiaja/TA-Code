@@ -11,17 +11,14 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class BeritaController extends Controller
 {
 
     public function index()
     {
-        $berita = Berita::all()->sortByDesc('waktu');
-        $beritaTerbaru = $berita->first();
-        // $berita = Berita::orderBy('waktu', 'desc')->get();
-        $totalBerita = Berita::all()->count();
-        return view('siakad/content/profil_sekolah/berita/index', compact('berita', 'totalBerita'), [
+        return view('siakad/content/profil_sekolah/berita/index', [
             'judul' => 'Profil Sekolah',
             'sub_judul' => 'Berita Sekolah',
             'text_singkat' => 'Mengelola berita kegiatan di sekolah!',
@@ -31,9 +28,9 @@ class BeritaController extends Controller
         ]);
     }
 
-    public function getData()
+    public function getDataBerita()
     {
-        $data = Berita::orderBy('idBerita', 'desc')->get();
+        $data = Berita::orderBy('waktu', 'desc')->get();
         $data = $data->map(function ($item, $key) {
             $item['nomor'] = $key + 1;
             // $item['waktu'] = Carbon::parse($item['waktu'])->format('Y-m-d');
@@ -60,6 +57,7 @@ class BeritaController extends Controller
 
             $validatedData['penulis'] = auth()->user()->pegawai->namaPegawai;
             $validatedData['waktu'] = Carbon::createFromFormat('d/m/Y h:i A', $request->waktu)->format('Y-m-d H:i:s');
+            $validatedData['slug'] = Str::slug($request->input('judulBerita'));
 
 
             if ($request->file('gambarBerita')) {
@@ -167,6 +165,7 @@ class BeritaController extends Controller
 
             $validatedData['penulis'] = auth()->user()->pegawai->namaPegawai;
             $validatedData['waktu'] = Carbon::createFromFormat('d/m/Y h:i A', $request->waktu)->format('Y-m-d H:i:s');
+            $validatedData['slug'] = Str::slug($request->input('judulBerita'));
 
             if ($request->file('gambarBerita')) {
                 // $img = $request->file('gambarBerita');
@@ -192,34 +191,7 @@ class BeritaController extends Controller
                 'message' => 'Error storing data.',
             ], 422);
         }
-        // Find Berita data by ID
-        // $berita = Berita::find($id);
-
-        // $validatedData = $request->validate([
-        //     'judulBerita' => 'required',
-        //     'gambar' => 'file|image|max:2048',
-        //     'isiBerita' => '',
-        //     'waktu' => 'required|date',
-        //     'sumberBerita' => '',
-        // ]);
-
-        // // If there is a new image file
-        // if ($request->hasFile('gambar')) {
-        //     $gambarPath = $request->file('gambar')->getClientOriginalName();
-        //     $validatedData['gambar'] = $request->file('gambar')->storeAs('gambar-berita', $gambarPath, 'public');
-
-        //     // Delete the old image
-        //     if ($berita->gambar) {
-        //         Storage::delete('public/' . $berita->gambar);
-        //     }
-        // }
-
-        // // Update Berita data
-        // $berita->update($validatedData);
-
-        // // Successfully updated data, send JSON response
-        // return back()
-        //     ->with('success', 'Berhasil memperbarui data.');
+        
     }
 
 

@@ -1,5 +1,8 @@
 @extends('company_profil/layouts/app')
 @section('app')
+    @php
+        use Carbon\Carbon;
+    @endphp
     <div class="row my-3 g-3">
         <div class="col-xxl-9 col-lg-8 col-12">
             {{-- Garis Judul --}}
@@ -15,30 +18,49 @@
             <div class="row m-0">
                 {{-- Kesan Pesan --}}
                 <div class="card bg-with mt-md-0 p-2 shadow-sm border-0 mb-3">
-                    <div class="card-body p-2">
-                        <form action="#" method="post">
+                    <div class="col-lg-8 align-self-center card-body p-2 py-4">
+                        @if (session('success'))
+                            <div class="alert alert-success d-flex align-items-center" role="alert">
+                                <i class="fa-solid fa-circle-check fs-3 me-3"></i>
+                                <div>
+                                    {{ session('success') }}
+                                </div>
+                            </div>
+                            @push('scripts')
+                                <script>
+                                    $(document).ready(function() {
+                                        setTimeout(function() {
+                                            $(".alert").alert('close');
+                                        }, 5000);
+                                    });
+                                </script>
+                            @endpush
+                        @endif
+                        <form action="{{ route('pesan.store') }}" method="POST">
+                            @csrf
                             <div class="mb-3">
                                 <label for="nama" class="form-label">Nama<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control form-control-alt"
-                                    placeholder="Masukkan nama lengkap Anda" id="nama" required>
+                                    placeholder="Masukkan nama lengkap Anda" id="nama" name="nama" required>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email<span class="text-danger">*</span></label>
                                 <input type="email" class="form-control form-control-alt"
-                                    placeholder="Masukkan alamat email Anda" id="email" required>
+                                    placeholder="Masukkan alamat email Anda" id="email" name="email" required>
                             </div>
                             <div class="mb-3">
                                 <label for="noHp" class="form-label">No Telepon<span
                                         class="text-danger">*</span></label>
-                                <input type="tel" class="form-control form-control-alt"
-                                    placeholder="Masukkan nomor telepon Anda" id="noHp" required>
+                                <input type="number" class="form-control form-control-alt"
+                                    placeholder="Masukkan nomor telepon Anda" id="noHp" name="noHp" required>
+                                {{-- <small id="noHpError" class="text-danger"></small> --}}
                             </div>
                             <div class="mb-3">
                                 <label for="pesan" class="form-label">Pesan</label>
-                                <textarea id="pesan" class="form-control form-control-alt" placeholder="Tulis pesan atau pertanyaan Anda di sini"
-                                    cols="30" rows="5"></textarea>
+                                <textarea id="pesan" class="form-control form-control-alt" name="pesan"
+                                    placeholder="Tulis pesan atau pertanyaan Anda di sini" cols="30" rows="5"></textarea>
                             </div>
-                            <button class="btn btn-alt-primary float-end"><i
+                            <button type="submit" class="btn btn-alt-primary float-end"><i
                                     class="fa-solid fa-paper-plane me-1"></i>Kirim</button>
                         </form>
                     </div>
@@ -61,52 +83,30 @@
                 <div class="col-12 p-0">
                     <div class="row g-3">
                         {{-- Konten Berita --}}
+                        @foreach ($beritaTerbaru as $bTree)
                         <div class="col-md-12">
-                            <div class="d-flex rounded shadow-sm p-3 bg-white">
-                                <img src="https://i.pinimg.com/originals/87/64/1a/87641ac11458c4259239b791593cf661.jpg"
-                                    alt="Berita" class="flex-shrink-0 me-3 object-fit-cover rounded" width="100"
-                                    height="100">
-                                <div class="w-100 position-relative">
-                                    <p class="fw-medium my-0 fst-normal text-dark ellipse-two">Lorem ipsum dolor sit amet
-                                        consectetur, adipisicing elit. Nostrum, itaque aliquid quos ratione cumque
-                                        blanditiis impedit possimus est atque incidunt.</p>
-                                    <small class="ellipse text-justify mb-4">Lorem
-                                        ipsum, dolor sit amet
-                                        consectetur adipisicing
-                                        elit. Ex facilis cumque delectus expedita libero nihil cupiditate blanditiis
-                                        quibusdam maiores fuga quae iusto ipsum vel atque praesentium sapiente corporis
-                                        vero, neque quas maxime ea et pariatur sint id? Explicabo, dignissimos nostrum! Rem
-                                        sunt dignissimos rerum odio, itaque velit iusto dolorem laborum?</small>
-                                    <small class="text-gray-dark position-absolute bottom-0"><i
-                                            class="fa-solid fa-calendar-day me-1"></i>02 Januari 2024
-                                    </small>
-                                    <a href="#" class="stretched-link"></a>
+                            <div class="d-flex block block-rounded shadow-sm p-2 m-0 position-relative">
+                                <div class="ratio" style="max-width: 6rem; height: 6rem;">
+                                    <img src="{{ $bTree['gambar'] }}" alt="Berita" class="rounded" style="width: 100%; height: 100%; object-fit: cover">
                                 </div>
+                                <div class="block-content w-100 align-items-center px-0 ms-2">
+                                    <h6 class="my-0 fst-normal text-dark mb-1">
+                                        {{ $bTree['judul'] }}
+                                    </h6>
+                                    <div class="fw-semibold text-dark fs-sm text-wrap">
+                                        <a class="link-effect link-primary d-lg-none d-md-inline"
+                                            href="#">{{ $bTree['penulis'] }}</a>
+                                        <span class="">
+                                            {{ $bTree['tanggal'] }} &bull;</span>
+                                        <span class="text-muted">
+                                            {{ $bTree['waktu'] }}</span>
+                                    </div>
+                                </div>
+                                <a href="{{ route('baca_berita', ['slug' => $bTree['slug'], 'id' => $bTree['id']]) }}"
+                                    class="stretched-link"></a>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class="d-flex rounded shadow-sm p-3 bg-white">
-                                <img src="https://i.pinimg.com/originals/87/64/1a/87641ac11458c4259239b791593cf661.jpg"
-                                    alt="Berita" class="flex-shrink-0 me-3 object-fit-cover rounded" width="100"
-                                    height="100">
-                                <div class="w-100 position-relative">
-                                    <p class="fw-medium my-0 fst-normal text-dark ellipse-two">Lorem ipsum dolor sit amet
-                                        consectetur, adipisicing elit. Nostrum, itaque aliquid quos ratione cumque
-                                        blanditiis impedit possimus est atque incidunt.</p>
-                                    <small class="ellipse text-justify mb-4">Lorem
-                                        ipsum, dolor sit amet
-                                        consectetur adipisicing
-                                        elit. Ex facilis cumque delectus expedita libero nihil cupiditate blanditiis
-                                        quibusdam maiores fuga quae iusto ipsum vel atque praesentium sapiente corporis
-                                        vero, neque quas maxime ea et pariatur sint id? Explicabo, dignissimos nostrum! Rem
-                                        sunt dignissimos rerum odio, itaque velit iusto dolorem laborum?</small>
-                                    <small class="text-gray-dark position-absolute bottom-0"><i
-                                            class="fa-solid fa-calendar-day me-1"></i>02 Januari 2024
-                                    </small>
-                                    <a href="#" class="stretched-link"></a>
-                                </div>
-                            </div>
-                        </div>
+                    @endforeach
                     </div>
                 </div>
             </div>

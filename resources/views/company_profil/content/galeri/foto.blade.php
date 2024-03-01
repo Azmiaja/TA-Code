@@ -1,5 +1,8 @@
 @extends('company_profil/content/galeri/index')
 @section('galeri')
+    @php
+        use Carbon\Carbon;
+    @endphp
     <div class="row m-0 mb-3">
         {{-- Garis Judul --}}
         <div class="row m-0 p-0 mb-3">
@@ -14,64 +17,30 @@
         <div class="row m-0 p-0 mb-3">
             <div class="col-12 p-0">
                 <div class="row g-3">
-                    <div class="col-lg-4 col-md-6">
-                        <a class="block block-rounded block-link-pop overflow-hidden popup-link m-0"
-                            href="https://i.pinimg.com/originals/12/97/a4/1297a454d516f4f0952f471f7eafc323.jpg">
-                            <div class="ratio ratio-16x9">
-                                <img class="img-fluid"
-                                    src="https://i.pinimg.com/originals/12/97/a4/1297a454d516f4f0952f471f7eafc323.jpg"
-                                    alt="">
-                            </div>
-                            <div class="block-content">
-                                <p class="fs-sm fw-medium mb-2">
-                                    02 Januari 2024
-                                </p>
-                                <p class="fs-sm text-muted ellipse text-justify">
-                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam, omnis alias natus ab
-                                    aliquid magnam laborum suscipit. Illum, nihil cumque.
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <a class="block block-rounded block-link-pop overflow-hidden popup-link m-0"
-                            href="https://i.pinimg.com/564x/2c/ab/78/2cab78a8830951815f5f04a433cf4a4d.jpg">
-                            <div class="ratio ratio-16x9">
-                                <img class="img-fluid"
-                                    src="https://i.pinimg.com/564x/2c/ab/78/2cab78a8830951815f5f04a433cf4a4d.jpg"
-                                    alt="">
-                            </div>
-                            <div class="block-content">
-                                <p class="fs-sm fw-medium mb-2">
-                                    02 Januari 2024
-                                </p>
-                                <p class="fs-sm text-muted ellipse text-justify">
-                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam, omnis alias natus ab
-                                    aliquid magnam laborum suscipit. Illum, nihil cumque.
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <a class="block block-rounded block-link-pop overflow-hidden popup-link m-0"
-                            href="https://i.pinimg.com/originals/12/97/a4/1297a454d516f4f0952f471f7eafc323.jpg">
-                            <div class="ratio ratio-16x9">
-                                <img class="img-fluid"
-                                    src="https://i.pinimg.com/originals/12/97/a4/1297a454d516f4f0952f471f7eafc323.jpg"
-                                    alt="">
-                            </div>
-                            <div class="block-content">
-                                <p class="fs-sm fw-medium mb-2">
-                                    02 Januari 2024
-                                </p>
-                                <p class="fs-sm text-muted ellipse text-justify">
-                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam, omnis alias natus ab
-                                    aliquid magnam laborum suscipit. Illum, nihil cumque.
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-
+                    @foreach ($dock as $b)
+                        <div class="col-lg-4 col-md-6">
+                            {{-- <div class="block block-rounded"> --}}
+                            <a class=" block block-rounded block-link-pop overflow-hidden popup-link m-0 h-100"
+                                href="{{ asset('storage/' . $b->media) }}">
+                                <div class="ratio ratio-16x9">
+                                    <img class="object-fit-cover" src="{{ asset('storage/' . $b->media) }}"
+                                        alt="Foto-{{ $b->idDokumentasi }}">
+                                </div>
+                                <div class="block-content p-3">
+                                    <p class="fw-medium mx-0 mb-2">
+                                        {{ Carbon::parse($b->waktu)->locale('id_ID')->isoFormat('Do MMMM YYYY') }}
+                                    </p>
+                                    <p class="fs-sm text-muted text-justify m-0">
+                                        {{ $b->judul }}
+                                    </p>
+                                </div>
+                            </a>
+                            {{-- </div> --}}
+                        </div>
+                    @endforeach
+                </div>
+                <div class="pagination justify-content-center mt-5">
+                    {{ $dock->links() }}
                 </div>
             </div>
 

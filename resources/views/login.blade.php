@@ -5,29 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Login - Siakad SDN Lemahbang</title>
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
-    <link rel="shortcut icon" href="assets/media/favicons/logo-tutwuri.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/logo-tutwuri.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/logo-tutwuri.png">
-    <link rel="stylesheet" id="css-main" href="assets/css/oneui.min.css">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-        gtag('config', 'G-9HQDQJJYW7');
-    </script>
+    <link rel="shortcut icon" href="{{ asset('assets/media/img/tut-wuri.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/media/img/tut-wuri.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/media/img/tut-wuri.png') }}">
+    <link rel="stylesheet" id="css-main" href="{{ asset('assets/css/oneui.min.css') }}">
+    {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script> --}}
 </head>
 
 <body>
     <div id="page-container">
         <main id="main-container">
-            <div class="bg-image" style="background-image: url('assets/media/photos/photo28@2x.jpg');">
+            <div class="bg-image">
                 <div class="row g-0 bg-primary-dark-op">
                     <div class="hero-static col-lg-4 d-none d-lg-flex flex-column justify-content-center">
                         <div class="p-4 p-xl-5 flex-grow-1 d-flex align-items-center">
@@ -55,9 +44,9 @@
                         <div class="p-4 w-100 flex-grow-1 d-flex align-items-center">
                             <div class="w-100">
                                 <div class="text-center mb-5">
-                                    <p class="mb-3">
-                                        <img style="height: 75px;" src="assets/media/favicons/logo-tutwuri.png">
-                                    </p>
+                                    <div>
+                                        <img class="img-fluid" width="120" src="{{ asset('assets/media/img/tut-wuri.png') }}">
+                                    </div>
                                     <h1 class="fw-bold mb-2">
                                         Login
                                     </h1>
@@ -116,8 +105,6 @@
     </div>
     <script src="assets/js/oneui.app.min.js"></script>
     <script src="assets/js/lib/jquery.min.js"></script>
-    <script src="assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
-    <script src="assets/js/pages/op_auth_signin.min.js"></script>
 </body>
 
 </html>

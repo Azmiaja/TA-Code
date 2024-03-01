@@ -35,8 +35,8 @@
                             <span class="nav-main-link-name">Manajemen User</span>
                         </a>
                     </li>
-                    <li class="nav-main-item {{ $judul === 'Manajemen Sekolah' ? 'open' : '' }}">
-                        <a class="nav-main-link nav-main-link-submenu {{ $judul === 'Manajemen Sekolah' ? 'active' : '' }}"
+                    <li class="nav-main-item {{ Request::routeIs('sekolah.index', 'pegawai.index', 'siswa.index') ? 'open' : '' }}">
+                        <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('sekolah.index', 'pegawai.index', 'siswa.index') ? 'active' : '' }}"
                             data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="?#">
                             <i class="nav-main-link-icon si si-bulb"></i>
                             <span class="nav-main-link-name">Manajemen Sekolah</span>
@@ -49,7 +49,7 @@
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link {{ $sub_judul === 'Pegawai' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ Request::routeIs('pegawai.index') ? 'active' : '' }}"
                                     href="{{ route('pegawai.index') }}">
                                     <span class="nav-main-link-name">Pegawai</span>
                                 </a>
@@ -62,9 +62,9 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-main-heading">Profil Sekolah</li>
-                    <li class="nav-main-item {{ Request::routeIs('berita.index', 'tentang.index', 'profil.index', 'galeri.index', 'profil-guru.index','kontak.index') ? 'open' : '' }}{{ $judul === 'Company Profil' ? 'open' : '' }}">
-                        <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('berita.index', 'profil.index', 'tentang.index', 'galeri.index', 'profil-guru.index','kontak.index') ? 'active' : '' }}"
+                    <li class="nav-main-heading">Company Profile</li>
+                    <li class="nav-main-item {{ Request::routeIs('berita.index', 'tentang.index', 'profil.index', 'galeri.index', 'profil-guru.index','kontak.index', 'dokumentasi.index', 'pesan.index') ? 'open' : '' }}">
+                        <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('berita.index', 'profil.index', 'tentang.index', 'galeri.index', 'profil-guru.index','kontak.index', 'dokumentasi.index', 'pesan.index') ? 'active' : '' }}"
                             data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                             <i class="nav-main-link-icon si si-wrench"></i>
                             <span class="nav-main-link-name">Profil Sekolah</span>
@@ -79,15 +79,27 @@
                             <li class="nav-main-item">
                                 <a class="nav-main-link {{ Request::routeIs('profil.index') ? 'active' : '' }}"
                                     href="{{ route('profil.index') }}">
-                                    <span class="nav-main-link-name">Sekolah</span>
+                                    <span class="nav-main-link-name">Tentang Sekolah</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
+                                <a class="nav-main-link {{ Request::routeIs('dokumentasi.index') ? 'active' : '' }}"
+                                    href="{{ route('dokumentasi.index') }}">
+                                    <span class="nav-main-link-name">Dokumentasi</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link {{ Request::routeIs('pesan.index') ? 'active' : '' }}"
+                                    href="{{ route('pesan.index') }}">
+                                    <span class="nav-main-link-name">Pesan Masuk</span>
+                                </a>
+                            </li>
+                            {{-- <li class="nav-main-item">
                                 <a class="nav-main-link {{ $sub_judul === 'Profil Guru' ? 'active' : '' }}"
                                     href="{{ route('profil-guru.index') }}">
                                     <span class="nav-main-link-name">Profil Guru</span>
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
                 @endcanany

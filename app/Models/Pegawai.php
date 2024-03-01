@@ -12,18 +12,19 @@ class Pegawai extends Model
     protected $table = 'pegawai';
     protected $guarded = ['idPegawai'];
     protected $primaryKey = 'idPegawai';
+    protected $foreignKey = 'idJabatan';
     public $timestamps = false;
-
-    protected $fillable = [
-        'nip', 'namaPegawai', 'jenisKelamin', 'tempatLahir', 'tanggalLahir', 'agama', 'alamat', 'jenisPegawai', 'noHp' , 'status'
-        // Add other fields as needed
-    ];
 
 
     // Define the relationship with the Kelas model
     public function kelas()
     {
         return $this->hasMany(Kelas::class, 'idPegawai');
+    }
+
+    public function jabatanPegawai()
+    {
+        return $this->hasOne(Jabatan::class, 'idJabatan', 'idJabatan');
     }
 
     public function pp_guru()

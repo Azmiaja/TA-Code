@@ -5,13 +5,16 @@ namespace App\Http\Controllers\Mcompany;
 use App\Http\Controllers\Controller;
 use App\Models\Profil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\HtmlString;
 
 class ProfilController extends Controller
 {
     public function index()
     {
-        $profil = Profil::orderBy('idProfil', 'desc')->take(1)->get();
+        $profil = Profil::orderBy('idProfil')->first();
+
         // $totalProfil = Profil::all()->count();
         return view('siakad.content.profil_sekolah.sekolah.index', compact('profil'), [
             'judul' => 'Profil Sekolah',
@@ -21,6 +24,26 @@ class ProfilController extends Controller
         ]);
     }
 
+    public function getProfil()
+    {
+        $profil = Profil::find(1); // Ganti dengan logic untuk mendapatkan profil yang sesuai
+
+        return response()->json([
+            'image' => asset('storage/' . $profil->gambar),
+            'deskripsi' => $profil->deskripsi,
+            'imageSejarah' => asset('storage/' . $profil->sejarahImg),
+            'deskripsiSejarah' => $profil->sejarahText,
+            'imageOrganisasi' => asset('storage/' . $profil->strukturOrgImg),
+            'deskripsiOrganisasi' => $profil->strukturOrgText,
+            'imageKeuangan' => asset('storage/' . $profil->keuanganImg),
+            'deskripsiKeuangan' => $profil->keuanganText,
+            'visi' => $profil->visi,
+            'misi' => $profil->misi,
+            'sambutanKepsek' => $profil->sambutanKepsek,
+        ]);
+    }
+
+
     public function create()
     {
         //
@@ -28,44 +51,6 @@ class ProfilController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi data
-        $validatedData = $request->validate([
-            'slogan' => 'required',
-            'gambarProfil' => 'required|file|mimes:jpg,jpeg,svg|max:2048',
-            'gambarSejarah' => 'required|file|mimes:jpg,jpeg,svg|max:2048',
-            'deskripsiProfil' => 'required',
-            'deskripsiSejarah' => 'required',
-            'visi' => 'required',
-            'misi' => 'required',
-        ]);
-
-        // Field-file yang akan dicek dan dihapus jika data baru ditambahkan
-        $gambarFields = ['gambarProfil', 'gambarSejarah'];
-
-        // Loop melalui field-file
-        foreach ($gambarFields as $field) {
-            // Cek apakah ada file lama
-            if ($request->hasFile($field)) {
-                // Hapus file lama sebelum menyimpan yang baru
-                $oldFile = Profil::whereNotNull($field)->value($field);
-                if ($oldFile) {
-                    // Hapus file lama dari storage
-                    Storage::delete('public/' . $oldFile);
-                }
-
-                // Simpan file baru
-                $gambarPath = $request->file($field)->getClientOriginalName();
-                $validatedData[$field] = $request->file($field)->storeAs('gambar-profil', $gambarPath, 'public');
-            }
-        }
-
-        // Hapus semua data yang ada di tabel Profil
-        Profil::truncate();
-
-        // Buat atau update profil baru
-        Profil::updateOrCreate([], $validatedData);
-
-        return back()->with('success', 'Berhasil menyimpan data.');
     }
 
 
@@ -79,110 +64,253 @@ class ProfilController extends Controller
         $profil = Profil::find($id);
         if (!$profil) {
             // Handle jika profil tidak ditemukan
-            return back()->with('error', 'Profil tidak ditemukan.');
+            return response()->json(['status' => 'error', 'message' => 'Data tidak ditemukan.']);
         }
 
-        return view(compact('profil'));
+        return response()->json(['profil' => $profil]);
     }
 
-    //  fungsi update profil
-    public function updateProfil(Request $request, $id)
+    public function update(Request $request, $id)
     {
-        $profil = Profil::find($id);
+        try {
+            $profil = Profil::find($id);
 
-        $validatedData = $request->validate([
-            'gambarProfil' => 'file|mimes:jpg,jpeg,svg|max:2048',
-            'deskripsiProfil' => 'required',
-            'timestampProfil' => 'required',
+            $deskripsi = $request->input('isiProfilSekolah');
 
-        ]);
-        $validatedData = $request->only(['deskripsiProfil', 'timestampProfil']);
-        if ($request->file('gambarProfil')) {
-            $gambarPath = $request->file('gambarProfil')->getClientOriginalName();
-            $validatedData['gambarProfil'] = $request->file('gambarProfil')->storeAs('gambar-profil', $gambarPath, 'public');
+            if ($request->hasFile('gambarProfilSekolah')) {
+                $imgName = uniqid() . '.' . $request->file('gambarProfilSekolah')->getClientOriginalExtension();
+                $gambarPath = $request->file('gambarProfilSekolah')->storeAs('tentang-sekolah', $imgName, 'public');
 
-            Storage::delete('public/' . $profil->gambarProfil);
+                if ($profil->gambar) {
+                    Storage::delete('public/' . $profil->gambar);
+                }
+                $profil->gambar = $gambarPath;
+            }
+
+            $profil->deskripsi = $deskripsi;
+
+            $profil->update();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil memperbarui data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error storing data.',
+            ], 422);
         }
-        $profil->update($validatedData);
-
-        return redirect()->route('profil.index')->with('success', 'Data profil berhasil diperbarui.');
     }
 
     // fungsi update sejarah
     public function updateSejarah(Request $request, $id)
     {
-        $profil = Profil::find($id);
+        try {
+            $profil = Profil::find($id);
 
-        $validatedData = $request->validate([
-            'gambarSejarah' => 'file|mimes:jpg,jpeg,svg|max:2048',
-            'deskripsiSejarah' => 'required',
-            'timestampSejarah' => 'required',
-        ]);
+            $deskripsi = $request->input('isiProfilSekolah');
 
-        $validatedData = $request->only(['deskripsiSejarah', 'timestampSejarah']);
-        if ($request->hasFile('gambarSejarah')) {
-            $gambarPath = $request->file('gambarSejarah')->getClientOriginalName();
-            $validatedData['gambarSejarah'] = $request->file('gambarSejarah')->storeAs('gambar-profil', $gambarPath, 'public');
+            if ($request->hasFile('gambarProfilSekolah')) {
+                $imgName = uniqid() . '.' . $request->file('gambarProfilSekolah')->getClientOriginalExtension();
+                $gambarPath = $request->file('gambarProfilSekolah')->storeAs('tentang-sekolah', $imgName, 'public');
 
-            Storage::delete('public/' . $profil->gambarSejarah);
+                if ($profil->sejarahImg) {
+                    Storage::delete('public/' . $profil->sejarahImg);
+                }
+                $profil->sejarahImg = $gambarPath;
+            }
+
+            $profil->sejarahText = $deskripsi;
+
+            $profil->update();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil memperbarui data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error storing data.',
+            ], 422);
         }
-        $profil->update($validatedData);
+    }
 
-        return redirect()->route('profil.index')->with('success', 'Data sejarah berhasil diperbarui.');
+    // fungsi update organisasi
+    public function updateOrganisasi(Request $request, $id)
+    {
+        try {
+            $profil = Profil::find($id);
+
+            $deskripsi = $request->input('isiProfilSekolah');
+
+            if ($request->hasFile('gambarProfilSekolah')) {
+                $imgName = uniqid() . '.' . $request->file('gambarProfilSekolah')->getClientOriginalExtension();
+                $gambarPath = $request->file('gambarProfilSekolah')->storeAs('tentang-sekolah', $imgName, 'public');
+
+                if ($profil->strukturOrgImg) {
+                    Storage::delete('public/' . $profil->strukturOrgImg);
+                }
+                $profil->strukturOrgImg = $gambarPath;
+            }
+
+            $profil->strukturOrgText = $deskripsi;
+
+            $profil->update();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil memperbarui data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error storing data.',
+            ], 422);
+        }
+    }
+
+    // fungsi update keuangan
+    public function updateKeuangan(Request $request, $id)
+    {
+        try {
+            $profil = Profil::find($id);
+
+            $deskripsi = $request->input('isiProfilSekolah');
+
+            if ($request->hasFile('gambarProfilSekolah')) {
+                $imgName = uniqid() . '.' . $request->file('gambarProfilSekolah')->getClientOriginalExtension();
+                $gambarPath = $request->file('gambarProfilSekolah')->storeAs('tentang-sekolah', $imgName, 'public');
+
+                if ($profil->keuanganImg) {
+                    Storage::delete('public/' . $profil->keuanganImg);
+                }
+                $profil->keuanganImg = $gambarPath;
+            }
+
+            $profil->keuanganText = $deskripsi;
+
+            $profil->update();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil memperbarui data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error storing data.',
+            ], 422);
+        }
     }
 
     // fungsi update visi misi
-    public function updateVisi(Request $request, $id)
+    public function updateVisiMisi(Request $request, $id)
     {
-        $profil = Profil::find($id);
+        try {
+            $profil = Profil::find($id);
 
-        $validatedData = $request->validate([
-            'visi' => 'required',
-            'timestampVisi' => 'required',
+            $visi = $request->input('isiVisi');
+            $misi = $request->input('isiMisi');
 
-        ]);
+            $profil->visi = $visi;
+            $profil->misi = $misi;
 
-        $profil->update($validatedData);
+            $profil->update();
 
-        return redirect()->route('profil.index')->with('success', 'Data Visi berhasil diperbarui.');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil memperbarui data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error storing data.',
+            ], 422);
+        }
     }
 
-    public function updateMisi(Request $request, $id)
+    // fungsi update Sambutan
+    public function updateSambutan(Request $request, $id)
     {
-        $profil = Profil::find($id);
+        try {
+            $profil = Profil::find($id);
 
-        $validatedData = $request->validate([
-            'misi' => 'required',
-            'timestampMisi' => 'required',
+            $sambutanKepsek = $request->input('sambutanKepsek');
 
-        ]);
+            $profil->sambutanKepsek = $sambutanKepsek;
 
-        $profil->update($validatedData);
+            $profil->update();
 
-        return redirect()->route('profil.index')->with('success', 'Data Misi berhasil diperbarui.');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil memperbarui data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error storing data.',
+            ], 422);
+        }
     }
 
-    public function updateSlogan(Request $request, $id)
+    private function deleteProfil($profil, $columnName, $imageColumn)
     {
-        $profil = Profil::find($id);
+        // Hapus gambar profil
+        if ($profil->{$imageColumn}) {
+            Storage::delete('public/' . $profil->{$imageColumn});
+        }
 
-        $validatedData = $request->validate([
-            'slogan' => 'required',
+        // Hapus kolom deskripsi dan gambar
+        $profil->{$columnName} = null;
+        $profil->{$imageColumn} = null;
+        $profil->save();
 
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Berhasil menghapus data.'
         ]);
-
-        $profil->update($validatedData);
-
-        return redirect()->route('profil.index')->with('success', 'Data Slogan berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
         $profil = Profil::find($id);
-        $profil->delete();
-        // Storage::delete('public/' . $profil->dokumen);
-        // Storage::delete('public/' . $profil->gambar);
-
-        return back()->with('success', 'Berhasil menghapus profil.');
+    
+        return $this->deleteProfil($profil, 'deskripsi', 'gambar');
     }
+
+    public function destroySejarah($id)
+    {
+        $profil = Profil::find($id);
+    
+        return $this->deleteProfil($profil, 'sejarahText', 'sejarahImg');
+    }
+
+    public function destroyOrg($id)
+    {
+        $profil = Profil::find($id);
+    
+        return $this->deleteProfil($profil, 'strukturOrgText', 'strukturOrgImg');
+    }
+    
+    public function destroyKeuangan($id)
+    {
+        $profil = Profil::find($id);
+    
+        return $this->deleteProfil($profil, 'keuanganText', 'keuanganImg');
+    }
+    
 }

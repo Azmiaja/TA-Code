@@ -38,12 +38,17 @@
                                     <img src="" class="img-preview img-fluid rounded-2 col-md-12 col-sm-4 mb-3"
                                         style="display: none; border: 2px dashed #dfe3ea;" alt="">
                                     <input type="file" class="form-control" name="gambarBerita"
-                                        accept=".jpg,.jpeg,.png,.svg" id="gambarBerita" onchange="prevImg()" required>
+                                        accept=".jpg,.jpeg,.png,.svg" id="gambarBerita" onchange="prevImg()">
                                     {{-- <div id="gambarBerita" class="dropzone" style="border: 2px dashed #dfe3ea;"></div> --}}
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label" for="waktu">Tanggal</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fa-regular fa-calendar-days"></i>
+                                        </span>
                                     <input type="text" class="form-control" id="waktu" name="waktu" required>
+                                    </div>
                                 </div>
                             </div>
                         </div>

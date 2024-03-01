@@ -32,7 +32,7 @@ class LoginController extends Controller
 
         foreach ($guards as $guard) {
             if ($this->attemptUserLogin($credentials, $guard)) {
-                return redirect()->intended('/dashboard');
+                return redirect()->intended('/beranda');
             }
         }
 

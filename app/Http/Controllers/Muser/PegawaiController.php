@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Muser;
 
 use App\Http\Controllers\Controller;
+use App\Models\Jabatan;
 use Illuminate\Http\Request;
 use App\Models\Pegawai;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -16,9 +18,9 @@ class PegawaiController extends Controller
     {
         $pegawai = Pegawai::all();
         return view('siakad.content.m_sekolah.pegawai.index', compact('pegawai'), [
-            'title' => 'Manajemen Sekolah',
-            'title2' => 'Pegawai'
-
+            'judul' => 'Manajemen Sekolah',
+            'sub_judul' => 'Pegawai',
+            'text_singkat' => 'Mengelola data pegawai!',
         ]);
     }
 
@@ -32,6 +34,8 @@ class PegawaiController extends Controller
         return DataTables::of($data)->toJson();
     }
 
+    
+
     public function create()
     {
         //
@@ -39,25 +43,41 @@ class PegawaiController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'nip' => 'required',
-            'namaPegawai' => 'required',
-            'tempatLahir' => 'required',
-            'tanggalLahir' => 'required|date',
-            'jenisKelamin' => 'required',
-            'agama' => 'required',
-            'alamat' => 'required',
-            'jenisPegawai' => 'required',
-            'noHp' => '',
-            'status' => 'required',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'nip' => 'required|numeric',
+                'namaPegawai' => 'required|string',
+                'tempatLahir' => 'nullable|string',
+                'tanggalLahir' => 'nullable|date',
+                'jenisKelamin' => 'nullable',
+                'agama' => 'nullable',
+                'alamat' => 'nullable|string',
+                'jenisPegawai' => 'required',
+                'noHp' => 'nullable|string|max:15',
+                'status' => 'required',
+                'gambar' => 'nullable|file|mimes:jpeg,png,jpg,svg|max:2048',
+                'idJabatan' => 'required|numeric',
+            ]);
 
-        Pegawai::create($validatedData);
+            if ($request->file('gambarPegawai')) {
+                $imgName = uniqid() . '.' . $request->file('gambarPegawai')->getClientOriginalExtension();
+                $validatedData['gambar'] = $request->file('gambarPegawai')->storeAs('profil-pegawai', $imgName, 'public');
+            }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Berhasil menambahkan data.',
-        ]);
+            Pegawai::create($validatedData);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil menambahkan data.',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error storing data.'  . $e->getMessage(),
+            ], 422);
+        }
     }
 
     public function edit($id)
@@ -73,46 +93,46 @@ class PegawaiController extends Controller
 
     public function update(Request $request, $id)
     {
-        $pegawai = Pegawai::find($id);
+        try {
+            $pegawai = Pegawai::find($id);
 
-        if (!$pegawai) {
-            return redirect()->route('data-pegawai.pegawai')->with('error', 'Data pegawai tidak ditemukan.');
+            $pegawai->fill($request->except(['some_field_to_exclude']));
+
+            if ($request->file('gambarPegawai')) {
+                if ($pegawai->gambar) {
+                    Storage::delete('public/' . $pegawai->gambar);
+                }
+                $imgName = uniqid() . '.' . $request->file('gambarPegawai')->getClientOriginalExtension();
+                $pegawai->gambar = $request->file('gambarPegawai')->storeAs('profil-pegawai', $imgName, 'public');
+            }
+
+            // Perbarui data pegawai
+            $pegawai->update();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil memprbarui data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error storing data.'  . $e->getMessage(),
+            ], 422);
         }
-
-        // Validasi input
-        $validatedData = $request->validate([
-            'nip' => 'required',
-            'namaPegawai' => 'required',
-            'tempatLahir' => 'required',
-            'tanggalLahir' => 'required|date',
-            'jenisKelamin' => 'required',
-            'agama' => 'required',
-            'alamat' => 'required',
-            'jenisPegawai' => 'required',
-            'noHp' => '',
-            'status' => 'required',
-        ]);
-
-        // $validatedData['tanggalLahir'] = Carbon::createFromFormat('d-m-Y', $request->input('tanggalLahir', Carbon::now()));
-
-        // Perbarui data pegawai
-        $pegawai->update($validatedData);
-
-        return response()->json([
-            'status'=>'success',
-            'message'=>'Berhasil memprbarui data.'
-        ]);
     }
 
 
     public function destroy($id)
     {
         $pegawai = Pegawai::find($id);
+        Storage::delete('public/' . $pegawai->gambar);
         $pegawai->delete();
 
         return response()->json([
-            'status'=>'success',
-            'message'=>'Berhasil menghapus data.'
+            'status' => 'success',
+            'message' => 'Berhasil menghapus data.'
         ]);
     }
 }

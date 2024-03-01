@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDN Lemahbang</title>
+    <title>{{ $namaSD }} | {{ $title }}</title>
 
     <!-- Google Fonts -->
     <link
@@ -12,40 +12,17 @@
         rel="stylesheet">
 
     <!-- Vendor CSS Files -->
-    {{-- <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet"> --}}
-    {{-- <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-    {{-- <link href="{{ asset('assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet"> --}}
-    {{-- <link href="{{ asset('assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet"> --}}
-    {{-- <link href="{{ asset('assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet"> --}}
-    {{-- <link href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet"> --}}
-    {{-- <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet"> --}}
-    <link rel="shortcut icon" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
+    <link rel="shortcut icon" href="{{ $logoSD }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ $logoSD }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ $logoSD }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/magnific-popup/magnific-popup.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/oneui.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.css') }}">
 
     @stack('style')
 
     <style>
-        .opacity-50 {
-            opacity: 0.50 !important;
-        }
-
-        .object-fit-cover {
-            -o-object-fit: cover !important;
-            object-fit: cover !important;
-        }
-
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
-
         @media (min-width: 768px) {
             .bd-placeholder-img-lg {
                 font-size: 3.5rem;
@@ -57,69 +34,6 @@
                 display: none;
             }
 
-        }
-
-        .b-example-divider {
-            width: 100%;
-            height: 3rem;
-            background-color: rgba(0, 0, 0, .1);
-            : solid rgba(0, 0, 0, .15);
-            border-width: 1px 0;
-            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-        }
-
-        .b-example-vr {
-            flex-shrink: 0;
-            width: 1.5rem;
-            height: 100vh;
-        }
-
-        .bi {
-            vertical-align: -.125em;
-            fill: currentColor;
-        }
-
-        .nav-scroller {
-            position: relative;
-            z-index: 2;
-            height: 2.75rem;
-            overflow-y: hidden;
-        }
-
-        .nav-scroller .nav {
-            display: flex;
-            flex-wrap: nowrap;
-            padding-bottom: 1rem;
-            margin-top: -1px;
-            overflow-x: auto;
-            text-align: center;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .btn-bd-primary {
-            --bd-violet-bg: #712cf9;
-            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
-
-            --bs-btn-font-weight: 600;
-            --bs-btn-color: var(--bs-white);
-            --bs-btn-bg: var(--bd-violet-bg);
-            --bs-btn-border-color: var(--bd-violet-bg);
-            --bs-btn-hover-color: var(--bs-white);
-            --bs-btn-hover-bg: #6528e0;
-            --bs-btn-hover-border-color: #6528e0;
-            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-            --bs-btn-active-color: var(--bs-btn-hover-color);
-            --bs-btn-active-bg: #5a23c8;
-            --bs-btn-active-border-color: #5a23c8;
-        }
-
-        .bd-mode-toggle {
-            z-index: 1500;
-        }
-
-        .bd-mode-toggle .dropdown-menu .active .bi {
-            display: block !important;
         }
 
         .ellipse {
@@ -254,12 +168,23 @@
             aspect-ratio: 3/4;
             width: 100%;
         }
+
+        .maps-container{
+            width: 100%;
+            display: flex;
+        }
+
+        .maps-container iframe{
+            width: 100%;
+            height: 200px;
+        }
     </style>
 
 </head>
 
 <body class="m-0 p-0">
     <div id="page-container" class="page-header">
+
         <header class="header py-4 bg-gray-lighter">
             <div class="container p-md-0">
                 <div class="row m-0">
@@ -267,16 +192,15 @@
                         <div class="row m-0">
                             <div class="col-sm-2 col-3 p-0">
                                 <!-- Logo -->
-                                <img src="{{ asset('assets/media/favicons/logo_sd.png') }}" class="img-fluid"
-                                    alt="logo SD" width="80">
+                                <img src="{{ $logoSD }}" class="img-fluid" alt="logo SD"
+                                    width="90">
                             </div>
                             <div class="col-sm-8 col-9 p-0 align-self-center">
-                                <a href="#"
+                                <a href="{{ route('home') }}"
                                     class="navbar-brand py-auto d-inline-block text-lg-start text-center w-100">
-                                    <h3 class="text-city fw-bold text-lg-nowrap text-wrap m-0">SD NEGERI
-                                        LEMAHBANG<br>
-                                        <p class="fw-semibold text-lg-nowrap text-wrap text-city-dark m-0 pt-2"
-                                            style="font-size: .8rem;">SEDAN ABANG JAYA</p>
+                                    <h3 class="text-city fw-bold text-lg-nowrap text-wrap m-0 text-uppercase">{{ $namaSD }}<br>
+                                        <p class="fw-semibold text-lg-nowrap text-wrap text-city-dark m-0 pt-2 text-uppercase"
+                                            style="font-size: .8rem;">{{ $sloganSD }}</p>
                                     </h3>
                                 </a>
                             </div>
@@ -287,11 +211,11 @@
                             <div class="p-0 m-0">
                                 <ul class="nav-main d-flex m-0 justify-content-center justify-content-lg-end gap-4">
                                     <li class="nav-main-item">
-                                        <a href="https://mail.google.com/mail/?view=cm&to=sdnlemahbang@yahoo.co.id"
+                                        <a href="https://mail.google.com/mail/?view=cm&to={{ $emailSD }}"
                                             target="_blank" class="nav-link text-city-dark fw-semibold ">
                                             <i class="fa-solid fa-envelope text-city me-1"></i>
                                             <span class="d-none d-md-inline"
-                                                style="font-size: .95rem;">sdnlemahbang@yahoo.co.id</span>
+                                                style="font-size: .95rem;">{{ $emailSD }}</span>
                                         </a>
                                     </li>
                                     <div class="vr text-city" style="width: 2px;"></div>
@@ -299,12 +223,12 @@
                                         <a href="#" class="nav-link text-city-dark fw-semibold">
                                             <i class="fa-solid fa-phone text-city me-1"></i>
                                             <span class="d-none d-md-inline"
-                                                style="font-size: .95rem;">085855477650</span>
+                                                style="font-size: .95rem;">{{ $telpSD }}</span>
                                         </a>
                                     </li>
                                     <div class="vr text-city" style="width: 2px;"></div>
                                     <li class="nav-main-item">
-                                        <a href="https://maps.app.goo.gl/SMZRCAUbTwKY6ihq5" target="_blank"
+                                        <a href="{{ $mapsLink }}" target="_blank"
                                             class="nav-link text-city-dark fw-semibold">
                                             <i class="fa-solid fa-location-dot text-city me-1"></i>
                                             <span class="d-none d-md-inline" style="font-size: .95rem;">Lokasi</span>
@@ -344,7 +268,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ Request::routeIs('berita') ? 'active' : '' }}"
+                                    <a class="nav-main-link {{ Request::routeIs('berita', 'baca_berita') ? 'active' : '' }}"
                                         href="{{ route('berita') }}">
                                         <span class="nav-main-link-name">Berita</span>
                                     </a>
@@ -421,15 +345,16 @@
                                                 <span class="nav-main-link-name">Guru</span>
                                             </a>
                                         </li>
-                                        <li class="nav-main-item">
+                                        {{-- <li class="nav-main-item">
                                             <a class="nav-main-link" href="#">
                                                 <span class="nav-main-link-name">Siswa</span>
                                             </a>
-                                        </li>
+                                        </li> --}}
                                     </ul>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link {{ Request::routeIs('kontak') ? 'active' : '' }}" href="{{ route('kontak') }}">
+                                    <a class="nav-main-link {{ Request::routeIs('kontak') ? 'active' : '' }}"
+                                        href="{{ route('kontak') }}">
                                         <span class="nav-main-link-name">Hubungi Kami</span>
                                     </a>
                                 </li>
@@ -445,61 +370,3 @@
                     </div>
                 </div>
             </div>
-            {{-- <nav class="navbar navbar-expand-lg navbar-dark sticky-top py-1 bg-modern">
-        <div class="container p-md-0">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myList"
-                aria-controls="myList" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- List of links -->
-            <div class="collapse navbar-collapse" id="myList">
-                <ul class="navbar-nav gap-2 ">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Berita</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            Tentang
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu rounded-0 border-0 p-0">
-                            <li><a class="nav-link py-0" href="#">Profil</a></li>
-                            <li><a class="nav-link" href="#">Sejarah</a></li>
-                            <li><a class="nav-link" href="#">Visi dan Misi</a></li>
-                            <li><a class="nav-link" href="#">Struktur Organisasi</a></li>
-                            <li><a class="nav-link" href="#">Keuangan</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            Galeri
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu bg-secondary">
-                            <li><a class="nav-link" href="#">Foto</a></li>
-                            <li><a class="nav-link" href="#">Video</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            Kategori
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu bg-secondary">
-                            <li><a class="nav-link" href="#">Guru</a></li>
-                            <li><a class="nav-link" href="#">Siswa</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Hubungi Kami</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Login</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav> --}}
-
-            <!-- End Header -->

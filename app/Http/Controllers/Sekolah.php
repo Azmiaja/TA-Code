@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Sekolah as ModelsSekolah;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class Sekolah extends Controller
 {
@@ -15,8 +18,33 @@ class Sekolah extends Controller
     public function index()
     {
         return view('siakad.content.m_sekolah.sekolah.index', [
-            'title' => 'Manajemen Sekolah',
-            'title2' => 'Sekolah'
+            'judul' => 'Manajemen Sekolah',
+            'sub_judul' => 'Sekolah',
+            'text_singkat' => 'Mengelola data informasi sekolah!',
+        ]);
+    }
+
+    public function getData()
+    {
+        $sekolah = ModelsSekolah::find(1); // Ganti dengan logic untuk mendapatkan profil yang sesuai
+
+        return response()->json([
+            'namaSekolah' => $sekolah->namaSekolah,
+            'npsn' => $sekolah->npsn,
+            'alamat' => $sekolah->alamat,
+            'desa' => $sekolah->desa,
+            'kec' => $sekolah->kecamatan,
+            'kab' => $sekolah->kabupaten,
+            'prov' => $sekolah->provinsi,
+            'kd_pos' => $sekolah->kodePos,
+            'telp' => $sekolah->telp,
+            'web' => $sekolah->website,
+            'email' => $sekolah->email,
+            'slogan' => $sekolah->slogan,
+            'logo' => asset('storage/' . $sekolah->logo),
+            'mapsLink' => $sekolah->mapsLink,
+            'mapsEmbed' => $sekolah->mapsEmbed,
+            'idSekolah' => $sekolah->idSekolah,
         ]);
     }
 
@@ -72,7 +100,46 @@ class Sekolah extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $sekolah = ModelsSekolah::find($id);
+
+            if ($sekolah) {
+                $oldLogoPath = $sekolah->logo; // Simpan path logo lama
+
+                $sekolah->fill($request->except(['some_field_to_exclude']));
+
+                if ($request->hasFile('logo')) {
+                    $imgName = uniqid() . '.' . $request->file('logo')->getClientOriginalExtension();
+                    $logoPath = $request->file('logo')->storeAs('logo-sekolah', $imgName, 'public');
+
+                    // Pastikan file logo lama ada sebelum mencoba menghapus
+                    if ($oldLogoPath && Storage::exists('public/' . $oldLogoPath)) {
+                        Storage::delete('public/' . $oldLogoPath);
+                    }
+
+                    $sekolah->logo = $logoPath;
+                }
+
+                $sekolah->save();
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Berhasil menyimpan data.'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Sekolah tidak ditemukan.'
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error storing data.'  . $e->getMessage(),
+            ], 422);
+        }
     }
 
     /**

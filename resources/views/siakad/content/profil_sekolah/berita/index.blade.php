@@ -13,10 +13,10 @@
             <div class="block-content block-content-full p-0">
                 <div class="table-responsive p-3">
                     <table id="tabelBerita" class="table w-100 table-hover table-borderless align-middle table-">
-                        <thead class="bg-gray-light">
+                        <thead class="bg-gray-light align-middle">
                             <tr class="text-center fw-medium fs-sm">
                                 <th style="width: 5%">No</th>
-                                <th style="width: 20%">Gambar</th>
+                                <th style="min-width: 23%">Gambar</th>
                                 <th>Judul</th>
                                 <th style="width: 16%;">Tanggal</th>
                                 <th style="width: 10%">Aksi</th>
@@ -52,7 +52,6 @@
                 const tambahBerita = $('#tambahBerita');
                 const tabelBerita = $('#tabelBerita');
                 const method = $('#method');
-
 
                 var myEditor;
                 ClassicEditor
@@ -187,9 +186,13 @@
                             var formatedWaktu = formatWaktu(response.berita.waktu);
                             waktu.val(formatedWaktu);
                             myEditor.setData(response.berita.isiBerita);
-                            var image = `{{ asset('storage/${response.berita.gambar}') }}`;
-                            imgPrev.style.display = 'block';
-                            imgPrev.src = image;
+                            if (response.berita.gambar == null) {
+                                imgPrev.src = '';
+                            } else {
+                                var image = `{{ asset('storage/${response.berita.gambar}') }}`;
+                                imgPrev.style.display = 'block';
+                                imgPrev.src = image;
+                            }
                         }
                     });
                 });
@@ -280,11 +283,32 @@
 
                         },
                         {
-                            data: 'gambar',
+                            data: null,
                             render: function(data, type, row) {
                                 var imageUrl = `{{ asset('storage/${row.gambar}') }}`;
+                                // console.log(inageUrl);
 
-                                return `<div class="rounded-2" style="max-height:100px; max-width:150px; overflow:hidden;"><img src="${imageUrl}" class="img-fluid flex-shrink-0 rounded"></div>`;
+                                $('.popup-link-berita').magnificPopup({
+                                    type: 'image',
+                                    mainClass: 'mfp-with-zoom',
+                                    gallery: {
+                                        enabled: true,
+                                        navigateByImgClick: true,
+                                    },
+                                    zoom: {
+                                        enabled: true,
+                                    }
+                                });
+
+                                return `<div class="rounded-2 p-1" style="border: 2px dashed #dfe3ea; overflow:hidden;">
+                                    <a href="${imageUrl ?? '#'}" class="popup-link-berita" id="pop-up-${row.idBerita}" title="View Image">
+                                            <div class="ratio ratio-16x9">
+                                                    <img src="${imageUrl ?? null}" class="object-fit-cover flex-shrink-0 rounded-2">
+                                                    </div>
+                                                    </a>
+                                        </div>`;
+
+
                             },
                             searchable: false,
                         },
