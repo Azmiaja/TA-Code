@@ -240,7 +240,7 @@
                                                 {{ $bTree['waktu'] }}</span>
                                         </div>
                                     </div>
-                                    <a href="{{ route('baca_berita', ['slug' => $bTree['slug'], 'id' => $bTree['id']]) }}"
+                                    <a href="{{ route('baca_berita', ['slug' => $bTree['slug']]) }}"
                                         class="stretched-link"></a>
                                 </div>
                             </div>
@@ -269,7 +269,7 @@
                                                 {{ $bTree['waktu'] }}</span>
                                         </div>
                                     </div>
-                                    <a href="{{ route('baca_berita', ['slug' => $bTree['slug'], 'id' => $bTree['id']]) }}"
+                                    <a href="{{ route('baca_berita', ['slug' => $bTree['slug']]) }}"
                                         class="stretched-link"></a>
                                 </div>
                             </div>
@@ -346,7 +346,7 @@
                                                 {{ $bTree['waktu'] }}</span>
                                         </div>
                                     </div>
-                                    <a href="{{ route('baca_berita', ['slug' => $bTree['slug'], 'id' => $bTree['id']]) }}"
+                                    <a href="{{ route('baca_berita', ['slug' => $bTree['slug']]) }}"
                                         class="stretched-link"></a>
                                 </div>
                             </div>

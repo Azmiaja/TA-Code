@@ -142,11 +142,11 @@ class BeritaController extends Controller
 
     public function edit($id)
     {
-        $berita = Berita::find($id);
-        if (!$berita) {
-            // Handle jika berita tidak ditemukan
-            return response()->json(['status' => 'error', 'message' => 'Data tidak ditemukan.']);
-        }
+        $berita = Berita::findOrFail($id);
+        // if (!$berita) {
+        //     // Handle jika berita tidak ditemukan
+        //     return response()->json(['status' => 'error', 'message' => 'Data tidak ditemukan.']);
+        // }
 
         return response()->json(['berita' => $berita]);
     }

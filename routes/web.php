@@ -36,21 +36,21 @@ Route::get('/a', [LandingController::class, 'index'])->name('landingpage')->midd
 // halaman utama
 Route::get('/', [Controller::class, 'indexHome'])->name('home');
 Route::get('/berita', [Controller::class, 'indexBerita'])->name('berita');
-Route::get('/berita/{slug}/{id}', [Controller::class, 'bacaBerita'])->name('baca_berita');
+Route::get('/berita-sekolah/{slug}', [Controller::class, 'bacaBerita'])->name('baca_berita');
 Route::get('/sambutan-kepala', [Controller::class, 'indexSambutan'])->name('sambutan');
 
-Route::prefix('tentang')->group(function(){
+Route::prefix('tentang')->group(function () {
     Route::get('/profil-sekolah', [Controller::class, 'tentangProfil'])->name('profil');
     Route::get('/sejarah-sekolah', [Controller::class, 'tentangSejarah'])->name('sejarah');
     Route::get('/visi-misi-sekolah', [Controller::class, 'tentangVisiMisi'])->name('visi_misi');
     Route::get('/struktur-organisasi-sekolah', [Controller::class, 'tentangOrg'])->name('struktur_org');
     Route::get('/keuangan-sekolah', [Controller::class, 'tentangKeuangan'])->name('keuangan');
 });
-Route::prefix('galeri')->group(function(){
+Route::prefix('galeri')->group(function () {
     Route::get('/foto-kegiatan', [Controller::class, 'galeriFoto'])->name('galeri_foto');
     Route::get('/video-kegiatan', [Controller::class, 'galeriVideo'])->name('galeri_video');
 });
-Route::prefix('kategori')->group(function(){
+Route::prefix('kategori')->group(function () {
     Route::get('/guru', [Controller::class, 'kategoriGuru'])->name('kt_guru');
 });
 Route::get('/hubungi-kami', [Controller::class, 'kontak'])->name('kontak');
@@ -118,7 +118,7 @@ Route::middleware(['auth:user,siswa'])->group(function () {
 
     Route::get('sekolah/get-data', [Sekolah::class, 'getData'])->name('sekolah.get-data');
     Route::put('sekolah/update/{id}', [Sekolah::class, 'update'])->name('sekolah.update');
-    
+
 
     // PROFIL GURU.BLADE
     Route::get('profil-guru/edit/{id}', [GuruProfilController::class, 'edit'])->name('profil-guru.edit');

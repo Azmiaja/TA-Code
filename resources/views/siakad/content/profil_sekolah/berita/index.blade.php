@@ -168,18 +168,19 @@
                     );
                     method.val('PUT');
 
-                    var idBerita = $(this).val();
+                    var slug = $(this).val();
                     // console.log(idBerita);
-                    formBerita.attr('action', '{!! url('berita/update') !!}/' + idBerita);
+                    formBerita.attr('action', '{!! url('berita/update') !!}/' + slug);
 
                     $.ajax({
                         type: "GET",
-                        url: "{{ url('berita/edit') }}/" + idBerita,
+                        url: `{{ url('berita/edit/${slug}') }}`,
                         headers: {
                             "Cache-Control": "no-cache, no-store, must-revalidate",
                             "Pragma": "no-cache"
                         },
                         success: function(response) {
+                            console.log(response);
                             // Set the form fields with the fetched data
                             id.val(response.berita.idBerita);
                             judulBerita.val(response.berita.judulBerita);
@@ -275,7 +276,7 @@
                 });
 
                 tabelBerita.DataTable({
-                    ajax: "{{ route('berita.get-data') }}",
+                    ajax: `{{ url('berita/get-data') }}`,
                     columns: [{
                             data: 'nomor',
                             name: 'nomor',

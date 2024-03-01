@@ -19,4 +19,9 @@ class Berita extends Model
     {
         return $this->belongsTo(User::class, 'idUser', 'idUser');
     }
+
+    // public function getRouteKey()
+    // {
+    //     return 'slug';
+    // }
 }

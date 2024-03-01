@@ -169,17 +169,16 @@ class Controller extends BaseController
         return view('company_profil/content/berita/index', compact('berita', 'beritaTerbaru', 'beritaSatuTerbaru', 'ambilBulan', 'ambilTahun'), $data);
     }
 
-    public function bacaBerita($slug, $id)
+    public function bacaBerita($slug)
     {
         $berita = Berita::where('slug', $slug)
-            ->where('idBerita', $id)
             ->first();
 
 
         $beritaImg = $berita->gambar ? asset('storage/' . $berita->gambar) : asset('assets/media/img/404.svg');
         $contenBerita = $berita->isiBerita ?: null;
         $judul = $berita->judulBerita ?: null;
-        $penulis = implode(' ', array_slice(str_word_count($berita->penulis, 1), 0, 2)) ?: null;
+        $penulis = $berita->penulis ?: null;
         $tanggal = Carbon::parse($berita->waktu)->locale('id_ID')->isoFormat('Do MMMM YYYY') ?: null;
         $waktu = Carbon::parse($berita->waktu)->locale('id_ID')->diffForHumans() ?: null;
 
@@ -187,7 +186,7 @@ class Controller extends BaseController
             $this->getCommonData(),
             $this->getBeritaTerbaru(),
             [
-                'title' => Str::title(str_replace('-', ' ', $slug)),
+                'title' => Str::title(str_replace('-', ' ', $berita)),
             ]
         );
 
