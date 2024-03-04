@@ -168,13 +168,13 @@
                     );
                     method.val('PUT');
 
-                    var slug = $(this).val();
+                    var id = $(this).val();
                     // console.log(idBerita);
-                    formBerita.attr('action', '{!! url('berita/update') !!}/' + slug);
+                    formBerita.attr('action', '{!! url('berita/update') !!}/' + id);
 
                     $.ajax({
                         type: "GET",
-                        url: `{{ url('berita/edit/${slug}') }}`,
+                        url: `{{ url('berita/edit/${id}') }}`,
                         headers: {
                             "Cache-Control": "no-cache, no-store, must-revalidate",
                             "Pragma": "no-cache"
@@ -301,7 +301,7 @@
                                     }
                                 });
 
-                                return `<div class="rounded-2 p-1" style="border: 2px dashed #dfe3ea; overflow:hidden;">
+                                return `<div class="rounded-2" style="border: 2px dashed #dfe3ea; overflow:hidden;">
                                     <a href="${imageUrl ?? '#'}" class="popup-link-berita" id="pop-up-${row.idBerita}" title="View Image">
                                             <div class="ratio ratio-16x9">
                                                     <img src="${imageUrl ?? null}" class="object-fit-cover flex-shrink-0 rounded-2">

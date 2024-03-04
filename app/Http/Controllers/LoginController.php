@@ -32,7 +32,17 @@ class LoginController extends Controller
 
         foreach ($guards as $guard) {
             if ($this->attemptUserLogin($credentials, $guard)) {
-                return redirect()->intended('/beranda');
+                // return redirect()->intended('/dashboard');
+                // Cek peran setelah berhasil login
+                $user = Auth::guard($guard)->user();
+
+                if ($user->hakAkses === 'Guru') {
+                    return redirect()->route('gg.beranda.index');
+                } elseif ($user->hakAkses === 'Siswa') {
+                    return redirect()->route('ss.beranda.index');
+                } else {
+                    return redirect()->route('dashboard.index');
+                }
             }
         }
 

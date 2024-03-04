@@ -12,39 +12,16 @@
     <link rel="stylesheet"
         href="{{ asset('assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css') }}">
     <link rel="stylesheet" id="css-main" href="{{ asset('assets/css/oneui.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('assets/js/plugins/fullcalendar/main.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('assets/js/plugins/flatpickr/flatpickr.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/js/plugins/flatpickr/themes/material_red.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.css') }}">
-    {{-- <link rel="stylesheet"
-        href="{{ asset('assets/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}"> --}}
     <link rel="stylesheet"
         href="{{ asset('assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/air-datepicker/dist/air-datepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/magnific-popup/magnific-popup.css') }}">
-    {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HQDQJJYW7"></script> --}}
 
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-        gtag('config', 'G-9HQDQJJYW7');
-        document.addEventListener("DOMContentLoaded", () => {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            const CKEditor5 = window.CKEditor5;
-        });
-    </script>
     <style>
         .ellipse {
             /* width: 300px; */
@@ -62,9 +39,16 @@
     <script src="{{ asset('assets/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugins/air-datepicker/dist/air-datepicker.js') }}"></script>
-    <script src="{{ asset('assets/js/plugins/dropzone/min/dropzone.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        });
+    </script>
 
 </head>
 
@@ -95,17 +79,32 @@
                         <button type="button" class="btn btn-sm btn-alt-secondary d-flex align-items-center"
                             id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
-                            <img class="rounded-circle" src="{{ asset('assets/media/avatars/avatar10.jpg') }}"
-                                alt="Header Avatar" style="width: 21px;">
+                            <div class="ratio" style="width: 21px; height: 21px;">
+                                @canany(['super.admin', 'admin', 'guru'])
+                                    <img class="rounded-circle"
+                                        src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}" alt="Header Avatar"
+                                        style="width: 100%; height: 100%; object-fit: cover">
+                                @endcanany
+                                @can('siswa')
+                                    <img class="rounded-circle" src="{{ asset('assets/media/avatars/avatar0.jpg') }}"
+                                        alt="Header Avatar" style="width: 100%; height: 100%; object-fit: cover">
+                                @endcan
+                            </div>
                             <span class="d-none d-sm-inline-block ms-2">{{ Auth::user()->username }}</span>
                             {{-- Username --}}
                             <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block opacity-50 ms-1 mt-1"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-md dropdown-menu-end p-0 border-0"
                             aria-labelledby="page-header-user-dropdown">
-                            <div class="p-3 text-center bg-body-light border-bottom rounded-top">
-                                <img class="img-avatar img-avatar48 img-avatar-thumb"
-                                    src="{{ asset('assets/media/avatars/avatar10.jpg') }}" alt="">
+                            <div class="p-3 text-center  bg-body-light border-bottom rounded-top">
+                                <div class="ratio mx-auto" style="width: 70px; height: 70px;">
+                                    @canany(['super.admin', 'admin', 'guru'])
+                                        <img class="rounded-circle border border-3 border-white"
+                                            style="width: 100%; height: 100%; object-fit: cover"
+                                            src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}" alt="">
+                                    @endcanany
+
+                                </div>
                                 <p class="mt-2 mb-0 fw-medium" id="HD_idSiswa"
                                     data-id-siswa={{ Auth::user()->idSiswa }}>
                                     @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin' || Auth::user()->hakAkses == 'Super Admin')
@@ -114,14 +113,18 @@
                                         {{ Auth::user()->namaSiswa }}
                                     @endif
                                 </p> {{-- Nama Lengkap --}}
-                                <p class="mb-0
-                                            text-muted fs-sm fw-medium">
+                                <p class="mb-0text-muted fs-sm fw-medium">
                                     {{ Auth::user()->hakAkses }}</p>
                                 {{-- Role --}}
                             </div>
                             <div class="p-2">
+                                <a href="{{ route('profil_pengguna.index') }}"
+                                    class="dropdown-item d-flex align-items-center justify-content-between">
+                                    <span class="fs-sm fw-medium">Profil</span> {{-- To log out --}}
+                                    {{-- <i class="fa-regular fa-address-card me-1"></i> --}}
+                                </a>
                                 <button class="dropdown-item d-flex align-items-center justify-content-between"
-                                    data-bs-toggle="modal" data-bs-target="#logoutAlert">
+                                    data-bs-toggle="modal" data-bs-target="#logoutAlert" id="logoutBtn">
                                     <span class="fs-sm fw-medium">Log Out</span> {{-- To log out --}}
                                     <i class="si si-logout me-1"></i>
                                 </button>

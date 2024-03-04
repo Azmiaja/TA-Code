@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Absensi;
+use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\GuruProfilController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KelasController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\NilaiSiswaController;
 use App\Http\Controllers\Sekolah;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PesanController;
+use App\Http\Controllers\ProfilUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,97 +29,65 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest:user,siswa');
-Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth:user,siswa');
 
-// Route::get('/berita-sekolah/{slug}', [LihatBeritaController::class, 'show'])->name('lihatberita')->middleware('guest:user,siswa');
-Route::get('/a', [LandingController::class, 'index'])->name('landingpage')->middleware('guest:user,siswa');
-// halaman utama
-Route::get('/', [Controller::class, 'indexHome'])->name('home');
-Route::get('/berita', [Controller::class, 'indexBerita'])->name('berita');
-Route::get('/berita-sekolah/{slug}', [Controller::class, 'bacaBerita'])->name('baca_berita');
-Route::get('/sambutan-kepala', [Controller::class, 'indexSambutan'])->name('sambutan');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
+    Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::prefix('tentang')->group(function () {
-    Route::get('/profil-sekolah', [Controller::class, 'tentangProfil'])->name('profil');
-    Route::get('/sejarah-sekolah', [Controller::class, 'tentangSejarah'])->name('sejarah');
-    Route::get('/visi-misi-sekolah', [Controller::class, 'tentangVisiMisi'])->name('visi_misi');
-    Route::get('/struktur-organisasi-sekolah', [Controller::class, 'tentangOrg'])->name('struktur_org');
-    Route::get('/keuangan-sekolah', [Controller::class, 'tentangKeuangan'])->name('keuangan');
+
+    Route::get('/', [Controller::class, 'indexHome'])->name('home');
+    Route::get('/berita', [Controller::class, 'indexBerita'])->name('berita');
+    Route::get('/berita-sekolah/{slug}', [Controller::class, 'bacaBerita'])->name('baca_berita');
+    Route::get('/sambutan-kepala', [Controller::class, 'indexSambutan'])->name('sambutan');
+
+    Route::prefix('tentang')->group(function () {
+        Route::get('/profil-sekolah', [Controller::class, 'tentangProfil'])->name('profil');
+        Route::get('/sejarah-sekolah', [Controller::class, 'tentangSejarah'])->name('sejarah');
+        Route::get('/visi-misi-sekolah', [Controller::class, 'tentangVisiMisi'])->name('visi_misi');
+        Route::get('/struktur-organisasi-sekolah', [Controller::class, 'tentangOrg'])->name('struktur_org');
+        Route::get('/keuangan-sekolah', [Controller::class, 'tentangKeuangan'])->name('keuangan');
+    });
+
+    Route::prefix('galeri')->group(function () {
+        Route::get('/foto-kegiatan', [Controller::class, 'galeriFoto'])->name('galeri_foto');
+        Route::get('/video-kegiatan', [Controller::class, 'galeriVideo'])->name('galeri_video');
+    });
+
+    Route::prefix('kategori')->group(function () {
+        Route::get('/guru', [Controller::class, 'kategoriGuru'])->name('kt_guru');
+    });
+
+    Route::get('/hubungi-kami', [Controller::class, 'kontak'])->name('kontak');
+    Route::post('pesan/store', [PesanController::class, 'store'])->name('pesan.store');
 });
-Route::prefix('galeri')->group(function () {
-    Route::get('/foto-kegiatan', [Controller::class, 'galeriFoto'])->name('galeri_foto');
-    Route::get('/video-kegiatan', [Controller::class, 'galeriVideo'])->name('galeri_video');
-});
-Route::prefix('kategori')->group(function () {
-    Route::get('/guru', [Controller::class, 'kategoriGuru'])->name('kt_guru');
-});
-Route::get('/hubungi-kami', [Controller::class, 'kontak'])->name('kontak');
 
-Route::post('pesan/store', [PesanController::class, 'store'])->name('pesan.store');
-
+Route::middleware(['auth:siswa', 'ceklevel:Siswa'])->group(function () {
+    Route::prefix('siswa')->group(function () {
+        Route::get('/beranda', [BerandaController::class, 'index'])->name('ss.beranda.index');
+    });
+});
+Route::middleware(['auth:user', 'ceklevel:Guru'])->group(function () {
+    Route::prefix('guru')->group(function () {
+        Route::get('/beranda', [BerandaController::class, 'index'])->name('gg.beranda.index');
+    });
+});
 
 
 Route::middleware(['auth:user,siswa'])->group(function () {
     //dashboard
-    Route::get('/beranda', [HomeController::class, 'indexBeranda'])->name('beranda.index');
+    Route::get('/dashboard', [HomeController::class, 'indexBeranda'])->name('dashboard.index');
 
 
-    // SISWA.BLADE
-    Route::get('siswa/get-data', [Muser\SiswaController::class, 'getData'])->name('siswa.get-data');
-    Route::get('siswa/edit/{id}', [Muser\SiswaController::class, 'edit'])->name('siswa.edit');
-    Route::put('siswa/update/{id}', [Muser\SiswaController::class, 'update'])->name('siswa.update');
-    Route::post('siswa/store', [Muser\SiswaController::class, 'store'])->name('siswa.store');
-    Route::delete('siswa/destroy/{id}', [Muser\SiswaController::class, 'destroy'])->name('siswa.destroy');
 
-    // PEGAWAI.BLADE
-    Route::get('pegawai/edit/{id}', [Muser\PegawaiController::class, 'edit']);
-    Route::put('pegawai/update/{id}', [Muser\PegawaiController::class, 'update']);
-    Route::delete('pegawai/destroy/{id}', [Muser\PegawaiController::class, 'destroy']);
-    Route::get('pegawai/get-data', [Muser\PegawaiController::class, 'getData'])->name('pegawai.get-data');
-
-    Route::get('get-jabatan', [Muser\JabatanController::class, 'getJabatan'])->name('get-jabatan');
-    Route::post('jabatan/store', [Muser\JabatanController::class, 'store'])->name('jabatan.store');
-    Route::delete('jabatan/destroy/{id}', [Muser\JabatanController::class, 'destroy']);
 
     // PESAN
     Route::get('pesan/get-data', [PesanController::class, 'getData'])->name('pesan.get-data');
     Route::delete('pesan/destroy/{id}', [PesanController::class, 'destroy']);
 
-    // BERITA.BLADE
-    Route::get('berita/get-data', [Mcompany\BeritaController::class, 'getDataBerita'])->name('berita.get-data');
-    Route::get('berita/edit/{id}', [Mcompany\BeritaController::class, 'edit']);
-    Route::get('berita/showDelete/{id}', [Mcompany\BeritaController::class, 'showDelete']);
-    Route::put('berita/update/{id}', [Mcompany\BeritaController::class, 'update'])->name('berita.update');
-    Route::post('berita/store', [Mcompany\BeritaController::class, 'store'])->name('berita.store');
-    Route::delete('berita/destroy/{id}', [Mcompany\BeritaController::class, 'destroy']);
 
-    // DOKUMENTASI.BLADE
-    Route::get('dock/get-data', [Mcompany\Dokumentasi::class, 'getData'])->name('dock.get-data');
-    Route::get('dock/get-data/video', [Mcompany\Dokumentasi::class, 'getDataVideo'])->name('dock.get-data.video');
-    Route::get('dock/edit/{id}', [Mcompany\Dokumentasi::class, 'edit']);
-    Route::get('berita/showDelete/{id}', [Mcompany\Dokumentasi::class, 'showDelete']);
-    Route::put('dock/update/{id}', [Mcompany\Dokumentasi::class, 'update'])->name('dock.update');
-    Route::post('dock/store', [Mcompany\Dokumentasi::class, 'store'])->name('dock.store');
-    Route::delete('dock/destroy/{id}', [Mcompany\Dokumentasi::class, 'destroy']);
 
-    // PROFIL SEKOLAH HANDLE
-    Route::get('profil/get-data', [Mcompany\ProfilController::class, 'getProfil'])->name('profil.get-data');
-    Route::get('profil/edit/{id}', [Mcompany\ProfilController::class, 'edit']);
-    Route::put('profil/update/{id}', [Mcompany\ProfilController::class, 'update'])->name('profil.update');
-    Route::put('profil-sejarah/update/{id}', [Mcompany\ProfilController::class, 'updateSejarah'])->name('profil-sejarah.update');
-    Route::put('profil-organisai/update/{id}', [Mcompany\ProfilController::class, 'updateOrganisasi'])->name('profil-organisasi.update');
-    Route::put('profil-keuangan/update/{id}', [Mcompany\ProfilController::class, 'updateKeuangan'])->name('profil-keuangan.update');
-    Route::put('profil-visimisi/update/{id}', [Mcompany\ProfilController::class, 'updateVisiMisi'])->name('profil-visimisi.update');
-    Route::put('profil-sambutan/update/{id}', [Mcompany\ProfilController::class, 'updateSambutan'])->name('profil-sambutan.update');
-    Route::delete('profil/delete/{id}', [Mcompany\ProfilController::class, 'destroy']);
-    Route::delete('profil-sejarah/delete/{id}', [Mcompany\ProfilController::class, 'destroySejarah']);
-    Route::delete('profil-organisasi/delete/{id}', [Mcompany\ProfilController::class, 'destroyOrg']);
-    Route::delete('profil-keuangan/delete/{id}', [Mcompany\ProfilController::class, 'destroyKeuangan']);
 
-    Route::get('sekolah/get-data', [Sekolah::class, 'getData'])->name('sekolah.get-data');
-    Route::put('sekolah/update/{id}', [Sekolah::class, 'update'])->name('sekolah.update');
 
 
     // PROFIL GURU.BLADE
@@ -206,6 +176,82 @@ Route::middleware(['auth:user,siswa'])->group(function () {
     // show dan store nilai
     Route::get('/nilai_siswa/{slug}/{id}/{kelas_id}/{periode_id}', [NilaiSiswaController::class, 'index'])->name('nilai-siswa.index');
     Route::post('simpan-nilai', [NilaiSiswaController::class, 'simpanNilai']);
+
+    // Profil Pengguna
+    Route::get('/profil-pengguna', [ProfilUserController::class, 'indexProfilGuru'])->name('profil_pengguna.index');
+    Route::get('/profil-pengguna/edit', [ProfilUserController::class, 'edit'])->name('profil_pengguna.edit');
+    Route::get('/profil-pengguna/change-password', [ProfilUserController::class, 'chPassword'])->name('profil_pengguna.chpassword');
+    Route::put('/profil-pengguna/update/password', [ProfilUserController::class, 'changePassword'])->name('update.password');
+    Route::put('/profil-pengguna/update/user/{id}', [ProfilUserController::class, 'updateUsername'])->name('profil_pengguna.update.user');
+    Route::put('/profil-pengguna/update/biografi/{id}', [ProfilUserController::class, 'updateBiografi'])->name('profil_pengguna.update.biografi');
+});
+
+Route::middleware(['auth:user'])->group(function () {
+    // Data master sekolah
+    Route::prefix('data-master')->group(function () {
+        Route::resource('pegawai', Muser\PegawaiController::class);
+        Route::get('siswa', [Muser\SiswaController::class, 'index'])->name('siswa.index');
+        Route::get('sekolah', [Sekolah::class, 'index'])->name('sekolah.index');
+        Route::resource('user', Muser\UserController::class);
+    });
+    //manajemen profil sekolah
+    Route::prefix('profil-sekolah')->group(function () {
+        Route::get('berita', [Mcompany\BeritaController::class, 'index'])->name('berita.index');
+        Route::get('profil', [Mcompany\ProfilController::class, 'index'])->name('profil.index');
+        Route::get('dokumentasi', [Mcompany\Dokumentasi::class, 'index'])->name('dokumentasi.index');
+        Route::get('pesan', [PesanController::class, 'index'])->name('pesan.index');
+    });
+
+    // PROFIL SEKOLAH HANDLE
+    Route::get('profil/get-data', [Mcompany\ProfilController::class, 'getProfil'])->name('profil.get-data');
+    Route::get('profil/edit/{id}', [Mcompany\ProfilController::class, 'edit']);
+    Route::put('profil/update/{id}', [Mcompany\ProfilController::class, 'update'])->name('profil.update');
+    Route::put('profil-sejarah/update/{id}', [Mcompany\ProfilController::class, 'updateSejarah'])->name('profil-sejarah.update');
+    Route::put('profil-organisai/update/{id}', [Mcompany\ProfilController::class, 'updateOrganisasi'])->name('profil-organisasi.update');
+    Route::put('profil-keuangan/update/{id}', [Mcompany\ProfilController::class, 'updateKeuangan'])->name('profil-keuangan.update');
+    Route::put('profil-visimisi/update/{id}', [Mcompany\ProfilController::class, 'updateVisiMisi'])->name('profil-visimisi.update');
+    Route::put('profil-sambutan/update/{id}', [Mcompany\ProfilController::class, 'updateSambutan'])->name('profil-sambutan.update');
+    Route::delete('profil/delete/{id}', [Mcompany\ProfilController::class, 'destroy']);
+    Route::delete('profil-sejarah/delete/{id}', [Mcompany\ProfilController::class, 'destroySejarah']);
+    Route::delete('profil-organisasi/delete/{id}', [Mcompany\ProfilController::class, 'destroyOrg']);
+    Route::delete('profil-keuangan/delete/{id}', [Mcompany\ProfilController::class, 'destroyKeuangan']);
+
+    Route::get('sekolah/get-data', [Sekolah::class, 'getData'])->name('sekolah.get-data');
+    Route::put('sekolah/update/{id}', [Sekolah::class, 'update'])->name('sekolah.update');
+
+    // BERITA.BLADE
+    Route::get('berita/get-data', [Mcompany\BeritaController::class, 'getDataBerita'])->name('berita.get-data');
+    Route::post('berita/store', [Mcompany\BeritaController::class, 'store'])->name('berita.store');
+    Route::get('berita/edit/{id}', [Mcompany\BeritaController::class, 'edit']);
+    Route::get('berita/showDelete/{id}', [Mcompany\BeritaController::class, 'showDelete']);
+    Route::put('berita/update/{id}', [Mcompany\BeritaController::class, 'update'])->name('berita.update');
+    Route::delete('berita/destroy/{id}', [Mcompany\BeritaController::class, 'destroy']);
+
+    // DOKUMENTASI.BLADE
+    Route::get('dock/get-data', [Mcompany\Dokumentasi::class, 'getData'])->name('dock.get-data');
+    Route::get('dock/get-data/video', [Mcompany\Dokumentasi::class, 'getDataVideo'])->name('dock.get-data.video');
+    Route::get('dock/edit/{id}', [Mcompany\Dokumentasi::class, 'edit']);
+    Route::get('berita/showDelete/{id}', [Mcompany\Dokumentasi::class, 'showDelete']);
+    Route::put('dock/update/{id}', [Mcompany\Dokumentasi::class, 'update'])->name('dock.update');
+    Route::post('dock/store', [Mcompany\Dokumentasi::class, 'store'])->name('dock.store');
+    Route::delete('dock/destroy/{id}', [Mcompany\Dokumentasi::class, 'destroy']);
+
+    // SISWA.BLADE
+    Route::get('siswa/get-data', [Muser\SiswaController::class, 'getData'])->name('siswa.get-data');
+    Route::get('siswa/edit/{id}', [Muser\SiswaController::class, 'edit'])->name('siswa.edit');
+    Route::put('siswa/update/{id}', [Muser\SiswaController::class, 'update'])->name('siswa.update');
+    Route::post('siswa/store', [Muser\SiswaController::class, 'store'])->name('siswa.store');
+    Route::delete('siswa/destroy/{id}', [Muser\SiswaController::class, 'destroy'])->name('siswa.destroy');
+
+    // PEGAWAI.BLADE
+    Route::get('pegawai/edit/{id}', [Muser\PegawaiController::class, 'edit']);
+    Route::put('pegawai/update/{id}', [Muser\PegawaiController::class, 'update']);
+    Route::delete('pegawai/destroy/{id}', [Muser\PegawaiController::class, 'destroy']);
+    Route::get('pegawai/get-data', [Muser\PegawaiController::class, 'getData'])->name('pegawai.get-data');
+
+    Route::get('get-jabatan', [Muser\JabatanController::class, 'getJabatan'])->name('get-jabatan');
+    Route::post('jabatan/store', [Muser\JabatanController::class, 'store'])->name('jabatan.store');
+    Route::delete('jabatan/destroy/{id}', [Muser\JabatanController::class, 'destroy']);
 });
 
 // --------------------------------------------- SUPER ADMIN -------------------------------------------------------------
@@ -213,6 +259,10 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
 
     // Route::get('/absensi', [Mkelas\Absensi::class, 'index'])->name('absensi.index');
     Route::resource('/absensi', Absensi::class);
+
+    Route::get('siswa/deletall', [Muser\SiswaController::class, 'dropAllSiswaData'])->name('siswa.delete.all');
+
+
 
     // berita
     Route::post('/posts/upload', [MCompany\BeritaController::class, 'upload'])->name('posts.upload');
@@ -229,22 +279,9 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
     Route::delete('user/destroy/pegawai/{id}', [Muser\UserController::class, 'destroy']);
     Route::delete('user/destroy/siswa/{id}', [Muser\UserController::class, 'destroyUsrSiswa']);
 
-    Route::prefix('manajemen-sekolah')->group(function () {
-        Route::resource('pegawai', Muser\PegawaiController::class);
-        Route::get('siswa', [Muser\SiswaController::class, 'index'])->name('siswa.index');
-        Route::get('sekolah', [Sekolah::class, 'index'])->name('sekolah.index');
-        Route::resource('user', Muser\UserController::class);
-    });
 
-    //manajemen profil sekolah
-    Route::prefix('profil-sekolah')->group(function () {
-        Route::get('berita', [Mcompany\BeritaController::class, 'index'])->name('berita.index');
-        Route::get('profil', [Mcompany\ProfilController::class, 'index'])->name('profil.index');
-        Route::get('dokumentasi', [Mcompany\Dokumentasi::class, 'index'])->name('dokumentasi.index');
-        Route::get('pesan', [PesanController::class, 'index'])->name('pesan.index');
 
-        // Route::post('profil-guru/store', [GuruProfilController::class, 'store'])->name('profil-guru.store');
-    });
+
 
 
     Route::prefix('manajemen-kelas')->group(function () {

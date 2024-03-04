@@ -1,51 +1,6 @@
 @extends('siakad/layouts/app')
 @section('siakad')
 @include('siakad/layouts/partials/hero')
-    <div class="bg-body-light">
-        <div class="content content-full">
-            <div class="row p-0">
-                <div class="col-6">
-                    {{-- Page title home --}}
-                    <nav class="flex-shrink-0 my-3 mt-sm-0" aria-label="breadcrumb">
-                        <ol class="breadcrumb breadcrumb-alt">
-                            <li class="breadcrumb-item">
-                                <a class="link-fx" href="javascript:void(0)">{{ $judul }}</a>
-                            </li>
-                            <li class="breadcrumb-item" aria-current="page">
-                                Dashboard
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="col-6">
-                    @can('siswa')
-                        <input type="hidden" id="kelas-nama"
-                            value="{{ ucwords(Auth::user()->tr_kelas->first()->kelas->namaKelas) }}">
-                    @endcan
-                    <div class="row pt-1 m-0 float-end">
-                        <div class="col-md col-auto p-0 align-self-center">
-                            {{-- ATUR PERIODE --}}
-                            <select class="form-select form-select-sm" id="periode" name="semester">
-                                @foreach ($periode as $item)
-                                    @php
-                                        $today = now();
-                                        $startDate = \Carbon\Carbon::parse($item->tanggalMulai);
-                                        $endDate = \Carbon\Carbon::parse($item->tanggalSelesai);
-                                        $selected = $today >= $startDate && $today <= $endDate ? 'selected' : '';
-                                    @endphp
-
-                                    <option value="{{ $item->idPeriode }}" {{ $selected }}>
-                                        {{ $item->semester }}/{{ \Carbon\Carbon::parse($item->tanggalMulai)->format('Y') }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <label class="col-auto col-form-label" for="semester">Periode</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="content">
         <div class="row d-flex nowrap">
             <div
@@ -279,7 +234,7 @@
                                     class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
                                     <dl class="mb-0">
                                         <dt class="fs-3 fw-bold lh-2" id="wali_kelas">Kelas
-                                            {{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}</dt>
+                                            {{-- {{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}</dt> --}}
                                     </dl>
                                     <div class="item item-rounded-lg bg-body-light">
                                         <i class="fa-solid fa-graduation-cap fs-2 text-primary"></i>
@@ -311,7 +266,7 @@
                                     <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
                                         href="javascript:void(0)">
                                         <span>Jumlah Siswa Kelas
-                                            {{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}</span>
+                                            {{-- {{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}</span> --}}
                                         <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
                                     </a>
                                 </div>
@@ -995,7 +950,7 @@
                             data: {
                                 hari: hariIndonesia[hari],
                                 periode: $('#periode').val(),
-                                nama: ' {{ ucwords(Auth::user()->pegawai->namaPegawai) }}',
+                                nama: ' {{ Auth::user()->pegawai->namaPegawai }}',
                             },
                             success: function(data) {
                                 // console.log(data);
@@ -1046,8 +1001,8 @@
                         type: 'GET',
                         data: {
                             periode: $('#periode').val(),
-                            nama: '{{ ucwords(Auth::user()->pegawai->namaPegawai) }}',
-                            kelas: '{{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}'
+                            nama: '{{ Auth::user()->pegawai->namaPegawai }}',
+                            kelas: '1'
                         },
                         success: function(response) {
                             console.log(response);
@@ -1065,3 +1020,5 @@
         @endcan
     @endpush
 @endsection
+{{-- kelas: '{{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}' --}}
+

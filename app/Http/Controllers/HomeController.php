@@ -38,10 +38,10 @@ class HomeController extends Controller
         $jumlahUser = User::count() + Siswa::whereNotNull('username')->count();
 
 
-        return view('siakad.content.beranda.index', compact('pegawai', 'siswa', 'periode', 'jumlahPegawaiAktif', 'jumlahSiswaAktif', 'jumlahUser'), [
-            'judul' => 'Beranda',
-            'sub_judul' => 'Beranda',
-            'text_singkat' => 'Sistem Informasi Akademik SD Negeri Lemahbang',
+        return view('siakad.content.dashboard.index', compact('pegawai', 'siswa', 'periode', 'jumlahPegawaiAktif', 'jumlahSiswaAktif', 'jumlahUser'), [
+            'judul' => 'Dashboard',
+            'sub_judul' => 'Dashboard',
+            'text_singkat' => 'Selamat datang <a href="' . route('profil_pengguna.index') . '" class="fw-semibold">' . auth()->user()->pegawai->namaPegawai . '</a>, di SIAKAD SD Negeri Lemahbang',
         ]);
     }
 

@@ -18,7 +18,7 @@ class PegawaiController extends Controller
     {
         $pegawai = Pegawai::all();
         return view('siakad.content.m_sekolah.pegawai.index', compact('pegawai'), [
-            'judul' => 'Manajemen Sekolah',
+            'judul' => 'Data Master',
             'sub_judul' => 'Pegawai',
             'text_singkat' => 'Mengelola data pegawai!',
         ]);
