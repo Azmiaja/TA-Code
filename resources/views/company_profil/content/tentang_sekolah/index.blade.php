@@ -12,7 +12,7 @@
 
         <div class="col-xxl-3 col-lg-4 col-12">
             {{-- Garis Judul --}}
-            <div class="row m-0 p-0 mb-3">
+            <div class="row mx-0 p-0 mb-3" style="margin-top: 6px;">
                 <h5 class="p-0 m-0 mb-1">TENTANG</h5>
                 <div class="col-4 bg-city p-0">
                     <div class="line-lv1"></div>

@@ -3,12 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Siswa extends Model implements Authenticatable
+class Siswa extends Model 
 {
-    use AuthenticatableTrait;
+    use HasFactory;
 
     protected $table = 'siswa';
     protected $guarded = ['idSiswa'];

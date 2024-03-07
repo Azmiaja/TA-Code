@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pegawai;
+use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -16,25 +17,25 @@ use Illuminate\Validation\ValidationException;
 
 class ProfilUserController extends Controller
 {
-    public function indexProfilGuru()
+    public function index()
     {
-        $profilPegawai = auth()->user()->pegawai;
-        return view('siakad/content/profil_user/guru', [
+        $auth = auth()->user();
+        return view('siakad/content/profil_user/index', [
             'judul' => 'Profil Pengguna',
             'sub_judul' => 'Profil',
             'text_singkat' => 'Mengelola data informasi profil Anda!',
-            'auth' => $profilPegawai,
+            'auths' => $auth,
         ]);
     }
     public function edit()
     {
-        $profilPegawai = auth()->user()->pegawai;
+        $auth = auth()->user();
         return view('siakad/content/profil_user/edit-profil', [
             'judul' => 'Profil Pengguna',
             'sub_judul' => 'Profil',
             'sub_sub_judul' => 'Edit Profil',
             'text_singkat' => 'Mengelola data informasi profil Anda!',
-            'auth' => $profilPegawai,
+            'auths' => $auth,
         ]);
     }
     public function chPassword()
@@ -132,5 +133,60 @@ class ProfilUserController extends Controller
         //         'message' => 'Error storing data.',
         //     ], 422);
         // }
+    }
+
+    public function updateBiografiSiswa(Request $request, $id)
+    {
+        $bio = Siswa::find($id);
+
+        $validatedData = $request->validate([
+            'namaSiswa' => 'required|string|max:45',
+            'panggilan' => 'required|string|max:45',
+            'tempatLahir' => 'required|string|max:10',
+            'tanggalLahir' => 'required|date',
+            'jenisKelamin' => 'required|in:Laki-Laki,Perempuan',
+            'agama' => 'required|in:Islam,Kristen,Katolik,Hindu,Budha',
+            'alamat' => 'required|string|max:125',
+        ]);
+
+        $bio->update($validatedData);
+
+        return back()->with('siswa_success', 'Biografi siswa berhasil diubah.');
+    }
+
+    public function updateBiografiOrtu(Request $request, $id)
+    {
+        $bio = Siswa::find($id);
+
+        $validatedData = $request->validate([
+            'namaAyah' => 'nullable|string|max:45',
+            'namaIbu' => 'nullable|string|max:45',
+            'pekerjaanAyah' => 'nullable|string|max:45',
+            'pekerjaanIbu' => 'nullable|string|max:45',
+            'noTlpAyah' => 'nullable|string|max:15',
+            'noTlpIbu' => 'nullable|string|max:15',
+            'alamatAyah' => 'nullable|string|max:125',
+            'alamatIbu' => 'nullable|string|max:125',
+        ]);
+
+        $bio->update($validatedData);
+
+        return back()->with('ortu_success', 'Data Orang tua murid berhasil diubah.');
+    }
+
+    public function updateBiografiWali(Request $request, $id)
+    {
+        $bio = Siswa::find($id);
+
+        $validatedData = $request->validate([
+            'namaWali' => 'nullable|string|max:45',
+            'pekerjaanWali' => 'nullable|string|max:45',
+            'noTlpWali' => 'nullable|string|max:15',
+            'alamatWali' => 'nullable|string|max:125',
+        ]);
+
+        $bio->update($validatedData);
+
+        return back()->with('wali_success', 'Data wali murid berhasil diubah.');
     }
 }

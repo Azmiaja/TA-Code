@@ -4,13 +4,27 @@
             <div class="row mt-3 m-0 justify-content-center w-100">
                 <div class="col-lg-8 col-6 mb-3">
                     <div class="ratio ratio-1x1">
-                        <img src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}"
-                            class="rounded-circle border border-5" style="width: 100%; height: 100%; object-fit: cover"
-                            alt="" srcset="">
+                        @cannot('siswa')
+                            <img src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}"
+                                class="rounded-circle border border-5" style="width: 100%; height: 100%; object-fit: cover"
+                                alt="" srcset="">
+                        @endcannot
+                        @can('siswa')
+                            <img src="{{ asset('assets/media/avatars/avatar1.jpg') }}"
+                                class="rounded-circle border border-5" style="width: 100%; height: 100%; object-fit: cover"
+                                alt="" srcset="">
+                        @endcan
                     </div>
                 </div>
                 <div class="text-center">
-                    <h5 class="fw-semibold mb-0">{{ Auth::user()->pegawai->namaPegawai }}</h5>
+                    <h5 class="fw-semibold mb-0">
+                        @cannot('siswa')
+                            {{ Auth::user()->pegawai->namaPegawai }}
+                        @endcannot
+                        @can('siswa')
+                            {{ Auth::user()->siswa->namaSiswa }}
+                        @endcan
+                    </h5>
                     <p class="fw-medium mb-0"><span>@</span>{{ Auth::user()->username }}</p>
                     <p class="fw-normal text-muted">{{ Auth::user()->hakAkses }}</p>
                 </div>

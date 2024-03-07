@@ -103,15 +103,21 @@
                                             style="width: 100%; height: 100%; object-fit: cover"
                                             src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}" alt="">
                                     @endcanany
+                                    @can('siswa')
+                                        <img class="rounded-circle border border-3 border-white"
+                                            style="width: 100%; height: 100%; object-fit: cover"
+                                            src="{{ asset('assets/media/avatars/avatar1.jpg') }}" alt="">
+                                    @endcan
 
                                 </div>
                                 <p class="mt-2 mb-0 fw-medium" id="HD_idSiswa"
                                     data-id-siswa={{ Auth::user()->idSiswa }}>
-                                    @if (Auth::user()->hakAkses == 'Guru' || Auth::user()->hakAkses == 'Admin' || Auth::user()->hakAkses == 'Super Admin')
-                                        {{ ucwords(Auth::user()->pegawai->namaPegawai) }}
-                                    @elseif (Auth::user()->hakAkses == 'Siswa')
-                                        {{ Auth::user()->namaSiswa }}
-                                    @endif
+                                    @cannot('siswa')
+                                        {{ Auth::user()->pegawai->namaPegawai }}
+                                    @endcannot
+                                    @can('siswa')
+                                        {{ Auth::user()->siswa->namaSiswa }}
+                                    @endcan
                                 </p> {{-- Nama Lengkap --}}
                                 <p class="mb-0text-muted fs-sm fw-medium">
                                     {{ Auth::user()->hakAkses }}</p>
@@ -121,7 +127,7 @@
                                 <a href="{{ route('profil_pengguna.index') }}"
                                     class="dropdown-item d-flex align-items-center justify-content-between">
                                     <span class="fs-sm fw-medium">Profil</span> {{-- To log out --}}
-                                    {{-- <i class="fa-regular fa-address-card me-1"></i> --}}
+                                    <i class="fa-regular fa-user me-1"></i>
                                 </a>
                                 <button class="dropdown-item d-flex align-items-center justify-content-between"
                                     data-bs-toggle="modal" data-bs-target="#logoutAlert" id="logoutBtn">

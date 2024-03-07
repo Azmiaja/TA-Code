@@ -10,6 +10,7 @@ use App\Models\Pengajaran;
 use App\Models\Periode;
 use App\Models\Siswa;
 use App\Models\User;
+use App\Models\userSiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +36,7 @@ class HomeController extends Controller
         $jumlahSiswaAktif = Siswa::where('status', 'Aktif')->count();
 
 
-        $jumlahUser = User::count() + Siswa::whereNotNull('username')->count();
+        $jumlahUser = User::count() + userSiswa::count();
 
 
         return view('siakad.content.dashboard.index', compact('pegawai', 'siswa', 'periode', 'jumlahPegawaiAktif', 'jumlahSiswaAktif', 'jumlahUser'), [

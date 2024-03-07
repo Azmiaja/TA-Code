@@ -74,7 +74,7 @@ return [
         ],
         'siswas' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Siswa::class,
+            'model' => App\Models\userSiswa::class,
         ],
 
         // 'users' => [

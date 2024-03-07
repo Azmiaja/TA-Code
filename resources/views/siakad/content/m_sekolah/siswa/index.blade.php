@@ -7,23 +7,24 @@
             <div class="block-header block-header-default">
                 <h3 class="block-title">Table Siswa</h3>
                 <div class="block-options">
+                    <button class="btn btn-sm btn-alt-success mb-lg-0 mb-2" id="tambah-siswa" title="Tambah Siswa"><i
+                            class="fa fa-plus mx-2"></i>Tambah Data Siswa</button>
                 </div>
             </div>
             <div class="block-content block-content-full">
                 <div class="table-responsive">
-                    <div class="row m-0">
+                    {{-- <div class="row m-0">
                         <div class="col-12 py-3 px-0 text-lg-end text-center">
                             <button class="btn btn-sm btn-alt-danger mb-lg-0 mb-2" id="hapus-semua-siswa"
                                 title="Tambah Siswa"><i class="fa fa-trash mx-2"></i>Hapus Semua Data Siswa</button>
-                            <button class="btn btn-sm btn-alt-success mb-lg-0 mb-2" id="tambah-siswa"
-                                title="Tambah Siswa"><i class="fa fa-plus mx-2"></i>Tambah Data Siswa</button>
+                            
                             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                 <button type="button" class="btn btn-sm btn-alt-warning">Import from excel</button>
                                 <button type="button" class="btn btn-sm btn-alt-success">Export to excel</button>
                             </div>
                         </div>
 
-                    </div>
+                    </div> --}}
                     <table id="tabelSiswa" class="table table-bordered border-dark table-striped table-vcenter w-100">
                         <thead>
                             <tr>

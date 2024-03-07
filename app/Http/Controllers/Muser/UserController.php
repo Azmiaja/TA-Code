@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Pegawai;
 use App\Models\Siswa;
 use App\Models\User;
+use App\Models\userSiswa;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -55,9 +56,11 @@ class UserController extends Controller
     public function getUsrSiswa()
     {
         try {
-            $data = Siswa::whereNotNull('username')->orderBy('idSiswa', 'desc')->get();
+            $data = userSiswa::orderBy('idUserSiswa', 'desc')->get();
             $data = $data->map(function ($item, $key) {
                 $item['nomor'] = $key + 1;
+                $item['namaSiswa'] = $item->siswa->namaSiswa;
+                $item['status'] = $item->siswa->status;
                 return $item;
             });
 
@@ -83,48 +86,48 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeUsrSiswa(Request $request, $id)
-    {
-        try {
-            $siswa = Siswa::find($id);
+    // public function storeUsrSiswa(Request $request, $id)
+    // {
+    //     try {
+    //         $siswa = Siswa::find($id);
 
-            if (!$siswa) {
-                // Handle jika periode tidak ditemukan
-                return response()->json(['status' =>  'error', 'message' => 'Data tidak ditemukan.']);
-            }
-            $validatedData = $request->validate([
-                'username' => 'required',
-                'password' => 'required',
-                'hakAkses' => 'required',
-                // 'idPegawai' => 'required',
-            ]);
+    //         if (!$siswa) {
+    //             // Handle jika periode tidak ditemukan
+    //             return response()->json(['status' =>  'error', 'message' => 'Data tidak ditemukan.']);
+    //         }
+    //         $validatedData = $request->validate([
+    //             'username' => 'required',
+    //             'password' => 'required',
+    //             'hakAkses' => 'required',
+    //             // 'idPegawai' => 'required',
+    //         ]);
 
-            // Enkripsi password menggunakan bcrypt
-            $validatedData['password'] = bcrypt($validatedData['password']);
+    //         // Enkripsi password menggunakan bcrypt
+    //         $validatedData['password'] = bcrypt($validatedData['password']);
 
-            $existingUser = Siswa::where('username', $validatedData['username'])->first();
+    //         $existingUser = Siswa::where('username', $validatedData['username'])->first();
 
-            if ($existingUser) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Siswa sudah terdaftar.',
-                ]);
-            } else {
-                // Menambahkan idPegawai saat membuat user
-                $siswa->update($validatedData);
+    //         if ($existingUser) {
+    //             return response()->json([
+    //                 'status' => 'error',
+    //                 'message' => 'Siswa sudah terdaftar.',
+    //             ]);
+    //         } else {
+    //             // Menambahkan idPegawai saat membuat user
+    //             $siswa->update($validatedData);
 
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Berhasil menyimpan data.'
-                ]);
-            }
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal menyimpan data. Pesan kesalahan: ' . $e->getMessage(),
-            ]);
-        }
-    }
+    //             return response()->json([
+    //                 'status' => 'success',
+    //                 'message' => 'Berhasil menyimpan data.'
+    //             ]);
+    //         }
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Gagal menyimpan data. Pesan kesalahan: ' . $e->getMessage(),
+    //         ]);
+    //     }
+    // }
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -148,6 +151,37 @@ class UserController extends Controller
             
         // }
         $user = User::create($validatedData);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil menyimpan data.',
+                'user' => $user,
+            ]);
+    }
+
+    public function storeUsrSiswa(Request $request)
+    {
+        $validatedData = $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+            'hakAkses' => 'required',
+            'idSiswa' => 'required',
+        ]);
+        // Enkripsi password menggunakan bcrypt
+        $validatedData['password'] = bcrypt($validatedData['password']);
+
+        // $existingUser = User::where('idPegawai', $validatedData['idPegawai'])->first();
+
+        // if ($existingUser) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Pegawai sudah terdaftar.',
+        //     ]);
+        // } else {
+        //     // Menambahkan idPegawai saat membuat user
+            
+        // }
+        $user = userSiswa::create($validatedData);
 
             return response()->json([
                 'status' => 'success',

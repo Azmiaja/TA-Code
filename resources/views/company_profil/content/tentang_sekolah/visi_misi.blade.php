@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-xl-9 col-12 p-0">
+        <div class="col-12 p-0">
             @if ($visiDeskripsi && $misiDeskripsi)
                 <div class="row m-0 mb-3">
                     <h3 class="fw-bold m-0 mb-3 text-center">VISI</h3>
@@ -28,7 +28,7 @@
                     </div>
                 </div>
             @else
-                <div class="col-xl-9 col-12">
+                <div class="col-12">
                     <div class="text-center story lend">
                         <img src="{{ asset('assets/media/img/error404.svg') }}" class="opacity-25" alt="">
                     </div>

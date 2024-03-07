@@ -222,11 +222,11 @@ class Controller extends BaseController
         $sekolah = Sekolah::find(1)->first();
         $namaSD = $sekolah->namaSekolah ?: 'SD Negeri Lemahbang';
         $logoSD = $sekolah->logo ? asset('storage/' . $sekolah->logo) : asset('assets/media/img/tut-wuri.png');
-        $sloganSD = $sekolah->slogan ?: 'Sedan Abang Jaya';
-        $emailSD = $sekolah->email ?: 'sdnlemahbang@yahoo.co.id';
+        $sloganSD = $sekolah->slogan ?: '-';
+        $emailSD = $sekolah->email ?: '-';
         $mapsLink = $sekolah->mapsLink ?: '#';
-        $telpSD = $sekolah->telp ?: 'Telepon';
-        $alamatSD = $sekolah->alamat ?: 'Alamat';
+        $telpSD = $sekolah->telp ?: '-';
+        $alamatSD = $sekolah->alamat ?: '-';
         $mapsEmbed = $sekolah->mapsEmbed ?: '<iframe></iframe>';
 
 

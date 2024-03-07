@@ -46,9 +46,30 @@
                                             </script>
                                         @endpush
                                     @endif
+                                    @can('siswa')
+                                        <div class="row mb-3">
+                                            <div class="alert alert-info alert-dismissible" role="alert">
+                                                <h3 class="alert-heading h4 my-2">Penting!</h3>
+                                                <ul>
+                                                    <li><small class="mb-0">Ubah password akun Anda dengan aman dan hati-hati.
+                                                            Mintalah bantuan orang tua/wali Anda.</small></li>
+                                                    <li> <small class="mb-0">Jangan bagikan password Anda kepada siapapun,
+                                                            termasuk teman dekat. </small></li>
+                                                    <li><small class="mb-0">Gunakan password yang kuat dan mudah diingat,
+                                                            seperti kombinasi huruf besar, huruf kecil, dan angka.</small></li>
+                                                    <li><small class="mb-0">Simpan password Anda di tempat yang aman, seperti
+                                                            buku catatan pribadi.</small></li>
+                                                    <li> <small class="mb-0">Ingatlah untuk selalu berhati-hati saat
+                                                            menggunakan internet.</small> </li>
+                                                </ul>
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                        </div>
+                                    @endcan
                                     <div class="row mb-3">
-                                        <label class="col-sm-4 col-form-label" for="current_password">Current
-                                            Password</label>
+                                        <label class="col-sm-4 col-form-label" for="current_password">
+                                            Password Sekarang</label>
                                         <div class="col-sm-8">
                                             <input type="password" class="form-control" id="current_password"
                                                 name="current_password" placeholder="Masukan password saat ini..">
@@ -58,7 +79,7 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <label class="col-sm-4 col-form-label" for="password">New Password</label>
+                                        <label class="col-sm-4 col-form-label" for="password">Password Baru</label>
                                         <div class="col-sm-8">
                                             <input type="password" class="form-control" id="password" name="password"
                                                 placeholder="Masukan password baru..">
@@ -69,7 +90,8 @@
                                             <div class="valid-feedback">Good</div>
                                             <div class="invalid-feedback">Wrong</div>
 
-                                            <div class="mt-2 alert alert-warning p-3 mb-0 d-none" role="alert" id="password-alert">
+                                            <div class="mt-2 alert alert-warning p-3 mb-0 d-none" role="alert"
+                                                id="password-alert">
                                                 <ul class="list-unstyled mb-0 ">
                                                     <li class="requirements leng fs-sm">
                                                         <div class="row p-0 m-0">
@@ -123,8 +145,9 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <label class="col-sm-4 col-form-label" for="password_confirmation">Password
-                                            Confirmation</label>
+                                        <label class="col-sm-4 col-form-label" for="password_confirmation">Konfirmasi
+                                            Password
+                                        </label>
                                         <div class="col-sm-8">
                                             <input type="password" class="form-control" id="password_confirmation"
                                                 name="password_confirmation" placeholder="Masukan konfirmasi password..">
