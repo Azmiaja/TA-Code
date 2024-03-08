@@ -245,7 +245,9 @@ Route::middleware(['auth:user'])->group(function () {
     Route::put('siswa/update/{id}', [Muser\SiswaController::class, 'update'])->name('siswa.update');
     Route::post('siswa/store', [Muser\SiswaController::class, 'store'])->name('siswa.store');
     Route::delete('siswa/destroy/{id}', [Muser\SiswaController::class, 'destroy'])->name('siswa.destroy');
-
+    Route::post('siswa/import', [Muser\SiswaController::class, 'importSiswa'])->name('siswa.import');
+    Route::get('siswa/export', [Muser\SiswaController::class, 'exportSiswa'])->name('siswa.export');
+    
     // PEGAWAI.BLADE
     Route::get('pegawai/edit/{id}', [Muser\PegawaiController::class, 'edit']);
     Route::put('pegawai/update/{id}', [Muser\PegawaiController::class, 'update']);

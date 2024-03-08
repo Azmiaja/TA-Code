@@ -5,33 +5,35 @@
     <div class="content">
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Table Siswa</h3>
+                <h3 class="block-title">Data Siswa</h3>
                 <div class="block-options">
-                    <button class="btn btn-sm btn-alt-success mb-lg-0 mb-2" id="tambah-siswa" title="Tambah Siswa"><i
-                            class="fa fa-plus mx-2"></i>Tambah Data Siswa</button>
+
                 </div>
             </div>
-            <div class="block-content block-content-full">
-                <div class="table-responsive">
-                    {{-- <div class="row m-0">
+            <div class="block-content block-content-full p-0">
+                <div class="table-responsive px-4">
+                    <div class="row m-0">
                         <div class="col-12 py-3 px-0 text-lg-end text-center">
-                            <button class="btn btn-sm btn-alt-danger mb-lg-0 mb-2" id="hapus-semua-siswa"
+                            <button class="btn btn-sm btn-alt-danger mb-lg-0 mb-2 mx-1" id="hapus-semua-siswa"
                                 title="Tambah Siswa"><i class="fa fa-trash mx-2"></i>Hapus Semua Data Siswa</button>
-                            
-                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                <button type="button" class="btn btn-sm btn-alt-warning">Import from excel</button>
-                                <button type="button" class="btn btn-sm btn-alt-success">Export to excel</button>
+                            <button class="btn btn-sm btn-alt-success mb-lg-0 mb-2 mx-1" id="tambah-siswa"
+                                title="Tambah Siswa"><i class="fa fa-plus mx-2"></i>Tambah Data Siswa</button>
+                            <div class="btn-group ms-1" role="group" aria-label="Basic mixed styles example">
+                                <button type="button" id="btn_import_siswa" class="btn btn-sm btn-alt-warning">Import from
+                                    excel</button>
+                                <button type="button" id="btn_export_siswa" class="btn btn-sm btn-alt-primary">Export to
+                                    excel</button>
                             </div>
                         </div>
 
-                    </div> --}}
+                    </div>
                     <table id="tabelSiswa" class="table table-bordered border-dark table-striped table-vcenter w-100">
                         <thead>
                             <tr>
                                 <th style="width: 5%;">No</th>
                                 <th style="width: 14%;">NIS</th>
                                 <th>Nama</th>
-                                <th style="width: 18%;">TTL</th>
+                                <th style="width: 18%;">Tempat, Tgl Lahir</th>
                                 <th style="width: 16%;">Jenis Kelamin</th>
                                 <th style="width: 10%;">Status</th>
                                 <th style="width: 10%;">Aksi</th>
@@ -47,6 +49,7 @@
     </div>
 
     @include('siakad/content/m_sekolah/siswa/modal')
+    @include('siakad/content/m_sekolah/siswa/import-excel')
 
     @push('scripts')
         <script>
@@ -59,6 +62,10 @@
                 const tabel = $('#tabelSiswa');
                 const method = $('#method');
                 const delAll = $('#hapus-semua-siswa');
+                const modalImport = $('#modalSiswaImport');
+                const formImport = $('#formSiswaImport');
+                const btImport = $('#btn_import_siswa');
+                const btExport = $('#btn_export_siswa');
 
                 function updateModal(title, button) {
                     modalTitle.text(title);
@@ -161,6 +168,7 @@
                         },
                         {
                             data: null,
+                            className: 'text-center',
                             render: function(data, type, row) {
                                 return '<div class="btn-group">' +
                                     '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editSiswa" value="' +
@@ -208,6 +216,18 @@
                             $('#jenisKelamin').val(response.siswa.jenisKelamin);
                             $('#agama').val(response.siswa.agama);
                             $('#status').val(response.siswa.status);
+                            $('#namaAyah').val(response.siswa.namaAyah);
+                            $('#pekerjaanAyah').val(response.siswa.pekerjaanAyah);
+                            $('#noTlpAyah').val(response.siswa.noTlpAyah);
+                            $('#alamatAyah').val(response.siswa.alamatAyah);
+                            $('#namaIbu').val(response.siswa.namaIbu);
+                            $('#pekerjaanIbu').val(response.siswa.pekerjaanIbu);
+                            $('#noTlpIbu').val(response.siswa.noTlpIbu);
+                            $('#alamatIbu').val(response.siswa.alamatIbu);
+                            $('#namaWali').val(response.siswa.namaWali);
+                            $('#pekerjaanWali').val(response.siswa.pekerjaanWali);
+                            $('#noTlpWali').val(response.siswa.noTlpWali);
+                            $('#alamatWali').val(response.siswa.alamatWali);
                             $('#idSiswa').val(response.siswa.idSiswa);
                         }
                     });
@@ -268,6 +288,57 @@
                                     tabel.DataTable().ajax.reload();
                                 }
                             });
+                        }
+                    });
+                });
+
+                // Import from excel
+                btImport.click(function(e) {
+                    e.preventDefault();
+
+                    modalImport.modal("show");
+                });
+
+                formImport.submit(function(e) {
+                    e.preventDefault();
+
+                    var data = new FormData(formImport[0]);
+                    var url = formImport.attr('action');
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: data,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                            });
+                            modalImport.modal('hide');
+                            formImport.trigger('reset');
+                            tabel.DataTable().ajax.reload();
+                        },
+                    });
+                });
+
+                btExport.click(function(e) {
+                    e.preventDefault();
+
+                    Swal.fire({
+                        title: 'Export Data Siswa',
+                        text: 'Anda ingin mengexport data siswa kedalam excel?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Export!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '{{ route('siswa.export') }}';
                         }
                     });
                 });

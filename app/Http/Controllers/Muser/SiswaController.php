@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Muser;
 
+use App\Exports\SiswaExport;
 use App\Http\Controllers\Controller;
+use App\Imports\SiswaImport;
 use App\Models\Siswa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -55,6 +57,19 @@ class SiswaController extends Controller
         $siswa->agama = $request->input('agama');
         $siswa->status = $request->input('status');
         $siswa->alamat = $request->input('alamat');
+        $siswa->namaAyah = $request->input('namaAyah');
+        $siswa->pekerjaanAyah = $request->input('pekerjaanAyah');
+        $siswa->noTlpAyah = $request->input('noTlpAyah');
+        $siswa->alamatAyah = $request->input('alamatAyah');
+        $siswa->namaIbu = $request->input('namaIbu');
+        $siswa->pekerjaanIbu = $request->input('pekerjaanIbu');
+        $siswa->noTlpIbu = $request->input('noTlpIbu');
+        $siswa->alamatIbu = $request->input('alamatIbu');
+        $siswa->namaWali = $request->input('namaWali');
+        $siswa->pekerjaanWali = $request->input('pekerjaanWali');
+        $siswa->noTlpWali = $request->input('noTlpWali');
+        $siswa->alamatWali = $request->input('alamatWali');
+
 
         $siswa->save();
 
@@ -90,6 +105,18 @@ class SiswaController extends Controller
             $siswa->agama = $request->input('agama');
             $siswa->status = $request->input('status');
             $siswa->alamat = $request->input('alamat');
+            $siswa->namaAyah = $request->input('namaAyah');
+            $siswa->pekerjaanAyah = $request->input('pekerjaanAyah');
+            $siswa->noTlpAyah = $request->input('noTlpAyah');
+            $siswa->alamatAyah = $request->input('alamatAyah');
+            $siswa->namaIbu = $request->input('namaIbu');
+            $siswa->pekerjaanIbu = $request->input('pekerjaanIbu');
+            $siswa->noTlpIbu = $request->input('noTlpIbu');
+            $siswa->alamatIbu = $request->input('alamatIbu');
+            $siswa->namaWali = $request->input('namaWali');
+            $siswa->pekerjaanWali = $request->input('pekerjaanWali');
+            $siswa->noTlpWali = $request->input('noTlpWali');
+            $siswa->alamatWali = $request->input('alamatWali');
 
             $siswa->update();
 
@@ -128,5 +155,36 @@ class SiswaController extends Controller
             'status' => 'success',
             'message' => 'Berhasil mengapus semua data siswa.'
         ]);
+    }
+
+    public function importSiswa(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls',
+        ]);
+
+        $file = $request->file('file');
+
+        try {
+            // Import data menggunakan class import yang telah Anda buat
+            Excel::import(new SiswaImport, $file);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil mengimport data siswa.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error storing data.'  . $e->getMessage(),
+            ], 422);
+        }
+    }
+
+    public function exportSiswa()
+    {
+        return Excel::download(new SiswaExport, 'data-siswa.xlsx');
     }
 }
