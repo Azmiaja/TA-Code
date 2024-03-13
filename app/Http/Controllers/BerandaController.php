@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class BerandaController extends Controller
 {
     public function index(){
-        $auth = auth()->user()->pegawai->namaPegawai ?? auth()->user()->namaSiswa;
+        $auth = auth()->user()->pegawai->namaPegawai ?? auth()->user()->siswa->namaSiswa;
         return view('siakad/content/dashboard/beranda', [
             'judul' => 'Beranda',
             'sub_judul' => 'Beranda',
