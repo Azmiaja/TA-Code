@@ -18,7 +18,7 @@ class Tr_kelas extends Model
 
     public function kelas()
     {
-        return $this->belongsTo(Kelas::class, 'idKelas', 'idKelas');
+        return $this->hasOne(Kelas::class, 'idKelas',);
     }
 
     public function siswa()

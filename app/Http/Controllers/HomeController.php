@@ -29,14 +29,22 @@ class HomeController extends Controller
     // for Dashboard
     public function indexBeranda()
     {
-        $pegawai = Pegawai::all()->count();
-        $siswa = Siswa::all()->count();
+        $pegawai = Pegawai::where('status', 'Aktif')->count();
+        $siswa = Siswa::where('status', 'Aktif')->count();
         $periode = Periode::orderBy('idPeriode', 'desc')->get();
         $jumlahPegawaiAktif = Pegawai::where('status', 'Aktif')->count();
         $jumlahSiswaAktif = Siswa::where('status', 'Aktif')->count();
 
 
-        $jumlahUser = User::count() + userSiswa::count();
+        $jumlahUserPegawai = User::whereHas('pegawai', function ($query) {
+            $query->where('status', 'Aktif');
+        })->count();
+        $jumlahUserSiswa = userSiswa::whereHas('siswa', function ($query) {
+            $query->where('status', 'Aktif');
+        })->count();
+
+        $jumlahUser = $jumlahUserPegawai + $jumlahUserSiswa;
+
 
 
         return view('siakad.content.dashboard.index', compact('pegawai', 'siswa', 'periode', 'jumlahPegawaiAktif', 'jumlahSiswaAktif', 'jumlahUser'), [

@@ -49,7 +49,7 @@
                                     @can('siswa')
                                         <div class="row mb-3">
                                             <div class="alert alert-info alert-dismissible" role="alert">
-                                                <h3 class="alert-heading h4 my-2">Penting!</h3>
+                                                <h3 class="alert-heading h4 my-2">Penting</h3>
                                                 <ul>
                                                     <li><small class="mb-0">Ubah password akun Anda dengan aman dan hati-hati.
                                                             Mintalah bantuan orang tua/wali Anda.</small></li>
@@ -60,10 +60,8 @@
                                                     <li><small class="mb-0">Simpan password Anda di tempat yang aman, seperti
                                                             buku catatan pribadi.</small></li>
                                                     <li> <small class="mb-0">Ingatlah untuk selalu berhati-hati saat
-                                                            menggunakan internet.</small> </li>
+                                                            menggunakan internet.</small></li>
                                                 </ul>
-                                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                    aria-label="Close"></button>
                                             </div>
                                         </div>
                                     @endcan

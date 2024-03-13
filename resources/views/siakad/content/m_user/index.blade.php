@@ -1,395 +1,128 @@
 @extends('siakad.layouts.app')
 @section('siakad')
-    {{-- header --}}
-    <div class="bg-body-light">
-        <div class="content content-full">
-            <div class="row p-0">
-                <div class="col-6">
-                    {{-- Page title berita --}}
-                    <nav class="flex-shrink-0 my-3 mt-sm-0" aria-label="breadcrumb">
-                        <ol class="breadcrumb breadcrumb-alt">
-                            <li class="breadcrumb-item">
-                                <a class="link-fx" href="javascript:void(0)">{{ $judul }}</a>
-                            </li>
-                            <li class="breadcrumb-item" aria-current="page">
-                                {{ $sub_judul }}
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="col-6 text-end">
-                    <div class="dropdown">
-                        <button type="button" class="btn btn-sm btn-alt-success dropdown-toggle"
-                            id="dropdown-align-alt-primary" data-bs-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false"><i class="fa fa-plus mx-2"></i>
-                            Tambah Data
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end fs-sm" aria-labelledby="dropdown-align-alt-primary">
-                            <a class="dropdown-item" id="btn-tambahUserPegawai" href="javascript:void(0)">Tambah User
-                                Pegawai</a>
-                            <a class="dropdown-item" id="btn-tambahUserSiswa" href="javascript:void(0)">Tambah User
-                                Siswa</a>
+    @include('siakad/layouts/partials/hero')
+    <div class="content">
+        <div class="block block-rounded">
+            <ul class="nav nav-tabs nav-tabs-alt bg-body-light" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" id="tab_pegawai" data-bs-toggle="tab" data-bs-target="#btab_pegawai"
+                        role="tab" aria-controls="btab_pegawai" aria-selected="true">Pegawai</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="tab_siswa" data-bs-toggle="tab" data-bs-target="#btab_siswa" role="tab"
+                        aria-controls="btab_siswa" aria-selected="false">Siswa</button>
+                </li>
+            </ul>
+            <div class="block-content tab-content p-0">
+                <div class="tab-pane active" id="btab_pegawai" role="tabpanel" aria-labelledby="tab_pegawai" tabindex="0">
+                    <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
+                        <div class="row">
+                            <div class="col-12 text-md-end text-center mb-3">
+                                <button class="btn btn-sm btn-alt-success" id="btn-tambahUserPegawai"><i
+                                        class="fa fa-plus me-2"></i>Tambah User
+                                    Pegawai</button>
+                            </div>
                         </div>
+                        <table id="tabel-userPegawai" class="table w-100 table-bordered align-middle">
+                            <thead class="bg-body-light align-middle">
+                                <tr>
+                                    <th style="width: 5%;">No</th>
+                                    <th>Nama</th>
+                                    <th style="width: 20%;">Username</th>
+                                    <th style="width: 15%;">Hak Akses</th>
+                                    <th style="width: 10%;">Status</th>
+                                    <th style="width: 10%;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{-- conten --}}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    {{-- conent --}}
-    <div class="content">
-        <div class="row">
-            <div class="col-12">
-                <div class="block block-rounded">
-                    <ul class="nav nav-tabs nav-tabs-block" role="tablist">
-                        <li class="nav-item">
-                            <button class="nav-link active" id="data-pegawai-tab" onclick="reloadPegawaiTb()"
-                                data-bs-toggle="tab" data-bs-target="#data-pegawai" role="tab"
-                                aria-controls="data-pegawai" aria-selected="true">Pegawai</button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="nav-link" id="data-siswa-tab" onclick="reloadSiswaTb()" data-bs-toggle="tab"
-                                data-bs-target="#data-siswa" role="tab" aria-controls="data-siswa"
-                                aria-selected="false">Siswa</button>
-                        </li>
-                    </ul>
-                    <div class="block-content tab-content overflow-hidden">
-                        <div class="tab-pane fade show active" id="data-pegawai" role="tabpanel"
-                            aria-labelledby="data-pegawai-tab" tabindex="0">
-                            {{-- tabel user pegawau --}}
-                            <table id="tabel-userPegawai" style="width: 100%"
-                                class="table tabel-responsive table-bordered table-striped table-vcenter js-dataTable-responsive">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 5%;" class="text-center">No</th>
-                                        <th style="width: auto">Nama</th>
-                                        <th>Username</th>
-                                        <th>Hak Akses</th>
-                                        <th style="width: 15%;" class="text-center">Status</th>
-                                        <th style="width: 10%;" class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{-- conten --}}
-                                </tbody>
-                            </table>
+                <div class="tab-pane" id="btab_siswa" role="tabpanel" aria-labelledby="tab_siswa" tabindex="0">
+                    <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
+                        <div class="row">
+                            <div class="col-12 text-md-end text-center mb-3">
+                                <button class="btn btn-sm btn-alt-success" id="btn-tambahUserSiswa"><i
+                                        class="fa fa-plus me-2"></i>Tambah User
+                                    Siswa</button>
+                            </div>
                         </div>
-                        <div class="tab-pane fade" id="data-siswa" role="tabpanel" aria-labelledby="data-siswa-tab"
-                            tabindex="0">
-                            {{-- tabel user siswa --}}
-                            <table id="tabel-userSiswa"
-                                class="table table-bordered table-striped table-vcenter js-dataTable-responsive"
-                                style="width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 5%;" class="text-center">No</th>
-                                        <th style="width: auto">Nama</th>
-                                        <th>Username</th>
-                                        <th>Hak Akses</th>
-                                        <th style="width: 10%;" class="text-center">Status</th>
-                                        <th style="width: 10%;" class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{-- conten --}}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="btabs-animated-fade-settings" role="tabpanel"
-                            aria-labelledby="btabs-animated-fade-settings-tab" tabindex="0">
-                            <h4 class="fw-normal">Settings Content</h4>
-                            <p>Content fades in..</p>
-                        </div>
+                        <table id="tabel-userSiswa" class="table w-100 table-bordered align-middle">
+                            <thead class="bg-body-light align-middle">
+                                <tr>
+                                    <th style="width: 5%;">No</th>
+                                    <th>Nama</th>
+                                    <th style="width: 10%;">Kelas</th>
+                                    <th style="width: 20%;">Username</th>
+                                    <th style="width: 15%;">Hak Akses</th>
+                                    <th style="width: 10%;">Status</th>
+                                    <th style="width: 10%;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{-- conten --}}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     {{-- MODAL PEGAWAI --}}
-    <div class="modal fade" id="modal-UserPegawai" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="modal-tambahUserLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="block block-rounded block-transparent mb-0">
-                    <div class="block-header block-header-default">
-                        <h3 class="block-title" id="modal-title-pegawai"></h3>
-                        <div class="block-options">
-                            <button type="button" id="btn-close" onclick="clearPegawaiForm()" class="btn-block-option"
-                                data-bs-dismiss="modal" aria-label="Close">
-                                <i class="fa fa-fw fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="block-content fs-sm">
-                        {{-- FORM --}}
-                        <input type="text" hidden id="for-id-pegawai">
-                        <div class="mb-4 sh-uspeg">
-                            <label class="form-label" for="idPegawai">Nama Pegawai</label>
-                            {{-- <input type="text" class="form-control nama-pegawai" disabled id="nama-pegawai"> --}}
-                            <select class="form-select pegawai-id" id="idPegawai" name="idPegawai" required>
-                                <option value="" disabled selected>-- Pilih Pegawai --</option>
-                                {{-- @foreach ($pegawaiList as $ls)
-                                    <option data-nip="{{ $ls->nip }}" data-tanggal-lahir="{{ $ls->tanggalLahir }}"
-                                        value="{{ $ls->idPegawai }}">{{ $ls->namaPegawai }}</option>
-                                @endforeach --}}
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <div class="row m-0">
-                                <div class="col-lg-6 col-sm-12 col-12 px-0 pe-lg-2 pe-0 mb-lg-0 mb-sm-4 mb-4">
-                                    <label class="form-label" for="username">Username</label>
-                                    <input type="text" class="form-control username" id="username" required
-                                        name="username" placeholder="Masukan Username">
-                                </div>
-                                <div class="col-lg-6 col-sm-12 col-12 px-0 ps-lg-2 ps-0">
-                                    <label class="form-label" for="password">Password</label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control password" id="password"
-                                            placeholder="Password">
-                                        <button class="btn btn-alt-secondary" type="button" id="togglePassword">
-                                            <i class="fa fa-eye-slash"></i>
-                                        </button>
-                                    </div>
-                                    {{-- <input type="password" class="form-control password" id="password" required
-                                        name="password" placeholder="Masukan Password"> --}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="hakAkses">Hak Akses</label>
-                            <select name="hakAkses" required id="hakAkses" class="form-select hak-akses">
-                                <option value="" selected>-- Pilih Hak Akses --</option>
-                                <option value="Guru">Guru</option>
-                                <option value="Admin">Admin</option>
-                                <option value="Super Admin">Super Admin</option>
-                            </select>
-
-                        </div>
-                        <div class="mb-4 text-end" id="bt-form-pegawai">
-                            {{-- btn form --}}
-                        </div>
-                    </div>
-
-                    <div class="block-content block-content-full bg-body">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('siakad/content/m_user/modal-pegawai')
     {{-- MODAL SISWA --}}
-    <div class="modal fade z-1" id="modal-UsrSiswa" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="modal-tambahUserLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="block block-rounded block-transparent mb-0">
-                    <div class="block-header block-header-default">
-                        <h3 class="block-title" id="modal-title-siswa"></h3>
-                        <div class="block-options">
-                            <button type="button" id="btn-close" onclick="clearSiswaForm()" class="btn-block-option"
-                                data-bs-dismiss="modal" aria-label="Close">
-                                <i class="fa fa-fw fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="block-content fs-sm">
-                        {{-- FORM --}}
-                        <input type="text" hidden id="for-id-siswa">
-                        <div class="mb-4 sh-ussis">
-                            <label class="form-label" for="idSiswa">Nama Siswa</label>
-                            {{-- <input type="text" class="form-control nama-siswa" disabled id="nama-siswa"> --}}
-                            <select class="form-select id-siswa" id="idSiswa" name="idSiswa">
-                                <option value="" disabled selected>-- Pilih Siswa --</option>
-                                {{-- @foreach ($siswaList as $ls)
-                                    <option value="{{ $ls->idSiswa }}" data-nisn="{{ $ls->nisn }}"
-                                        data-tanggal-lahir="{{ $ls->tanggalLahir }}">{{ $ls->namaSiswa }}</option>
-                                @endforeach --}}
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <div class="row m-0">
-                                <div class="col-lg-6 col-sm-12 col-12 px-0 pe-lg-2 pe-0 mb-lg-0 mb-sm-4 mb-4">
-                                    <label class="form-label" for="username">Username</label>
-                                    <input type="text" class="form-control username-siswa" id="username_siswa"
-                                        required name="username" placeholder="Masukan Username">
-                                </div>
-                                <div class="col-lg-6 col-sm-12 col-12 px-0 ps-lg-2 ps-0">
-                                    <label class="form-label" for="password">Password</label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control password-siswa" id="password_siswa"
-                                            placeholder="Password">
-                                        <button class="btn btn-alt-secondary" type="button" id="togglePassword-siswa">
-                                            <i class="fa fa-eye-slash"></i>
-                                        </button>
-                                    </div>
-                                    {{-- <input type="password" class="form-control password-siswa" id="password_siswa"
-                                        required name="password" placeholder="Masukan Password"> --}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-4" hidden>
-                            <label class="form-label" for="hakAkses">Hak Akses</label>
-                            <select name="hakAkses" required id="hakAkses" class="form-select hak-akses-siswa">
-                                <option value="" selected>-- Pilih Hak Akses --</option>
-                                <option id="ops_siswa" value="Siswa">Siswa</option>
-                            </select>
+    @include('siakad/content/m_user/modal-siswa')
 
-                        </div>
-                        <div class="mb-4 text-end" id="bt-form-siswa">
-                            {{-- content button --}}
-                        </div>
-                    </div>
-
-                    <div class="block-content block-content-full bg-body">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     @push('scripts')
         <script>
-            // clear form siswa
-            function clearSiswaForm() {
-                $('.username-siswa').val('');
-                $('.password-siswa').val('');
-                $('.hak-akses-siswa').val('');
-                $('#idSiswa').val(null).trigger('change');
-            }
-
-            // clear form siswa
-            function clearPegawaiForm() {
-                $('.username').val('');
-                $('.password').val('');
-                $('.hak-akses').val('');
-                $('#idPegawai').val(null).trigger('change');
-            }
-
-            // reload tabel siswa
-            function reloadSiswaTb() {
-                $('#tabel-userSiswa').DataTable().ajax.reload();
-            }
-
-            // reload tabel pegawai
-            function reloadPegawaiTb() {
-                $('#tabel-userPegawai').DataTable().ajax.reload();
-            }
-
-            // Fungsi untuk memformat tanggal menjadi ddmmYY
-            function formatDate(inputDate) {
-                var date = new Date(inputDate);
-                var day = date.getDate().toString().padStart(2, '0');
-                var month = (date.getMonth() + 1).toString().padStart(2, '0');
-                var year = date.getFullYear().toString().substring(2);
-
-                return day + month + year;
-            }
-
-            function loadDropdownOptions() {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: 'GET',
-                    url: "{{ url('data-kelas/kelas/form') }}",
-                    success: function(data) {
-
-                        $('.pegawai-id').empty();
-                        $('.pegawai-id').append(
-                            '<option value="" disabled selected>-- Pilih User Pegawai --</option>');
-
-                        $('.id-siswa').empty();
-                        $('.id-siswa').append(
-                            '<option value="" disabled selected>-- Pilih User Siswa --</option>');
-
-
-                        $.each(data.periode, function(key, value) {
-                            // console.log(value.idKelas);
-                            $('.pilih-periode').append('<option value="' + value.idPeriode +
-                                '">' + value.formattedTanggalMulai + '</option>');
-                        });
-
-                        $.each(data.pegawai, function(key, value) {
-                            // console.log(value.idKelas);
-                            $('.pegawai-id').append('<option data-nip="' + value.nip +
-                                '" data-tanggal-lahir="' + value.tanggalLahir + '" value="' + value
-                                .idPegawai +
-                                '">' + value.namaPegawai + '</option>');
-                        });
-
-
-                        $.each(data.siswa, function(key, value) {
-                            // console.log(value.idKelas);
-                            $('.id-siswa').append('<option data-nisn="' + value.nisn +
-                                '" data-tanggal-lahir="' + value.tanggalLahir + '" value="' + value
-                                .idSiswa +
-                                '">' + value.namaSiswa + '</option>');
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            }
-
-            $('#idSiswa').on('change', function() {
-                // Periksa apakah tombol tambah sudah diklik
-                if (tambahSiswaClicked) {
-                    // Mendapatkan nilai nisn dan tanggalLahir dari data atribut
-                    var nisn = $(this).find(':selected').data('nisn');
-                    var tanggalLahir = $(this).find(':selected').data('tanggal-lahir');
-
-                    // Format tanggal lahir menjadi ddmmYY
-                    var formattedDate = formatDate(tanggalLahir);
-
-                    // Mengisi nilai pada input username dan password
-                    $('.username-siswa').val(nisn);
-                    $('.password-siswa').val(formattedDate);
-                    $('#ops_siswa').prop('selected', true);
-
-                    // Set ulang status tombol tambahSiswaClicked menjadi false
-                    tambahSiswaClicked = false;
-                }
-            });
-
-
             $(document).ready(function() {
-                loadDropdownOptions();
+                const tabelSiswa = $('#tabel-userSiswa');
+                const tabelPegawai = $('#tabel-userPegawai');
+                const btnInsertUsSiswa = $('#btn-tambahUserSiswa');
+                const btnInsertUsPegawai = $('#btn-tambahUserPegawai');
+                const modalSiswa = $('#modal-UsrSiswa');
+                const modalSiswa_title = $('#modal-title-siswa');
+                const modalPegawai = $('#modal-UserPegawai');
+                const modalPegawai_title = $('#modal-title-pegawai');
+                const formSiswa = $('#form_user_siswa');
+                const formPegawai = $('#form_user_pegawai');
+                const formSiswa_btn = $('#bt-form-siswa');
+                const formPegawai_btn = $('#bt-form-pegawai');
+                const form_method = $('#method');
+                const tabSiswa = $('#tab_siswa');
+                const tabPegawai = $('#tab_pegawai');
+                // loadDropdownOptions();
                 // =========================== SISWA ============================
-                // CONFIG USER PASS SISWA
-                $('#togglePassword-siswa').on('click', function() {
-                    const passwordInput = $('#password_siswa');
-                    const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
-                    passwordInput.attr('type', type);
-                    $(this).find('i').toggleClass('fa-eye fa-eye-slash');
-                });
 
                 // tabel siswa
-                $('#tabel-userSiswa').DataTable({
+                tabelSiswa.DataTable({
                     ajax: "{{ route('get-user.siswa') }}",
                     columns: [{
                             data: 'nomor',
                             bame: 'nomor',
-                            className: 'text-center fw-medium',
+                            className: 'text-center fw-semibold',
                             searchable: false,
                         }, {
                             data: 'namaSiswa',
                             name: 'namaSiswa'
                         }, {
+                            data: 'kelas',
+                            name: 'kelas',
+                            className: 'text-center'
+                        }, {
                             data: 'username',
                             name: 'username'
                         }, {
                             data: 'hakAkses',
-                            name: 'hakAkses'
+                            name: 'hakAkses',
+                            className: 'text-center'
                         }, {
                             data: 'status',
                             className: 'text-center',
                             searchable: false,
-                            render: function(data, type, row) {
-                                var statusClass = row.status === 'Aktif' ?
-                                    'bg-success-light text-success' : 'bg-danger-light text-danger';
-                                return `<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill ${statusClass}">${row.status}</span>`;
-                            }
                         },
                         {
                             data: null,
@@ -398,10 +131,11 @@
                             render: function(data, type, row) {
                                 return '<div class="btn-group">' +
                                     '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editUsrSiswa" value="' +
-                                    data.idSiswa + '">' +
+                                    data.idUserSiswa + '">' +
                                     '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
                                     '<button type="button" class="btn btn-sm btn-alt-danger" id="action-hapusUsrSiswa" title="Delete" value="' +
-                                    data.idSiswa + '" data-nama-siswa="' + data.namaSiswa + '">' +
+                                    data.idUserSiswa + '" data-nama-siswa="' + data.siswa.namaSiswa +
+                                    '">' +
                                     '<i class="fa fa-fw fa-times"></i></button>' +
                                     '</div>';
                             }
@@ -411,158 +145,176 @@
                         "<'row my-2 '<'col-12 col-sm-12'tr>>" +
                         "<'row mb-2'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
                     lengthMenu: [10, 25, 50, 100],
-                    responsive: true
-
                 });
 
-                var tambahSiswaClicked = false;
+                var sudahDijalankan = false;
 
-                // show modal tambah siswa
-                $(document).on('click', '#btn-tambahUserSiswa', function(e) {
-                    e.preventDefault();
-                    $("#modal-UsrSiswa").modal("show");
-                    $("#nama-siswa").prop('hidden', true);
-                    $("#idSiswa").prop('hidden', false);
-                    $("#modal-title-siswa").text('Tambah User Siswa');
-                    $("#bt-form-siswa").html(`<button type="button" class="btn btn-secondary" onclick="clearSiswaForm()" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary"
-                                id="btn-tbhSubmitSiswa">Simpan</button>`);
+                function loadTabelSiswa() {
+                    if (!sudahDijalankan) {
+                        tabelSiswa.DataTable().draw();
+                        tabelSiswa.DataTable().columns.adjust().responsive.recalc();
 
-                    tambahSiswaClicked = true;
+                        sudahDijalankan = true;
+                    }
+                }
 
+                tabSiswa.click(function() {
+                    loadTabelSiswa();
                 });
 
-                // show modal edit siswa
-                $(document).on('click', '#action-editUsrSiswa', function(e) {
-                    e.preventDefault();
-                    $("#modal-UsrSiswa").modal("show");
-                    $("#modal-title-siswa").text('Edit User Siswa');
-                    $("#nama-siswa").prop('hidden', false);
-                    $("#idSiswa").prop('disabled', true);
-                    $("#bt-form-siswa").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary"
-                                id="btn-edtSubmitSiswa">Simpan</button>`);
+                function modalCustom(text, button) {
+                    modalSiswa_title.text(text);
+                    formSiswa_btn.html(button);
+                }
 
-                    var idSiswa = $(this).val();
-                    var url = "{{ url('user/edit/siswa') }}/" + idSiswa
-                    // console.log(url);
+                function resetForm() {
+                    formSiswa.trigger('reset');
+                    $('#idSiswa').val(null).change();
+                    $('#idSiswa').prop("disabled", false);
+                    $('#uss_display').prop("hidden", true);
+                    $('#pass_display').prop("hidden", true);
+
+                    formPegawai.trigger('reset');
+                    $('#idPegawai').val(null).change();
+                    $('#idPegawai').prop("disabled", false);
+                    $('#uss_display_pegawai').prop("hidden", true);
+                    $('#pass_display_pegawai').prop("hidden", true);
+
+                }
+
+                function getSelect() {
                     $.ajax({
                         type: "GET",
-                        url: url,
-                        success: function(response) {
-                            // console.log(response.user.idSiswa);
-                            $('.nama-siswa').val(response.user.namaSiswa);
-                            $('.username-siswa').val(response.user.username);
-                            $('.password-siswa').val();
-                            $('.hak-akses-siswa').val(response.user.hakAkses);
-                            $('#for-id-siswa').val(response.user.idSiswa);
-
-                            var selectSiswa = $(".id-siswa");
-                            var optionSiswa = selectSiswa.find("option[value='" + response.user
-                                .idSiswa + "']");
-                            selectSiswa.val(optionSiswa.val()).trigger('change');
-                        },
-                        error: function(xhr, status, error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: xhr.responseJSON.message,
+                        url: `{{ route('siswa.select') }}`,
+                        success: function(data) {
+                            $('#idSiswa').html('');
+                            $.each(data, function(i, item) {
+                                $('#idSiswa').append(
+                                    `<option value="${item.idSiswa}">${item.namaSiswa}</option>`
+                                );
                             });
-                        }
+                        },
                     });
+                }
+
+                modalSiswa.on('hidden.bs.modal', function() {
+                    // Reset form
+                    resetForm()
+                });
+                modalPegawai.on('hidden.bs.modal', function() {
+                    // Reset form
+                    resetForm()
                 });
 
-                // store data siswa
-                $(document).on('click', '#btn-tbhSubmitSiswa', function(e) {
+                btnInsertUsSiswa.click(function(e) {
                     e.preventDefault();
-                    var idSiswa = $('#idSiswa').val();
-                    var data = {
-                        'username': $('.username-siswa').val(),
-                        'password': $('.password-siswa').val(),
-                        'hakAkses': $('.hak-akses-siswa').val(),
-                    }
-                    // console.log(data);
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
+
+                    modalSiswa.modal('show');
+                    modalCustom('Tambah User Siswa', `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="btn-tbhSubmitSiswa">Simpan</button>`);
+
+                    formSiswa.attr('action', '{{ route('user.siswa.store') }}');
+
+                    getSelect();
+                });
+
+                // Select2 from siswa
+                $('#idSiswa').select2({
+                    width: '100%',
+                    cache: false,
+                    dropdownParent: modalSiswa,
+                    theme: "bootstrap",
+                    multiple: true,
+                });
+
+                formSiswa.submit(function(e) {
+                    e.preventDefault();
+
+                    var selectedData = $('#idSiswa').val();
+
                     $.ajax({
-                        type: "PUT",
-                        url: "{{ url('user/siswa/store') }}/" + idSiswa,
-                        data: data,
+                        type: "POST",
+                        url: formSiswa.attr('action'),
+                        data: {
+                            selectedData: selectedData
+                        },
                         dataType: "json",
 
                         success: function(response) {
-                            $(".btn-block-option").click();
-                            $("#data-siswa-tab").click();
-                            // console.log(response);
+                            modalSiswa.modal('hide');
+                            tabelSiswa.DataTable().ajax.reload();
                             Swal.fire({
-                                icon: response.status,
+                                icon: 'success',
                                 title: response.status,
                                 text: response.message,
                             });
 
                         },
-                        error: function(xhr, status, error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: xhr.responseJSON.message,
+                    });
+                });
+
+                // show modal edit siswa
+                $(document).on('click', '#action-editUsrSiswa', function(e) {
+                    e.preventDefault();
+
+                    modalSiswa.modal('show');
+                    modalCustom('Edit User Siswa', `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="btn-edtSubmitSiswa">Simpan</button>`);
+                    form_method.val("PUT");
+
+                    $('#idSiswa').prop("disabled", true);
+                    $('#uss_display').prop("hidden", false);
+                    $('#pass_display').prop("hidden", false);
+                    $('#kls_display').prop("hidden", false);
+                    // $('#idSiswa').html('');
+
+                    var idSiswa = $(this).val();
+                    formSiswa.attr('action', `{{ url('user/update/siswa/${idSiswa}') }}`);
+                    var url = `{{ url('user/edit/siswa/${idSiswa}') }}`;
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        success: function(response) {
+                            $('#username_siswa').val(response.user.username);
+                            $('#kelas_siswa').val(response.kelas);
+                            $('#password_siswa').val();
+                            $('#idSiswa').append(
+                                `<option selected value="${response.user.idSiswa}">${response.user.siswa.namaSiswa}</option>`
+                            );
+
+                            $('#reset_password_siswa').click(function() {
+                                var tgtLahir = response.user.siswa.tanggalLahir;
+                                var parsedDate = moment(tgtLahir);
+                                var formattedDate = parsedDate.format('DDMMYY');
+                                $('#password_siswa').val(formattedDate).change();
                             });
-                        }
+
+                        },
                     });
                 });
 
                 // update data siswa
                 $(document).on('click', '#btn-edtSubmitSiswa', function(e) {
                     e.preventDefault();
-                    var idSiswa = $('#for-id-siswa').val();
-                    var username = $('.username-siswa').val();
-                    var password = $('.password-siswa').val();
-                    var hakAkses = $('.hak-akses-siswa').val();
-                    // Validasi data
-                    if (!username || !hakAkses) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Semua kolom harus diisi.',
-                        });
-                        return;
-                    }
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
 
-                    var url = "{{ url('user/update/siswa') }}/" + idSiswa;
-                    // console.log(idSiswa);
+                    var data = new FormData(formSiswa[0]);
 
                     $.ajax({
-                        type: "PUT",
-                        url: url,
+                        type: "POST",
+                        url: formSiswa.attr('action'),
                         dataType: "json",
-                        data: {
-                            'username': username,
-                            'password': password,
-                            'hakAkses': hakAkses,
-                        },
+                        contentType: false,
+                        processData: false,
+                        data: data,
                         success: function(response) {
-                            $(".btn-block-option").click();
                             Swal.fire({
-                                icon: response.status,
+                                icon: 'success',
                                 title: response.status,
                                 text: response.message,
                             });
+                            modalSiswa.modal('hide');
+                            tabelSiswa.DataTable().ajax.reload();
                         },
-                        error: function(xhr, status, error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: xhr.responseJSON.message,
-                            });
-                        }
                     });
                 });
 
@@ -575,7 +327,7 @@
 
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        text: 'Menghapus data ' + namaSiswa + '',
+                        html: 'Menghapus user <b>' + namaSiswa + '</b>',
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonText: 'Batal',
@@ -584,14 +336,9 @@
                         confirmButtonText: 'Ya, Hapus!'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            $.ajaxSetup({
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                }
-                            });
                             $.ajax({
                                 type: 'DELETE',
-                                url: "{{ url('user/destroy/siswa') }}/" + idSiswa,
+                                url: `{{ url('user/destroy/siswa/${idSiswa}') }}`,
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
@@ -600,38 +347,21 @@
                                         text: response.message,
                                     });
 
-                                    $('#tabel-userSiswa').DataTable().ajax.reload();
+                                    tabelSiswa.DataTable().ajax.reload();
                                 },
-                                error: function(xhr, status, error) {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: xhr.responseJSON.message,
-                                    });
-                                }
                             });
                         }
                     });
                 });
 
                 // ============================== PEGAWAI =============================
-                // CONFIG USER PASS Pegawai
-
-
-                $('#togglePassword').on('click', function() {
-                    const passwordInput = $('#password');
-                    const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
-                    passwordInput.attr('type', type);
-                    $(this).find('i').toggleClass('fa-eye fa-eye-slash');
-                });
-
                 // tabel user pegawai
-                $('#tabel-userPegawai').DataTable({
+                tabelPegawai.DataTable({
                     ajax: "{{ route('get-user.pegawai') }}",
                     columns: [{
                             data: 'nomor',
                             bame: 'nomor',
-                            className: 'text-center fw-medium',
+                            className: 'text-center fw-semibold',
                             searchable: false,
                         }, {
                             data: 'namaPegawai',
@@ -641,16 +371,12 @@
                             name: 'username'
                         }, {
                             data: 'hakAkses',
-                            name: 'hakAkses'
+                            name: 'hakAkses',
+                            className: 'text-center'
                         }, {
                             data: 'status',
                             className: 'text-center',
                             searchable: false,
-                            render: function(data, type, row) {
-                                var statusClass = row.status === 'Aktif' ?
-                                    'bg-success-light text-success' : 'bg-danger-light text-danger';
-                                return `<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill ${statusClass}">${row.status}</span>`;
-                            }
                         },
                         {
                             data: null,
@@ -672,171 +398,154 @@
                         "<'row my-2 '<'col-12 col-sm-12'tr>>" +
                         "<'row mb-2'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
                     lengthMenu: [10, 25, 50, 100],
-                    responsive: true
 
                 });
+
+                var sudahDijalankanPegawai = false;
+
+                function loadTabelPegawai() {
+                    if (!sudahDijalankanPegawai) {
+                        tabelPegawai.DataTable().draw();
+                        tabelPegawai.DataTable().columns.adjust().responsive.recalc();
+
+                        sudahDijalankanPegawai = true;
+                    }
+                }
+
+                tabPegawai.click(function() {
+                    loadTabelPegawai();
+                });
+
+                function updateModalPegawai(title, button) {
+                    modalPegawai_title.text(title);
+                    formPegawai_btn.html(button);
+                }
+
+                // Select2 from pegawai
+                $('#idPegawai').select2({
+                    width: '100%',
+                    cache: false,
+                    dropdownParent: modalPegawai,
+                    theme: "bootstrap",
+                    multiple: true,
+                });
+
+                function getSelectPegawai() {
+                    $.ajax({
+                        type: "GET",
+                        url: `{{ route('pegawai.select') }}`,
+                        success: function(data) {
+                            $('#idPegawai').html('');
+                            $.each(data, function(i, item) {
+                                $('#idPegawai').append(
+                                    `<option value="${item.idPegawai}">${item.namaPegawai}</option>`
+                                );
+                            });
+                        },
+                    });
+                }
 
                 // SHOW MODAL tambah
-                $(document).on('click', '#btn-tambahUserPegawai', function(e) {
+                btnInsertUsPegawai.click(function(e) {
                     e.preventDefault();
-                    $("#modal-UserPegawai").modal("show");
-                    $("#modal-title-pegawai").text('Tambah User Pegawai');
-                    $("#bt-form-pegawai").html(`<button type="button" class="btn btn-secondary" onclick="clearPegawaiForm()" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary"
-                            id="btn-submitTbhUsrPegawai">Simpan</button>`);
 
-                    $('#idPegawai').on('change', function() {
-                        // Mendapatkan nilai nisn dan tanggalLahir dari data atribut
-                        var nip = $(this).find(':selected').data('nip');
-                        var tanggalLahir = $(this).find(':selected').data('tanggal-lahir');
+                    modalPegawai.modal('show');
+                    updateModalPegawai('Tambah User Pegawai', `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="btn-submitTbhUsrPegawai">Simpan</button>`);
 
-                        // Format tanggal lahir menjadi ddmmYY
-                        var formattedDate = formatDate(tanggalLahir);
+                    getSelectPegawai();
 
-                        // Mengisi nilai pada input username dan password
-                        $('.username').val(nip);
-                        $('.password').val(formattedDate);
-                    });
+                    formPegawai.attr('action', '{{ route('user.pegawai.store') }}');
+
                 });
 
-                // STORE DATA 
-                $(document).on('click', '#btn-submitTbhUsrPegawai', function(e) {
+                formPegawai.submit(function(e) {
                     e.preventDefault();
-                    // Mendapatkan nilai dari input
-                    var idPegawai = $('.pegawai-id').val();
-                    var username = $('.username').val();
-                    var password = $('.password').val();
-                    var hakAkses = $('.hak-akses').val();
 
-                    // Validasi data
-                    if (!idPegawai || !username || !password || !hakAkses) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Semua kolom harus diisi.',
-                        });
-                        return; // Menghentikan proses jika ada data yang kosong
-                    }
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
+                    var selectedData = $('#idPegawai').val();
+                    var role = $('#hak_akses').val();
+
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('user.store') }}",
+                        url: formPegawai.attr('action'),
                         data: {
-                            'idPegawai': idPegawai,
-                            'username': username,
-                            'password': password,
-                            'hakAkses': hakAkses,
+                            selectedData: selectedData,
+                            role: role
                         },
                         dataType: "json",
+
                         success: function(response) {
-                            $(".btn-block-option").click();
-                            $("#data-pegawai-tab").click();
+                            modalPegawai.modal('hide');
+                            tabelPegawai.DataTable().ajax.reload();
                             Swal.fire({
-                                icon: response.status,
+                                icon: 'success',
                                 title: response.status,
                                 text: response.message,
                             });
+
                         },
-                        error: function(xhr, status, error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: xhr.responseJSON.message,
-                            });
-                        }
                     });
                 });
 
                 // SHOW MODAL EDIT
                 $(document).on('click', '#action-editUsrPegawai', function(e) {
                     e.preventDefault();
-                    $("#modal-UserPegawai").modal("show");
-                    $("#idPegawai").prop('disabled', true);
-                    $("#modal-title-pegawai").text('Edit User Pegawai');
-                    $("#bt-form-pegawai").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary"
-                            id="btn-submitEdtUsrPegawai">Simpan</button>`);
-                    var idUser = $(this).val();
+                    modalPegawai.modal("show");
+                    updateModalPegawai('Edit User Pegawai', `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="btn-submitEdtUsrPegawai">Simpan</button>`);
+                    form_method.val("PUT");
+
+                    $('#idPegawai').prop("disabled", true);
+                    $('#uss_display_pegawai').prop("hidden", false);
+                    $('#pass_display_pegawai').prop("hidden", false);
+
+                    var idPegawai = $(this).val();
+                    formPegawai.attr('action', `{{ url('user/update/pegawai/${idPegawai}') }}`);
+
                     $.ajax({
                         type: "GET",
-                        url: "{{ url('user/edit/pegawai') }}/" + idUser,
+                        url: `{{ url('user/edit/pegawai/${idPegawai}') }}`,
                         success: function(response) {
-                            // $('.nama-pegawai').val(response.user.pegawai.namaPegawai);
-                            $('.username').val(response.user.username);
-                            $('.password').val();
-                            $('.hak-akses').val(response.user.hakAkses);
-                            $('#for-id-pegawai').val(response.user.idUser);
+                            $('#username_pegawai').val(response.user.username);
+                            $('#hak_akses').val(response.user.hakAkses);
+                            $('#password_pegawai').val();
+                            $('#idPegawai').append(
+                                `<option selected value="${response.user.idPegawai}">${response.user.pegawai.namaPegawai}</option>`
+                            );
 
-                            var selectPeg = $(".pegawai-id");
-                            var optionPeg = selectPeg.find("option[value='" + response.user
-                                .pegawai.idPegawai + "']");
-                            selectPeg.val(optionPeg.val()).trigger('change');
-                            console.log(response.user.pegawai.idPegawai);
+                            $('#reset_password_pegawai').click(function() {
+                                var tgtLahir = response.user.pegawai.tanggalLahir;
+                                var parsedDate = moment(tgtLahir);
+                                var formattedDate = parsedDate.format('DDMMYY');
+                                $('#password_pegawai').val(formattedDate).change();
+                            });
 
                         },
-                        error: function(xhr, status, error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: xhr.responseJSON.message,
-                            });
-                        }
                     });
                 });
 
                 // update data user pegawai
                 $(document).on('click', '#btn-submitEdtUsrPegawai', function(e) {
                     e.preventDefault();
-                    var idUser = $('#for-id-pegawai').val();
-                    var username = $('.username').val();
-                    var password = $('.password').val();
-                    var hakAkses = $('.hak-akses').val();
 
-                    // Validasi data
-                    if (!username || !hakAkses) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Semua kolom harus diisi.',
-                        });
-                        return; // Menghentikan proses jika ada data yang kosong
-                    }
-
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
+                    var data = new FormData(formPegawai[0]);
 
                     $.ajax({
-                        type: "PUT",
-                        url: "{{ url('user/update/pegawai') }}/" + idUser,
+                        type: "POST",
+                        url: formPegawai.attr('action'),
                         dataType: "json",
-                        data: {
-                            'username': username,
-                            'password': password,
-                            'hakAkses': hakAkses,
-                        },
+                        contentType: false,
+                        processData: false,
+                        data: data,
                         success: function(response) {
-                            $(".btn-block-option").click();
                             Swal.fire({
-                                icon: response.status,
+                                icon: 'success',
                                 title: response.status,
                                 text: response.message,
                             });
-                            $('#tabel-userPegawai').DataTable().ajax.reload();
+                            modalPegawai.modal('hide');
+                            tabelPegawai.DataTable().ajax.reload();
                         },
-                        error: function(xhr, status, error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: xhr.responseJSON.message,
-                            });
-                        }
                     });
                 });
                 // END UPDATE
@@ -849,7 +558,7 @@
 
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        text: 'Menghapus data ' + namaUser + '',
+                        html: 'Menghapus data <b>' + namaUser + '</b>',
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonText: 'Batal',
@@ -858,14 +567,9 @@
                         confirmButtonText: 'Ya, Hapus!'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            $.ajaxSetup({
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                }
-                            });
                             $.ajax({
                                 type: 'DELETE',
-                                url: "{{ url('user/destroy/pegawai') }}/" + idUser,
+                                url: `{{ url('user/destroy/pegawai/${idUser}') }}`,
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
@@ -874,33 +578,12 @@
                                         text: response.message,
                                     });
 
-                                    $('#tabel-userPegawai').DataTable().ajax.reload();
+                                    tabelPegawai.DataTable().ajax.reload();
                                 },
-                                error: function(xhr, status, error) {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: xhr.responseJSON.message,
-                                    });
-                                }
                             });
                         }
                     });
                 });
-
-                function initSelect2(selector, placeholder, dropdownParent) {
-                    $(selector).select2({
-                        placeholder,
-                        allowClear: true,
-                        width: "100%",
-                        cache: false,
-                        dropdownParent,
-                        theme: "bootstrap",
-                    });
-                }
-
-                initSelect2('#idPegawai', 'Pilih User Pegawai', $('#modal-UserPegawai'));
-                initSelect2('#idSiswa', 'Pilih User Siswa', $('#modal-UsrSiswa'));
 
             });
         </script>

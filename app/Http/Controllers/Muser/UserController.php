@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Muser;
 
+use App\Exports\UserSiswaExport;
 use App\Http\Controllers\Controller;
 use App\Models\Pegawai;
 use App\Models\Siswa;
 use App\Models\User;
 use App\Models\userSiswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -19,40 +22,18 @@ class UserController extends Controller
      */
     public function index()
     {
-        $pegawaiList = Pegawai::all();
-        $siswaList = Siswa::all();
-        return view('siakad.content.m_user.index', compact('pegawaiList', 'siswaList'), [
+        $pegawai = Pegawai::all();
+        $siswa = Siswa::all();
+        // $siswa_kelas = $siswa->tr_kelas;
+
+        return view('siakad.content.m_user.index', compact('pegawai', 'siswa',), [
             'judul' => 'Manajemen User',
             'sub_judul' => 'Data User',
+            'text_singkat' => 'Mengelola data user!',
         ]);
     }
 
-    // tampilkan user pegawai
-    public function getUsrPegawai()
-    {
-        try {
-            $data = User::orderBy('idUser', 'desc')->with('pegawai')->get();
-            $data = $data->map(function ($item, $key) {
-                $item['nomor'] = $key + 1;
-                return $item;
-            });
-
-            return DataTables::of($data)
-                ->addColumn('namaPegawai', function ($user) {
-                    return optional($user->pegawai)->namaPegawai;
-                })
-                ->addColumn('status', function ($user) {
-                    return optional($user->pegawai)->status;
-                })
-                ->make(true);
-
-            // return DataTables::of($data)->make(true);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
-        }
-    }
-
-    // tampilkan user siswa
+    // tampilkan data tabel user siswa
     public function getUsrSiswa()
     {
         try {
@@ -60,14 +41,142 @@ class UserController extends Controller
             $data = $data->map(function ($item, $key) {
                 $item['nomor'] = $key + 1;
                 $item['namaSiswa'] = $item->siswa->namaSiswa;
-                $item['status'] = $item->siswa->status;
+                $item['kelas'] = $item->siswa->kelas->pluck('namaKelas')->transform(function ($kelas) {
+                    return 'Kelas ' . $kelas;
+                })->toArray() ?: ['N/A'];
+                $item['status'] = $item->siswa->status === 'Aktif' ? '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-success-light text-success">' . $item->siswa->status . '</span>' : '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-danger-light text-danger">' . $item->siswa->status . '</span>';
                 return $item;
             });
 
-            return DataTables::of($data)->make(true);
+            return response()->json(['data' => $data]);
+        } catch (\Exception $e) {
+            Log::error('Error get data: ' . $e->getMessage());
+        }
+    }
+
+    // untuk select2 data siswa
+    public function getOptions()
+    {
+        // $query = $request->input('query');
+
+        $data = Siswa::whereDoesntHave('userSiswa')->get();
+
+        // dd($data);
+
+        return response()->json($data);
+    }
+
+    // store data user siswa
+    public function storeUsrSiswa(Request $request)
+    {
+        $selectedData = $request->input('selectedData');
+
+        foreach ($selectedData as $data) {
+            $siswa = Siswa::find($data);
+
+            $username = $siswa->nis;
+
+            $password = date('dmy', strtotime($siswa->tanggalLahir));
+
+            $role = 'Siswa';
+
+            userSiswa::create([
+                'idSiswa' => $data,
+                'username' => $username,
+                'password' => bcrypt($password),
+                'hakAkses' => $role,
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Berhasil menyimpan data.',
+        ]);
+    }
+
+    // show edit data user siswa
+    public function editUsrSiswa($id)
+    {
+        $siswa = userSiswa::with('siswa')->find($id);
+        if (!$siswa) {
+            // Handle jika berita tidak ditemukan
+            return response()->json(['status' => 'error', 'message' => 'Data user tidak ditemukan.']);
+        }
+        $kelas =  $siswa->siswa->kelas->pluck('namaKelas')->transform(function ($kelas) {
+            return 'Kelas ' . $kelas;
+        })->toArray() ?: ['N/A'];
+
+        return response()->json(['user' => $siswa, 'kelas' => $kelas]);
+    }
+
+    // update data user siswa
+    public function updateUsrSiswa(Request $request, $id)
+    {
+
+        $user = userSiswa::find($id);
+
+
+        $user->username = $request->input('username');
+
+
+        if ($request->filled('password')) {
+
+            $user->password = bcrypt($request->input('password'));
+        }
+
+        $user->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Berhasil mengubah data.'
+        ]);
+    }
+
+    // delete data user siswa
+    public function destroyUsrSiswa($id)
+    {
+        $user = userSiswa::find($id);
+        $user->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Berhasil mengapus data.'
+        ]);
+    }
+
+
+    // tampilkan user pegawai
+    public function getUsrPegawai()
+    {
+        try {
+            $data = User::where('hakAkses', '!=', 'Super Admin')
+                ->orderBy('idUser', 'desc')
+                ->get();
+            $data = $data->map(function ($item, $key) {
+                $item['nomor'] = $key + 1;
+                $item['namaPegawai'] = $item->pegawai->namaPegawai;
+                $item['status'] = $item->pegawai->status === 'Aktif' ? '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-success-light text-success">' . $item->pegawai->status . '</span>' : '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-danger-light text-danger">' . $item->pegawai->status . '</span>';
+                return $item;
+            });
+
+            return response()->json(['data' => $data]);
+
+            // return DataTables::of($data)->make(true);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }
+    }
+
+    // untuk select2 data pegawai
+    public function getOptionsPegawai()
+    {
+        // $query = $request->input('query');
+
+        $data = Pegawai::orderBy('namaPegawai', 'asc')->get();
+
+        // dd($data);
+
+        return response()->json($data);
     }
 
     /**
@@ -86,110 +195,49 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // public function storeUsrSiswa(Request $request, $id)
-    // {
-    //     try {
-    //         $siswa = Siswa::find($id);
 
-    //         if (!$siswa) {
-    //             // Handle jika periode tidak ditemukan
-    //             return response()->json(['status' =>  'error', 'message' => 'Data tidak ditemukan.']);
-    //         }
-    //         $validatedData = $request->validate([
-    //             'username' => 'required',
-    //             'password' => 'required',
-    //             'hakAkses' => 'required',
-    //             // 'idPegawai' => 'required',
-    //         ]);
-
-    //         // Enkripsi password menggunakan bcrypt
-    //         $validatedData['password'] = bcrypt($validatedData['password']);
-
-    //         $existingUser = Siswa::where('username', $validatedData['username'])->first();
-
-    //         if ($existingUser) {
-    //             return response()->json([
-    //                 'status' => 'error',
-    //                 'message' => 'Siswa sudah terdaftar.',
-    //             ]);
-    //         } else {
-    //             // Menambahkan idPegawai saat membuat user
-    //             $siswa->update($validatedData);
-
-    //             return response()->json([
-    //                 'status' => 'success',
-    //                 'message' => 'Berhasil menyimpan data.'
-    //             ]);
-    //         }
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'Gagal menyimpan data. Pesan kesalahan: ' . $e->getMessage(),
-    //         ]);
-    //     }
-    // }
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-            'hakAkses' => 'required',
-            'idPegawai' => 'required',
-        ]);
-        // Enkripsi password menggunakan bcrypt
-        $validatedData['password'] = bcrypt($validatedData['password']);
+        try {
+            $selectedData = $request->input('selectedData');
 
-        // $existingUser = User::where('idPegawai', $validatedData['idPegawai'])->first();
+            foreach ($selectedData as $data) {
+                $pegawai = Pegawai::find($data);
 
-        // if ($existingUser) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Pegawai sudah terdaftar.',
-        //     ]);
-        // } else {
-        //     // Menambahkan idPegawai saat membuat user
-            
-        // }
-        $user = User::create($validatedData);
+                $username = $pegawai->nip;
+
+                $password = date('dmy', strtotime($pegawai->tanggalLahir));
+
+                $role = $request->input('role');
+
+                User::create([
+                    'idPegawai' => $data,
+                    'username' => $username,
+                    'password' => bcrypt($password),
+                    'hakAkses' => $role,
+                ]);
+            }
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Berhasil menyimpan data.',
-                'user' => $user,
             ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+        }
     }
 
-    public function storeUsrSiswa(Request $request)
+    // show data edit user pegawai
+    public function edit($id)
     {
-        $validatedData = $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-            'hakAkses' => 'required',
-            'idSiswa' => 'required',
-        ]);
-        // Enkripsi password menggunakan bcrypt
-        $validatedData['password'] = bcrypt($validatedData['password']);
+        $user = User::with('pegawai')->find($id);
+        if (!$user) {
+            // Handle jika berita tidak ditemukan
+            return response()->json(['status' => 'error', 'message' => 'Data user tidak ditemukan.']);
+        }
 
-        // $existingUser = User::where('idPegawai', $validatedData['idPegawai'])->first();
-
-        // if ($existingUser) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Pegawai sudah terdaftar.',
-        //     ]);
-        // } else {
-        //     // Menambahkan idPegawai saat membuat user
-            
-        // }
-        $user = userSiswa::create($validatedData);
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Berhasil menyimpan data.',
-                'user' => $user,
-            ]);
+        return response()->json(['user' => $user]);
     }
-
     /**
      * Display the specified resource.
      *
@@ -207,26 +255,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $user = User::with('pegawai')->find($id);
-        if (!$user) {
-            // Handle jika berita tidak ditemukan
-            return response()->json(['status' => 'error', 'message' => 'Data user tidak ditemukan.']);
-        }
 
-        return response()->json(['user' => $user]);
-    }
-    public function editUsrSiswa($id)
-    {
-        $siswa = Siswa::find($id);
-        if (!$siswa) {
-            // Handle jika berita tidak ditemukan
-            return response()->json(['status' => 'error', 'message' => 'Data user tidak ditemukan.']);
-        }
-
-        return response()->json(['user' => $siswa]);
-    }
 
     /**
      * Update the specified resource in storage.
@@ -237,66 +266,28 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
+        try {
+            $user = User::find($id);
 
-        if (!$user) {
-            return response()->json(['status' => 'error', 'message' => 'Data user tidak ditemukan.']);
+            $user->username = $request->input('username');
+            $user->hakAkses = $request->input('hakAkses');
+
+            if ($request->filled('password')) {
+                $user->password = bcrypt($request->input('password'));
+            }
+            $user->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil mengubah data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
         }
-        // Validasi input
-        $validatedData = $request->validate([
-            'username' => 'required',
-            'hakAkses' => 'required',
-            'password' => $request->filled('password') ? 'required' : '',
-        ]);
-
-        // Perbarui data user, termasuk penanganan password
-        if ($request->filled('password')) {
-            // Jika password diisi, maka update password
-            $validatedData['password'] = bcrypt($validatedData['password']);
-        } else {
-            // Jika password tidak diisi, abaikan kolom 'password' saat pembaruan
-            unset($validatedData['password']);
-        }
-
-        // Perbarui data user
-        $user->update($validatedData);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Berhasil mengubah data.'
-        ]);
     }
-    public function updateUsrSiswa(Request $request, $id)
-    {
-        $user = Siswa::find($id);
 
-        if (!$user) {
-            return response()->json(['status' => 'error', 'message' => 'Data user tidak ditemukan.']);
-        }
-        // Validasi input
-        $validatedData = $request->validate([
-            'username' => 'required',
-            'hakAkses' => 'required',
-            'password' => $request->filled('password') ? 'required' : '',
-        ]);
 
-        // Perbarui data user, termasuk penanganan password
-        if ($request->filled('password')) {
-            // Jika password diisi, maka update password
-            $validatedData['password'] = bcrypt($validatedData['password']);
-        } else {
-            // Jika password tidak diisi, abaikan kolom 'password' saat pembaruan
-            unset($validatedData['password']);
-        }
 
-        // Perbarui data user
-        $user->update($validatedData);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Berhasil mengubah data.'
-        ]);
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -314,26 +305,27 @@ class UserController extends Controller
             'message' => 'Berhasil mengapus data.'
         ]);
     }
-    public function destroyUsrSiswa($id)
-    {
-        try {
-            // Temukan siswa berdasarkan ID
-            $siswa = Siswa::find($id);
 
-            if (!$siswa) {
-                return response()->json(['status' => 'error', 'message' => 'Data siswa tidak ditemukan.']);
-            }
+    // public function destroyUsrSiswa($id)
+    // {
+    //     try {
+    //         // Temukan siswa berdasarkan ID
+    //         $siswa = Siswa::find($id);
 
-            // Mengosongkan nilai kolom username, password, dan hakAkses
-            $siswa->update([
-                'username' => null,
-                'password' => null,
-                'hakAkses' => null,
-            ]);
+    //         if (!$siswa) {
+    //             return response()->json(['status' => 'error', 'message' => 'Data siswa tidak ditemukan.']);
+    //         }
 
-            return response()->json(['status' => 'success', 'message' => 'Berhasil mengapus data.']);
-        } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'message' => 'Gagal menghapus data. ' . $e->getMessage()]);
-        }
-    }
+    //         // Mengosongkan nilai kolom username, password, dan hakAkses
+    //         $siswa->update([
+    //             'username' => null,
+    //             'password' => null,
+    //             'hakAkses' => null,
+    //         ]);
+
+    //         return response()->json(['status' => 'success', 'message' => 'Berhasil mengapus data.']);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['status' => 'error', 'message' => 'Gagal menghapus data. ' . $e->getMessage()]);
+    //     }
+    // }
 }

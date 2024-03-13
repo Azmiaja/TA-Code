@@ -1,11 +1,92 @@
 @extends('siakad/layouts/app')
 @section('siakad')
-@include('siakad/layouts/partials/hero')
+    @include('siakad/layouts/partials/hero')
     <div class="content">
-        <div class="row d-flex nowrap">
+        <div class="row g-4">
+            <div class="col-lg-9 col-12">
+                <div class="row items-push">
+                    <div class="col-sm-12 col-xxl-4">
+                        <div class="block block-rounded d-flex flex-column h-100 mb-0">
+                            <div
+                                class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                                <dl class="mb-0">
+                                    <dt class="fs-3 fw-bold">{{ $pegawai }}</dt>
+                                    <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Jumlah Pegawai Aktif</dd>
+                                </dl>
+                                <div class="item item-rounded-lg bg-body-light">
+                                    <i class="fa-solid fa-user-tie fs-3 text-primary"></i>
+                                </div>
+                            </div>
+                            <div class="bg-body-light rounded-bottom">
+                                <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
+                                    href="{{ route('pegawai.index') }}">
+                                    <span>View all pegawai</span>
+                                    <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xxl-4">
+                        <div class="block block-rounded d-flex flex-column h-100 mb-0">
+                            <div
+                                class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                                <dl class="mb-0">
+                                    <dt class="fs-3 fw-bold">{{ $siswa }}</dt>
+                                    <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Jumlah Siswa Aktif</dd>
+                                </dl>
+                                <div class="item item-rounded-lg bg-body-light">
+                                    <i class="fa-solid fa-graduation-cap fs-3 text-primary"></i>
+                                </div>
+                            </div>
+                            <div class="bg-body-light rounded-bottom">
+                                <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
+                                    href="javascript:void(0)">
+                                    <span>View all siswa</span>
+                                    <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xxl-4">
+                        <div class="block block-rounded d-flex flex-column h-100 mb-0">
+                            <div
+                                class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                                <dl class="mb-0">
+                                    <dt class="fs-3 fw-bold">{{ $jumlahUser }}</dt>
+                                    <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Jumlah Pengguna Aktif</dd>
+                                </dl>
+                                <div class="item item-rounded-lg bg-body-light">
+                                    <i class="far fa-user-circle fs-3 text-primary"></i>
+                                </div>
+                            </div>
+                            <div class="bg-body-light rounded-bottom">
+                                <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
+                                    href="{{ route('user.index') }}">
+                                    <span>View all user</span>
+                                    <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-12">
+                <div class="block block-rounded">
+                    <div class="block-content block-content-full ratio ratio-1x1">
+
+                    </div>
+                    <div class="bg-body-light rounded-bottom">
+                        <span class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex">
+                            <span>Grafik Pengguna</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- <div class="row d-flex nowrap">
             <div
-                class="col-xxl-9 col-xl-9 col-lg-8 col-md-7 pe-md-3 mb-sm-3 mb-3 pe-0 col-sm-12 col-12 order-md-first order-last">
-                @canany(['super.admin', 'admin'])
+                class="col-xxl-9 col-xl-9 col-lg-8 col-md-7 pe-md-3 mb-sm-3 mb-3 pe-0 col-sm-12 col-12 order-md-first order-last"> --}}
+                {{-- @canany(['super.admin', 'admin'])
                     <div class="row item-push mb-md-3 mb-0">
                         <div class=" mb-lg-0 mb-sm-3 mb-3 col-6 col-xl-4 col-sm-4 col-md-6 col-lg-6">
                             <!-- Pending Orders -->
@@ -123,8 +204,8 @@
                             </div>
                         </div>
                     </div>
-                @endcanany
-                @can('siswa')
+                @endcanany --}}
+                {{-- @can('siswa')
                     <div class="row item-push mb-md-3 mb-0">
                         <div class=" mb-lg-0 mb-sm-3 mb-3 col-12 col-lg-6">
                             <!-- Pending Orders -->
@@ -182,7 +263,7 @@
                                         <div class="row pt-1 m-0 float-end">
                                             <label class="col-auto col-form-label" for="semester">Nilai</label>
                                             <div class="col-md col-auto p-0 align-self-center">
-                                                {{-- ATUR PERIODE --}}
+                                                <!--ATUR PERIODE-->
                                                 <select class="form-select form-select-sm" id="an_nilai">
                                                     <option selected value="nilaiUH">Nilai UH</option>
                                                     <option value="nilaiUTS">Nilai UTS</option>
@@ -202,8 +283,8 @@
                             </div>
                         </div>
                     </div>
-                @endcan
-                @can('guru')
+                @endcan --}}
+                {{-- @can('guru')
                     <div class="row item-push mb-md-3 mb-0">
                         <div class=" mb-lg-0 mb-sm-3 mb-3 col-6 col-xl-4 col-sm-4 col-md-6 col-lg-6">
                             <!-- Pending Orders -->
@@ -234,7 +315,6 @@
                                     class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
                                     <dl class="mb-0">
                                         <dt class="fs-3 fw-bold lh-2" id="wali_kelas">Kelas
-                                            {{-- {{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}</dt> --}}
                                     </dl>
                                     <div class="item item-rounded-lg bg-body-light">
                                         <i class="fa-solid fa-graduation-cap fs-2 text-primary"></i>
@@ -266,18 +346,17 @@
                                     <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
                                         href="javascript:void(0)">
                                         <span>Jumlah Siswa Kelas
-                                            {{-- {{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}</span> --}}
-                                        <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
+                                            <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
                                     </a>
                                 </div>
                             </div>
                             <!-- END Pending Orders -->
                         </div>
                     </div>
-                @endcan
-            </div>
+                @endcan --}}
+            {{-- </div> --}}
 
-            <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-5 ps-md-3 ps-2 p-0 col-sm-12 col-12 order-md-last order-first">
+            {{-- <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-5 ps-md-3 ps-2 p-0 col-sm-12 col-12 order-md-last order-first">
                 <div class="row">
                     <div class="col-md-12 col-sm-6">
                         <div class="block block-rounded">
@@ -325,14 +404,9 @@
                     </div>
                 </div>
 
-            </div>
-        </div>
-    </div>
-
-    @can('siswa')
-    @endcan
-
-    </div>
+            </div> --}}
+        {{-- </div> --}}
+    {{-- </div> --}}
 
 
     @push('scripts')
@@ -1021,4 +1095,3 @@
     @endpush
 @endsection
 {{-- kelas: '{{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}' --}}
-

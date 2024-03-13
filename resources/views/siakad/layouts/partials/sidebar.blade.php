@@ -109,8 +109,8 @@
                 @endcanany
                 @canany(['super.admin', 'admin'])
                     <li
-                        class="nav-main-item {{ Request::routeIs('sekolah.index', 'pegawai.index', 'siswa.index') ? 'open' : '' }}">
-                        <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('sekolah.index', 'pegawai.index', 'siswa.index') ? 'active' : '' }}"
+                        class="nav-main-item {{ Request::routeIs('sekolah.index', 'pegawai.index', 'siswa.index', 'periode.index', 'kelas.index') ? 'open' : '' }}">
+                        <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('sekolah.index', 'pegawai.index', 'siswa.index', 'periode.index', 'kelas.index') ? 'active' : '' }}"
                             data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="?#">
                             <i class="nav-main-link-icon si si-bulb"></i>
                             <span class="nav-main-link-name">Master Data</span>
@@ -133,6 +133,29 @@
                                     href="{{ route('siswa.index') }}">
                                     <span class="nav-main-link-name">Siswa</span>
                                 </a>
+                            </li>
+                            <li class="nav-main-item {{ Request::routeIs('periode.index', 'kelas.index') ? 'open' : '' }}">
+                                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
+                                    aria-expanded="false" href="#">
+                                    <span class="nav-main-link-name">Akademik</span>
+                                </a>
+                                <ul class="nav-main-submenu">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ Request::routeIs('periode.index') ? 'active' : '' }}" href="{{ route('periode.index') }}">
+                                            <span class="nav-main-link-name">Periode</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ Request::routeIs('kelas.index') ? 'active' : '' }}" href="{{ route('kelas.index') }}">
+                                            <span class="nav-main-link-name">Kelas</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link" href="#">
+                                            <span class="nav-main-link-name">Pengajar</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
@@ -209,7 +232,7 @@
                                 @php
                                     $routeKelas =
                                         Auth::user()->hakAkses == 'Super Admin'
-                                            ? route('data-kelas.index')
+                                            ? route('kelas.index')
                                             : route('data-kelas-admin.index');
                                 @endphp
                                 <a class="nav-main-link {{ $sub_judul === 'data-kelas' ? 'active' : '' }}"

@@ -28,13 +28,13 @@ class Kelas extends Model
     {
         return $this->hasMany(Pengajaran::class, 'idKelas');
     }
-    public function tr_kelas()
+    public function siswa()
     {
-        return $this->hasMany(Tr_kelas::class, 'idKelas');
+        return $this->belongsToMany(Siswa::class, 'tr_kelas', 'idKelas', 'idSiswa');
     }
-
-    // public function pengajaran()
+    // public function tr_kelas()
     // {
-    //     return $this->hasOne(Pengajaran::class, 'idPengajaran');
+    //     return $this->hasMany(Tr_kelas::class, 'idKelas', 'idKelas');
     // }
+
 }

@@ -56,20 +56,12 @@
                         success: function(response) {
                             // Redirect atau lakukan sesuai kebutuhan setelah logout berhasil
                             window.location.href = '{{ route('home') }}';
-                        },
-                        error: function(error) {
-                            console.error('Logout error:', error);
                         }
                     });
                 }
             });
         });
     });
-</script>
-
-
-<script>
-    One.helpersOnLoad(['js-ckeditor5', 'js-flatpickr']);
 </script>
 </body>
 

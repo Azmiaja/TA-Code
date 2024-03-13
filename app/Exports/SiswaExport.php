@@ -18,7 +18,7 @@ class SiswaExport implements FromCollection, WithHeadings, WithEvents
      */
     public function collection()
     {
-        $siswaData = Siswa::all();
+        $siswaData = Siswa::orderBy('namaSiswa', 'asc')->get();
 
         $formattedData = $siswaData->map(function ($siswa, $key) {
             return [

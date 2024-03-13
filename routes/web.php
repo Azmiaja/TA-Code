@@ -79,16 +79,9 @@ Route::middleware(['auth:user,siswa'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'indexBeranda'])->name('dashboard.index');
 
 
-
-
     // PESAN
     Route::get('pesan/get-data', [PesanController::class, 'getData'])->name('pesan.get-data');
     Route::delete('pesan/destroy/{id}', [PesanController::class, 'destroy']);
-
-
-
-
-
 
     // PROFIL GURU.BLADE
     Route::get('profil-guru/edit/{id}', [GuruProfilController::class, 'edit'])->name('profil-guru.edit');
@@ -101,7 +94,7 @@ Route::middleware(['auth:user,siswa'])->group(function () {
 
     // PERIODE
     Route::get('get-data/periode', [Mkelas\PeriodeController::class, 'getPeriode']);
-    Route::post('periode/store', [Mkelas\PeriodeController::class, 'store']);
+    Route::post('periode/store', [Mkelas\PeriodeController::class, 'store'])->name('periode.store');
     Route::get('periode/edit/{id}', [Mkelas\PeriodeController::class, 'edit']);
     Route::put('periode/update/{id}', [Mkelas\PeriodeController::class, 'update']);
     Route::delete('periode/destroy/{id}', [Mkelas\PeriodeController::class, 'destroy']);
@@ -196,6 +189,9 @@ Route::middleware(['auth:user'])->group(function () {
         Route::get('siswa', [Muser\SiswaController::class, 'index'])->name('siswa.index');
         Route::get('sekolah', [Sekolah::class, 'index'])->name('sekolah.index');
         Route::resource('user', Muser\UserController::class);
+        Route::resource('periode', Mkelas\PeriodeController::class);
+        Route::get('kelas', [KelasController::class, 'index'])->name('kelas.index');
+
     });
     //manajemen profil sekolah
     Route::prefix('profil-sekolah')->group(function () {
@@ -247,6 +243,8 @@ Route::middleware(['auth:user'])->group(function () {
     Route::delete('siswa/destroy/{id}', [Muser\SiswaController::class, 'destroy'])->name('siswa.destroy');
     Route::post('siswa/import', [Muser\SiswaController::class, 'importSiswa'])->name('siswa.import');
     Route::get('siswa/export', [Muser\SiswaController::class, 'exportSiswa'])->name('siswa.export');
+    Route::get('siswa/deletall', [Muser\SiswaController::class, 'dropAllSiswaData'])->name('siswa.delete.all');
+
     
     // PEGAWAI.BLADE
     Route::get('pegawai/edit/{id}', [Muser\PegawaiController::class, 'edit']);
@@ -255,6 +253,7 @@ Route::middleware(['auth:user'])->group(function () {
     Route::get('pegawai/get-data', [Muser\PegawaiController::class, 'getData'])->name('pegawai.get-data');
 
     Route::get('get-jabatan', [Muser\JabatanController::class, 'getJabatan'])->name('get-jabatan');
+    Route::get('get-jabatan-options', [Muser\JabatanController::class, 'getJabatanOptions'])->name('get-jabatan.options');
     Route::post('jabatan/store', [Muser\JabatanController::class, 'store'])->name('jabatan.store');
     Route::delete('jabatan/destroy/{id}', [Muser\JabatanController::class, 'destroy']);
 });
@@ -265,24 +264,24 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
     // Route::get('/absensi', [Mkelas\Absensi::class, 'index'])->name('absensi.index');
     Route::resource('/absensi', Absensi::class);
 
-    Route::get('siswa/deletall', [Muser\SiswaController::class, 'dropAllSiswaData'])->name('siswa.delete.all');
-
-
-
     // berita
     Route::post('/posts/upload', [MCompany\BeritaController::class, 'upload'])->name('posts.upload');
     Route::post('/ckberita/upload', [MCompany\BeritaController::class, 'ck_upload'])->name('ckberita.upload');
 
     //manajemen user
-    Route::get('user/pegawai/get-data', [Muser\UserController::class, 'getUsrPegawai'])->name('get-user.pegawai');
     Route::get('user/siswa/get-data', [Muser\UserController::class, 'getUsrSiswa'])->name('get-user.siswa');
-    Route::put('user/siswa/store/{id}', [Muser\UserController::class, 'storeUsrSiswa'])->name('store-user.siswa');
-    Route::get('user/edit/pegawai/{id}', [Muser\UserController::class, 'edit']);
-    Route::put('user/update/pegawai/{id}', [Muser\UserController::class, 'update']);
+    Route::get('user/siswa/select', [Muser\UserController::class, 'getOptions'])->name('siswa.select');
+    Route::post('user/siswa/store', [Muser\UserController::class, 'storeUsrSiswa'])->name('user.siswa.store');
     Route::put('user/update/siswa/{id}', [Muser\UserController::class, 'updateUsrSiswa']);
     Route::get('user/edit/siswa/{id}', [Muser\UserController::class, 'editUsrSiswa']);
-    Route::delete('user/destroy/pegawai/{id}', [Muser\UserController::class, 'destroy']);
     Route::delete('user/destroy/siswa/{id}', [Muser\UserController::class, 'destroyUsrSiswa']);
+    
+    Route::post('user/pegawai/store', [Muser\UserController::class, 'store'])->name('user.pegawai.store');
+    Route::get('user/pegawai/get-data', [Muser\UserController::class, 'getUsrPegawai'])->name('get-user.pegawai');
+    Route::get('user/pegawai/select', [Muser\UserController::class, 'getOptionsPegawai'])->name('pegawai.select');
+    Route::get('user/edit/pegawai/{id}', [Muser\UserController::class, 'edit']);
+    Route::put('user/update/pegawai/{id}', [Muser\UserController::class, 'update']);
+    Route::delete('user/destroy/pegawai/{id}', [Muser\UserController::class, 'destroy']);
 
 
 
@@ -291,9 +290,7 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
 
     Route::prefix('manajemen-kelas')->group(function () {
         Route::resource('data-kelas', KelasController::class)->except(['index']);
-        Route::get('data-kelas', [KelasController::class, 'indexMasterDataKelas'])->name('data-kelas.index');
         Route::resource('penjadwalan', Mkelas\PenjadwalanController::class);
-        Route::resource('periode', Mkelas\PeriodeController::class);
         Route::resource('mapel', Mkelas\MapelController::class);
         Route::resource('pengajaran', Mkelas\PengajarController::class);
         Route::resource('penilaian', Mkelas\PenilaianController::class);

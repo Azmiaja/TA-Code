@@ -14,11 +14,11 @@
                                 Data Pegawai</button>
                         </div>
                     </div>
-                    <div class="block-content block-content-full">
-                        <div class="table-responsive p-0">
-                            <table id="tabelPegawai" class="table w-100 table-bordered border-dark table-stripped">
-                                <thead class="bg-gray-light align-middle">
-                                    <tr class="text-center fw-medium fs-sm">
+                    <div class="block-content block-content-full p-0">
+                        <div class="table-responsive m-md-0 m-4 p-md-4 p-0">
+                            <table id="tabelPegawai" class="table w-100 table-bordered align-middle">
+                                <thead class="bg-body-light align-middle">
+                                    <tr>
                                         <th style="width: 5%;">No</th>
                                         <th>NIP</th>
                                         <th>Nama</th>
@@ -115,7 +115,7 @@
                     });
                 }
                 const jabatandd = $('#idJabatan');
-                let url = `{{ route('get-jabatan') }}`;
+                let url = `{{ route('get-jabatan.options') }}`;
 
                 function getJabatan() {
                     // var id = $(this).val();

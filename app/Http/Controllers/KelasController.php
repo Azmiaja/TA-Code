@@ -14,16 +14,18 @@ use Yajra\DataTables\DataTables;
 
 class KelasController extends Controller
 {
-    public function indexMasterDataKelas()
+    public function index()
     {
         $pegawai = Pegawai::all();
         $guru = Pegawai::where('jenisPegawai', 'Guru')->get();
         $kelas = Kelas::orderBy('idKelas', 'desc')->get();
         $periode = Periode::orderBy('tanggalMulai', 'asc')->get();
         $siswa = Siswa::orderBy('idSiswa', 'desc')->get();
-        return view('mkelas.data-kelas', compact('periode', 'kelas', 'pegawai', 'guru', 'siswa'), [
-            "title" => "Manajemen Kelas",
-            "title2" => "Master Data Kelas"
+        return view('siakad.content.m_sekolah.akademik.kelas.index', compact('periode', 'kelas', 'pegawai', 'guru', 'siswa'), [
+            'judul' => 'Data Master',
+            'sub_judul' => 'Akademik',
+            'sub_sub_judul' => 'Kelas',
+            'text_singkat' => 'Mengelola kelas untuk guru dan siswa sekolah!',
         ]);
     }
 

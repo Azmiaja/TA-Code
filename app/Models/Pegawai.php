@@ -40,7 +40,7 @@ class Pegawai extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'idUser', 'idUser');
+        return $this->hasMany(User::class, 'idPegawai');
     }
 
     public function pengajar()

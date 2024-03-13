@@ -1,95 +1,167 @@
 @extends('siakad.layouts.app')
 @section('siakad')
-    <div class="bg-body-light">
-        <div class="content content-full">
-            <div class="row p-0">
-                <div class="col-6">
-                    {{-- Page title periode --}}
-                    <nav class="flex-shrink-0 my-3 mt-sm-0" aria-label="breadcrumb">
-                        <ol class="breadcrumb breadcrumb-alt">
-                            <li class="breadcrumb-item">
-                                <a class="link-fx" href="javascript:void(0)">{{ $judul }}</a>
-                            </li>
-                            <li class="breadcrumb-item" aria-current="page">
-                                {{ $sub_judul }}
-                            </li>
-                        </ol>
-                    </nav>
+    @include('siakad/layouts/partials/hero')
+    {{-- <div class="dropdown">
+        <button type="button" class="btn btn-sm btn-alt-success dropdown-toggle" id="dropdown-align-alt-primary"
+            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-plus mx-2"></i>Tambah Data
+        </button>
+        <div class="dropdown-menu dropdown-menu-end fs-sm" aria-labelledby="dropdown-align-alt-primary">
+            <a class="dropdown-item" id="btn-tambahKelasGuru" href="javascript:void(0)">Tambah Guru</a>
+            <a class="dropdown-item" id="btn-tambahKelasSiswa" href="javascript:void(0)">Tambah Siswa</a>
+        </div>
+    </div> --}}
+    <div class="content">
+        <div class="row m-0 pb-4 justify-content-end">
+            <div class="col-sm-3 p-0">
+                {{-- ATUR PERIODE --}}
+                <select class="form-select" id="periode" name="semester">
+                    @foreach ($periode as $item)
+                        @php
+                            $today = now();
+                            $startDate = \Carbon\Carbon::parse($item->tanggalMulai);
+                            $endDate = \Carbon\Carbon::parse($item->tanggalSelesai);
+                            $selected = $today >= $startDate && $today <= $endDate ? 'selected' : '';
+                        @endphp
+
+                        <option value="{{ $item->idPeriode }}" {{ $selected }}>
+                            Semester {{ $item->semester }}/{{ \Carbon\Carbon::parse($item->tanggalMulai)->format('Y') }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="block block-rounded">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">Wali Kelas</h3>
+                <div class="block-options">
+                    <button class="btn btn-sm btn-alt-success" id="btn-tambahUserPegawai"><i
+                            class="fa fa-plus me-2"></i>Tambah Wali Kelas</button>
                 </div>
-                <div class="col-6 text-end">
-                    {{-- ================================== BUTTON AKTIVITAS TAMBAH DATA ======================================== --}}
-                    <div class="dropdown">
-                        <button type="button" class="btn btn-sm btn-alt-success dropdown-toggle"
-                            id="dropdown-align-alt-primary" data-bs-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                            <i class="fa fa-plus mx-2"></i>Tambah Data
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end fs-sm" aria-labelledby="dropdown-align-alt-primary">
-                            <a class="dropdown-item" id="btn-tambahKelasGuru" href="javascript:void(0)">Tambah Guru</a>
-                            <a class="dropdown-item" id="btn-tambahKelasSiswa" href="javascript:void(0)">Tambah Siswa</a>
+            </div>
+            <div class="block-content p-0">
+                <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
+                    <table id="tabel-PeriodeGuru" class="table table-bordered table-vcenter w-100">
+                        <thead class="bg-body-light align-middle">
+                            <tr>
+                                <th style="width: 5%;" class="text-center">No</th>
+                                <th style="width: auto">Kelas</th>
+                                <th>Semester</th>
+                                <th>Nama Guru</th>
+                                <th style="width: 10%;" class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{-- conten --}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="block block-rounded">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">Data Siswa Kelas</h3>
+            </div>
+            <ul class="nav nav-tabs nav-tabs-alt bg-body-light" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" id="tab_kelas_1" data-bs-toggle="tab" data-bs-target="#btab_kelas_1"
+                        role="tab" aria-controls="btab_kelas_1" aria-selected="true">Kelas 1</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="tab_kelas_2" data-bs-toggle="tab" data-bs-target="#btab_kelas_2"
+                        role="tab" aria-controls="btab_kelas_2" aria-selected="true">Kelas 2</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="tab_kelas_3" data-bs-toggle="tab" data-bs-target="#btab_kelas_3"
+                        role="tab" aria-controls="btab_kelas_3" aria-selected="true">Kelas 3</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="tab_kelas_4" data-bs-toggle="tab" data-bs-target="#btab_kelas_4"
+                        role="tab" aria-controls="btab_kelas_4" aria-selected="true">Kelas 4</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="tab_kelas_5" data-bs-toggle="tab" data-bs-target="#btab_kelas_5"
+                        role="tab" aria-controls="btab_kelas_5" aria-selected="true">Kelas 5</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="tab_kelas_6" data-bs-toggle="tab" data-bs-target="#btab_kelas_6"
+                        role="tab" aria-controls="btab_kelas_6" aria-selected="true">Kelas 6</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="tab_siswa" data-bs-toggle="tab" data-bs-target="#btab_siswa"
+                        role="tab" aria-controls="btab_siswa" aria-selected="false">Siswa</button>
+                </li>
+            </ul>
+            <div class="block-content tab-content p-0">
+                <div class="tab-pane active" id="btab_kelas_1" role="tabpanel" aria-labelledby="tab_kelas_1"
+                    tabindex="0">
+                    <h1>Kelas 1</h1>
+                </div>
+                <div class="tab-pane" id="btab_kelas_2" role="tabpanel" aria-labelledby="tab_kelas_2" tabindex="0">
+                    <h1>Kelas 2</h1>
+                </div>
+                <div class="tab-pane" id="btab_kelas_3" role="tabpanel" aria-labelledby="tab_kelas_3" tabindex="0">
+                    <h1>Kelas 3</h1>
+                </div>
+                <div class="tab-pane" id="btab_kelas_4" role="tabpanel" aria-labelledby="tab_kelas_4" tabindex="0">
+                    <h1>Kelas 4</h1>
+                </div>
+                <div class="tab-pane" id="btab_kelas_5" role="tabpanel" aria-labelledby="tab_kelas_5" tabindex="0">
+                    <h1>Kelas 5</h1>
+                </div>
+                <div class="tab-pane" id="btab_kelas_6" role="tabpanel" aria-labelledby="tab_kelas_6" tabindex="0">
+                    <h1>Kelas 6</h1>
+                </div>
+                <div class="tab-pane" id="btab_siswa" role="tabpanel" aria-labelledby="tab_siswa" tabindex="0">
+                    <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
+                        <div class="row">
+                            <div class="col-12 text-md-end text-center mb-3">
+                                <button class="btn btn-sm btn-alt-success" id="btn-tambahUserSiswa"><i
+                                        class="fa fa-plus me-2"></i>Tambah User
+                                    Siswa</button>
+                            </div>
                         </div>
+                        <table id="tabel-PeriodeSiswa" class="table table-bordered table-vcenter w-100">
+                            <thead class="bg-body-light align-middle">
+                                <tr>
+                                    <th style="max-width: 5%;" class="text-center">No</th>
+                                    <th style="width: auto">Kelas</th>
+                                    <th>Semester</th>
+                                    <th>Nama Siswa</th>
+                                    <th style="width: 10%;" class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{-- conten --}}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="content">
         <div class="row">
             <div class="col-12">
                 <div class="block block-rounded">
                     <ul class="nav nav-tabs nav-tabs-block" role="tablist">
                         <li class="nav-item">
                             <button class="nav-link active" id="data-guru-tab" data-bs-toggle="tab"
-                                data-bs-target="#data-guru" role="tab" aria-controls="data-guru" aria-selected="true"
-                                onclick="reloadGuru()">Guru</button>
+                                data-bs-target="#data-guru" role="tab" aria-controls="data-guru"
+                                aria-selected="true" onclick="reloadGuru()">Guru</button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link" id="data-siswa-tab" data-bs-toggle="tab" data-bs-target="#data-siswa"
-                                role="tab" aria-controls="data-siswa" onclick="reloadSiswa()"
-                                aria-selected="false">Siswa</button>
+                            <button class="nav-link" id="data-siswa-tab" data-bs-toggle="tab"
+                                data-bs-target="#data-siswa" role="tab" aria-controls="data-siswa"
+                                onclick="reloadSiswa()" aria-selected="false">Siswa</button>
                         </li>
                         <li class="nav-item ms-auto">
-                            <div class="row pt-1 m-0 text-end">
-                                <div class="col p-0 align-self-center">
-                                    {{-- ATUR PERIODE --}}
-                                    <select class="form-select form-select-sm" id="periode" name="semester">
-                                        @foreach ($periode as $item)
-                                            @php
-                                                $today = now();
-                                                $startDate = \Carbon\Carbon::parse($item->tanggalMulai);
-                                                $endDate = \Carbon\Carbon::parse($item->tanggalSelesai);
-                                                $selected = $today >= $startDate && $today <= $endDate ? 'selected' : '';
-                                            @endphp
 
-                                            <option value="{{ $item->idPeriode }}" {{ $selected }}>
-                                                {{ $item->semester }}/{{ \Carbon\Carbon::parse($item->tanggalMulai)->format('Y') }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-
-                                </div>
-                                <label class="col-auto col-form-label" for="semester">Periode</label>
-                            </div>
                         </li>
                     </ul>
                     <div class="block-content tab-content overflow-hidden">
                         <div class="tab-pane fade show active" id="data-guru" role="tabpanel"
                             aria-labelledby="data-guru-tab" tabindex="0">
-                            <table id="tabel-PeriodeGuru" style="width: 100%;"
-                                class="table tabel-responsive table-bordered table-striped table-vcenter js-dataTable-responsive">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 5%;" class="text-center">No</th>
-                                        <th style="width: auto">Kelas</th>
-                                        <th>Semester</th>
-                                        <th>Nama Guru</th>
-                                        <th style="width: 10%;" class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{-- conten --}}
-                                </tbody>
-                                {{-- <tbody>
+
+                            {{-- <tbody>
                                     @foreach ($guru as $item)
                                         <tr>
                                             <td class="text-center fs-sm">{{ $loop->iteration }}</td>
@@ -129,21 +201,7 @@
                         </div>
                         <div class="tab-pane fade" id="data-siswa" role="tabpanel" aria-labelledby="data-siswa-tab"
                             tabindex="0">
-                            <table id="tabel-PeriodeSiswa" style="width: 100%;"
-                                class="table tabel-responsive table-bordered table-striped table-vcenter">
-                                <thead>
-                                    <tr>
-                                        <th style="max-width: 5%;" class="text-center">No</th>
-                                        <th style="width: auto">Kelas</th>
-                                        <th>Semester</th>
-                                        <th>Nama Siswa</th>
-                                        <th style="width: 10%;" class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{-- conten --}}
-                                </tbody>
-                            </table>
+
                         </div>
                         <div class="tab-pane fade" id="btabs-animated-fade-settings" role="tabpanel"
                             aria-labelledby="btabs-animated-fade-settings-tab" tabindex="0">
@@ -394,8 +452,7 @@
             loadDropdownOptions()
             // Guru
             $('#tabel-PeriodeGuru').DataTable({
-                processing: true,
-                serverSide: true,
+                ordering: false,
                 ajax: {
                     url: "{{ url('periode/guru/get-data') }}",
                     data: function(d) {
@@ -445,9 +502,9 @@
                 order: [
                     [1, 'asc']
                 ],
-                dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'l><'col-12 col-sm-12 col-md-6'<'row float-end' <'col' f><'col text-end'B>>>>" +
+                dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'><'col-12 col-sm-12 col-md-6'>>" +
                     "<'row my-2 '<'col-12 col-sm-12'tr>>" +
-                    "<'row mb-2'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    "<'row'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'>>",
                 lengthMenu: [10, 25, 50, 100],
                 buttons: [{
                         extend: 'print',
@@ -542,9 +599,9 @@
                 order: [
                     [1, 'asc']
                 ],
-                dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'l><'col-12 col-sm-12 col-md-6'<'row float-end' <'col' f><'col text-end'B>>>>" +
+                dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'l><'col-12 col-sm-12 col-md-6'f>>" +
                     "<'row my-2 '<'col-12 col-sm-12'tr>>" +
-                    "<'row mb-2'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    "<'row'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
                 lengthMenu: [10, 25, 50, 100],
                 buttons: [{
                         extend: 'print',
@@ -849,7 +906,8 @@
                             .trigger('change');
 
                         var selectSiswa = $("#idSiswa-two");
-                        var optionSiswa = selectSiswa.find("option[value='" + response.tr_kelas.idSiswa + "']");
+                        var optionSiswa = selectSiswa.find("option[value='" + response.tr_kelas
+                            .idSiswa + "']");
                         selectSiswa.val(optionSiswa.val()).trigger('change');
 
                         // Ajax untuk mengambil data kelas

@@ -15,6 +15,12 @@ class JabatanController extends Controller
         return response()->json($data);
     }
 
+    public function getJabatanOptions()
+    {
+        $data = Jabatan::whereDoesntHave('pegawai')->get();
+        return response()->json($data);
+    }
+
     public function store(Request $request)
     {
         try {

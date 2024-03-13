@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="block-content block-content-full p-0">
-                <div class="table-responsive px-4">
+                <div class="table-responsive m-md-0 m-4 p-md-4 p-0">
                     <div class="row m-0">
                         <div class="col-12 py-3 px-0 text-lg-end text-center">
                             <button class="btn btn-sm btn-alt-danger mb-lg-0 mb-2 mx-1" id="hapus-semua-siswa"
@@ -27,8 +27,8 @@
                         </div>
 
                     </div>
-                    <table id="tabelSiswa" class="table table-bordered border-dark table-striped table-vcenter w-100">
-                        <thead>
+                    <table id="tabelSiswa" class="table table-bordered align-middle w-100">
+                        <thead class="bg-body-light align-middle">
                             <tr>
                                 <th style="width: 5%;">No</th>
                                 <th style="width: 14%;">NIS</th>
@@ -161,7 +161,8 @@
                             nama: 'ttl',
                         }, {
                             data: 'jenisKelamin',
-                            name: 'jenisKelamin'
+                            name: 'jenisKelamin',
+                            className: 'text-center'
                         }, {
                             data: 'status',
                             className: 'text-center',
@@ -175,7 +176,8 @@
                                     data.idSiswa + '">' +
                                     '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
                                     '<button type="button" class="btn btn-sm btn-alt-danger" id="action-hapusSiswa" title="Delete" value="' +
-                                    data.idSiswa + '" data-nama-siswa="' + data.namaSiswa + '">' +
+                                    data.idSiswa + '" data-nama-siswa="' + data.namaSiswa +
+                                    '">' +
                                     '<i class="fa fa-fw fa-times"></i></button>' +
                                     '</div>';
                             }
@@ -266,7 +268,7 @@
 
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        text: 'Menghapus data ' + namaSiswa + '',
+                        html: `Menghapus data <b>${namaSiswa}</b> akan menghapus data <b>User</b>-nya juga`,
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonText: 'Batal',
