@@ -216,6 +216,8 @@
                     formSiswa.attr('action', '{{ route('user.siswa.store') }}');
 
                     getSelect();
+
+                    $('#kls_display').prop("hidden", true);
                 });
 
                 // Select2 from siswa

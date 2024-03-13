@@ -12,7 +12,7 @@ class userSiswa extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, CanResetPassword;
 
-    protected $table = 'userSiswa';
+    protected $table = 'usersiswa';
     protected $guarded = ['idUserSiswa']; 
     protected $primaryKey = 'idUserSiswa';
     protected $fillable = ['username', 'password', 'hakAkses', 'idSiswa'];
