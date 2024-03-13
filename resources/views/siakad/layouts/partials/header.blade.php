@@ -81,9 +81,15 @@
                             aria-expanded="false">
                             <div class="ratio" style="width: 21px; height: 21px;">
                                 @canany(['super.admin', 'admin', 'guru'])
-                                    <img class="rounded-circle"
-                                        src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}" alt="Header Avatar"
-                                        style="width: 100%; height: 100%; object-fit: cover">
+                                    @if (Auth::user()->pegawai->gambar)
+                                        <img class="rounded-circle"
+                                            src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}"
+                                            alt="Header Avatar" style="width: 100%; height: 100%; object-fit: cover">
+                                    @else
+                                        <img class="rounded-circle border border-3 border-white"
+                                            style="width: 100%; height: 100%; object-fit: cover"
+                                            src="{{ asset('assets/media/avatars/avatar1.jpg') }}" alt="">
+                                    @endif
                                 @endcanany
                                 @can('siswa')
                                     <img class="rounded-circle" src="{{ asset('assets/media/avatars/avatar0.jpg') }}"
@@ -99,9 +105,16 @@
                             <div class="p-3 text-center  bg-body-light border-bottom rounded-top">
                                 <div class="ratio mx-auto" style="width: 70px; height: 70px;">
                                     @canany(['super.admin', 'admin', 'guru'])
-                                        <img class="rounded-circle border border-3 border-white"
-                                            style="width: 100%; height: 100%; object-fit: cover"
-                                            src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}" alt="">
+                                        @if (Auth::user()->pegawai->gambar)
+                                            <img class="rounded-circle border border-3 border-white"
+                                                style="width: 100%; height: 100%; object-fit: cover"
+                                                src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}"
+                                                alt="">
+                                        @else
+                                            <img class="rounded-circle border border-3 border-white"
+                                                style="width: 100%; height: 100%; object-fit: cover"
+                                                src="{{ asset('assets/media/avatars/avatar1.jpg') }}" alt="">
+                                        @endif
                                     @endcanany
                                     @can('siswa')
                                         <img class="rounded-circle border border-3 border-white"
