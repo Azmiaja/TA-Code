@@ -5,9 +5,15 @@
                 <div class="col-lg-8 col-6 mb-3">
                     <div class="ratio ratio-1x1">
                         @cannot('siswa')
-                            <img src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}"
-                                class="rounded-circle border border-5" style="width: 100%; height: 100%; object-fit: cover"
-                                alt="" srcset="">
+                            @if (Auth::user()->pegawai->gambar)
+                                <img src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}"
+                                    class="rounded-circle border border-5"
+                                    style="width: 100%; height: 100%; object-fit: cover" alt="" srcset="">
+                            @else
+                                <img src="{{ asset('assets/media/avatars/avatar1.jpg') }}"
+                                    class="rounded-circle border border-5"
+                                    style="width: 100%; height: 100%; object-fit: cover" alt="" srcset="">
+                            @endif
                         @endcannot
                         @can('siswa')
                             <img src="{{ asset('assets/media/avatars/avatar1.jpg') }}"
