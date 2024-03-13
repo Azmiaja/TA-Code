@@ -384,7 +384,7 @@ class Controller extends BaseController
 
         return $guru->map(function ($pegawai) {
             $namaPegawai = $pegawai->namaPegawai;
-            $gambar = $pegawai->gambar ? asset('storage/' . $pegawai->gambar) : null;
+            $gambar = $pegawai->gambar ? asset('storage/' . $pegawai->gambar) : asset('assets/media/avatars/avatar1.jpg');
             $namaJabatan = optional($pegawai->jabatanPegawai)->jabatan;
 
             return compact('namaPegawai', 'gambar', 'namaJabatan');

@@ -94,8 +94,6 @@
                                         {{ $bTree['judul'] }}
                                     </h6>
                                     <div class="fw-semibold text-dark fs-sm text-wrap">
-                                        <a class="link-effect link-primary d-lg-none d-md-inline"
-                                            href="#">{{ $bTree['penulis'] }}</a>
                                         <span class="">
                                             {{ $bTree['tanggal'] }} &bull;</span>
                                         <span class="text-muted">

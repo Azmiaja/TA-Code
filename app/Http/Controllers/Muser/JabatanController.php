@@ -21,6 +21,12 @@ class JabatanController extends Controller
         return response()->json($data);
     }
 
+    public function getJabatanOptionsEdit()
+    {
+        $data = Jabatan::all();
+        return response()->json($data);
+    }
+
     public function store(Request $request)
     {
         try {

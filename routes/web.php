@@ -188,7 +188,6 @@ Route::middleware(['auth:user'])->group(function () {
         Route::resource('pegawai', Muser\PegawaiController::class);
         Route::get('siswa', [Muser\SiswaController::class, 'index'])->name('siswa.index');
         Route::get('sekolah', [Sekolah::class, 'index'])->name('sekolah.index');
-        Route::resource('user', Muser\UserController::class);
         Route::resource('periode', Mkelas\PeriodeController::class);
         Route::get('kelas', [KelasController::class, 'index'])->name('kelas.index');
 
@@ -253,7 +252,8 @@ Route::middleware(['auth:user'])->group(function () {
     Route::get('pegawai/get-data', [Muser\PegawaiController::class, 'getData'])->name('pegawai.get-data');
 
     Route::get('get-jabatan', [Muser\JabatanController::class, 'getJabatan'])->name('get-jabatan');
-    Route::get('get-jabatan-options', [Muser\JabatanController::class, 'getJabatanOptions'])->name('get-jabatan.options');
+    Route::get('get-jabatan/options', [Muser\JabatanController::class, 'getJabatanOptions'])->name('get-jabatan.options');
+    Route::get('get-jabatan/options/edit', [Muser\JabatanController::class, 'getJabatanOptionsEdit'])->name('get-jabatan.options.edit');
     Route::post('jabatan/store', [Muser\JabatanController::class, 'store'])->name('jabatan.store');
     Route::delete('jabatan/destroy/{id}', [Muser\JabatanController::class, 'destroy']);
 });
@@ -263,6 +263,9 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
 
     // Route::get('/absensi', [Mkelas\Absensi::class, 'index'])->name('absensi.index');
     Route::resource('/absensi', Absensi::class);
+    Route::prefix('manajemen-user')->group(function(){
+        Route::resource('user', Muser\UserController::class);
+    });
 
     // berita
     Route::post('/posts/upload', [MCompany\BeritaController::class, 'upload'])->name('posts.upload');

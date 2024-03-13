@@ -2,91 +2,158 @@
 @section('siakad')
     @include('siakad/layouts/partials/hero')
     <div class="content">
-        <div class="row g-4">
-            <div class="col-lg-9 col-12">
-                <div class="row items-push">
-                    <div class="col-sm-12 col-xxl-4">
-                        <div class="block block-rounded d-flex flex-column h-100 mb-0">
-                            <div
-                                class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
-                                <dl class="mb-0">
-                                    <dt class="fs-3 fw-bold">{{ $pegawai }}</dt>
-                                    <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Jumlah Pegawai Aktif</dd>
-                                </dl>
-                                <div class="item item-rounded-lg bg-body-light">
-                                    <i class="fa-solid fa-user-tie fs-3 text-primary"></i>
+        @can('super.admin')
+            <div class="row g-4">
+                <div class="col-lg-9 col-12">
+                    <div class="row items-push">
+                        <div class="col-sm-12 col-xxl-4">
+                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
+                                <div
+                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                                    <dl class="mb-0">
+                                        <dt class="fs-3 fw-bold">{{ $pegawai }}</dt>
+                                        <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Jumlah Pegawai Aktif</dd>
+                                    </dl>
+                                    <div class="item item-rounded-lg bg-body-light">
+                                        <i class="fa-solid fa-user-tie fs-3 text-primary"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="bg-body-light rounded-bottom">
-                                <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
-                                    href="{{ route('pegawai.index') }}">
-                                    <span>View all pegawai</span>
-                                    <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
-                                </a>
+                                <div class="bg-body-light rounded-bottom">
+                                    <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
+                                        href="{{ route('pegawai.index') }}">
+                                        <span>View all pegawai</span>
+                                        <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-xxl-4">
-                        <div class="block block-rounded d-flex flex-column h-100 mb-0">
-                            <div
-                                class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
-                                <dl class="mb-0">
-                                    <dt class="fs-3 fw-bold">{{ $siswa }}</dt>
-                                    <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Jumlah Siswa Aktif</dd>
-                                </dl>
-                                <div class="item item-rounded-lg bg-body-light">
-                                    <i class="fa-solid fa-graduation-cap fs-3 text-primary"></i>
+                        <div class="col-sm-12 col-xxl-4">
+                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
+                                <div
+                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                                    <dl class="mb-0">
+                                        <dt class="fs-3 fw-bold">{{ $siswa }}</dt>
+                                        <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Jumlah Siswa Aktif</dd>
+                                    </dl>
+                                    <div class="item item-rounded-lg bg-body-light">
+                                        <i class="fa-solid fa-graduation-cap fs-3 text-primary"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="bg-body-light rounded-bottom">
-                                <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
-                                    href="javascript:void(0)">
-                                    <span>View all siswa</span>
-                                    <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
-                                </a>
+                                <div class="bg-body-light rounded-bottom">
+                                    <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
+                                        href="{{ route('siswa.index') }}">
+                                        <span>View all siswa</span>
+                                        <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-xxl-4">
-                        <div class="block block-rounded d-flex flex-column h-100 mb-0">
-                            <div
-                                class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
-                                <dl class="mb-0">
-                                    <dt class="fs-3 fw-bold">{{ $jumlahUser }}</dt>
-                                    <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Jumlah Pengguna Aktif</dd>
-                                </dl>
-                                <div class="item item-rounded-lg bg-body-light">
-                                    <i class="far fa-user-circle fs-3 text-primary"></i>
+                        <div class="col-sm-12 col-xxl-4">
+                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
+                                <div
+                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                                    <dl class="mb-0">
+                                        <dt class="fs-3 fw-bold">{{ $jumlahUser }}</dt>
+                                        <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Jumlah Pengguna Aktif</dd>
+                                    </dl>
+                                    <div class="item item-rounded-lg bg-body-light">
+                                        <i class="far fa-user-circle fs-3 text-primary"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="bg-body-light rounded-bottom">
-                                <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
-                                    href="{{ route('user.index') }}">
-                                    <span>View all user</span>
-                                    <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
-                                </a>
+                                <div class="bg-body-light rounded-bottom">
+                                    <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
+                                        href="{{ route('user.index') }}">
+                                        <span>View all user</span>
+                                        <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3 col-12">
-                <div class="block block-rounded">
-                    <div class="block-content block-content-full ratio ratio-1x1">
+                <div class="col-lg-3 col-12">
+                    <div class="block block-rounded">
+                        <div class="block-content block-content-full ratio ratio-1x1">
 
-                    </div>
-                    <div class="bg-body-light rounded-bottom">
-                        <span class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex">
-                            <span>Grafik Pengguna</span>
-                        </span>
+                        </div>
+                        <div class="bg-body-light rounded-bottom">
+                            <span class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex">
+                                <span>Grafik Pengguna</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endcan
+
+        {{-- Admin --}}
+        @can('admin')
+            <div class="row g-4">
+                <div class="col-lg-9 col-12">
+                    <div class="row items-push">
+                        <div class="col-sm-12 col-xxl-6">
+                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
+                                <div
+                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                                    <dl class="mb-0">
+                                        <dt class="fs-3 fw-bold">{{ $pegawai }}</dt>
+                                        <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Jumlah Pegawai Aktif</dd>
+                                    </dl>
+                                    <div class="item item-rounded-lg bg-body-light">
+                                        <i class="fa-solid fa-user-tie fs-3 text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="bg-body-light rounded-bottom">
+                                    <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
+                                        href="{{ route('pegawai.index') }}">
+                                        <span>View all pegawai</span>
+                                        <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-xxl-6">
+                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
+                                <div
+                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
+                                    <dl class="mb-0">
+                                        <dt class="fs-3 fw-bold">{{ $siswa }}</dt>
+                                        <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Jumlah Siswa Aktif</dd>
+                                    </dl>
+                                    <div class="item item-rounded-lg bg-body-light">
+                                        <i class="fa-solid fa-graduation-cap fs-3 text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="bg-body-light rounded-bottom">
+                                    <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
+                                        href="{{ route('siswa.index') }}">
+                                        <span>View all siswa</span>
+                                        <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="col-lg-3 col-12">
+                    <div class="block block-rounded">
+                        <div class="block-content block-content-full ratio ratio-1x1">
+
+                        </div>
+                        <div class="bg-body-light rounded-bottom">
+                            <span class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex">
+                                <span>Grafik Siswa</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endcan
         {{-- <div class="row d-flex nowrap">
             <div
                 class="col-xxl-9 col-xl-9 col-lg-8 col-md-7 pe-md-3 mb-sm-3 mb-3 pe-0 col-sm-12 col-12 order-md-first order-last"> --}}
-                {{-- @canany(['super.admin', 'admin'])
+        {{-- @canany(['super.admin', 'admin'])
                     <div class="row item-push mb-md-3 mb-0">
                         <div class=" mb-lg-0 mb-sm-3 mb-3 col-6 col-xl-4 col-sm-4 col-md-6 col-lg-6">
                             <!-- Pending Orders -->
@@ -205,7 +272,7 @@
                         </div>
                     </div>
                 @endcanany --}}
-                {{-- @can('siswa')
+        {{-- @can('siswa')
                     <div class="row item-push mb-md-3 mb-0">
                         <div class=" mb-lg-0 mb-sm-3 mb-3 col-12 col-lg-6">
                             <!-- Pending Orders -->
@@ -284,7 +351,7 @@
                         </div>
                     </div>
                 @endcan --}}
-                {{-- @can('guru')
+        {{-- @can('guru')
                     <div class="row item-push mb-md-3 mb-0">
                         <div class=" mb-lg-0 mb-sm-3 mb-3 col-6 col-xl-4 col-sm-4 col-md-6 col-lg-6">
                             <!-- Pending Orders -->
@@ -354,9 +421,9 @@
                         </div>
                     </div>
                 @endcan --}}
-            {{-- </div> --}}
+        {{-- </div> --}}
 
-            {{-- <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-5 ps-md-3 ps-2 p-0 col-sm-12 col-12 order-md-last order-first">
+        {{-- <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-5 ps-md-3 ps-2 p-0 col-sm-12 col-12 order-md-last order-first">
                 <div class="row">
                     <div class="col-md-12 col-sm-6">
                         <div class="block block-rounded">
@@ -406,692 +473,692 @@
 
             </div> --}}
         {{-- </div> --}}
-    {{-- </div> --}}
+        {{-- </div> --}}
 
 
-    @push('scripts')
-        @cannot('guru')
-            <script>
-                $(document).ready(function() {
-                    $('#calendar').datepicker({
-                        format: 'yyyy-mm-dd',
-                        todayHighlight: true,
-                        autoclose: true,
-                        orientation: 'bottom auto'
+        @push('scripts')
+            @cannot('guru')
+                <script>
+                    $(document).ready(function() {
+                        $('#calendar').datepicker({
+                            format: 'yyyy-mm-dd',
+                            todayHighlight: true,
+                            autoclose: true,
+                            orientation: 'bottom auto'
+                        });
+
+                        $('#calendar').on('changeDate', function(e) {
+
+                            var selectedDate = e.format('yyyy-mm-dd');
+
+                            var hari = moment(selectedDate).format('dddd');
+
+                            var hariIndonesia = {
+                                'Sunday': 'Minggu',
+                                'Monday': 'Senin',
+                                'Tuesday': 'Selasa',
+                                'Wednesday': 'Rabu',
+                                'Thursday': 'Kamis',
+                                'Friday': 'Jumat',
+                                'Saturday': 'Sabtu',
+                            };
+
+                            // console.log(hariIndonesia[hari]);
+
+                            $.ajax({
+                                url: "{{ url('get-kalender-jadwal') }}",
+                                type: 'GET',
+                                data: {
+                                    hari: hariIndonesia[hari],
+                                    kelas: $("#kelas-nama").val(),
+                                    periode: $('#periode').val(),
+                                },
+                                success: function(data) {
+                                    if (data && data.data.length > 0) {
+                                        // Jika data berhasil diterima
+
+                                        // Tampilkan daftar jadwal pelajaran
+                                        var detailsHTML = '<ul class="list-group">';
+
+                                        for (let i = 0; i < data.data.length; i++) {
+                                            // Tambahkan detail jadwal pelajaran
+                                            detailsHTML += '<li class="list-group-item lh-1">' +
+                                                '<strong>' + data.data[i].hari + '</strong> - <strong>' +
+                                                data.data[i].namaMapel +
+                                                '</strong>' +
+                                                '<p>Jam: ' + data.data[i].jamMulai + ' - ' + data.data[i]
+                                                .jamSelesai + '</p>' +
+                                                '<p class="lh-0">Pengajar: ' + data.data[i].namaPegawai +
+                                                '</p></li>';
+                                        }
+
+                                        detailsHTML += '</ul>';
+
+                                        // Tampilkan hasil di #dateDetails
+                                        $('#dateDetails').html(detailsHTML);
+                                    } else {
+                                        // Jika data tidak berhasil diterima atau tidak ada jadwal pelajaran
+
+                                        // Tampilkan pesan yang sesuai
+                                        var messageHTML = data && data.data.length === 0 ?
+                                            '<p>Jadwal pelajaran untuk tanggal ini belum diset.</p>' :
+                                            '<p>Gagal mendapatkan jadwal pelajaran.</p>';
+
+                                        $('#dateDetails').html(messageHTML);
+                                    }
+                                },
+
+                                error: function(error) {
+                                    console.error('Error fetching data:', error);
+                                }
+                            });
+                        });
+                    });
+                </script>
+            @endcannot
+            @canany(['super.admin', 'admin'])
+                <script>
+                    $(document).ready(function() {
+                        getChart();
+
+                        getChartBarJK();
+                        getChartBarJKsiswa();
+                        // getChartBar($('#periode').val());
+                        getChartBar($('#periode').val());
+
+                        getSiswa($('#periode').val())
+
+                        // Tambahkan event listener untuk perubahan nilai pada elemen select
+                        $('#periode').change(function() {
+                            getSiswa($(this).val());
+                            getChartBar($(this).val());
+                        });
+
+
+
                     });
 
-                    $('#calendar').on('changeDate', function(e) {
+                    function getChart() {
+                        $.ajax({
+                            url: "{{ url('chart/donat/user') }}",
+                            method: 'GET',
+                            success: function(data) {
+                                console.log(data);
 
-                        var selectedDate = e.format('yyyy-mm-dd');
+                                var ctx = document.getElementById('chart_donut_jumlah_user').getContext('2d');
+                                var chart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: data.data.map(function(item) {
+                                            return item.hakAkses;
+                                        }),
+                                        datasets: [{
+                                            label: 'Jumlah User',
+                                            data: data.data.map(function(item) {
+                                                return item.jumlah;
+                                            }),
+                                            backgroundColor: [
+                                                '#81c2ff',
+                                                '#abe37d',
+                                                '#fff18a',
+                                                '#ffbe8a',
+                                                '#f8d4d4',
+                                                '#c1e7ee'
+                                            ],
+                                            borderColor: [
+                                                '#81c2ff',
+                                                '#abe37d',
+                                                '#fff18a',
+                                                '#ffbe8a',
+                                                '#f8d4d4',
+                                                '#c1e7ee'
+                                            ],
+                                            borderWidth: 1,
+                                        }],
+                                    },
+                                    options: {
+                                        plugins: {
+                                            legend: {
+                                                display: true,
+                                                position: 'bottom',
+                                                labels: {
+                                                    fontSize: 16,
+                                                },
+                                            },
+                                        },
+                                        responsive: true,
+                                    },
+                                });
+                            },
+                        });
+                    }
 
-                        var hari = moment(selectedDate).format('dddd');
+                    function getChartBar(periodeId) {
+                        $.ajax({
+                            url: `{{ url('/jumlah-pengajar-per-kelas') }}/${periodeId}`,
+                            method: 'GET',
+                            success: function(data) {
+                                console.log(data);
 
-                        var hariIndonesia = {
-                            'Sunday': 'Minggu',
-                            'Monday': 'Senin',
-                            'Tuesday': 'Selasa',
-                            'Wednesday': 'Rabu',
-                            'Thursday': 'Kamis',
-                            'Friday': 'Jumat',
-                            'Saturday': 'Sabtu',
-                        };
+                                const ctx = document.getElementById('chart_jumlah_pengajar').getContext('2d');
+                                if (window.myBarChart) {
+                                    // Hancurkan chart lama jika sudah ada
+                                    window.myBarChart.destroy();
+                                }
+                                window.myBarChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: data.map((item) => `Kelas ${item.namaKelas}`),
+                                        datasets: [{
+                                            label: 'Jumlah Pengajar',
+                                            data: data.map((item) => item.jumlah),
+                                            backgroundColor: [
+                                                '#81c2ff',
+                                                '#abe37d',
+                                                '#fff18a',
+                                                '#ffbe8a',
+                                                '#f8d4d4',
+                                                '#c1e7ee'
+                                            ],
+                                            borderColor: [
+                                                '#81c2ff',
+                                                '#abe37d',
+                                                '#fff18a',
+                                                '#ffbe8a',
+                                                '#f8d4d4',
+                                                '#c1e7ee'
+                                            ],
+                                            borderWidth: 1,
+                                            borderRadius: 10,
+                                        }],
+                                    },
+                                    options: {
+                                        bezierCurve: false,
+                                        plugins: {
+                                            legend: {
+                                                display: false,
+                                            },
+                                            tooltip: {
+                                                radius: '3',
+                                                enabled: true,
+                                            }
+                                        },
+                                        responsive: true,
+                                        scales: {
+                                            x: {
+                                                grid: {
+                                                    display: false
+                                                },
+                                            },
+                                            y: {
+                                                grid: {
+                                                    display: false
+                                                },
+                                            },
+                                            // beginAtZero = !0,
+                                        },
+                                        elements: {
+                                            line: {
+                                                tension: 0.4, // Set the tension for a smoother line
+                                            },
+                                        },
+                                    },
+                                });
+                            },
+                        });
+                    }
 
-                        // console.log(hariIndonesia[hari]);
+                    function getSiswa(periodeId) {
+                        $.ajax({
+                            url: `{{ url('/jumlah-siswa') }}/${periodeId}`,
+                            method: 'GET',
+                            success: function(data) {
+                                console.log(data);
+
+                                const ctx = document.getElementById('chart_jumlah_siswa').getContext('2d');
+                                if (window.siswaChart) {
+                                    // Hancurkan chart lama jika sudah ada
+                                    window.siswaChart.destroy();
+                                }
+                                window.siswaChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: data.map((item) => `Kelas ${item.namaKelas}`),
+                                        datasets: [{
+                                            label: 'Jumlah Siswa',
+                                            data: data.map((item) => item.jumlah),
+                                            backgroundColor: [
+                                                '#81c2ff',
+                                                '#abe37d',
+                                                '#fff18a',
+                                                '#ffbe8a',
+                                                '#f8d4d4',
+                                                '#c1e7ee'
+                                            ],
+                                            borderColor: [
+                                                '#81c2ff',
+                                                '#abe37d',
+                                                '#fff18a',
+                                                '#ffbe8a',
+                                                '#f8d4d4',
+                                                '#c1e7ee'
+                                            ],
+                                            borderWidth: 1,
+                                            borderRadius: 10,
+                                        }],
+                                    },
+                                    options: {
+                                        bezierCurve: false,
+                                        plugins: {
+                                            legend: {
+                                                display: false,
+                                            },
+                                            tooltip: {
+                                                radius: '3',
+                                                enabled: true,
+                                            }
+                                        },
+                                        responsive: true,
+                                        scales: {
+                                            x: {
+                                                grid: {
+                                                    display: false
+                                                },
+                                            },
+                                            y: {
+                                                grid: {
+                                                    display: false
+                                                },
+                                            },
+                                            // beginAtZero = !0,
+                                        },
+                                        elements: {
+                                            line: {
+                                                tension: 0.4, // Set the tension for a smoother line
+                                            },
+                                        },
+                                    },
+                                });
+                            },
+                        });
+                    }
+
+                    function getChartBarJK() {
+                        $.ajax({
+                            url: `{{ url('chart/jenis-kelamin') }}`,
+                            method: 'GET',
+                            success: function(data) {
+                                console.log(data);
+
+                                const ctx = document.getElementById('chrat_bar_jK').getContext('2d');
+                                const chart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: ['L', 'P'],
+                                        datasets: [{
+                                            label: 'Jumlah',
+                                            data: data.pegawai.map(function(item) {
+                                                return item.Jumlah
+                                            }),
+                                            backgroundColor: [
+                                                '#81c2ff',
+                                                '#abe37d',
+                                            ],
+                                            borderColor: [
+                                                '#81c2ff',
+                                                '#abe37d',
+                                            ],
+                                            borderWidth: 1,
+                                            borderRadius: 10,
+                                        }],
+                                    },
+                                    options: {
+                                        indexAxis: 'y',
+                                        responsive: true,
+                                        plugins: {
+                                            legend: {
+                                                display: false,
+                                                position: 'bottom',
+                                                labels: {
+                                                    fontSize: 16,
+                                                },
+                                            },
+                                            title: {
+                                                display: true,
+                                                text: 'Pegawai',
+                                                fontSize: 50,
+                                                align: 'start'
+                                            },
+                                        },
+                                        scales: {
+                                            x: {
+                                                grid: {
+                                                    display: false
+                                                }, // Sembunyikan grid untuk sumbu x
+                                            },
+                                            y: {
+                                                grid: {
+                                                    display: false
+                                                }, // Sembunyikan grid untuk sumbu y
+                                            },
+                                        },
+
+                                    },
+                                });
+                            },
+                        });
+                    }
+
+                    function getChartBarJKsiswa() {
+                        $.ajax({
+                            url: `{{ url('chart/jenis-kelamin') }}`,
+                            method: 'GET',
+                            success: function(data) {
+                                console.log(data);
+
+                                const ctx = document.getElementById('chrat_bar_jK_siswa').getContext('2d');
+                                const chart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: ['L', 'P'],
+                                        datasets: [{
+                                            label: 'Jumlah',
+                                            data: data.siswa.map(function(item) {
+                                                return item.Jumlah
+                                            }),
+                                            backgroundColor: [
+                                                '#ffbe8a',
+                                                '#f8d4d4',
+                                                '#c1e7ee'
+                                            ],
+                                            borderColor: [
+                                                '#ffbe8a',
+                                                '#f8d4d4',
+                                                '#c1e7ee'
+                                            ],
+                                            borderWidth: 1,
+                                            borderRadius: 10,
+                                        }],
+                                    },
+                                    options: {
+                                        indexAxis: 'y',
+                                        responsive: true,
+                                        plugins: {
+                                            legend: {
+                                                display: false,
+                                                position: 'bottom',
+                                                labels: {
+                                                    fontSize: 16,
+                                                },
+                                            },
+                                            title: {
+                                                display: true,
+                                                text: 'Siswa',
+                                                fontSize: 50,
+                                                align: 'start'
+                                            },
+                                        },
+                                        scales: {
+                                            x: {
+                                                grid: {
+                                                    display: false
+                                                }, // Sembunyikan grid untuk sumbu x
+                                            },
+                                            y: {
+                                                grid: {
+                                                    display: false
+                                                }, // Sembunyikan grid untuk sumbu y
+                                            },
+                                        },
+
+                                    },
+                                });
+                            },
+                        });
+                    }
+                </script>
+            @endcanany
+            @can('siswa')
+                <script>
+                    $(document).ready(function() {
+
 
                         $.ajax({
-                            url: "{{ url('get-kalender-jadwal') }}",
+                            url: '{{ route('count-mapel.siswa') }}',
                             type: 'GET',
                             data: {
-                                hari: hariIndonesia[hari],
                                 kelas: $("#kelas-nama").val(),
                                 periode: $('#periode').val(),
                             },
-                            success: function(data) {
-                                if (data && data.data.length > 0) {
-                                    // Jika data berhasil diterima
-
-                                    // Tampilkan daftar jadwal pelajaran
-                                    var detailsHTML = '<ul class="list-group">';
-
-                                    for (let i = 0; i < data.data.length; i++) {
-                                        // Tambahkan detail jadwal pelajaran
-                                        detailsHTML += '<li class="list-group-item lh-1">' +
-                                            '<strong>' + data.data[i].hari + '</strong> - <strong>' +
-                                            data.data[i].namaMapel +
-                                            '</strong>' +
-                                            '<p>Jam: ' + data.data[i].jamMulai + ' - ' + data.data[i]
-                                            .jamSelesai + '</p>' +
-                                            '<p class="lh-0">Pengajar: ' + data.data[i].namaPegawai +
-                                            '</p></li>';
-                                    }
-
-                                    detailsHTML += '</ul>';
-
-                                    // Tampilkan hasil di #dateDetails
-                                    $('#dateDetails').html(detailsHTML);
+                            success: function(response) {
+                                var wakel = response.wakel;
+                                if (wakel && wakel.length > 0) {
+                                    var pegawaiPertama = wakel[0];
+                                    $('#wali_kelas').text(pegawaiPertama.namaPegawai);
+                                    $('#nip_wakel').text(pegawaiPertama.nip);
+                                    $('#nohp_wakel').text(pegawaiPertama.noHp);
                                 } else {
-                                    // Jika data tidak berhasil diterima atau tidak ada jadwal pelajaran
-
-                                    // Tampilkan pesan yang sesuai
-                                    var messageHTML = data && data.data.length === 0 ?
-                                        '<p>Jadwal pelajaran untuk tanggal ini belum diset.</p>' :
-                                        '<p>Gagal mendapatkan jadwal pelajaran.</p>';
-
-                                    $('#dateDetails').html(messageHTML);
+                                    console.log('Data Wakel Tidak Ditemukan');
                                 }
-                            },
+                                // Tampilkan jumlah mata pelajaran di elemen HTML dengan id #jumlah_mapel
+                                $('#jumlah_mapel').text(response.jumlah_mapel);
 
-                            error: function(error) {
-                                console.error('Error fetching data:', error);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error); // Tampilkan pesan kesalahan di konsol
                             }
                         });
-                    });
-                });
-            </script>
-        @endcannot
-        @canany(['super.admin', 'admin'])
-            <script>
-                $(document).ready(function() {
-                    getChart();
 
-                    getChartBarJK();
-                    getChartBarJKsiswa();
-                    // getChartBar($('#periode').val());
-                    getChartBar($('#periode').val());
+                        $('#periode').change(function() {
+                            getChartNilai();
+                        });
 
-                    getSiswa($('#periode').val())
-
-                    // Tambahkan event listener untuk perubahan nilai pada elemen select
-                    $('#periode').change(function() {
-                        getSiswa($(this).val());
-                        getChartBar($(this).val());
-                    });
-
-
-
-                });
-
-                function getChart() {
-                    $.ajax({
-                        url: "{{ url('chart/donat/user') }}",
-                        method: 'GET',
-                        success: function(data) {
-                            console.log(data);
-
-                            var ctx = document.getElementById('chart_donut_jumlah_user').getContext('2d');
-                            var chart = new Chart(ctx, {
-                                type: 'doughnut',
-                                data: {
-                                    labels: data.data.map(function(item) {
-                                        return item.hakAkses;
-                                    }),
-                                    datasets: [{
-                                        label: 'Jumlah User',
-                                        data: data.data.map(function(item) {
-                                            return item.jumlah;
-                                        }),
-                                        backgroundColor: [
-                                            '#81c2ff',
-                                            '#abe37d',
-                                            '#fff18a',
-                                            '#ffbe8a',
-                                            '#f8d4d4',
-                                            '#c1e7ee'
-                                        ],
-                                        borderColor: [
-                                            '#81c2ff',
-                                            '#abe37d',
-                                            '#fff18a',
-                                            '#ffbe8a',
-                                            '#f8d4d4',
-                                            '#c1e7ee'
-                                        ],
-                                        borderWidth: 1,
-                                    }],
-                                },
-                                options: {
-                                    plugins: {
-                                        legend: {
-                                            display: true,
-                                            position: 'bottom',
-                                            labels: {
-                                                fontSize: 16,
-                                            },
-                                        },
-                                    },
-                                    responsive: true,
-                                },
-                            });
-                        },
-                    });
-                }
-
-                function getChartBar(periodeId) {
-                    $.ajax({
-                        url: `{{ url('/jumlah-pengajar-per-kelas') }}/${periodeId}`,
-                        method: 'GET',
-                        success: function(data) {
-                            console.log(data);
-
-                            const ctx = document.getElementById('chart_jumlah_pengajar').getContext('2d');
-                            if (window.myBarChart) {
-                                // Hancurkan chart lama jika sudah ada
-                                window.myBarChart.destroy();
-                            }
-                            window.myBarChart = new Chart(ctx, {
-                                type: 'bar',
-                                data: {
-                                    labels: data.map((item) => `Kelas ${item.namaKelas}`),
-                                    datasets: [{
-                                        label: 'Jumlah Pengajar',
-                                        data: data.map((item) => item.jumlah),
-                                        backgroundColor: [
-                                            '#81c2ff',
-                                            '#abe37d',
-                                            '#fff18a',
-                                            '#ffbe8a',
-                                            '#f8d4d4',
-                                            '#c1e7ee'
-                                        ],
-                                        borderColor: [
-                                            '#81c2ff',
-                                            '#abe37d',
-                                            '#fff18a',
-                                            '#ffbe8a',
-                                            '#f8d4d4',
-                                            '#c1e7ee'
-                                        ],
-                                        borderWidth: 1,
-                                        borderRadius: 10,
-                                    }],
-                                },
-                                options: {
-                                    bezierCurve: false,
-                                    plugins: {
-                                        legend: {
-                                            display: false,
-                                        },
-                                        tooltip: {
-                                            radius: '3',
-                                            enabled: true,
-                                        }
-                                    },
-                                    responsive: true,
-                                    scales: {
-                                        x: {
-                                            grid: {
-                                                display: false
-                                            },
-                                        },
-                                        y: {
-                                            grid: {
-                                                display: false
-                                            },
-                                        },
-                                        // beginAtZero = !0,
-                                    },
-                                    elements: {
-                                        line: {
-                                            tension: 0.4, // Set the tension for a smoother line
-                                        },
-                                    },
-                                },
-                            });
-                        },
-                    });
-                }
-
-                function getSiswa(periodeId) {
-                    $.ajax({
-                        url: `{{ url('/jumlah-siswa') }}/${periodeId}`,
-                        method: 'GET',
-                        success: function(data) {
-                            console.log(data);
-
-                            const ctx = document.getElementById('chart_jumlah_siswa').getContext('2d');
-                            if (window.siswaChart) {
-                                // Hancurkan chart lama jika sudah ada
-                                window.siswaChart.destroy();
-                            }
-                            window.siswaChart = new Chart(ctx, {
-                                type: 'bar',
-                                data: {
-                                    labels: data.map((item) => `Kelas ${item.namaKelas}`),
-                                    datasets: [{
-                                        label: 'Jumlah Siswa',
-                                        data: data.map((item) => item.jumlah),
-                                        backgroundColor: [
-                                            '#81c2ff',
-                                            '#abe37d',
-                                            '#fff18a',
-                                            '#ffbe8a',
-                                            '#f8d4d4',
-                                            '#c1e7ee'
-                                        ],
-                                        borderColor: [
-                                            '#81c2ff',
-                                            '#abe37d',
-                                            '#fff18a',
-                                            '#ffbe8a',
-                                            '#f8d4d4',
-                                            '#c1e7ee'
-                                        ],
-                                        borderWidth: 1,
-                                        borderRadius: 10,
-                                    }],
-                                },
-                                options: {
-                                    bezierCurve: false,
-                                    plugins: {
-                                        legend: {
-                                            display: false,
-                                        },
-                                        tooltip: {
-                                            radius: '3',
-                                            enabled: true,
-                                        }
-                                    },
-                                    responsive: true,
-                                    scales: {
-                                        x: {
-                                            grid: {
-                                                display: false
-                                            },
-                                        },
-                                        y: {
-                                            grid: {
-                                                display: false
-                                            },
-                                        },
-                                        // beginAtZero = !0,
-                                    },
-                                    elements: {
-                                        line: {
-                                            tension: 0.4, // Set the tension for a smoother line
-                                        },
-                                    },
-                                },
-                            });
-                        },
-                    });
-                }
-
-                function getChartBarJK() {
-                    $.ajax({
-                        url: `{{ url('chart/jenis-kelamin') }}`,
-                        method: 'GET',
-                        success: function(data) {
-                            console.log(data);
-
-                            const ctx = document.getElementById('chrat_bar_jK').getContext('2d');
-                            const chart = new Chart(ctx, {
-                                type: 'bar',
-                                data: {
-                                    labels: ['L', 'P'],
-                                    datasets: [{
-                                        label: 'Jumlah',
-                                        data: data.pegawai.map(function(item) {
-                                            return item.Jumlah
-                                        }),
-                                        backgroundColor: [
-                                            '#81c2ff',
-                                            '#abe37d',
-                                        ],
-                                        borderColor: [
-                                            '#81c2ff',
-                                            '#abe37d',
-                                        ],
-                                        borderWidth: 1,
-                                        borderRadius: 10,
-                                    }],
-                                },
-                                options: {
-                                    indexAxis: 'y',
-                                    responsive: true,
-                                    plugins: {
-                                        legend: {
-                                            display: false,
-                                            position: 'bottom',
-                                            labels: {
-                                                fontSize: 16,
-                                            },
-                                        },
-                                        title: {
-                                            display: true,
-                                            text: 'Pegawai',
-                                            fontSize: 50,
-                                            align: 'start'
-                                        },
-                                    },
-                                    scales: {
-                                        x: {
-                                            grid: {
-                                                display: false
-                                            }, // Sembunyikan grid untuk sumbu x
-                                        },
-                                        y: {
-                                            grid: {
-                                                display: false
-                                            }, // Sembunyikan grid untuk sumbu y
-                                        },
-                                    },
-
-                                },
-                            });
-                        },
-                    });
-                }
-
-                function getChartBarJKsiswa() {
-                    $.ajax({
-                        url: `{{ url('chart/jenis-kelamin') }}`,
-                        method: 'GET',
-                        success: function(data) {
-                            console.log(data);
-
-                            const ctx = document.getElementById('chrat_bar_jK_siswa').getContext('2d');
-                            const chart = new Chart(ctx, {
-                                type: 'bar',
-                                data: {
-                                    labels: ['L', 'P'],
-                                    datasets: [{
-                                        label: 'Jumlah',
-                                        data: data.siswa.map(function(item) {
-                                            return item.Jumlah
-                                        }),
-                                        backgroundColor: [
-                                            '#ffbe8a',
-                                            '#f8d4d4',
-                                            '#c1e7ee'
-                                        ],
-                                        borderColor: [
-                                            '#ffbe8a',
-                                            '#f8d4d4',
-                                            '#c1e7ee'
-                                        ],
-                                        borderWidth: 1,
-                                        borderRadius: 10,
-                                    }],
-                                },
-                                options: {
-                                    indexAxis: 'y',
-                                    responsive: true,
-                                    plugins: {
-                                        legend: {
-                                            display: false,
-                                            position: 'bottom',
-                                            labels: {
-                                                fontSize: 16,
-                                            },
-                                        },
-                                        title: {
-                                            display: true,
-                                            text: 'Siswa',
-                                            fontSize: 50,
-                                            align: 'start'
-                                        },
-                                    },
-                                    scales: {
-                                        x: {
-                                            grid: {
-                                                display: false
-                                            }, // Sembunyikan grid untuk sumbu x
-                                        },
-                                        y: {
-                                            grid: {
-                                                display: false
-                                            }, // Sembunyikan grid untuk sumbu y
-                                        },
-                                    },
-
-                                },
-                            });
-                        },
-                    });
-                }
-            </script>
-        @endcanany
-        @can('siswa')
-            <script>
-                $(document).ready(function() {
-
-
-                    $.ajax({
-                        url: '{{ route('count-mapel.siswa') }}',
-                        type: 'GET',
-                        data: {
-                            kelas: $("#kelas-nama").val(),
-                            periode: $('#periode').val(),
-                        },
-                        success: function(response) {
-                            var wakel = response.wakel;
-                            if (wakel && wakel.length > 0) {
-                                var pegawaiPertama = wakel[0];
-                                $('#wali_kelas').text(pegawaiPertama.namaPegawai);
-                                $('#nip_wakel').text(pegawaiPertama.nip);
-                                $('#nohp_wakel').text(pegawaiPertama.noHp);
-                            } else {
-                                console.log('Data Wakel Tidak Ditemukan');
-                            }
-                            // Tampilkan jumlah mata pelajaran di elemen HTML dengan id #jumlah_mapel
-                            $('#jumlah_mapel').text(response.jumlah_mapel);
-
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(error); // Tampilkan pesan kesalahan di konsol
-                        }
-                    });
-
-                    $('#periode').change(function() {
                         getChartNilai();
+
+                        $('#an_nilai').val('nilaiUH');
+
+                        $('#an_nilai').change(function() {
+                            getChartNilai();
+                        });
+
+
+
                     });
 
-                    getChartNilai();
-
-                    $('#an_nilai').val('nilaiUH');
-
-                    $('#an_nilai').change(function() {
-                        getChartNilai();
-                    });
-
-
-
-                });
-
-                function getChartNilai() {
-                    $.ajax({
-                        url: '{{ route('get-nilai.siswa') }}',
-                        type: 'GET',
-                        data: {
-                            kelas: $("#kelas-nama").val(),
-                            periode: $('#periode').val(),
-                            idSiswa: $('#HD_idSiswa').data('id-siswa'),
-                            nilai: $('#an_nilai').val(),
-                        },
-                        success: function(data) {
-                            console.log(data);
-
-                            const ctx = document.getElementById('chart_nilai_siswa').getContext('2d');
-                            if (window.nilaiChart) {
-                                window.nilaiChart.destroy();
-                            }
-
-                            // Mengambil label dan warna dari dropdown nilai
-                            const selectedNilai = $('#an_nilai').val();
-                            const label = selectedNilai === 'nilaiUH' ? 'Nilai UH' :
-                                selectedNilai === 'nilaiUTS' ? 'Nilai UTS' : 'Nilai UAS';
-
-
-                            window.nilaiChart = new Chart(ctx, {
-                                type: 'bar',
-                                data: {
-                                    labels: data.map(function(item) {
-                                        return item.namaMapel;
-                                    }),
-                                    datasets: [{
-                                        label: label,
-                                        data: data.map(function(item) {
-                                            return item[selectedNilai];
-                                        }),
-                                        backgroundColor: [
-                                            '#81c2ff',
-                                            '#abe37d',
-                                            '#fff18a',
-                                            '#ffbe8a',
-                                            '#f8d4d4',
-                                            '#c1e7ee'
-                                        ],
-                                        borderColor: [
-                                            '#81c2ff',
-                                            '#abe37d',
-                                            '#fff18a',
-                                            '#ffbe8a',
-                                            '#f8d4d4',
-                                            '#c1e7ee'
-                                        ],
-                                        borderWidth: 1,
-                                        borderRadius: 10,
-                                    }],
-                                },
-                                options: {
-
-                                    responsive: true,
-                                    plugins: {
-                                        title: {
-                                            display: true,
-                                            text: label,
-                                        },
-                                        legend: {
-                                            display: false
-                                        }
-                                    },
-                                    scales: {
-                                        y: {
-                                            grid: {
-                                                display: false
-                                            },
-                                            max: 100,
-                                            callback: function(value) {
-                                                // Batasi nilai sumbu x antara 0 dan 100
-                                                return Math.max(0, Math.min(100, value));
-                                            }
-                                        },
-                                        x: {
-                                            grid: {
-                                                display: false
-                                            }
-                                        }
-                                    },
-                                }
-
-                            });
-                        }
-                    });
-                }
-            </script>
-        @endcan
-        @can('guru')
-            <script>
-                $(document).ready(function() {
-                    $('#calendar').datepicker({
-                        format: 'yyyy-mm-dd',
-                        todayHighlight: true,
-                        autoclose: true,
-                        orientation: 'bottom auto'
-                    });
-
-                    $('#calendar').on('changeDate', function(e) {
-
-                        var selectedDate = e.format('yyyy-mm-dd');
-
-                        var hari = moment(selectedDate).format('dddd');
-
-                        var hariIndonesia = {
-                            'Sunday': 'Minggu',
-                            'Monday': 'Senin',
-                            'Tuesday': 'Selasa',
-                            'Wednesday': 'Rabu',
-                            'Thursday': 'Kamis',
-                            'Friday': 'Jumat',
-                            'Saturday': 'Sabtu',
-                        };
-
-                        // console.log(hariIndonesia[hari]);
-
+                    function getChartNilai() {
                         $.ajax({
-                            url: "{{ route('get-jadwal.guru') }}",
+                            url: '{{ route('get-nilai.siswa') }}',
                             type: 'GET',
                             data: {
-                                hari: hariIndonesia[hari],
+                                kelas: $("#kelas-nama").val(),
                                 periode: $('#periode').val(),
-                                nama: ' {{ Auth::user()->pegawai->namaPegawai }}',
+                                idSiswa: $('#HD_idSiswa').data('id-siswa'),
+                                nilai: $('#an_nilai').val(),
                             },
                             success: function(data) {
-                                // console.log(data);
-                                if (data && data.length > 0) {
-                                    // Jika data berhasil diterima
+                                console.log(data);
 
-                                    // Tampilkan daftar jadwal pelajaran
-                                    var detailsHTML = '<ul class="list-group">';
+                                const ctx = document.getElementById('chart_nilai_siswa').getContext('2d');
+                                if (window.nilaiChart) {
+                                    window.nilaiChart.destroy();
+                                }
 
-                                    for (let i = 0; i < data.length; i++) {
-                                        // Tambahkan detail jadwal pelajaran
-                                        detailsHTML += '<li class="list-group-item lh-1">' +
-                                            '<strong>' + data[i].hari + '</strong> - <strong>' +
-                                            data[i].namaMapel +
-                                            '</strong>' +
-                                            '<p>Jam: ' + data[i].jamMulai + ' - ' + data[i].jamSelesai +
-                                            '</p>' +
-                                            '<p class="lh-0">Kelas: ' + data[i].namaKelas + '</p></li>';
+                                // Mengambil label dan warna dari dropdown nilai
+                                const selectedNilai = $('#an_nilai').val();
+                                const label = selectedNilai === 'nilaiUH' ? 'Nilai UH' :
+                                    selectedNilai === 'nilaiUTS' ? 'Nilai UTS' : 'Nilai UAS';
+
+
+                                window.nilaiChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: data.map(function(item) {
+                                            return item.namaMapel;
+                                        }),
+                                        datasets: [{
+                                            label: label,
+                                            data: data.map(function(item) {
+                                                return item[selectedNilai];
+                                            }),
+                                            backgroundColor: [
+                                                '#81c2ff',
+                                                '#abe37d',
+                                                '#fff18a',
+                                                '#ffbe8a',
+                                                '#f8d4d4',
+                                                '#c1e7ee'
+                                            ],
+                                            borderColor: [
+                                                '#81c2ff',
+                                                '#abe37d',
+                                                '#fff18a',
+                                                '#ffbe8a',
+                                                '#f8d4d4',
+                                                '#c1e7ee'
+                                            ],
+                                            borderWidth: 1,
+                                            borderRadius: 10,
+                                        }],
+                                    },
+                                    options: {
+
+                                        responsive: true,
+                                        plugins: {
+                                            title: {
+                                                display: true,
+                                                text: label,
+                                            },
+                                            legend: {
+                                                display: false
+                                            }
+                                        },
+                                        scales: {
+                                            y: {
+                                                grid: {
+                                                    display: false
+                                                },
+                                                max: 100,
+                                                callback: function(value) {
+                                                    // Batasi nilai sumbu x antara 0 dan 100
+                                                    return Math.max(0, Math.min(100, value));
+                                                }
+                                            },
+                                            x: {
+                                                grid: {
+                                                    display: false
+                                                }
+                                            }
+                                        },
                                     }
 
-                                    detailsHTML += '</ul>';
-
-                                    // Tampilkan hasil di #dateDetails
-                                    $('#dateDetails').html(detailsHTML);
-                                } else {
-                                    // Jika data tidak berhasil diterima atau tidak ada jadwal pelajaran
-
-                                    // Tampilkan pesan yang sesuai
-                                    var messageHTML = data && data.length === 0 ?
-                                        '<p>Jadwal pelajaran untuk tanggal ini belum diset.</p>' :
-                                        '<p>Gagal mendapatkan jadwal pelajaran.</p>';
-
-                                    $('#dateDetails').html(messageHTML);
-                                }
-                            },
-
-                            error: function(error) {
-                                console.error('Error fetching data:', error);
+                                });
                             }
                         });
+                    }
+                </script>
+            @endcan
+            @can('guru')
+                <script>
+                    $(document).ready(function() {
+                        $('#calendar').datepicker({
+                            format: 'yyyy-mm-dd',
+                            todayHighlight: true,
+                            autoclose: true,
+                            orientation: 'bottom auto'
+                        });
+
+                        $('#calendar').on('changeDate', function(e) {
+
+                            var selectedDate = e.format('yyyy-mm-dd');
+
+                            var hari = moment(selectedDate).format('dddd');
+
+                            var hariIndonesia = {
+                                'Sunday': 'Minggu',
+                                'Monday': 'Senin',
+                                'Tuesday': 'Selasa',
+                                'Wednesday': 'Rabu',
+                                'Thursday': 'Kamis',
+                                'Friday': 'Jumat',
+                                'Saturday': 'Sabtu',
+                            };
+
+                            // console.log(hariIndonesia[hari]);
+
+                            $.ajax({
+                                url: "{{ route('get-jadwal.guru') }}",
+                                type: 'GET',
+                                data: {
+                                    hari: hariIndonesia[hari],
+                                    periode: $('#periode').val(),
+                                    nama: ' {{ Auth::user()->pegawai->namaPegawai }}',
+                                },
+                                success: function(data) {
+                                    // console.log(data);
+                                    if (data && data.length > 0) {
+                                        // Jika data berhasil diterima
+
+                                        // Tampilkan daftar jadwal pelajaran
+                                        var detailsHTML = '<ul class="list-group">';
+
+                                        for (let i = 0; i < data.length; i++) {
+                                            // Tambahkan detail jadwal pelajaran
+                                            detailsHTML += '<li class="list-group-item lh-1">' +
+                                                '<strong>' + data[i].hari + '</strong> - <strong>' +
+                                                data[i].namaMapel +
+                                                '</strong>' +
+                                                '<p>Jam: ' + data[i].jamMulai + ' - ' + data[i].jamSelesai +
+                                                '</p>' +
+                                                '<p class="lh-0">Kelas: ' + data[i].namaKelas + '</p></li>';
+                                        }
+
+                                        detailsHTML += '</ul>';
+
+                                        // Tampilkan hasil di #dateDetails
+                                        $('#dateDetails').html(detailsHTML);
+                                    } else {
+                                        // Jika data tidak berhasil diterima atau tidak ada jadwal pelajaran
+
+                                        // Tampilkan pesan yang sesuai
+                                        var messageHTML = data && data.length === 0 ?
+                                            '<p>Jadwal pelajaran untuk tanggal ini belum diset.</p>' :
+                                            '<p>Gagal mendapatkan jadwal pelajaran.</p>';
+
+                                        $('#dateDetails').html(messageHTML);
+                                    }
+                                },
+
+                                error: function(error) {
+                                    console.error('Error fetching data:', error);
+                                }
+                            });
 
 
 
+                        });
+
+                        $.ajax({
+                            url: '{{ route('get-jml.kelas') }}',
+                            type: 'GET',
+                            data: {
+                                periode: $('#periode').val(),
+                                nama: '{{ Auth::user()->pegawai->namaPegawai }}',
+                                kelas: '1'
+                            },
+                            success: function(response) {
+                                console.log(response);
+
+                                $('#jumlah_kelas').text(response.jumlah_kelas + ' Kelas');
+                                $('#jml_siswa').text(response.jumlahSiswa + ' Siswa');
+
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error); // Tampilkan pesan kesalahan di konsol
+                            }
+                        });
                     });
-
-                    $.ajax({
-                        url: '{{ route('get-jml.kelas') }}',
-                        type: 'GET',
-                        data: {
-                            periode: $('#periode').val(),
-                            nama: '{{ Auth::user()->pegawai->namaPegawai }}',
-                            kelas: '1'
-                        },
-                        success: function(response) {
-                            console.log(response);
-
-                            $('#jumlah_kelas').text(response.jumlah_kelas + ' Kelas');
-                            $('#jml_siswa').text(response.jumlahSiswa + ' Siswa');
-
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(error); // Tampilkan pesan kesalahan di konsol
-                        }
-                    });
-                });
-            </script>
-        @endcan
-    @endpush
-@endsection
-{{-- kelas: '{{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}' --}}
+                </script>
+            @endcan
+        @endpush
+    @endsection
+    {{-- kelas: '{{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}' --}}

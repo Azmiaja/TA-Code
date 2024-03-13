@@ -115,9 +115,8 @@
                     });
                 }
                 const jabatandd = $('#idJabatan');
-                let url = `{{ route('get-jabatan.options') }}`;
 
-                function getJabatan() {
+                function getJabatan(url) {
                     // var id = $(this).val();
                     $.ajax({
                         url: url,
@@ -138,7 +137,6 @@
                     });
                 }
 
-                getJabatan();
 
                 function resetForm() {
                     imgPrev.style.display = 'none';
@@ -214,6 +212,7 @@
                     );
                     formPegawai.attr('action', '{{ route('pegawai.store') }}');
                     formMethod.val('POST');
+                    getJabatan(`{{ route('get-jabatan.options') }}`);
                 });
 
                 insertJabatan.click(function(e) {
@@ -307,6 +306,8 @@
                     updateModal('Edit Data Pegawai', `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary" id="btn-submitEdtPegawai">Simpan</button>`);
                     formMethod.val('PUT');
+
+                    getJabatan(`{{ route('get-jabatan.options.edit') }}`);
 
                     var id = $(this).val();
                     // console.log(id);
