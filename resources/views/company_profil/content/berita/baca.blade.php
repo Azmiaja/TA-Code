@@ -8,7 +8,7 @@
                 </div>
             </div>
             <div class="row justify-content-center">
-                <div class="col-xl-9 col-12">
+                <div class="col-12">
                     <div class="text-center fs-sm push mb-5">
                         <h3 class="mt-3">{{ $judul }}</h3>
                         <span class="d-inline-block py-2 px-4 bg-body-light rounded">

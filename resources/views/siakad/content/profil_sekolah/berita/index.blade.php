@@ -45,7 +45,7 @@
                 const btnInsert = $('#insertBerita');
                 const judulBerita = $('#judulBerita');
                 const waktu = $('#waktu');
-                const id = $('#idBerita');
+                const idBerita = $('#idBerita');
                 const imgPrev = document.querySelector('.img-preview');
                 const btCloseModal = document.querySelector('.close-berita-modal');
                 const btModal = $('#btn-form');
@@ -180,9 +180,8 @@
                             "Pragma": "no-cache"
                         },
                         success: function(response) {
-                            console.log(response);
                             // Set the form fields with the fetched data
-                            id.val(response.berita.idBerita);
+                            idBerita.val(response.berita.idBerita);
                             judulBerita.val(response.berita.judulBerita);
                             var formatedWaktu = formatWaktu(response.berita.waktu);
                             waktu.val(formatedWaktu);
