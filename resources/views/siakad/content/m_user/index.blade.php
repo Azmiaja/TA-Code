@@ -302,7 +302,7 @@
                     var data = new FormData(formSiswa[0]);
 
                     $.ajax({
-                        type: "POST",
+                        type: "PUT",
                         url: formSiswa.attr('action'),
                         dataType: "json",
                         contentType: false,

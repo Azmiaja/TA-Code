@@ -45,7 +45,8 @@
                             <div class="w-100">
                                 <div class="text-center mb-5">
                                     <div>
-                                        <img class="img-fluid" width="120" src="{{ asset('assets/media/img/tut-wuri.png') }}">
+                                        <img class="img-fluid" width="120"
+                                            src="{{ asset('assets/media/img/tut-wuri.png') }}">
                                     </div>
                                     <h1 class="fw-bold mb-2">
                                         Login
@@ -57,8 +58,8 @@
                                 <div class="row g-0 justify-content-center">
                                     <div class="col-sm-8 col-xl-4">
                                         {{-- form login --}}
-                                        <form class="js-validation-signin" action="/authenticate"
-                                            autocomplete="off" method="POST">
+                                        <form class="js-validation-signin" action="/authenticate" autocomplete="off"
+                                            method="POST">
                                             @csrf
                                             <div class="mb-4">
                                                 <input type="text"
@@ -82,12 +83,32 @@
                                             </div>
                                         </form>
                                         @if (session('error'))
+                                            <div class="alert alert-danger d-flex align-items-center fade show mb-3"
+                                                role="alert">
+                                                <i class="fa-solid fa-circle-exclamation fs-3 me-3"></i>
+                                                <div>
+                                                    {{ session('error') }}
+                                                </div>
+                                                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            @push('scripts')
+                                                <script>
+                                                    $(document).ready(function() {
+                                                        setTimeout(function() {
+                                                            $(".alert").alert('close');
+                                                        }, 5000);
+                                                    });
+                                                </script>
+                                            @endpush
+                                        @endif
+                                        {{-- @if (session('error'))
                                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                                 {{ session('error') }}
                                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                                     aria-label="Close"></button>
                                             </div>
-                                        @endif
+                                        @endif --}}
                                     </div>
                                 </div>
                             </div>

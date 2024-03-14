@@ -30,7 +30,7 @@
                         <div class="mb-3" id="pass_display_pegawai" hidden>
                             <label class="form-label" for="password">Password</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="password_pegawai" placeholder="Password">
+                                <input type="text" class="form-control" name="password" id="password_pegawai" placeholder="Password">
                                 <button class="btn btn-alt-primary" type="button" id="reset_password_pegawai">
                                     Reset
                                 </button>

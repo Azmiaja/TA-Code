@@ -29,9 +29,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest:user,siswa');
 
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
@@ -62,11 +62,14 @@ Route::middleware('guest')->group(function () {
     Route::post('pesan/store', [PesanController::class, 'store'])->name('pesan.store');
 });
 
+
 Route::middleware(['auth:siswa', 'ceklevel:Siswa'])->group(function () {
     Route::prefix('siswa')->group(function () {
         Route::get('/beranda', [BerandaController::class, 'index'])->name('ss.beranda.index');
     });
 });
+
+
 Route::middleware(['auth:user', 'ceklevel:Guru'])->group(function () {
     Route::prefix('guru')->group(function () {
         Route::get('/beranda', [BerandaController::class, 'index'])->name('gg.beranda.index');
@@ -76,7 +79,6 @@ Route::middleware(['auth:user', 'ceklevel:Guru'])->group(function () {
 
 Route::middleware(['auth:user,siswa'])->group(function () {
     //dashboard
-    Route::get('/dashboard', [HomeController::class, 'indexBeranda'])->name('dashboard.index');
 
 
     // PESAN
@@ -93,7 +95,7 @@ Route::middleware(['auth:user,siswa'])->group(function () {
     Route::get('periode/siswa/get-data', [KelasController::class, 'getPeriodeSiswa']);
 
     // PERIODE
-    Route::get('get-data/periode', [Mkelas\PeriodeController::class, 'getPeriode']);
+    Route::get('get-data/periode', [Mkelas\PeriodeController::class, 'getPeriode'])->name('get.periode');
     Route::post('periode/store', [Mkelas\PeriodeController::class, 'store'])->name('periode.store');
     Route::get('periode/edit/{id}', [Mkelas\PeriodeController::class, 'edit']);
     Route::put('periode/update/{id}', [Mkelas\PeriodeController::class, 'update']);
@@ -128,6 +130,8 @@ Route::middleware(['auth:user,siswa'])->group(function () {
     Route::delete('penjadwalan/destroy/{id}', [Mkelas\PenjadwalanController::class, 'destroy']);
 
     //manajemen guru kelas siswa
+    Route::get('kelas/options', [KelasController::class, 'getOptions'])->name('get.kelas.options');
+
     Route::get('data-kelas/edit/guru/{id}', [KelasController::class, 'edit']);
     Route::put('data-kelas/update/guru/{id}', [KelasController::class, 'update']);
     Route::delete('data-kelas/destroy/guru/{id}', [KelasController::class, 'destroy']);
@@ -183,6 +187,8 @@ Route::middleware(['auth:user,siswa'])->group(function () {
 });
 
 Route::middleware(['auth:user'])->group(function () {
+    Route::get('/dashboard', [HomeController::class, 'indexBeranda'])->name('dashboard.index');
+    
     // Data master sekolah
     Route::prefix('data-master')->group(function () {
         Route::resource('pegawai', Muser\PegawaiController::class);

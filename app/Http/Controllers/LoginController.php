@@ -38,10 +38,17 @@ class LoginController extends Controller
 
                 if ($user->hakAkses === 'Guru') {
                     return redirect()->route('gg.beranda.index');
-                } elseif ($user->hakAkses === 'Siswa') {
+                } elseif ($guard === 'siswa') {
                     return redirect()->route('ss.beranda.index');
                 } else {
                     return redirect()->route('dashboard.index');
+                }
+            } else {
+                // Cek apakah login gagal karena akun tidak aktif
+                if ($guard === 'siswa' && $this->isAccountInactive($credentials, $guard)) {
+                    return back()->with('error', 'Akun Anda tidak aktif.');
+                } elseif ($guard === 'user' && $this->isAccountInactive($credentials, $guard)) {
+                    return back()->with('error', 'Akun Anda tidak aktif.');
                 }
             }
         }
@@ -49,10 +56,37 @@ class LoginController extends Controller
         return back()->with('error', 'Username atau password salah.');
     }
 
+    private function isAccountInactive($credentials, $guard)
+    {
+        return Auth::guard($guard)->validate($credentials);
+    }
+
     private function attemptUserLogin($credentials, $guard)
     {
-        return Auth::guard($guard)->attempt($credentials);
+        if (Auth::guard($guard)->attempt($credentials)) {
+            $user = Auth::guard($guard)->user();
+
+            // Periksa status pengguna
+            if ($guard === 'siswa' && $user->siswa->status !== 'Aktif') {
+                Auth::guard($guard)->logout();
+                return false;
+            } elseif ($guard === 'user' && $user->pegawai->status !== 'Aktif') {
+                Auth::guard($guard)->logout();
+                return false;
+            }
+
+            return true;
+        }
+
+        // Jika login gagal, kembalikan false
+        return false;
     }
+
+    // private function attemptUserLogin($credentials, $guard)
+    // {
+    //     return Auth::guard($guard)->attempt($credentials);
+    // }
+
 
 
 
@@ -83,6 +117,6 @@ class LoginController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/login');
     }
 }

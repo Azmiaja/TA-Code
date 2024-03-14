@@ -9,6 +9,7 @@ use App\Models\Siswa;
 use App\Models\User;
 use App\Models\userSiswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
@@ -273,12 +274,12 @@ class UserController extends Controller
             $user->hakAkses = $request->input('hakAkses');
 
             if ($request->filled('password')) {
-                $user->password = bcrypt($request->input('password'));
+                $user->password = Hash::make($request->input('password'));
             }
-            $user->save();
+            $user->update();
 
             return response()->json([
-                'status' => 'success',
+                'status' => 'Success',
                 'message' => 'Berhasil mengubah data.'
             ]);
         } catch (\Exception $e) {

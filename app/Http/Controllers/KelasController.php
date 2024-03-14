@@ -48,6 +48,13 @@ class KelasController extends Controller
         return DataTables::of($kelas)->toJson();
     }
 
+    public function getOptions()
+    {
+        $data = Periode::orderBy('tanggalMulai', 'desc')->get();
+
+        return response()->json($data);
+    }
+
     public function getKelas()
     {
         $kelas = Kelas::with('periode')->get()
