@@ -116,19 +116,17 @@ class UserController extends Controller
 
         $user = userSiswa::find($id);
 
-
         $user->username = $request->input('username');
 
 
         if ($request->filled('password')) {
-
-            $user->password = bcrypt($request->input('password'));
+            $user->password = Hash::make($request->input('password'));
         }
 
-        $user->save();
+        $user->update();
 
         return response()->json([
-            'status' => 'success',
+            'status' => 'Success',
             'message' => 'Berhasil mengubah data.'
         ]);
     }

@@ -92,6 +92,7 @@
                 const formSiswa_btn = $('#bt-form-siswa');
                 const formPegawai_btn = $('#bt-form-pegawai');
                 const form_method = $('#method');
+                const form_method_siswa = $('#method_siswa');
                 const tabSiswa = $('#tab_siswa');
                 const tabPegawai = $('#tab_pegawai');
                 // loadDropdownOptions();
@@ -262,7 +263,7 @@
                     modalSiswa.modal('show');
                     modalCustom('Edit User Siswa', `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary" id="btn-edtSubmitSiswa">Simpan</button>`);
-                    form_method.val("PUT");
+                    form_method_siswa.val("PUT");
 
                     $('#idSiswa').prop("disabled", true);
                     $('#uss_display').prop("hidden", false);
@@ -302,7 +303,7 @@
                     var data = new FormData(formSiswa[0]);
 
                     $.ajax({
-                        type: "PUT",
+                        type: "POST",
                         url: formSiswa.attr('action'),
                         dataType: "json",
                         contentType: false,

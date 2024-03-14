@@ -16,7 +16,7 @@
                     {{-- FORM --}}
                     <form id="form_user_siswa" action="" method="POST">
                         @csrf
-                        <input type="hidden" name="_method" id="method" value="POST">
+                        <input type="hidden" name="_method" id="method_siswa" value="POST">
                         <input type="text" hidden id="idUserSiswa">
                         <div class="mb-3 sh-ussis">
                             <label class="form-label" for="idSiswa">Nama Siswa</label>
@@ -34,7 +34,7 @@
                         <div class="mb-3" id="pass_display" hidden>
                             <label class="form-label" for="password">Password</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="password_siswa" placeholder="Password">
+                                <input type="text" class="form-control" name="password" id="password_siswa" placeholder="Password">
                                 <button class="btn btn-alt-primary" type="button" id="reset_password_siswa">
                                     Reset
                                 </button>
