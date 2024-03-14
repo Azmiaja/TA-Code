@@ -171,7 +171,13 @@ class UserController extends Controller
     {
         // $query = $request->input('query');
 
-        $data = Pegawai::orderBy('namaPegawai', 'asc')->get();
+        // $data = Pegawai::orderBy('namaPegawai', 'asc')->get();
+        $data = Pegawai::whereNotIn('idPegawai', function($query) {
+            $query->select('idPegawai')
+                  ->from('user')
+                  ->where('hakAkses', 'Super Admin');
+        })->orderBy("namaPegawai", "asc")->get();
+        
 
         // dd($data);
 
