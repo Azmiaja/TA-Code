@@ -66,7 +66,7 @@ class PegawaiController extends Controller
 
             if ($request->file('gambarPegawai')) {
                 $imgName = uniqid() . '.' . $request->file('gambarPegawai')->getClientOriginalExtension();
-                $validatedData['gambar'] = $request->file('gambarPegawai')->storeAs('profil-pegawai', $imgName, 'public');
+                $validatedData['gambar'] = $request->file('gambarPegawai')->storeAs('profil_pegawai', $imgName, 'public');
             }
 
             Pegawai::create($validatedData);
@@ -108,7 +108,7 @@ class PegawaiController extends Controller
                     Storage::delete('public/' . $pegawai->gambar);
                 }
                 $imgName = uniqid() . '.' . $request->file('gambarPegawai')->getClientOriginalExtension();
-                $pegawai->gambar = $request->file('gambarPegawai')->storeAs('profil-pegawai', $imgName, 'public');
+                $pegawai->gambar = $request->file('gambarPegawai')->storeAs('profil_pegawai', $imgName, 'public');
             }
 
             // Perbarui data pegawai
