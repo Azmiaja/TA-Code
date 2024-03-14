@@ -15,7 +15,8 @@
                     <div class="carousel-inner rounded-3">
                         @foreach ($dock as $index => $item)
                             <div class="carousel-item ratio ratio-16x9 {{ $index === 0 ? 'active' : '' }}">
-                                <img src="{{ $item['gambar'] }}" class="rounded-3" style="width: 100%; height: 100%; object-fit: cover" alt="">
+                                <img src="{{ $item['gambar'] }}" class="rounded-3"
+                                    style="width: 100%; height: 100%; object-fit: cover" alt="">
                             </div>
                         @endforeach
                     </div>
@@ -33,12 +34,13 @@
             </div>
             <div class="row m-0 my-3">
                 <div class="rounded bg-city d-flex justify-content-center align-items-center">
-                    <h6 class="m-0 text-light fw-bold py-lg-4 py-3 text-wrap text-center">SELAMAT DATANG DI WEBSITE RESMI SD NEGERI
+                    <h6 class="m-0 text-light fw-bold py-lg-4 py-3 text-wrap text-center">SELAMAT DATANG DI WEBSITE RESMI SD
+                        NEGERI
                         LEMAHBANG</h6>
                 </div>
             </div>
             <div class="row m-0">
-                {{-- Garis Judul --}} 
+                {{-- Garis Judul --}}
                 <div class="row m-0 p-0 mb-3">
                     <h5 class="p-0 m-0 mb-1">BERITA TERBARU</h5>
                     <div class="col-4 bg-city p-0">
@@ -53,7 +55,8 @@
                         {{-- Konten Berita --}}
                         @foreach ($beritaTerbaru as $bTree)
                             <div class="col-12 col-xl-6">
-                                <div class="d-flex block block-rounded block-link-pop shadow-sm p-2 m-0 position-relative h-100">
+                                <div
+                                    class="d-flex block block-rounded block-link-pop shadow-sm p-2 m-0 position-relative h-100">
                                     <div class="ratio" style="max-width: 6rem; height: 6rem;">
                                         <img src="{{ $bTree['gambar'] }}" alt="Berita" class="rounded"
                                             style="width: 100%; height: 100%; object-fit: cover">
@@ -97,7 +100,13 @@
                     <div class="block-content p-2">
                         {{-- Foto Kepala Sekolah --}}
                         <div class="portrait-content">
-                            <img src="{{ $gambarKepsek }}" alt="Sambutan Kepala Sekolah" class="rounded-top" style="width: 100%; height: 100%; object-fit: cover;"> 
+                            @if ($gambarKepsek)
+                                <img src="{{ $gambarKepsek }}" class="rounded-top"
+                                    style="width: 100%; height: 100%; object-fit: cover;">
+                            @else
+                                <img src="{{ asset('assets/media/avatars/avatar1.jpg') }}" class="rounded-top"
+                                    style="width: 100%; height: 100%; object-fit: cover;">
+                            @endif
                         </div>
                         <div class="card-body p-2">
                             {{-- Nama Kepala Sekolah --}}
@@ -108,7 +117,8 @@
                                 - {{ $jabatan }} -
                             </p>
                             <hr class="my-1 mb-3" style="border-width: 0.2rem;">
-                            <div class="card-text text-justify ellipse-multi mb-1 fs-sm text-truncate">{!! $sambutan !!}</div>
+                            <div class="card-text text-justify ellipse-multi mb-1 fs-sm text-truncate">
+                                {!! $sambutan !!}</div>
                         </div>
 
                     </div>

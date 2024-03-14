@@ -54,7 +54,7 @@ class Controller extends BaseController
         })->first();
 
         $kepsek = $pegawai ? $pegawai->namaPegawai : null;
-        $gambarKepsek = $pegawai ? asset('storage/' . $pegawai->gambar) : asset('assets/media/avatars/avatar1.jpg');
+        $gambarKepsek = $pegawai ? asset('storage/' . $pegawai->gambar) : null;
         $jabatan = $pegawai ? optional($pegawai->jabatanPegawai)->jabatan : 'Kepala Sekolah';
 
 
