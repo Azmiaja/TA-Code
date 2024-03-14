@@ -26,7 +26,12 @@ class PegawaiController extends Controller
 
     public function getData()
     {
-        $data = Pegawai::orderBy("idPegawai", "DESC")->get();
+        // $data = Pegawai::orderBy("idPegawai", "DESC")->get();
+        $data = Pegawai::whereNotIn('idPegawai', function($query) {
+            $query->select('idPegawai')
+                  ->from('user')
+                  ->where('hakAkses', 'Super Admin');
+        })->orderBy("idPegawai", "DESC")->get();        
         $data = $data->map(function ($item, $key) {
             $item['nomor'] = $key + 1;
             return $item;
@@ -34,7 +39,7 @@ class PegawaiController extends Controller
         return DataTables::of($data)->toJson();
     }
 
-    
+
 
     public function create()
     {
@@ -127,6 +132,7 @@ class PegawaiController extends Controller
     public function destroy($id)
     {
         $pegawai = Pegawai::find($id);
+
         Storage::delete('public/' . $pegawai->gambar);
         $pegawai->delete();
 

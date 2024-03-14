@@ -378,7 +378,7 @@
 
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        text: 'Menghapus data ' + nama + '',
+                        html: `Menghapus data <b>${nama}</b> akan menghapus data <b>User</b>-nya juga`,
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonText: 'Batal',
