@@ -100,11 +100,11 @@
                     <div class="block-content p-2">
                         {{-- Foto Kepala Sekolah --}}
                         <div class="portrait-content">
-                            @if ($gambarKepsek)
-                                <img src="{{ $gambarKepsek }}" class="rounded-top"
+                            @if ($gambarKepsek == null)
+                                <img src="{{ asset('assets/media/avatars/avatar1.jpg') }}" class="rounded-top"
                                     style="width: 100%; height: 100%; object-fit: cover;">
                             @else
-                                <img src="{{ asset('assets/media/avatars/avatar1.jpg') }}" class="rounded-top"
+                                <img src="{{ $gambarKepsek }}" class="rounded-top"
                                     style="width: 100%; height: 100%; object-fit: cover;">
                             @endif
                         </div>
