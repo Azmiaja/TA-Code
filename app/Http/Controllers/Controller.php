@@ -53,9 +53,9 @@ class Controller extends BaseController
             $query->where('jabatan', 'Kepala Sekolah');
         })->first();
 
-        $kepsek = $pegawai->namaPegawai ?: null;
-        $gambarKepsek = $pegawai->gambar ? asset('storage/' . $pegawai->gambar) : asset('assets/media/avatars/avatar1.jpg');
-        $jabatan = optional($pegawai->jabatanPegawai)->jabatan ?: null;
+        $kepsek = $pegawai ? $pegawai->namaPegawai : null;
+        $gambarKepsek = $pegawai ? asset('storage/' . $pegawai->gambar) : asset('assets/media/avatars/avatar1.jpg');
+        $jabatan = $pegawai ? optional($pegawai->jabatanPegawai)->jabatan : 'Kepala Sekolah';
 
 
         $profil = Profil::all()->first();
