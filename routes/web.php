@@ -176,14 +176,10 @@ Route::middleware(['auth:user,siswa'])->group(function () {
 
     // Profil Pengguna
     Route::get('/profil-pengguna', [ProfilUserController::class, 'index'])->name('profil_pengguna.index');
-    Route::get('/profil-pengguna/edit', [ProfilUserController::class, 'edit'])->name('profil_pengguna.edit');
-    Route::get('/profil-pengguna/change-password', [ProfilUserController::class, 'chPassword'])->name('profil_pengguna.chpassword');
     Route::put('/profil-pengguna/update/password', [ProfilUserController::class, 'changePassword'])->name('update.password');
-    Route::put('/profil-pengguna/update/user/{id}', [ProfilUserController::class, 'updateUsername'])->name('profil_pengguna.update.user');
+    Route::put('/profil-pengguna/update/foto-profil/{id}', [ProfilUserController::class, 'updateFotoProfil'])->name('profil_pengguna.update.foto-profil');
     Route::put('/profil-pengguna/update/biografi/{id}', [ProfilUserController::class, 'updateBiografi'])->name('profil_pengguna.update.biografi');
     Route::put('/profil-pengguna/update/biografi/siswa/{id}', [ProfilUserController::class, 'updateBiografiSiswa'])->name('profil_pengguna.update.biografi.siswa');
-    Route::put('/profil-pengguna/update/biografi/ortu/{id}', [ProfilUserController::class, 'updateBiografiOrtu'])->name('profil_pengguna.update.biografi.ortu');
-    Route::put('/profil-pengguna/update/biografi/wali/{id}', [ProfilUserController::class, 'updateBiografiWali'])->name('profil_pengguna.update.biografi.wali');
 });
 
 Route::middleware(['auth:user'])->group(function () {

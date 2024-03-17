@@ -15,42 +15,41 @@
         <div class="row m-0 pb-4 justify-content-end">
             <div class="col-sm-4 p-0">
                 {{-- ATUR PERIODE --}}
-                <div class="input-group">
-                    <select class="form-select" id="periode" name="semester">
-                        @foreach ($periode as $item)
-                            @php
-                                $today = now();
-                                $startDate = \Carbon\Carbon::parse($item->tanggalMulai);
-                                $endDate = \Carbon\Carbon::parse($item->tanggalSelesai);
-                                $selected = $today >= $startDate && $today <= $endDate ? 'selected' : '';
-                            @endphp
+                <select class="form-select" id="periode" name="semester">
+                    @foreach ($periode as $item)
+                        @php
+                            $today = now();
+                            $startDate = \Carbon\Carbon::parse($item->tanggalMulai);
+                            $endDate = \Carbon\Carbon::parse($item->tanggalSelesai);
+                            $selected = $today >= $startDate && $today <= $endDate ? 'selected' : '';
+                        @endphp
 
-                            <option value="{{ $item->idPeriode }}" {{ $selected }}>
-                                Semester {{ $item->semester }}/{{ \Carbon\Carbon::parse($item->tanggalMulai)->format('Y') }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <button type="button" class="btn btn-primary">Submit</button>
-                </div>
+                        <option value="{{ $item->idPeriode }}" {{ $selected }}>
+                            Semester {{ $item->semester }}/{{ \Carbon\Carbon::parse($item->tanggalMulai)->format('Y') }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
         </div>
         <div class="block block-rounded">
             <div class="block-header block-header-default">
                 <h3 class="block-title">Wali Kelas</h3>
                 <div class="block-options">
-                    <button class="btn btn-sm btn-alt-success" id="btn-tambahKelasGuru"><i
+                    <button class="btn btn-sm btn-alt-success" id="btn_tambahKelasGuru"><i
                             class="fa fa-plus me-2"></i>Tambah Wali Kelas</button>
                 </div>
             </div>
             <div class="block-content p-0">
                 <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
-                    <table id="tabel-PeriodeGuru" class="table table-bordered table-vcenter w-100">
+                    <table id="tabel_waliKelas" class="table table-bordered table-vcenter w-100">
                         <thead class="bg-body-light align-middle">
                             <tr>
                                 <th style="width: 5%;" class="text-center">No</th>
-                                <th style="width: auto">Kelas</th>
-                                <th>Semester</th>
+                                <th style="width: 10%;">Kelas</th>
+                                <th style="width: 10%;">Fase</th>
                                 <th>Nama Guru</th>
+                                <th style="width: 15%;">NIP</th>
+                                <th style="width: 20%;">Semester</th>
                                 <th style="width: 10%;" class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -384,83 +383,148 @@
 
 
         $(document).ready(function() {
-            function initSelect2(selector, placeholder, dropdownParent) {
-                $(selector).select2({
-                    placeholder,
-                    allowClear: true,
-                    width: "100%",
-                    cache: false,
-                    dropdownParent,
-                    theme: "bootstrap",
+            const insertWaliKelas = $('#btn_tambahKelasGuru');
+            const modalWaliKelas = $('#modal_kelasGuru');
+            const modalWaliKelas_btn = $('#bt_modalGuru');
+            const modalWaliKelas_title = $('#title-modal');
+            const methodlWaliKelas = $('#method_waliKelas');
+            const formWaliKelas = $('#form_waliKelas');
+            const tabelWaliKelas = $('#tabel_waliKelas');
+
+            function updateModal_waliKelas(title, button) {
+                modalWaliKelas_title.text(title);
+                modalWaliKelas_btn.html(button);
+            }
+
+            insertWaliKelas.click(function(e) {
+                modalWaliKelas.modal('show');
+                updateModal_waliKelas('Tambah Wali Kelas',
+                    `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> <button type="submit" class="btn btn-primary" id="btn-tbhGuru">Simpan</button>`
+                );
+                formWaliKelas.attr('action', `{{ route('data-kelas.store') }}`);
+            });
+
+            function resetForm() {
+                formWaliKelas.trigger('reset');
+                $('#idPegawai').val(null).change();
+            }
+            modalWaliKelas.on('hidden.bs.modal', function() {
+                resetForm();
+            });
+
+            // Select2 from wali kelas
+            $('#idPegawai').select2({
+                width: "100%",
+                cache: false,
+                dropdownParent: modalWaliKelas,
+                theme: "bootstrap",
+                placeholder: "Pilih Guru",
+                allowClear: true,
+                selectOnClose: true
+            });
+
+            getSelectPegawai();
+
+            function getSelectPegawai() {
+                $.ajax({
+                    type: "GET",
+                    url: `{{ route('pegawai.select') }}`,
+                    success: function(data) {
+                        $('#idPegawai').html('');
+                        $.each(data, function(i, item) {
+                            $('#idPegawai').append(
+                                `<option value="${item.idPegawai}">${item.namaPegawai}</option>`
+                            );
+                        });
+                    },
                 });
             }
 
-            initSelect2('#idPrgawai', "Pilih Guru", $('#modal-bagiKelasGuru'));
-            initSelect2('#idSiswa', '', $('#modal-bagiKelasSiswa'));
-            initSelect2('#idSiswa-two', '', $('#modal-bagiKelasSiswa'));
+            // function initSelect2(selector, placeholder, dropdownParent) {
+            //     $(selector).select2({
+            //         placeholder,
+            //         allowClear: true,
+            //         width: "100%",
+            //         cache: false,
+            //         dropdownParent,
+            //         theme: "bootstrap",
+            //     });
+            // }
 
-            getPeriode();
+            // initSelect2('#idPrgawai', "Pilih Guru", $('#modal-bagiKelasGuru'));
+            // initSelect2('#idSiswa', '', $('#modal-bagiKelasSiswa'));
+            // initSelect2('#idSiswa-two', '', $('#modal-bagiKelasSiswa'));
+
+            // getPeriode();
             // loadDropdownOptions()
-            function getPeriode(){
+            function getPeriode() {
                 $.ajax({
-                        type: "GET",
-                        url: `{{ route('get.kelas.options') }}`,
-                        success: function(data) {
-                            $('#periode_klas').html('');
-                            $('#periode_klas').html('<option disabled selected>-- Pilih Periode --</option>');
-                            $.each(data, function(i, item) {
-                                console.log(item.semester);
-                                $('#periode_klas').append(
-                                    `<option value="${item.idPeriode}">Semester ${item.semester}</option>`
-                                );
-                            });
-                        },
-                    });
+                    type: "GET",
+                    url: `{{ route('get.kelas.options') }}`,
+                    success: function(data) {
+                        $('#periode_klas').html('');
+                        $('#periode_klas').html(
+                            '<option disabled selected>-- Pilih Periode --</option>');
+                        $.each(data, function(i, item) {
+                            console.log(item.semester);
+                            $('#periode_klas').append(
+                                `<option value="${item.idPeriode}">Semester ${item.semester}</option>`
+                            );
+                        });
+                    },
+                });
             }
             // Guru
-            $('#tabel-PeriodeGuru').DataTable({
+            tabelWaliKelas.DataTable({
                 ordering: false,
-                ajax: {
-                    url: "{{ url('periode/guru/get-data') }}",
-                    data: function(d) {
-                        d.periode_id = $('#periode').val();
-                    }
-                },
+                ajax: "{{ url('periode/guru/get-data') }}",
                 columns: [{
-                        data: null,
+                        data: 'nomor',
                         name: 'nomor',
                         className: 'text-center',
-                        searchable: false,
-                        render: function(data, type, row, meta) {
-                            return meta.row +
-                                1;
-                        }
                     },
                     {
-                        data: 'namaKelas',
-                        name: 'namaKelas',
-                        render: function(data, type, row) {
-                            return 'kelas ' + data;
-                        }
+                        data: 'kelas',
+                        name: 'kelas',
                     },
                     {
-                        data: 'periode.formattedTanggalMulai',
-                        name: 'periode.formattedTanggalMulai',
+                        data: 'fase',
+                        name: 'fase',
+                        className: 'text-center',
+                        render: function(data) {
+                            var fase = data;
+                            if (fase === 'A') {
+                                return '<span class="badge bg-primary">Fase A</span>';
+                            } else if (fase === 'B') {
+                                return '<span class="badge bg-success">Fase B</span>';
+                            } else if (fase === 'C') {
+                                return '<span class="badge bg-warning">Fase C</span>';
+                            }
+                            return '<em>null</em>';
+                        },
                     },
                     {
-                        data: 'guru.namaPegawai',
-                        name: 'guru.namaPegawai'
+                        data: 'namaGuru',
+                        name: 'namaGuru'
+                    },
+                    {
+                        data: 'nipGuru',
+                        name: 'nipGuru'
+                    },
+                    {
+                        data: 'semester',
+                        name: 'semester',
                     },
                     {
                         data: null,
+                        className: 'text-center',
                         render: function(data, type, row) {
                             return '<div class="btn-group">' +
                                 '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editGuru" value="' +
                                 data.idKelas + '">' +
                                 '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
                                 '<button type="button" class="btn btn-sm btn-alt-danger" id="action-hapusGuru" title="Delete" value="' +
-                                data.idKelas + '" data-nama-guru="' + data.guru
-                                .namaPegawai + '">' +
+                                data.idKelas + '" data-nama-guru="' + data.namaGuru + '">' +
                                 '<i class="fa fa-fw fa-times"></i></button>' +
                                 '</div>';
                         }
@@ -469,10 +533,10 @@
                 order: [
                     [1, 'asc']
                 ],
-                dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'><'col-12 col-sm-12 col-md-6'>>" +
+                dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'l><'col-12 col-sm-12 col-md-6'f>>" +
                     "<'row my-2 '<'col-12 col-sm-12'tr>>" +
-                    "<'row'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'>>",
-                lengthMenu: [10, 25, 50, 100],
+                    "<'row'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                lengthMenu: [5, 25, 50],
                 buttons: [{
                         extend: 'print',
                         title: '<h2>Data Guru Kelas</h2>',
@@ -620,59 +684,46 @@
 
             // CRUD DATA GURU
 
-            $(document).on('click', '#btn-tambahKelasGuru', function(e) {
-                e.preventDefault();
-                $("#modal-bagiKelasGuru").modal('show');
-                $("#title-modal").text('Tambah Guru Kelas');
-                $("#cn-btn").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary" id="btn-tbhGuru">Simpan</button>`);
-                $('.pilih-periode').val('');
-                $('.pilih-kelas').val('');
-                $('.pilih-guru').val(null).trigger('change');
-                getPeriode();
+            // $(document).on('click', '#btn-tambahKelasGuru', function(e) {
+            //     e.preventDefault();
+            //     $("#modal-bagiKelasGuru").modal('show');
+            //     $("#title-modal").text('Tambah Guru Kelas');
+            //     $("#cn-btn").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        //                         <button type="submit" class="btn btn-primary" id="btn-tbhGuru">Simpan</button>`);
+            //     $('.pilih-periode').val('');
+            //     $('.pilih-kelas').val('');
+            //     $('.pilih-guru').val(null).trigger('change');
+            //     // getPeriode();
 
-            });
+            // });
 
-            $(document).on('click', '#btn-tbhGuru', function(e) {
+            formWaliKelas.submit(function(e) {
                 e.preventDefault();
-                var data = {
-                    'idPeriode': $('.pilih-periode').val(),
-                    'idPegawai': $('.pilih-guru').val(),
-                    'namaKelas': $('.pilih-kelas').val(),
-                }
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+                var periode = $('#periode_klas').val();
+                var guru = $('#idPegawai').val();
+                var kelas = $('#namaKelas').val();
+
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('data-kelas.store') }}",
-                    data: data,
+                    url: formWaliKelas.attr('action'),
+                    data: {
+                        idPeriode: periode,
+                        idPegawai: guru,
+                        namaKelas: kelas,
+                    },
                     dataType: "json",
+                    contentType: false,
+                    processData: false,
                     success: function(response) {
-                        // console.log(response);
-                        $(".btn-block-option").click();
-
                         Swal.fire({
                             icon: response.status,
                             title: response.status,
                             text: response.message,
                         });
-                        $('#tabel-PeriodeGuru').DataTable().ajax.reload();
-                        loadDropdownOptions();
-                        $('.pilih-periode').val('');
-                        $('.pilih-guru').val('');
-                        $('.pilih-kelas').val('');
+                        modalWaliKelas.modal('hide');
+                        tabelWaliKelas.DataTable().ajax.reload();
 
                     },
-                    error: function(xhr, status, error) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON.message,
-                        });
-                    }
                 });
             });
 

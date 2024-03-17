@@ -10,6 +10,7 @@ use App\Models\Siswa;
 use App\Models\Tr_kelas;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class KelasController extends Controller
@@ -31,21 +32,29 @@ class KelasController extends Controller
 
     public function getPeriodeGuru(Request $request)
     {
-        $kelas = Kelas::with(['periode', 'guru'])
-            ->where('idPeriode', $request->periode_id)
-            ->get()
-            ->map(function ($kelas) {
-                // Tambahkan properti baru 'formattedTanggalMulai'
-                $kelas->periode->formattedTanggalMulai = $kelas->periode->semester . '/' . date('Y', strtotime($kelas->periode->tanggalMulai));
-
-                return $kelas;
-            });
+        $kelas = Kelas::orderBy('namaKelas', 'asc')->get();
         $kelas = $kelas->map(function ($item, $key) {
             $item['nomor'] = $key + 1;
             return $item;
         });
 
-        return DataTables::of($kelas)->toJson();
+        return DataTables::of($kelas)
+            ->addColumn('namaGuru', function ($d) {
+                return $d->guru->namaPegawai;
+            })
+            ->addColumn('nipGuru', function ($d) {
+                return $d->guru->nip;
+            })
+            ->addColumn('kelas', function ($d) {
+                return 'Kelas ' . $d->namaKelas;
+            })
+            ->addColumn('semester', function ($d) {
+                return 'Semester ' . $d->periode->semester . '/' . date('Y', strtotime($d->periode->tanggalMulai));
+            })
+            ->addColumn('fase', function ($d) {
+                return $d->fase;
+            })
+            ->toJson();
     }
 
     public function getOptions()
@@ -132,26 +141,44 @@ class KelasController extends Controller
     //store Kelas
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'idPeriode' => 'required',
-            'idPegawai' => 'required',
-            'namaKelas' => 'required',
-        ]);
-
-        $kelas = Kelas::where('idPeriode', $validatedData['idPeriode'])->where('namaKelas', $validatedData['namaKelas'])->first();
-
-        if ($kelas) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Kelas sudah ada.'
+        try {
+            $validatedData = $request->validate([
+                'idPeriode' => 'required',
+                'idPegawai' => 'required',
+                'namaKelas' => 'required',
             ]);
-        } else {
+
+            // Periksa apakah kelas sudah ada
+            $kelas = Kelas::where('idPeriode', $validatedData['idPeriode'])
+                ->where('namaKelas', $validatedData['namaKelas'])
+                ->first();
+
+            if ($kelas) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Kelas sudah ada.'
+                ]);
+            }
+
+            // Tambahkan logika untuk menetapkan nilai fase berdasarkan namaKelas
+            $namaKelas = intval($validatedData['namaKelas']);
+            if ($namaKelas >= 1 && $namaKelas <= 2) {
+                $validatedData['fase'] = 'A';
+            } elseif ($namaKelas >= 3 && $namaKelas <= 4) {
+                $validatedData['fase'] = 'B';
+            } elseif ($namaKelas >= 5 && $namaKelas <= 6) {
+                $validatedData['fase'] = 'C';
+            }
+
+            // Jika kelas belum ada, buat kelas baru
             Kelas::create($validatedData);
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Berhasil menyimpan data.'
             ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
         }
     }
 

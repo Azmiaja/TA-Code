@@ -96,7 +96,14 @@
                                         alt="Header Avatar" style="width: 100%; height: 100%; object-fit: cover">
                                 @endcan
                             </div>
-                            <span class="d-none d-sm-inline-block ms-2">{{ Auth::user()->username }}</span>
+                            @can('siswa')
+                                <span
+                                    class="d-none d-sm-inline-block ms-2">{{ Auth::user()->siswa->panggilan ?: Auth::user()->username }}</span>
+                            @endcan
+                            @cannot('siswa')
+                                <span
+                                    class="d-none d-sm-inline-block ms-2">{{ implode(' ', array_slice(str_word_count(Auth::user()->pegawai->namaPegawai, 1), 0, 2)) }}</span>
+                            @endcannot
                             {{-- Username --}}
                             <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block opacity-50 ms-1 mt-1"></i>
                         </button>

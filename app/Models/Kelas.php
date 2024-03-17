@@ -22,7 +22,7 @@ class Kelas extends Model
 
     public function guru()
     {
-        return $this->belongsTo(Pegawai::class, 'idPegawai');
+        return $this->hasOne(Pegawai::class, 'idPegawai');
     }
     public function pengajaran()
     {

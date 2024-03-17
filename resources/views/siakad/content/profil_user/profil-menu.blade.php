@@ -14,6 +14,13 @@
                                     class="rounded-circle border border-5"
                                     style="width: 100%; height: 100%; object-fit: cover" alt="" srcset="">
                             @endif
+                            <div class="position-relative">
+                                <div class="position-absolute bottom-0 end-0 translate-middle-x">
+                                    <button type="button" id="edit_fotoProfil"
+                                        class="btn btn-sm btn-primary rounded-circle" title="Ubah Foto Profil"><i
+                                            class="fa-solid fa-pen-to-square"></i></button>
+                                </div>
+                            </div>
                         @endcannot
                         @can('siswa')
                             <img src="{{ asset('assets/media/avatars/avatar1.jpg') }}"
@@ -47,16 +54,14 @@
                     </a>
                 </li>
                 {{-- edit profil menu --}}
-                <li class="nav-main-item {{ Request::routeIs('profil_pengguna.edit') ? 'bg-body-light' : '' }}">
-                    <a class="nav-main-link {{ Request::routeIs('profil_pengguna.edit') ? 'active' : '' }}"
-                        href="{{ route('profil_pengguna.edit') }}">
+                <li class="nav-main-item">
+                    <a class="nav-main-link" id="btn_ubahprofil" href="javascript:void(0)"">
                         <i class="fa-solid fa-pen-to-square me-2"></i>
-                        <span class="nav-main-link-name">Edit profil</span>
+                        <span class="nav-main-link-name">Ubah profil</span>
                     </a>
                 </li>
-                <li class="nav-main-item {{ Request::routeIs('profil_pengguna.chpassword') ? 'bg-body-light' : '' }}">
-                    <a class="nav-main-link {{ Request::routeIs('profil_pengguna.chpassword') ? 'active' : '' }}"
-                        href="{{ route('profil_pengguna.chpassword') }}">
+                <li class="nav-main-item">
+                    <a class="nav-main-link" id="btn_changepassword" href="javascript:void(0)">
                         <i class="fa-solid fa-key me-2"></i>
                         <span class="nav-main-link-name">Ubah password</span>
                     </a>
