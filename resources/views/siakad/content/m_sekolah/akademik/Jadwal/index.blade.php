@@ -131,11 +131,6 @@
                                 <select name="idPengajaran" id="idPengajaran" class="form-select">
                                 </select>
                             </div>
-                            <div class="mb-3" id="map_2" hidden>
-                                <label class="form-label" for="idPengajaran_two">Mapel</label>
-                                <select name="idPengajaran_two" id="idPengajaran_two" class="form-select">
-                                </select>
-                            </div>
                             <div class="row g-3 mb-3">
                                 {{-- isian form --}}
                                 <div class="col-md-4">
@@ -228,12 +223,8 @@
                             },
                             success: function(data) {
                                 $('#idPengajaran').empty();
-                                $('#idPengajaran_two').empty();
                                 $.each(data.pengajaran, function(key, value) {
                                     $('#idPengajaran').append(
-                                        `<option value="${value.idPengajaran}">${value.mapel.namaMapel}</option>`
-                                    );
-                                    $('#idPengajaran_two').append(
                                         `<option value="${value.idPengajaran}">${value.mapel.namaMapel}</option>`
                                     );
                                 });
@@ -254,8 +245,7 @@
                     timePicker('#jamMulai', '#modal_Jadwal');
                     timePicker('#jamSelesai', '#modal_Jadwal');
 
-                    select2Multiple('#idPengajaran', modalJadwal);
-                    select2('#idPengajaran_two', modalJadwal);
+                    select2('#idPengajaran', modalJadwal);
 
                     $('#idPeriode').on('change', function() {
                         getSelectKelas();
@@ -373,9 +363,6 @@
                         formJadwal.attr('action', `{{ url('penjadwalan/update/${id}') }}`);
                         method.val('PUT');
 
-                        $('#map_1').prop('hidden', true);
-                        $('#map_2').prop('hidden', false);
-
                         $.ajax({
                             type: "GET",
                             url: `{{ url('penjadwalan/edit/${id}') }}`,
@@ -384,7 +371,7 @@
                                 setTimeout(function() {
                                     $('#idKelas').val(response.jadwal.idKelas).change();
                                 }, 500);
-                                $('#idPengajaran_two').val(response.jadwal.idPengajaran).change();
+                                $('#idPengajaran').val(response.jadwal.idPengajaran).change();
                                 $('#hari').val(response.jadwal.hari);
                                 $('#jamMulai').val(response.jadwal.jamMulai);
                                 $('#jamSelesai').val(response.jadwal.jamSelesai);
