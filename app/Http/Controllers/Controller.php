@@ -53,13 +53,13 @@ class Controller extends BaseController
             $query->where('jabatan', 'Kepala Sekolah');
         })->first();
 
-        $kepsek = $pegawai ? $pegawai->namaPegawai : null;
+        $kepsek = $pegawai ? $pegawai->namaPegawai : '-';
         $gambarKepsek = $pegawai ? asset('storage/' . $pegawai->gambar) : null;
         $jabatan = $pegawai ? optional($pegawai->jabatanPegawai)->jabatan : 'Kepala Sekolah';
 
 
         $profil = Profil::all()->first();
-        $sambutan = $profil->sambutanKepsek ?: null;
+        $sambutan = $profil->sambutanKepsek ?: '-';
 
         $data = array_merge(
             $this->getCommonData(),
