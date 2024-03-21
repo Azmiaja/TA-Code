@@ -16,22 +16,25 @@ class Pengajaran extends Model
 
     public function periode()
     {
-        return $this->belongsTo(Periode::class, 'idPeriode');
+        return $this->hasOne(Periode::class, 'idPeriode', 'idPeriode');
     }
     public function guru()
     {
-        return $this->belongsTo(Pegawai::class, 'idPegawai');
+        return $this->hasOne(Pegawai::class, 'idPegawai', 'idPegawai');
     }
-    
+
     public function mapel()
     {
-        return $this->belongsTo(Mapel::class, 'idMapel');
+        return $this->hasOne(Mapel::class, 'idMapel', 'idMapel');
     }
 
     public function kelas()
     {
-        return $this->belongsTo(Kelas::class, 'idKelas');
+        return $this->hasOne(Kelas::class, 'idKelas', 'idKelas');
     }
-    
 
+    public function jadwal()
+    {
+        return $this->hasMany(Jadwal::class, 'idPengajaran');
+    }
 }

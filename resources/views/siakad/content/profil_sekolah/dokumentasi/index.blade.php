@@ -15,16 +15,16 @@
                 <li class="nav-item ms-auto">
                     <div class="nav-link p-1 me-3">
                         <button class="btn btn-sm btn-alt-success" data-toggle="block-option" id="insertFoto"><i
-                                class="me-2 fa fa-plus"></i><span>Tambah</span></button>
+                                class="me-2 fa fa-plus"></i><span>Tambah Dokumentasi</span></button>
                     </div>
                 </li>
             </ul>
             <div class="block-content tab-content overflow-hidden p-0">
                 <div class="tab-pane fade fade-left show active" id="daftarFoto" role="tabpanel" aria-labelledby="tabs-foto"
                     tabindex="0">
-                    <div class="table-responsive p-4">
-                        <table id="tabelFoto" class="table w-100 table-hover table-borderless align-middle table-">
-                            <thead class="bg-gray-light align-middle">
+                    <div class="table-responsive  m-md-0 m-4 p-md-4 p-0">
+                        <table id="tabelFoto" class="table w-100 table-hover table-borderless align-middle">
+                            <thead class="bg-body-light align-middle">
                                 <tr class="text-center fw-medium fs-sm">
                                     <th style="width: 5%">No</th>
                                     <th style="min-width: 23%">Gambar</th>
@@ -41,9 +41,9 @@
                 </div>
                 <div class="tab-pane fade fade-left" id="daftarVideo" role="tabpanel" aria-labelledby="tabs-video"
                     tabindex="0">
-                    <div class="table-responsive p-4">
+                    <div class="table-responsive  m-md-0 m-4 p-md-4 p-0">
                         <table id="tabelVideo" class="table w-100 table-hover table-borderless align-middle table-">
-                            <thead class="bg-gray-light align-middle">
+                            <thead class="bg-body-light align-middle">
                                 <tr class="text-center fw-medium fs-sm">
                                     <th>No</th>
                                     <th style="min-width: 23%">Video</th>
@@ -173,9 +173,11 @@
                         dataType: "json",
                         success: function(response) {
                             Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+                                icon: response.status,
+                                title: response.title,
                                 text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
                             });
                             modalDocFoto.modal('hide');
                             resetForm();
@@ -225,11 +227,11 @@
                                 videoLink.disabled = true;
                                 gambarDokumentasi.disabled = false;
                                 imgPrev.style.display = 'block';
+                                var image = `{{ asset('storage/${response.dock.media}') }}`;
+                                imgPrev.src = image;
                             }
                             var formatedWaktu = formatWaktu(response.dock.waktu);
                             waktu.val(formatedWaktu);
-                            var image = `{{ asset('storage/${response.dock.media}') }}`;
-                            imgPrev.src = image;
                         }
                     });
                 });
@@ -248,9 +250,11 @@
                         dataType: 'json',
                         success: function(response) {
                             Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+                                icon: response.status,
+                                title: response.title,
                                 text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
                             });
 
                             modalDocFoto.modal('hide');
@@ -269,7 +273,7 @@
 
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        text: 'Menghapus data ' + nama + '',
+                        html: `Menghapus dokumentasi <b>${nama}</b>`,
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonText: 'Batal',
@@ -284,9 +288,11 @@
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
-                                        icon: 'success',
-                                        title: 'Dihapus!',
+                                        icon: response.status,
+                                        title: response.title,
                                         text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
                                     });
                                     tableFoto.DataTable().ajax.reload();
                                     tableVideo.DataTable().ajax.reload();
@@ -429,8 +435,6 @@
                     }],
                 });
 
-
-                disabledInput();
             });
         </script>
     @endpush

@@ -1,7 +1,7 @@
 <!-- Modal -->
 <div class="modal fade" id="modalJabatan" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
     aria-labelledby="modal-tambahUserLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="block block-rounded block-transparent mb-0">
                 <div class="block-header block-header-default">
@@ -23,7 +23,7 @@
                         <input type="hidden" name="idJabatan" id="idJ">
                         <div class="mb-3">
                             <label for="jabatan" class="form-label">Jabatan</label>
-                            <input type="text" name="jabatan" id="jabatan" class="form-control" placeholder="Jabatan Pegawai">
+                            <input type="text" name="jabatan" id="jabatan" class="form-control" placeholder="Masukan Jabatan Pegawai" required>
                         </div>
                         <div class="mb-3 text-end" id="bt-form-jabatan">
                             <!-- Form Buttons -->

@@ -20,7 +20,7 @@
                         <input type="text" hidden id="idUserSiswa">
                         <div class="mb-3 sh-ussis">
                             <label class="form-label" for="idSiswa">Nama Siswa</label>
-                            <select class="form-select" id="idSiswa" name="idSiswa[]" multiple="multiple"></select>
+                            <select class="form-select" id="idSiswa" name="idSiswa[]" multiple="multiple" required></select>
                         </div>
                         <div class="mb-3" id="kls_display" hidden>
                             <label class="form-label" for="username">Kelas</label>

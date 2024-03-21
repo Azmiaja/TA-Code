@@ -17,16 +17,20 @@ class Kelas extends Model
 
     public function periode()
     {
-        return $this->belongsTo(Periode::class, 'idPeriode');
+        return $this->hasOne(Periode::class, 'idPeriode', 'idPeriode');
     }
 
     public function guru()
     {
-        return $this->hasOne(Pegawai::class, 'idPegawai');
+        return $this->hasOne(Pegawai::class, 'idPegawai', 'idPegawai');
     }
     public function pengajaran()
     {
         return $this->hasMany(Pengajaran::class, 'idKelas');
+    }
+    public function jadwal()
+    {
+        return $this->hasMany(Jadwal::class, 'idKelas');
     }
     public function siswa()
     {

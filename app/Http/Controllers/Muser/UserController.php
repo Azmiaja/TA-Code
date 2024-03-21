@@ -9,6 +9,7 @@ use App\Models\Siswa;
 use App\Models\User;
 use App\Models\userSiswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
@@ -38,13 +39,21 @@ class UserController extends Controller
     public function getUsrSiswa()
     {
         try {
+            $now = Carbon::now();
             $data = userSiswa::orderBy('idUserSiswa', 'desc')->get();
-            $data = $data->map(function ($item, $key) {
+            $data = $data->map(function ($item, $key) use ($now) {
                 $item['nomor'] = $key + 1;
                 $item['namaSiswa'] = $item->siswa->namaSiswa;
-                $item['kelas'] = $item->siswa->kelas->pluck('namaKelas')->transform(function ($kelas) {
-                    return 'Kelas ' . $kelas;
-                })->toArray() ?: ['N/A'];
+                $item['kelas'] = $item->siswa->kelas()
+                    ->whereHas('periode', function ($query) use ($now) {
+                        $query->where('tanggalMulai', '<=', $now)
+                            ->where('tanggalSelesai', '>=', $now);
+                    })
+                    ->pluck('namaKelas')
+                    ->transform(function ($kelas) {
+                        return 'Kelas ' . $kelas;
+                    })
+                    ->toArray() ?: ['N/A'];
                 $item['status'] = $item->siswa->status === 'Aktif' ? '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-success-light text-success">' . $item->siswa->status . '</span>' : '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-danger-light text-danger">' . $item->siswa->status . '</span>';
                 return $item;
             });
@@ -70,7 +79,7 @@ class UserController extends Controller
     // store data user siswa
     public function storeUsrSiswa(Request $request)
     {
-        $selectedData = $request->input('selectedData');
+        $selectedData = $request->input('idSiswa');
 
         foreach ($selectedData as $data) {
             $siswa = Siswa::find($data);
@@ -91,6 +100,7 @@ class UserController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Sukses',
             'message' => 'Berhasil menyimpan data.',
         ]);
     }
@@ -126,7 +136,8 @@ class UserController extends Controller
         $user->update();
 
         return response()->json([
-            'status' => 'Success',
+            'status' => 'success',
+            'title' => 'Sukses',
             'message' => 'Berhasil mengubah data.'
         ]);
     }
@@ -139,6 +150,7 @@ class UserController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil mengapus data.'
         ]);
     }
@@ -172,12 +184,12 @@ class UserController extends Controller
         // $query = $request->input('query');
 
         // $data = Pegawai::orderBy('namaPegawai', 'asc')->get();
-        $data = Pegawai::whereNotIn('idPegawai', function($query) {
+        $data = Pegawai::whereNotIn('idPegawai', function ($query) {
             $query->select('idPegawai')
-                  ->from('user')
-                  ->where('hakAkses', 'Super Admin');
+                ->from('user')
+                ->where('hakAkses', 'Super Admin');
         })->orderBy("namaPegawai", "asc")->get();
-        
+
 
         // dd($data);
 
@@ -204,7 +216,18 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
-            $selectedData = $request->input('selectedData');
+            $selectedData = $request->input('idPegawai');
+            $existingKelas = User::where('idPegawai', $selectedData)
+                ->where('hakAkses', $request->input('hakAkses'))
+                ->exists();
+
+            if ($existingKelas) {
+                return response()->json([
+                    'status' => 'error',
+                    'title' => 'Gagal',
+                    'message' => 'User dengan hak akses ' . $request->input('hakAkses') . ' sudah ada.'
+                ]);
+            }
 
             foreach ($selectedData as $data) {
                 $pegawai = Pegawai::find($data);
@@ -213,7 +236,7 @@ class UserController extends Controller
 
                 $password = date('dmy', strtotime($pegawai->tanggalLahir));
 
-                $role = $request->input('role');
+                $role = $request->input('hakAkses');
 
                 User::create([
                     'idPegawai' => $data,
@@ -225,6 +248,7 @@ class UserController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil menyimpan data.',
             ]);
         } catch (\Exception $e) {
@@ -275,7 +299,7 @@ class UserController extends Controller
             $user = User::find($id);
 
             $user->username = $request->input('username');
-            $user->hakAkses = $request->input('hakAkses');
+            // $user->hakAkses = $request->input('hakAkses');
 
             if ($request->filled('password')) {
                 $user->password = Hash::make($request->input('password'));
@@ -283,7 +307,8 @@ class UserController extends Controller
             $user->update();
 
             return response()->json([
-                'status' => 'Success',
+                'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil mengubah data.'
             ]);
         } catch (\Exception $e) {
@@ -307,6 +332,7 @@ class UserController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil mengapus data.'
         ]);
     }

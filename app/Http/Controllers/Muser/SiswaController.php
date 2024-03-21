@@ -75,6 +75,7 @@ class SiswaController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Sukses',
             'message' => 'Berhasil menyimpan data.'
         ]);
     }
@@ -84,7 +85,7 @@ class SiswaController extends Controller
         $siswa = Siswa::find($id);
         if (!$siswa) {
             // Handle jika berita tidak ditemukan
-            return response()->json(['status' => 'error', 'message' => 'Data siswa tidak ditemukan.']);
+            return response()->json(['status' => 'error', 'title' => 'Gagal', 'message' => 'Data siswa tidak ditemukan.']);
         }
 
         return response()->json(['siswa' => $siswa]);
@@ -122,6 +123,7 @@ class SiswaController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil mengubah data.'
             ]);
         } catch (\Exception $e) {
@@ -129,6 +131,7 @@ class SiswaController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.'  . $e->getMessage(),
             ], 422);
         }
@@ -142,6 +145,7 @@ class SiswaController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Sukses',
             'message' => 'Berhasil mengapus data.'
         ]);
     }
@@ -153,6 +157,7 @@ class SiswaController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil mengapus semua data siswa.'
         ]);
     }
@@ -171,6 +176,7 @@ class SiswaController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Import Sukses',
                 'message' => 'Berhasil mengimport data siswa.'
             ]);
         } catch (\Exception $e) {
@@ -178,6 +184,7 @@ class SiswaController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title' => 'Import Gagal',
                 'message' => 'Error storing data.'  . $e->getMessage(),
             ], 422);
         }

@@ -7,7 +7,7 @@
                 <h3 class="block-title">Daftar Berita</h3>
                 <div class="block-options">
                     <button class="btn btn-sm btn-alt-success" data-toggle="block-option" id="insertBerita"><i
-                            class="me-2 fa fa-plus"></i><span>Tambah</span></button>
+                            class="me-2 fa fa-plus"></i><span>Tambah Berita</span></button>
                 </div>
             </div>
             <div class="block-content block-content-full p-0">
@@ -91,7 +91,7 @@
                     $(this).val(numericValue);
                 });
 
-                $('form[name=formBerita]').submit(function(event) {
+                formBerita.submit(function(event) {
                     // Pastikan bahwa formulir tidak benar-benar dikirim.
                     event.preventDefault();
 
@@ -114,31 +114,18 @@
                         dataType: "json",
                         success: function(response) {
                             Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+                                icon: response.status,
+                                title: response.title,
                                 text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
                             });
                             modalBerita.modal('hide');
-                            resetForm();
                             tabelBerita.DataTable().ajax.reload();
                         },
                     });
                 });
 
-
-                function resetForm() {
-                    myEditor.setData('');
-                    imgPrev.style.display = 'none';
-                    formBerita.trigger('reset');
-                    myEditor.setData('');
-                    $('#judulBeritaError').text('');
-                }
-
-
-                function updateModal(title, button) {
-                    modalTitle.text(title);
-                    btModal.html(button);
-                }
 
                 function formatWaktu(waktu) {
                     return moment(waktu).format('DD/MM/YYYY hh:mm A');
@@ -147,24 +134,23 @@
 
                 modalBerita.on('hidden.bs.modal', function() {
                     // Reset form
-                    resetForm()
+                    resetForm(formBerita, function() {
+                        myEditor.setData('');
+                        imgPrev.style.display = 'none';
+                        $('#judulBeritaError').text('');
+                    });
                 });
 
-                btnInsert.click(() => {
-                    modalBerita.modal('show');
-                    formBerita.attr('action', '{!! url('berita/store') !!}');
-                    updateModal('Tambah Berita',
-                        `<button type="button" class="btn btn-secondary me-2 close-berita-modal" data-bs-dismiss="modal">Close</button><button type="submit" class="btn btn-primary" id="tambahBerita">Simpan</button>`
-                    );
-                    method.val('POST');
-                });
+                showModalInsert(btnInsert, modalBerita, formBerita, `{{ url('berita/store') }}`, method, modalTitle,
+                    btModal,
+                    'Tambah Berita', `<button type="submit" class="btn btn-primary">Simpan</button>`);
 
                 $(document).on('click', '#action-editBerita', function(e) {
                     e.preventDefault();
 
                     modalBerita.modal('show');
-                    updateModal('Edit Berita',
-                        `<button type="button" class="btn btn-secondary me-2 close-berita-modal" data-bs-dismiss="modal">Close</button><button type="submit" class="btn btn-primary" id="ubahBerita">Simpan</button>`
+                    updateModals(modalTitle, btModal, 'Edit Berita',
+                        `<button type="submit" class="btn btn-primary" id="ubahBerita">Simpan</button>`
                     );
                     method.val('PUT');
 
@@ -213,19 +199,16 @@
                         dataType: 'json',
                         success: function(response) {
                             Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+                                icon: response.status,
+                                title: response.title,
                                 text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
                             });
 
                             modalBerita.modal('hide');
-                            resetForm();
                             tabelBerita.DataTable().ajax.reload();
                         },
-                        error: function(xhr, status, error) {
-                            var errors = xhr.responseJSON.errors;
-                            // Handle errors as needed
-                        }
                     });
                 });
 
@@ -236,7 +219,7 @@
 
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        text: 'Menghapus data ' + nama + '',
+                        html: `Menghapus berita <b>${nama}</b>`,
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonText: 'Batal',
@@ -245,29 +228,19 @@
                         confirmButtonText: 'Ya, Hapus!'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            $.ajaxSetup({
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                }
-                            });
                             $.ajax({
                                 type: "DELETE",
                                 url: "{{ url('berita/destroy') }}/" + id,
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
-                                        icon: 'success',
-                                        title: 'Dihapus!',
+                                        icon: response.status,
+                                        title: response.title,
                                         text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
                                     });
-                                    $('#tabelBerita').DataTable().ajax.reload();
-                                },
-                                error: function(xhr, status, error) {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: 'Data gagal dihapus.',
-                                    });
+                                    tabelBerita.DataTable().ajax.reload();
                                 }
                             });
                         }
@@ -303,12 +276,10 @@
                                 return `<div class="rounded-2" style="border: 2px dashed #dfe3ea; overflow:hidden;">
                                     <a href="${imageUrl ?? '#'}" class="popup-link-berita" id="pop-up-${row.idBerita}" title="View Image">
                                             <div class="ratio ratio-16x9">
-                                                    <img src="${imageUrl ?? null}" class="object-fit-cover flex-shrink-0 rounded-2">
+                                                    <img src="${imageUrl ?? null}" style="width: 100%; height: 100%; object-fit: cover;" class="flex-shrink-0 rounded-2">
                                                     </div>
                                                     </a>
                                         </div>`;
-
-
                             },
                             searchable: false,
                         },
@@ -341,7 +312,6 @@
                         "<'row'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
                     lengthMenu: [10, 25],
                 });
-
 
             });
         </script>

@@ -35,16 +35,15 @@
                                 <div class="mb-2">
                                     <label class="form-label" for="namaPegawai">Nama Pegawai <span
                                             class="text-danger fs-sm">*</span></label>
-                                    <input type="text" class="form-control" id="namaPegawai"
-                                        name="namaPegawai" placeholder="Masukan Nama" required>
+                                    <input type="text" class="form-control" id="namaPegawai" name="namaPegawai"
+                                        placeholder="Masukan Nama" required>
                                 </div>
                                 <!-- Jenis Kelamin -->
                                 <div class="mb-2">
                                     <label class="form-label" for="jenisKelamin">Jenis Kelamin <span
                                             class="text-danger fs-sm">*</span></label>
-                                    <select name="jenisKelamin" id="jenisKelamin" class="form-select"
-                                        required>
-                                        <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
+                                    <select name="jenisKelamin" id="jenisKelamin" class="form-select" required>
+                                        <option value="" disabled selected>Pilih Jenis Kelamin</option>
                                         <option value="Laki-Laki">Laki-Laki</option>
                                         <option value="Perempuan">Perempuan</option>
                                     </select>
@@ -52,19 +51,19 @@
                                 {{-- Tempat Lahir --}}
                                 <div class="mb-2">
                                     <label class="form-label" for="tempatLahir">Tempat Lahir</label>
-                                    <input type="text" class="form-control" id="tempatLahir"
-                                        name="tempatLahir" placeholder="Masukan Tampat Lahir">
+                                    <input type="text" class="form-control" id="tempatLahir" name="tempatLahir"
+                                        placeholder="Masukan Tampat Lahir">
                                 </div>
                                 <!-- Tanggal Lahir -->
                                 <div class="mb-2">
-                                    <label class="form-label" for="tanggalLahir">Tanggal Lahir</label>
-                                    <input type="date" class="form-control" id="tanggalLahir"
-                                        name="tanggalLahir">
+                                    <label class="form-label" for="tanggalLahir">Tanggal Lahir <span
+                                        class="text-danger fs-sm">*</span></label>
+                                    <input type="text" class="form-control" id="tanggalLahir" name="tanggalLahir" required>
                                 </div>
                                 <!-- Alamat -->
                                 <div class="mb-2">
                                     <label class="form-label" for="alamat">Alamat</label>
-                                    <textarea id="alamat" class="form-control" name="alamat" placeholder="Masukan Alamat"></textarea>
+                                    <textarea id="alamat" class="form-control" rows="3" style="resize: none" name="alamat" placeholder="Masukan Alamat"></textarea>
                                 </div>
                             </div>
                             <div class="col-lg-5 col-12">
@@ -72,9 +71,8 @@
                                 <div class="mb-2">
                                     <label class="form-label" for="jenisPegawai">Jenis Pegawai <span
                                             class="text-danger fs-sm">*</span></label>
-                                    <select name="jenisPegawai" id="jenisPegawai" class="form-select"
-                                        required>
-                                        <option value="" selected disabled>-- Pilih Jenis Pegawai --</option>
+                                    <select name="jenisPegawai" id="jenisPegawai" class="form-select" required>
+                                        <option value="" selected disabled>Pilih Jenis Pegawai</option>
                                         <option value="Guru">Guru</option>
                                         <option value="Tapen">Tenaga Pengajar</option>
                                     </select>
@@ -83,7 +81,7 @@
                                 <div class="mb-2">
                                     <label class="form-label" for="agama">Agama</label>
                                     <select name="agama" id="agama" class="form-select">
-                                        <option value="" selected disabled>-- Pilih Agama --</option>
+                                        <option value="" selected disabled>Pilih Agama</option>
                                         <option value="Islam">Islam</option>
                                         <option value="Kristen">Kristen</option>
                                         <option value="Katolik">Katolik</option>
@@ -95,9 +93,9 @@
                                 <!-- Jabatan -->
                                 <div class="mb-2">
                                     <label class="form-label" for="jabatan">Jabatan <span
-                                        class="text-danger fs-sm">*</span></label>
+                                            class="text-danger fs-sm">*</span></label>
                                     <select name="idJabatan" id="idJabatan" class="form-select">
-                                        <option value="" selected disabled>-- Pilih Jabatan --</option>
+                                        <option value="" selected disabled>Pilih Jabatan</option>
                                     </select>
                                 </div>
                                 <!-- No Handphone -->
@@ -111,7 +109,7 @@
                                     <label class="form-label" for="status">Status <span
                                             class="text-danger fs-sm">*</span></label>
                                     <select name="status" id="status" class="form-select" required>
-                                        <option value="" selected disabled>-- Pilih Status --</option>
+                                        <option value="" selected disabled>Pilih Status</option>
                                         <option value="Aktif">Aktif</option>
                                         <option value="Tidak Aktif">Tidak Aktif</option>
                                     </select>
@@ -119,11 +117,16 @@
                                 {{-- Gambar --}}
                                 <div class="mb-2">
                                     <label class="form-label" for="gambarPegawai">Gambar</label>
-                                    <input type="file" class="form-control mb-3" name="gambarPegawai"
-                                        accept=".jpg,.jpeg,.png,.svg" id="gambarPegawai" onchange="prevImg()">
-                                    <img src="" class="img-preview img-fluid rounded-2 col-md-12 col-sm-4"
+                                    <img src="" class="img-preview img-fluid rounded-2 col-12 mb-2"
                                         style="display: none; border: 2px dashed #dfe3ea; width: 150px;"
                                         alt="">
+                                    <input type="file" class="form-control d-none" name="gambarPegawai"
+                                        accept=".jpg,.jpeg,.png,.svg" id="gambarPegawai" onchange="prevImg()">
+                                    <div class="col">
+                                        <button type="button" id="fileButton" class="btn btn-success"><i
+                                                class="fa-solid fa-file-image me-2"></i>Pilih
+                                            File</button>
+                                    </div>
                                 </div>
                             </div>
                             <hr>

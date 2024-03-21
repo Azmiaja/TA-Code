@@ -10,9 +10,11 @@ class MapelController extends Controller
 {
     public function index()
     {
-        return view('mkelas.mapel', [
-            'title' => 'Manajemen Kelas',
-            'title2' => 'Mata Pelajaran'
+        return view('siakad.content.m_sekolah.akademik.mapel.index', [
+            'judul' => 'Data Master',
+            'sub_judul' => 'Akademik',
+            'sub_sub_judul' => 'Mata Pelajaran',
+            'text_singkat' => 'Mengelola data mata pelajaran akademik sekolah!',
         ]);
     }
     public function index_admin()
@@ -25,7 +27,15 @@ class MapelController extends Controller
 
     public function getMapel()
     {
-        $mapel = Mapel::orderBy('idMapel', 'desc')->get();
+        $mapel = Mapel::orderBy('idMapel', 'desc')->get()
+            ->map(function ($item, $key) {
+                $item['nomor'] = $key + 1;
+                $item['mapel'] = $item->namaMapel;
+                $item['kkm'] = $item->kkm;
+                $item['deskripsi'] = $item->deskripsiMapel;
+
+                return $item;
+            });
 
         return response()->json(['data' => $mapel]);
     }
@@ -50,13 +60,15 @@ class MapelController extends Controller
     {
         $validatedData = $request->validate([
             'namaMapel' => 'required',
-            'deskripsiMapel' => '',
+            'deskripsiMapel' => 'nullable',
+            'kkm' => 'required',
         ]);
 
         Mapel::create($validatedData);
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Sukses',
             'message' => 'Berhasil menyimpan data.'
         ]);
     }
@@ -70,7 +82,7 @@ class MapelController extends Controller
     {
         $mapel = Mapel::find($id);
         if (!$mapel) {
-            return response()->json(['status' => 'error', 'message' => 'Data mapel tidak ditemukan.']);
+            return response()->json(['status' => 'error', 'title' => 'Gagal', 'message' => 'Data mapel tidak ditemukan.']);
         }
 
         return response()->json(['data' => $mapel]);
@@ -80,12 +92,13 @@ class MapelController extends Controller
     {
         $mapel = Mapel::find($id);
         if (!$mapel) {
-            return response()->json(['status' => 'error', 'message' => 'Data mapel tidak ditemukan.']);
+            return response()->json(['status' => 'error', 'title' => 'Gagal', 'message' => 'Data mapel tidak ditemukan.']);
         }
         // Validasi input
         $validatedData = $request->validate([
             'namaMapel' => 'required',
-            'deskripsiMapel' => '',
+            'deskripsiMapel' => 'nullable',
+            'kkm' => 'required',
         ]);
 
         // Perbarui data mapel
@@ -93,6 +106,7 @@ class MapelController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Sukses',
             'message' => 'Berhasil mengubah data.'
         ]);
     }
@@ -104,6 +118,7 @@ class MapelController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil mengapus data.'
         ]);
     }

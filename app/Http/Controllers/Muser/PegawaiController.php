@@ -27,11 +27,11 @@ class PegawaiController extends Controller
     public function getData()
     {
         // $data = Pegawai::orderBy("idPegawai", "DESC")->get();
-        $data = Pegawai::whereNotIn('idPegawai', function($query) {
+        $data = Pegawai::whereNotIn('idPegawai', function ($query) {
             $query->select('idPegawai')
-                  ->from('user')
-                  ->where('hakAkses', 'Super Admin');
-        })->orderBy("idPegawai", "DESC")->get();        
+                ->from('user')
+                ->where('hakAkses', 'Super Admin');
+        })->orderBy("idPegawai", "DESC")->get();
         $data = $data->map(function ($item, $key) {
             $item['nomor'] = $key + 1;
             return $item;
@@ -53,7 +53,7 @@ class PegawaiController extends Controller
                 'nip' => 'required|numeric',
                 'namaPegawai' => 'required|string',
                 'tempatLahir' => 'nullable|string',
-                'tanggalLahir' => 'nullable|date',
+                'tanggalLahir' => 'required',
                 'jenisKelamin' => 'nullable',
                 'agama' => 'nullable',
                 'alamat' => 'nullable|string',
@@ -68,11 +68,13 @@ class PegawaiController extends Controller
                 $imgName = uniqid() . '.' . $request->file('gambarPegawai')->getClientOriginalExtension();
                 $validatedData['gambar'] = $request->file('gambarPegawai')->storeAs('profil_pegawai', $imgName, 'public');
             }
+            $validatedData['tanggalLahir'] = Carbon::createFromFormat('d/m/Y', $request->tanggalLahir)->format('Y-m-d');
 
             Pegawai::create($validatedData);
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil menambahkan data.',
             ]);
         } catch (\Exception $e) {
@@ -80,6 +82,7 @@ class PegawaiController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.'  . $e->getMessage(),
             ], 422);
         }
@@ -111,11 +114,14 @@ class PegawaiController extends Controller
                 $pegawai->gambar = $request->file('gambarPegawai')->storeAs('profil_pegawai', $imgName, 'public');
             }
 
+            $pegawai->tanggalLahir = Carbon::createFromFormat('d/m/Y', $request->input('tanggalLahir'))->format('Y-m-d');
+
             // Perbarui data pegawai
             $pegawai->update();
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil memprbarui data.'
             ]);
         } catch (\Exception $e) {
@@ -123,6 +129,7 @@ class PegawaiController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.'  . $e->getMessage(),
             ], 422);
         }
@@ -138,6 +145,7 @@ class PegawaiController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil menghapus data.'
         ]);
     }

@@ -16,23 +16,15 @@ class Jadwal extends Model
 
     public function pengajaran()
     {
-        return $this->belongsTo(Pengajaran::class, 'idPengajaran');
+        return $this->hasOne(Pengajaran::class, 'idPengajaran', 'idPengajaran');
     }
     
-    public function guru()
-    {
-        return $this->pengajaran->belongsTo(Pegawai::class, 'idPegawai');
-    }
-    public function mapel()
-    {
-        return $this->pengajaran->belongsTo(Mapel::class, 'idMapel');
-    }
     public function periode()
     {
-        return $this->pengajaran->belongsTo(Periode::class, 'idPeriode');
+        return $this->hasOne(Periode::class, 'idPeriode', 'idPeriode');
     }
     public function kelas()
     {
-        return $this->pengajaran->belongsTo(Kelas::class, 'idKelas');
+        return $this->hasOne(Kelas::class, 'idKelas', 'idKelas');
     }
 }

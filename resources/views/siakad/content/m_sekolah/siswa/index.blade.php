@@ -5,7 +5,7 @@
     <div class="content">
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Data Siswa</h3>
+                <h3 class="block-title">Daftar Siswa</h3>
                 <div class="block-options">
 
                 </div>
@@ -115,8 +115,7 @@
                 btnInsert.click(function(e) {
                     e.preventDefault();
                     modal.modal('show');
-                    updateModal('Tambah Data Siswa', `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Simpan</button>`)
+                    updateModal('Tambah Data Siswa', `<button type="submit" class="btn btn-primary">Simpan</button>`)
                 });
 
                 form.submit(function(e) {
@@ -134,9 +133,11 @@
                         dataType: "json",
                         success: function(response) {
                             Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+                                icon: response.status,
+                                title: response.title,
                                 text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
                             });
                             modal.modal('hide');
                             tabel.DataTable().ajax.reload();
@@ -194,8 +195,7 @@
                     e.preventDefault();
                     var idSiswa = $(this).val();
                     modal.modal('show');
-                    updateModal('Edit Data Siswa', `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="btn-editSiswa">Simpan</button>`);
+                    updateModal('Ubah Data Siswa', `<button type="submit" class="btn btn-primary" id="btn-editSiswa">Simpan</button>`);
 
                     method.val('PUT');
                     form.attr('action', `{{ url('siswa/update/${idSiswa}') }}`);
@@ -250,9 +250,11 @@
                         processData: false,
                         success: function(response) {
                             Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+                                icon: response.status,
+                                title: response.title,
                                 text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
                             });
                             modal.modal('hide');
                             tabel.DataTable().ajax.reload();
@@ -283,9 +285,11 @@
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
-                                        icon: 'success',
-                                        title: 'Dihapus!',
+                                        icon: response.status,
+                                        title: response.title,
                                         text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
                                     });
                                     tabel.DataTable().ajax.reload();
                                 }
@@ -315,9 +319,11 @@
                         processData: false,
                         success: function(response) {
                             Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+                                icon: response.status,
+                                title: response.title,
                                 text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
                             });
                             modalImport.modal('hide');
                             formImport.trigger('reset');

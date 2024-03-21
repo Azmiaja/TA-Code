@@ -75,6 +75,7 @@ class Dokumentasi extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil menyimpan data.'
             ]);
         } catch (\Exception $e) {
@@ -82,6 +83,7 @@ class Dokumentasi extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -93,7 +95,11 @@ class Dokumentasi extends Controller
         $dokumentasi = ModelsDokumentasi::find($id);
         if (!$dokumentasi) {
             // Handle jika dokumentasi tidak ditemukan
-            return response()->json(['status' => 'error', 'message' => 'Data tidak ditemukan.']);
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal',
+                'message' => 'Data tidak ditemukan.'
+            ]);
         }
 
         return response()->json(['dock' => $dokumentasi]);
@@ -118,8 +124,7 @@ class Dokumentasi extends Controller
                 if ($dock->media) {
                     Storage::delete('public/' . $dock->media);
                 }
-            } else {
-                $link = $request->link_video;
+            } elseif ($link = $request->link_video) {
 
                 $parsedUrl = parse_url($link);
                 $path = $parsedUrl['path'];
@@ -134,6 +139,7 @@ class Dokumentasi extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil memperbarui data.'
             ]);
         } catch (\Exception $e) {
@@ -141,6 +147,7 @@ class Dokumentasi extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -153,6 +160,7 @@ class Dokumentasi extends Controller
         $dock->delete();
         return response()->json([
             'status' => 'success',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil menghapus data.'
         ]);
     }

@@ -25,11 +25,15 @@ class Periode extends Model
     // Define the relationship with the Kelas model
     public function kelas()
     {
-        return $this->hasMany(Kelas::class, 'idPeriode', 'idPeriode');
+        return $this->hasMany(Kelas::class, 'idPeriode');
     }
     
     public function pengajar()
     {
         return $this->hasMany(Pengajaran::class, 'idPengajaran');
+    }
+    public function jadwal()
+    {
+        return $this->hasMany(Jadwal::class, 'idJadwal');
     }
 }

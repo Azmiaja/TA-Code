@@ -93,6 +93,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil memperbarui data.'
             ]);
         } catch (\Exception $e) {
@@ -100,6 +101,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title'=> 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -129,6 +131,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil memperbarui data.'
             ]);
         } catch (\Exception $e) {
@@ -136,6 +139,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title'=> 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -165,6 +169,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil memperbarui data.'
             ]);
         } catch (\Exception $e) {
@@ -172,6 +177,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title'=> 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -201,6 +207,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil memperbarui data.'
             ]);
         } catch (\Exception $e) {
@@ -208,6 +215,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title'=> 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -229,6 +237,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil memperbarui data.'
             ]);
         } catch (\Exception $e) {
@@ -236,6 +245,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title'=> 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -255,6 +265,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil memperbarui data.'
             ]);
         } catch (\Exception $e) {
@@ -262,6 +273,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title'=> 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -281,6 +293,7 @@ class ProfilController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil menghapus data.'
         ]);
     }
@@ -311,6 +324,12 @@ class ProfilController extends Controller
         $profil = Profil::find($id);
     
         return $this->deleteProfil($profil, 'keuanganText', 'keuanganImg');
+    }
+    public function destroySam($id)
+    {
+        $profil = Profil::find($id);
+    
+        return $this->deleteProfil($profil, 'sambutanKepsek', '');
     }
     
 }

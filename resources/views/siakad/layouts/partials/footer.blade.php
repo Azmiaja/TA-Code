@@ -62,6 +62,82 @@
             });
         });
     });
+
+    // Fungsi Untuk Update/Custom Modal
+    function updateModals(md_title, md_button, title, button) {
+        md_title.text(title);
+        md_button.html(button);
+    }
+
+    // Fungsi Show Modal Insert
+    function showModalInsert(button1, modal, form, url, fr_method, md_title, md_button, title, button2) {
+        button1.click(function(e) {
+            e.preventDefault();
+            modal.modal('show');
+            form.attr('action', url);
+            fr_method.val('POST');
+            updateModals(md_title, md_button, title, button2);
+        });
+    }
+
+
+    // Fungsi Insert dan Update Data
+    function insertOrUpdateData(form, options) {
+        form.submit(function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: new FormData(this),
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    Swal.fire({
+                        icon: response.status,
+                        title: response.title,
+                        text: response.message,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    options();
+                },
+            });
+        });
+    }
+
+    // Fungsi Reset Form
+    function resetForm(form, options) {
+        form.trigger('reset');
+        options();
+    }
+
+    // Fungsi Select2 Multiple
+    function select2Multiple(select, modal) {
+        $(select).select2({
+            width: "100%",
+            cache: false,
+            dropdownParent: modal,
+            theme: "bootstrap-5",
+            multiple: true,
+            allowClear: true,
+        });
+    }
+
+    // Fungsi Select2
+    function select2(select, modal) {
+        $(select).select2({
+            width: '100%',
+            cache: false,
+            dropdownParent: modal,
+            theme: "bootstrap-5",
+            placeholder: $( this ).data('placeholder'),
+            allowClear: true,
+        });
+    }
+
+    
 </script>
 </body>
 

@@ -55,6 +55,7 @@ class PesanController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.'  . $e->getMessage(),
             ], 422);
         }
@@ -67,6 +68,7 @@ class PesanController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil menghapus data.'
         ]);
     }

@@ -9,6 +9,7 @@ use App\Models\Pegawai;
 use App\Models\Pengajaran;
 use App\Models\Periode;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Contracts\DataTable;
 use Yajra\DataTables\DataTables as DataTablesDataTables;
 use Yajra\DataTables\Facades\DataTables;
@@ -17,23 +18,44 @@ class PengajarController extends Controller
 {
     public function index()
     {
-        $periode = Periode::orderBy('idPeriode', 'desc')->get();
-        return view('mkelas.pengajaran', compact('periode'), [
-            'title' => "Manajemen Kelas",
-            'title2' => "Pengajar",
+        $periode = Periode::orderBy('tanggalMulai', 'desc')->get();
+        return view('siakad.content.m_sekolah.akademik.pengajaran.index', compact('periode'), [
+            'judul' => 'Data Master',
+            'sub_judul' => 'Akademik',
+            'sub_sub_judul' => 'Pengajar',
+            'text_singkat' => 'Mengelola pengajar mapel dan kelas akademik sekolah!',
         ]);
     }
 
     public function getPengajar(Request $request)
     {
-        $data = Pengajaran::with(['periode', 'guru', 'mapel', 'kelas'])
-            ->where('idPeriode', $request->periode_id)
-            ->whereHas('kelas', function ($query) use ($request) {
-                $query->where('namaKelas', $request->nama_kls);
-            })
-            ->get();
+        try {
 
-        return DataTables::of($data)->toJson();
+            $data = Pengajaran::with(['periode', 'guru', 'mapel', 'kelas'])
+                ->when($request->filled('periode'), function ($query) use ($request) {
+                    return $query->where('idPeriode', $request->input('periode'));
+                })
+                ->whereHas('kelas', function ($query) use ($request) {
+                    $query->where('namaKelas', $request->input('namaKelas'));
+                })
+                ->orderBy('idPengajaran', 'desc')
+                ->get();
+
+            $data = $data->map(function ($item, $key) {
+                $item['nomor'] = $key + 1;
+                $item['kelasPengajar'] = $item->kelas ? 'Kelas ' . $item->kelas->namaKelas : '-';
+                $item['namaPengajar'] = $item->guru ? $item->guru->namaPegawai : '-';
+                $item['nipPengajar'] = $item->guru ? $item->guru->nip : '-';
+                $item['mapelDiapu'] = $item->mapel ? $item->mapel->namaMapel : '-';
+                $item['semester'] = $item->periode ? 'Semester ' . $item->periode->semester . '/' . date('Y', strtotime($item->periode->tanggalMulai)) : '-';
+
+                return $item;
+            });
+
+            return response()->json(['data' => $data]);
+        } catch (\Exception $e) {
+            Log::error('Error get data: ' . $e->getMessage());
+        }
     }
 
     public function getForm(Request $request)
@@ -70,30 +92,45 @@ class PengajarController extends Controller
      */
     public function store(Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'idPeriode' => 'required',
-        //     'idMapel' => 'required',
-        //     'idPegawai' => 'required',
-        //     'idKelas' => 'required',
-        // ]);
+        try {
+            $idMapel = $request->input('idMapel');
+            $idPeriode = $request->input('idPeriode');
+            $idKelas = $request->input('idKelas');
+            $idPegawai = $request->input('idPegawai');
 
-        $idPeriode = $request->idPeriode;
-        $idMapel = $request->idMapel;
-        $idPegawai = $request->idPegawai;
-        $idKelas = $request->idKelas;
 
-        $insertPengajar = [];
-        for ($i = 0; $i < count($idMapel); $i++) {
-            array_push($insertPengajar, ['idKelas' => $idKelas, 'idPegawai'=>$idPegawai, 'idPeriode'=>$idPeriode, 'idMapel'=>$idMapel[$i]]);
+            foreach ($idMapel as $data) {
+                $existingPengajaran = Pengajaran::where('idPegawai', $idPegawai)
+                    ->where('idMapel', $data)
+                    ->where('idKelas', $idKelas)
+                    ->where('idPeriode', $idPeriode)
+                    ->exists();
+
+                if ($existingPengajaran) {
+                    return response()->json([
+                        'status' => 'error',
+                        'title' => 'Gagal',
+                        'message' => 'Guru yang dipilih sudah mengajar mata pelajaran pada kelas yang dipilih.'
+                    ]);
+                }
+
+                Pengajaran::create([
+                    'idMapel' => $data,
+                    'idPeriode' => $idPeriode,
+                    'idPegawai' => $idPegawai,
+                    'idKelas' => $idKelas,
+                ]);
+            }
+
+
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Sukses',
+                'message' => 'Berhasil menyimpan data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error get data: ' . $e->getMessage() . $idMapel);
         }
-
-        Pengajaran::insertOrIgnore($insertPengajar);
-
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Berhasil menyimpan data.'
-        ]);
     }
 
     /**
@@ -116,7 +153,7 @@ class PengajarController extends Controller
     public function edit($id)
     {
         $pengajar = Pengajaran::find($id);
-        return response()->json(['pengajar' => $pengajar]);
+        return response()->json(['data' => $pengajar]);
     }
 
     /**
@@ -130,22 +167,32 @@ class PengajarController extends Controller
     {
         $pengajar = Pengajaran::find($id);
 
-        if (!$pengajar) {
-            return response()->json(['status' => 'error', 'message' => 'Data pengajar tidak ditemukan.']);
-        }
-        // Validasi input
-        $validatedData = $request->validate([
-            'idPeriode' => 'required',
-            'idMapel' => 'required',
-            'idPegawai' => 'required',
-            'idKelas' => 'required',
-        ]);
+        // Cek apakah pengajar sudah mengajar mata pelajaran pada kelas yang dipilih
+        $existingPengajaran = Pengajaran::where('idPegawai', $request->input('idPegawai'))
+            ->where('idMapel', $request->input('idMapel_two'))
+            ->where('idKelas', $request->input('idKelas'))
+            ->where('idPeriode', $request->input('idPeriode'))
+            ->exists();
 
-        // Perbarui data pengajar
-        $pengajar->update($validatedData);
+        if ($existingPengajaran) {
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal',
+                'message' => 'Guru yang dipilih sudah mengajar mata pelajaran pada kelas yang dipilih.'
+            ]);
+        }
+
+        // Update data pengajar
+        $pengajar->update([
+            'idMapel' => $request->input('idMapel_two'),
+            'idPeriode' => $request->input('idPeriode'),
+            'idKelas' => $request->input('idKelas'),
+            'idPegawai' => $request->input('idPegawai'),
+        ]);
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Sukses',
             'message' => 'Berhasil mengubah data.'
         ]);
     }
@@ -157,6 +204,7 @@ class PengajarController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil mengapus data.'
         ]);
     }

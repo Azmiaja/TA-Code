@@ -5,15 +5,11 @@
         <div class="block block-rounded">
             <div class="block-header block-header-default">
                 <h3 class="block-title">Daftar Pesan Masuk</h3>
-                {{-- <div class="block-options">
-                    <button class="btn btn-sm btn-alt-success" data-toggle="block-option" id="insertBerita"><i
-                            class="me-2 fa fa-plus"></i><span>Tambah</span></button>
-                </div> --}}
             </div>
             <div class="block-content block-content-full p-0">
-                <div class="table-responsive p-3">
-                    <table id="tabelPesan" class="table w-100 table-bordered border-dark table-stripped">
-                        <thead class="bg-gray-light align-middle">
+                <div class="table-responsive m-md-0 m-4 p-md-4 p-0">
+                    <table id="tabelPesan" class="table w-100 table-bordered">
+                        <thead class="bg-body-light align-middle">
                             <tr class="text-center fw-medium fs-sm">
                                 <th style="width: 5%">No</th>
                                 <th style="width: 14%">Waktu</th>
@@ -86,7 +82,7 @@
 
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        text: `Menghapus pesan dari ${nama}`,
+                        html: `Menghapus pesan dari <b>${nama}</b>`,
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonText: 'Batal',
@@ -101,9 +97,11 @@
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
-                                        icon: 'success',
-                                        title: 'Dihapus!',
+                                        icon: response.status,
+                                        title: response.title,
                                         text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
                                     });
                                     tabel.DataTable().ajax.reload();
                                 },

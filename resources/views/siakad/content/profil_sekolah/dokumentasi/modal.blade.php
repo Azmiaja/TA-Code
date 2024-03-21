@@ -45,7 +45,7 @@
                             <div class="col-md-8 col-12 order-md-1 order-0">
                                 <div class="mb-2">
                                     <label class="form-label" for="judulDokumentasi">Judul</label>
-                                    <textarea class="form-control" id="judulDokumentasi" name="judulDokumentasi" required rows="4"></textarea>
+                                    <textarea class="form-control" id="judulDokumentasi" name="judulDokumentasi" style="resize: none" required rows="3"></textarea>
                                     <span id="judulDokumentasiError" class="text-danger fs-sm"></span>
                                 </div>
                                 <div class="mb-2">

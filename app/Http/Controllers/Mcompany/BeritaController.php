@@ -70,6 +70,7 @@ class BeritaController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil menyimpan data.'
             ]);
         } catch (\Exception $e) {
@@ -77,6 +78,7 @@ class BeritaController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -111,6 +113,7 @@ class BeritaController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil menyimpan data.'
             ]);
         }
@@ -181,6 +184,7 @@ class BeritaController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil memperbarui data.'
             ]);
         } catch (\Exception $e) {
@@ -188,10 +192,10 @@ class BeritaController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
-        
     }
 
 
@@ -211,7 +215,8 @@ class BeritaController extends Controller
         $berita->delete();
 
         return response()->json([
-            'status' => 'success',
+            'status' => 'success',                    
+            'title' => 'Dihapus!',
             'message' => 'Berhasil menghapus data.'
         ]);
     }

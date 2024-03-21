@@ -22,19 +22,22 @@
                             <input type="text" id="idSiswa" name="idSiswa" hidden>
                             <legend class="col-12 mb-0">Data Siswa</legend>
                             <div class="col-md-6">
-                                <label class="form-label" for="nisn">NISN</label>
+                                <label class="form-label" for="nisn">NISN <span
+                                    class="text-danger fs-sm">*</span></label>
                                 <input type="number" class="form-control" id="nisn" name="nisn"
-                                    placeholder="NISN">
+                                    placeholder="NISN" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label" for="nis">NIS</label>
+                                <label class="form-label" for="nis">NIS <span
+                                    class="text-danger fs-sm">*</span></label>
                                 <input type="number" class="form-control" id="nis" name="nis"
-                                    placeholder="NIS">
+                                    placeholder="NIS" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label" for="namaSiswa">Nama Siswa</label>
+                                <label class="form-label" for="namaSiswa">Nama Siswa <span
+                                    class="text-danger fs-sm">*</span></label>
                                 <input type="text" class="form-control" id="namaSiswa" name="namaSiswa"
-                                    placeholder="Nama Lengkap Siswa">
+                                    placeholder="Nama Lengkap Siswa" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" for="namaPanggilan">Nama Panggilan</label>
@@ -47,14 +50,15 @@
                                     placeholder="Tempat Lahir Siswa">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label" for="tanggalLahir">Tanggal Lahir</label>
+                                <label class="form-label" for="tanggalLahir">Tanggal Lahir <span
+                                    class="text-danger fs-sm">*</span></label>
                                 <input type="date" class="form-control" id="tanggalLahir" name="tanggalLahir"
-                                    placeholder="Tanggal Lahir Siswa">
+                                    placeholder="Tanggal Lahir Siswa" required>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label" for="jenisKelamin">Jenis Kelamin</label>
                                 <select name="jenisKelamin" id="jenisKelamin" class="form-select">
-                                    <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
+                                    <option value="" disabled selected>Pilih Jenis Kelamin</option>
                                     <option value="Laki-Laki">Laki-Laki</option>
                                     <option value="Perempuan">Perempuan</option>
                                 </select>
@@ -62,7 +66,7 @@
                             <div class="col-md-4">
                                 <label class="form-label" for="agama">Agama</label>
                                 <select name="agama" id="agama" class="form-select add-agama">
-                                    <option value="" disabled selected>-- Pilih Agama --</option>
+                                    <option value="" disabled selected>Pilih Agama</option>
                                     <option value="Islam">Islam</option>
                                     <option value="Kristen">Kristen</option>
                                     <option value="Katolik">Katolik</option>
@@ -73,14 +77,14 @@
                             <div class="col-md-4">
                                 <label class="form-label" for="status">Status</label>
                                 <select name="status" id="status" class="form-select">
-                                    <option value="" disabled selected>-- Pilih Status --</option>
+                                    <option value="" disabled selected>Pilih Status</option>
                                     <option value="Aktif">Aktif</option>
                                     <option value="Tidak Aktif">Tidak Aktif</option>
                                 </select>
                             </div>
                             <div class="col-md-12 mb-4">
                                 <label class="form-label" for="alamat">Alamat</label>
-                                <textarea id="alamat" class="form-control" name="alamat" rows="2" placeholder="Masukan Alamat Siswa"></textarea>
+                                <textarea id="alamat" class="form-control" name="alamat" rows="2" placeholder="Masukan Alamat Siswa" style="resize: none"></textarea>
                             </div>
                             <legend class="col-12">Data Orang Tua Siswa</legend>
                             <div class="col-md-6">
@@ -115,11 +119,11 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" for="alamatAyah">Alamat Ayah</label>
-                                <textarea id="alamatAyah" class="form-control" name="alamatAyah" rows="2" placeholder="Masukan Alamat Ayah"></textarea>
+                                <textarea id="alamatAyah" class="form-control" name="alamatAyah" rows="2" placeholder="Masukan Alamat Ayah"  style="resize: none"></textarea>
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="form-label" for="alamatIbu">Alamat Ibu</label>
-                                <textarea id="alamatIbu" class="form-control" name="alamatIbu" rows="2" placeholder="Masukan Alamat Ibu"></textarea>
+                                <textarea id="alamatIbu" class="form-control" name="alamatIbu" rows="2" placeholder="Masukan Alamat Ibu" style="resize: none"></textarea>
                             </div>
                             <legend class="col-12">Data Wali Siswa</legend>
                             <div class="col-md-6">
@@ -139,7 +143,7 @@
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="form-label" for="alamatWali">Alamat Wali</label>
-                                <textarea id="alamatWali" class="form-control" name="alamatWali" rows="2" placeholder="Masukan Alamat Wali"></textarea>
+                                <textarea id="alamatWali" class="form-control" name="alamatWali" rows="2" placeholder="Masukan Alamat Wali" style="resize: none"></textarea>
                             </div>
 
                             <hr>

@@ -22,7 +22,7 @@ class PeriodeController extends Controller
 
     public function getPeriode()
     {
-        $data = Periode::orderBy("tanggalMulai", "asc")->get();
+        $data = Periode::orderBy("tanggalMulai", "desc")->get();
         $data = $data->map(function ($item, $key) {
             $item['nomor'] = $key + 1;
             $item['tanggalMulai'] = Carbon::parse($item->tanggalMulai)->locale('id_ID')->isoFormat('Do MMMM YYYY') ?: null;;
@@ -36,14 +36,18 @@ class PeriodeController extends Controller
     {
         $validatedData = $request->validate([
             'semester' => 'required',
-            'tanggalMulai' => 'required|date',
-            'tanggalSelesai' => 'required|date',
+            'tanggalMulai' => 'required',
+            'tanggalSelesai' => 'required',
         ]);
+
+        $validatedData['tanggalMulai'] = Carbon::createFromFormat('d/m/Y', $request->input('tanggalMulai'))->format('Y-m-d');
+        $validatedData['tanggalSelesai'] = Carbon::createFromFormat('d/m/Y', $request->input('tanggalSelesai'))->format('Y-m-d');
 
         Periode::create($validatedData);
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Sukses',
             'message' => 'Berhasil menyimpan data.'
         ]);
     }
@@ -52,7 +56,7 @@ class PeriodeController extends Controller
     {
         $periode = Periode::find($id);
         if (!$periode) {
-            return response()->json(['status' => 'error', 'message' => 'Data periode tidak ditemukan.']);
+            return response()->json(['status' => 'error', 'title' => 'Gagal', 'message' => 'Data periode tidak ditemukan.']);
         }
 
         return response()->json([
@@ -66,15 +70,19 @@ class PeriodeController extends Controller
         // Validasi input
         $validatedData = $request->validate([
             'semester' => 'required',
-            'tanggalMulai' => 'required|date',
-            'tanggalSelesai' => 'required|date',
+            'tanggalMulai' => 'required',
+            'tanggalSelesai' => 'required',
         ]);
+
+        $validatedData['tanggalMulai'] = Carbon::createFromFormat('d/m/Y', $request->input('tanggalMulai'))->format('Y-m-d');
+        $validatedData['tanggalSelesai'] = Carbon::createFromFormat('d/m/Y', $request->input('tanggalSelesai'))->format('Y-m-d');
 
         // Perbarui data periode
         $periode->update($validatedData);
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Sukses',
             'message' => 'Berhasil mengubah data.'
         ]);
     }
@@ -86,6 +94,7 @@ class PeriodeController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil mengapus data.'
         ]);
     }

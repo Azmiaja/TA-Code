@@ -163,26 +163,6 @@
                     loadTabelSiswa();
                 });
 
-                function modalCustom(text, button) {
-                    modalSiswa_title.text(text);
-                    formSiswa_btn.html(button);
-                }
-
-                function resetForm() {
-                    formSiswa.trigger('reset');
-                    $('#idSiswa').val(null).change();
-                    $('#idSiswa').prop("disabled", false);
-                    $('#uss_display').prop("hidden", true);
-                    $('#pass_display').prop("hidden", true);
-
-                    formPegawai.trigger('reset');
-                    $('#idPegawai').val(null).change();
-                    $('#idPegawai').prop("disabled", false);
-                    $('#uss_display_pegawai').prop("hidden", true);
-                    $('#pass_display_pegawai').prop("hidden", true);
-
-                }
-
                 function getSelect() {
                     $.ajax({
                         type: "GET",
@@ -191,7 +171,7 @@
                             $('#idSiswa').html('');
                             $.each(data, function(i, item) {
                                 $('#idSiswa').append(
-                                    `<option value="${item.idSiswa}">${item.namaSiswa}</option>`
+                                    `<option value="${item.idSiswa}">${item.nis} - ${item.namaSiswa}</option>`
                                 );
                             });
                         },
@@ -200,9 +180,23 @@
 
                 modalSiswa.on('hidden.bs.modal', function() {
                     // Reset form
-                    resetForm()
+                    resetForm(formSiswa, function() {
+                        $('#idSiswa').val(null).change();
+                        $('#idSiswa').prop("disabled", false);
+                        $('#uss_display').prop("hidden", true);
+                        $('#pass_display').prop("hidden", true);
+                    });
                 });
+
                 modalPegawai.on('hidden.bs.modal', function() {
+                    resetForm(formPegawai, function() {
+                        $('#idPegawai').val(null).change();
+                        $('#idPegawai').prop("disabled", false);
+                        $('#uss_display_pegawai').prop("hidden", true);
+                        $('#pass_display_pegawai').prop("hidden", true);
+                        $('#role_display').prop("hidden", false);
+
+                    });
                     // Reset form
                     resetForm()
                 });
@@ -211,58 +205,43 @@
                     e.preventDefault();
 
                     modalSiswa.modal('show');
-                    modalCustom('Tambah User Siswa', `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="btn-tbhSubmitSiswa">Simpan</button>`);
+                    updateModals(
+                        modalSiswa_title,
+                        formSiswa_btn,
+                        'Tambah User Siswa',
+                        `<button type="submit" class="btn btn-primary">Simpan</button>`
+                    );
 
                     formSiswa.attr('action', '{{ route('user.siswa.store') }}');
+                    form_method_siswa.val('POST');
 
                     getSelect();
 
                     $('#kls_display').prop("hidden", true);
                 });
 
-                // Select2 from siswa
-                $('#idSiswa').select2({
-                    width: '100%',
-                    cache: false,
-                    dropdownParent: modalSiswa,
-                    theme: "bootstrap",
-                    multiple: true,
-                });
+                select2Multiple('#idSiswa', modalSiswa);
 
-                formSiswa.submit(function(e) {
-                    e.preventDefault();
-
-                    var selectedData = $('#idSiswa').val();
-
-                    $.ajax({
-                        type: "POST",
-                        url: formSiswa.attr('action'),
-                        data: {
-                            selectedData: selectedData
-                        },
-                        dataType: "json",
-
-                        success: function(response) {
-                            modalSiswa.modal('hide');
-                            tabelSiswa.DataTable().ajax.reload();
-                            Swal.fire({
-                                icon: 'success',
-                                title: response.status,
-                                text: response.message,
-                            });
-
-                        },
-                    });
-                });
+                // Store dan Update Data User Siswa
+                insertOrUpdateData(
+                    formSiswa,
+                    function() {
+                        modalSiswa.modal('hide');
+                        tabelSiswa.DataTable().ajax.reload();
+                    }
+                );
 
                 // show modal edit siswa
                 $(document).on('click', '#action-editUsrSiswa', function(e) {
                     e.preventDefault();
 
                     modalSiswa.modal('show');
-                    modalCustom('Edit User Siswa', `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="btn-edtSubmitSiswa">Simpan</button>`);
+                    updateModals(
+                        modalSiswa_title,
+                        formSiswa_btn,
+                        'Ubah User Siswa',
+                        `<button type="submit" class="btn btn-primary">Simpan</button>`
+                    );
                     form_method_siswa.val("PUT");
 
                     $('#idSiswa').prop("disabled", true);
@@ -282,7 +261,7 @@
                             $('#kelas_siswa').val(response.kelas);
                             $('#password_siswa').val();
                             $('#idSiswa').append(
-                                `<option selected value="${response.user.idSiswa}">${response.user.siswa.namaSiswa}</option>`
+                                `<option selected value="${response.user.idSiswa}">${response.user.siswa.nis} - ${response.user.siswa.namaSiswa}</option>`
                             );
 
                             $('#reset_password_siswa').click(function() {
@@ -296,31 +275,6 @@
                     });
                 });
 
-                // update data siswa
-                $(document).on('click', '#btn-edtSubmitSiswa', function(e) {
-                    e.preventDefault();
-
-                    var data = new FormData(formSiswa[0]);
-
-                    $.ajax({
-                        type: "POST",
-                        url: formSiswa.attr('action'),
-                        dataType: "json",
-                        contentType: false,
-                        processData: false,
-                        data: data,
-                        success: function(response) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: response.status,
-                                text: response.message,
-                            });
-                            modalSiswa.modal('hide');
-                            tabelSiswa.DataTable().ajax.reload();
-                        },
-                    });
-                });
-
                 // delete data siswa
                 $(document).on('click', '#action-hapusUsrSiswa', function(e) {
                     e.preventDefault();
@@ -330,7 +284,7 @@
 
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        html: 'Menghapus user <b>' + namaSiswa + '</b>',
+                        html: `Menghapus User <strong>${namaSiswa}</strong>`,
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonText: 'Batal',
@@ -345,9 +299,11 @@
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
-                                        icon: 'success',
-                                        title: 'Dihapus!',
+                                        icon: response.status,
+                                        title: response.title,
                                         text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
                                     });
 
                                     tabelSiswa.DataTable().ajax.reload();
@@ -424,14 +380,8 @@
                     formPegawai_btn.html(button);
                 }
 
-                // Select2 from pegawai
-                $('#idPegawai').select2({
-                    width: '100%',
-                    cache: false,
-                    dropdownParent: modalPegawai,
-                    theme: "bootstrap",
-                    multiple: true,
-                });
+
+                select2Multiple('#idPegawai', modalPegawai);
 
                 function getSelectPegawai() {
                     $.ajax({
@@ -441,7 +391,7 @@
                             $('#idPegawai').html('');
                             $.each(data, function(i, item) {
                                 $('#idPegawai').append(
-                                    `<option value="${item.idPegawai}">${item.namaPegawai}</option>`
+                                    `<option value="${item.idPegawai}">${item.nip} - ${item.namaPegawai}</option>`
                                 );
                             });
                         },
@@ -453,54 +403,44 @@
                     e.preventDefault();
 
                     modalPegawai.modal('show');
-                    updateModalPegawai('Tambah User Pegawai', `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="btn-submitTbhUsrPegawai">Simpan</button>`);
+                    updateModals(
+                        modalPegawai_title,
+                        formPegawai_btn,
+                        'Tambah User Pegawai',
+                        `<button type="submit" class="btn btn-primary">Simpan</button>`
+                    );
 
                     getSelectPegawai();
 
                     formPegawai.attr('action', '{{ route('user.pegawai.store') }}');
+                    form_method.val('POST');
 
                 });
 
-                formPegawai.submit(function(e) {
-                    e.preventDefault();
-
-                    var selectedData = $('#idPegawai').val();
-                    var role = $('#hak_akses').val();
-
-                    $.ajax({
-                        type: "POST",
-                        url: formPegawai.attr('action'),
-                        data: {
-                            selectedData: selectedData,
-                            role: role
-                        },
-                        dataType: "json",
-
-                        success: function(response) {
-                            modalPegawai.modal('hide');
-                            tabelPegawai.DataTable().ajax.reload();
-                            Swal.fire({
-                                icon: 'success',
-                                title: response.status,
-                                text: response.message,
-                            });
-
-                        },
-                    });
-                });
+                insertOrUpdateData(
+                    formPegawai,
+                    function() {
+                        modalPegawai.modal('hide');
+                        tabelPegawai.DataTable().ajax.reload();
+                    }
+                );
 
                 // SHOW MODAL EDIT
                 $(document).on('click', '#action-editUsrPegawai', function(e) {
                     e.preventDefault();
                     modalPegawai.modal("show");
-                    updateModalPegawai('Edit User Pegawai', `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="btn-submitEdtUsrPegawai">Simpan</button>`);
+                    updateModals(
+                        modalPegawai_title,
+                        formPegawai_btn,
+                        'Ubah User Pegawai',
+                        `<button type="submit" class="btn btn-primary">Simpan</button>`
+                    );
                     form_method.val("PUT");
 
                     $('#idPegawai').prop("disabled", true);
                     $('#uss_display_pegawai').prop("hidden", false);
                     $('#pass_display_pegawai').prop("hidden", false);
+                    $('#role_display').prop("hidden", true);
 
                     var idPegawai = $(this).val();
                     formPegawai.attr('action', `{{ url('user/update/pegawai/${idPegawai}') }}`);
@@ -513,7 +453,7 @@
                             $('#hak_akses').val(response.user.hakAkses);
                             $('#password_pegawai').val();
                             $('#idPegawai').append(
-                                `<option selected value="${response.user.idPegawai}">${response.user.pegawai.namaPegawai}</option>`
+                                `<option selected value="${response.user.idPegawai}">${response.user.pegawai.nip} - ${response.user.pegawai.namaPegawai}</option>`
                             );
 
                             $('#reset_password_pegawai').click(function() {
@@ -526,32 +466,6 @@
                         },
                     });
                 });
-
-                // update data user pegawai
-                $(document).on('click', '#btn-submitEdtUsrPegawai', function(e) {
-                    e.preventDefault();
-
-                    var data = new FormData(formPegawai[0]);
-
-                    $.ajax({
-                        type: "POST",
-                        url: formPegawai.attr('action'),
-                        dataType: "json",
-                        contentType: false,
-                        processData: false,
-                        data: data,
-                        success: function(response) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: response.status,
-                                text: response.message,
-                            });
-                            modalPegawai.modal('hide');
-                            tabelPegawai.DataTable().ajax.reload();
-                        },
-                    });
-                });
-                // END UPDATE
 
                 // DELETE
                 $(document).on('click', '#action-hapusUsrPegawai', function(e) {
@@ -576,9 +490,11 @@
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
-                                        icon: 'success',
-                                        title: 'Dihapus!',
+                                        icon: response.status,
+                                        title: response.title,
                                         text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
                                     });
 
                                     tabelPegawai.DataTable().ajax.reload();

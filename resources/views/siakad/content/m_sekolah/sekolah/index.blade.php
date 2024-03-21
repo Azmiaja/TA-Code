@@ -113,7 +113,7 @@
                                 <div>
                                     <figure class="figure w-100">
                                         <figcaption class="fw-semibold mb-2">Maps Embed</figcaption>
-                                        <div id="maps_embed"  style="border: 2px dashed #dfe3ea;" class="rounded p-1"></div>
+                                        <div id="maps_embed" style="border: 2px dashed #dfe3ea;" class="rounded p-1"></div>
                                     </figure>
                                 </div>
                             </div>
@@ -180,6 +180,11 @@
                 const mp_embed = $("#fm_mapsEmbed");
                 const logo = $("#logoSekolah");
                 const imgPrev = document.querySelector('.img-preview');
+
+
+                $('#fileButton').click(function() {
+                    $('#logoSekolah').click();
+                });
 
                 fetchDataSekolah();
 
@@ -270,9 +275,11 @@
                         dataType: 'json',
                         success: function(response) {
                             Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+                                icon: response.status,
+                                title: response.title,
                                 text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
                             });
 
                             modalSekolah.modal('hide');

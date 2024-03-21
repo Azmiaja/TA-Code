@@ -38,6 +38,7 @@ class JabatanController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil menambahkan data.',
             ]);
         } catch (\Exception $e) {
@@ -45,6 +46,7 @@ class JabatanController extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.'  . $e->getMessage(),
             ], 422);
         }
@@ -57,6 +59,7 @@ class JabatanController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil menghapus data.'
         ]);
     }

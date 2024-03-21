@@ -88,6 +88,11 @@
                 const hp = document.getElementById("noHp");
                 const status = document.getElementById("status");
 
+
+                $('#fileButton').click(function() {
+                    $('#gambarPegawai').click();
+                });
+
                 getJabatanPegawai();
 
                 function getJabatanPegawai() {
@@ -137,20 +142,18 @@
                     });
                 }
 
+                new AirDatepicker('#tanggalLahir', {
+                    container: '#modalPegawai',
+                    autoClose: true,
+                });
 
-                function resetForm() {
-                    imgPrev.style.display = 'none';
-                    formPegawai.trigger('reset');
-                }
-
-                function updateModal(title, button) {
-                    modalTitle.text(title);
-                    btnModalPegawai.html(button);
-                }
 
                 modalPegawai.on('hidden.bs.modal', function() {
                     // Reset form
-                    resetForm()
+                    resetForm(formPegawai, function() {
+                        imgPrev.style.display = 'none';
+
+                    })
                 });
 
                 // tabel pegawai
@@ -202,13 +205,13 @@
                     lengthMenu: [10, 25],
                 });
 
+
                 // show modal tambah
                 insertPegawai.click(function(e) {
                     e.preventDefault();
                     modalPegawai.modal('show');
-                    updateModal('Tambah Data Pegawai',
-                        `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                     <button type="submit" class="btn btn-primary" id="btn-tbhSubmitPegawai">Simpan</button>`
+                    updateModals(modalTitle, btnModalPegawai, 'Tambah Data Pegawai',
+                        `<button type="submit" class="btn btn-primary" id="btn-tbhSubmitPegawai">Simpan</button>`
                     );
                     formPegawai.attr('action', '{{ route('pegawai.store') }}');
                     formMethod.val('POST');
@@ -218,8 +221,7 @@
                 insertJabatan.click(function(e) {
                     e.preventDefault();
                     modalJabatan.modal('show');
-                    $('#modal-title-jabatan').text('Tambah Data Jabatan');
-                    $('#bt-form-jabatan').html(
+                    updateModals($('#modal-title-jabatan'), $('#bt-form-jabatan'), 'Tambah Data Jabatan',
                         `<button type="submit" class="btn btn-primary" id="btn-tbhSubmitJabatan">Simpan</button>`
                     );
                     formJabatan.attr('action', '{{ route('jabatan.store') }}');
@@ -229,68 +231,26 @@
                 });
 
                 // submit form pegawai
-                formPegawai.submit(function(e) {
-                    e.preventDefault();
-
-                    const data = new FormData(formPegawai[0]);
-
-                    $.ajax({
-                        type: "POST",
-                        url: formPegawai.attr('action'),
-                        data: data,
-                        contentType: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function(response) {
-                            modalPegawai.modal('hide');
-                            resetForm();
-                            tabel.DataTable().ajax.reload();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.message,
-                            });
-
-                        },
-                    });
+                insertOrUpdateData(formPegawai, function() {
+                    modalPegawai.modal('hide');
+                    tabel.DataTable().ajax.reload();
                 });
 
                 // submit form jabatan
-                formJabatan.submit(function(e) {
-                    e.preventDefault();
-
-                    const data = new FormData(formJabatan[0]);
-
-                    $.ajax({
-                        type: "POST",
-                        url: formJabatan.attr('action'),
-                        data: data,
-                        contentType: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function(response) {
-                            modalJabatan.modal('hide');
-                            getJabatanPegawai();
-                            getJabatan();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.message,
-                            });
-
-                        },
-                    });
+                insertOrUpdateData(formJabatan, function() {
+                    modalJabatan.modal('hide');
+                    getJabatanPegawai();
                 });
 
-                $(document).on('click', '#jabatanView', function(e){
+
+                $(document).on('click', '#jabatanView', function(e) {
                     e.preventDefault();
 
                     var id = $(this).data('id-jabatan');
                     var name = $(this).data('name-jabatan');
 
                     modalJabatan.modal('show');
-                    $('#modal-title-jabatan').text('Data Jabatan');
-                    $('#bt-form-jabatan').html(
+                    updateModals($('#modal-title-jabatan'), $('#bt-form-jabatan'), 'Data Jabatan',
                         `<button type="button" class="btn btn-danger" id="btn-hapusJabatan">Hapus</button>`
                     );
                     $('#jabatan').prop('readonly', true);
@@ -303,8 +263,9 @@
                     e.preventDefault();
 
                     modalPegawai.modal('show');
-                    updateModal('Edit Data Pegawai', `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="btn-submitEdtPegawai">Simpan</button>`);
+                    updateModals(modalTitle, btnModalPegawai, 'Ubah Data Pegawai',
+                        `<button type="submit" class="btn btn-primary">Simpan</button>`
+                    );
                     formMethod.val('PUT');
 
                     getJabatan(`{{ route('get-jabatan.options.edit') }}`);
@@ -324,7 +285,7 @@
                             $(nip).val(response.data.nip);
                             $(namaPegawai).val(response.data.namaPegawai);
                             $(tpLahir).val(response.data.tempatLahir);
-                            $(tglLahir).val(response.data.tanggalLahir);
+                            $(tglLahir).val(moment(response.data.tanggalLahir).format('DD/MM/YYYY'));
                             $(alamat).val(response.data.alamat);
                             $(jnKelamin).val(response.data.jenisKelamin);
                             $(agama).val(response.data.agama);
@@ -344,31 +305,6 @@
                     });
                 });
 
-                // submit edit data pegawai
-                $(document).on('click', '#btn-submitEdtPegawai', function(e) {
-                    e.preventDefault();
-                    var data = new FormData(formPegawai[0]);
-
-                    $.ajax({
-                        type: "POST",
-                        url: formPegawai.attr('action'),
-                        data: data,
-                        contentType: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function(response) {
-                            modalPegawai.modal('hide');
-                            resetForm();
-                            tabel.DataTable().ajax.reload();
-                            Swal.fire({
-                                icon: response.status,
-                                title: response.status,
-                                text: response.message,
-                            });
-                        },
-                    });
-                });
-
                 // delete data pegawai
                 $(document).on('click', '#action-hapusPegawai', function(e) {
                     e.preventDefault();
@@ -378,7 +314,7 @@
 
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        html: `Menghapus data <b>${nama}</b> akan menghapus data <b>User</b>-nya juga`,
+                        html: `Menghapus pegawai <b>${nama}</b> akan menghapus data lain yang terkait.`,
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonText: 'Batal',
@@ -393,11 +329,12 @@
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
-                                        icon: 'success',
-                                        title: 'Dihapus!',
+                                        icon: response.status,
+                                        title: response.title,
                                         text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
                                     });
-
                                     tabel.DataTable().ajax.reload();
                                 },
                             });
@@ -415,7 +352,7 @@
 
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        text: 'Menghapus data ' + nama + '',
+                        html: `Menghapus data <strong>${nama}</strong>`,
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonText: 'Batal',
@@ -430,14 +367,15 @@
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
-                                        icon: 'success',
-                                        title: 'Dihapus!',
+                                        icon: response.status,
+                                        title: response.title,
                                         text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
                                     });
 
                                     modalJabatan.modal('hide');
                                     getJabatanPegawai();
-                                    getJabatan();
                                 },
                             });
                         }

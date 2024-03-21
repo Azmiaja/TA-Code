@@ -45,6 +45,8 @@ class HomeController extends Controller
 
         $jumlahUser = $jumlahUserPegawai + $jumlahUserSiswa;
 
+        
+
 
 
         return view('siakad.content.dashboard.index', compact('pegawai', 'siswa', 'periode', 'jumlahPegawaiAktif', 'jumlahSiswaAktif', 'jumlahUser'), [

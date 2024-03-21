@@ -20,8 +20,8 @@ class KelasController extends Controller
         $pegawai = Pegawai::all();
         $guru = Pegawai::where('jenisPegawai', 'Guru')->get();
         $kelas = Kelas::orderBy('idKelas', 'desc')->get();
-        $periode = Periode::orderBy('tanggalMulai', 'asc')->get();
-        $siswa = Siswa::orderBy('idSiswa', 'desc')->get();
+        $periode = Periode::orderBy('tanggalMulai', 'desc')->get();
+        $siswa = Siswa::whereDoesntHave('kelas')->orderBy('idSiswa', 'desc')->get();
         return view('siakad.content.m_sekolah.akademik.kelas.index', compact('periode', 'kelas', 'pegawai', 'guru', 'siswa'), [
             'judul' => 'Data Master',
             'sub_judul' => 'Akademik',
@@ -30,31 +30,84 @@ class KelasController extends Controller
         ]);
     }
 
-    public function getPeriodeGuru(Request $request)
+    // Tabel Wali Kelas
+    public function getGuru(Request $request)
     {
-        $kelas = Kelas::orderBy('namaKelas', 'asc')->get();
-        $kelas = $kelas->map(function ($item, $key) {
-            $item['nomor'] = $key + 1;
-            return $item;
-        });
+        try {
+            $kelas = Kelas::orderBy('namaKelas', 'asc');
 
-        return DataTables::of($kelas)
-            ->addColumn('namaGuru', function ($d) {
-                return $d->guru->namaPegawai;
+            // Filter berdasarkan periode_guru jika ada
+            $periodeGuru = $request->input('periode_guru');
+            if (!empty($periodeGuru)) {
+                $kelas->where('idPeriode', $periodeGuru);
+            }
+
+            $kelas = $kelas->get();
+
+            $kelas = $kelas->map(function ($item, $key) {
+                $item['nomor'] = $key + 1;
+                $item['kelas'] = $item->namaKelas ? 'Kelas ' . $item->namaKelas : '-';
+                $item['fase'] = $item->fase;
+                $item['namaGuru'] = $item->guru->namaPegawai ?? '-';
+                $item['nip'] = $item->guru->nip ?? '-';
+                $item['semester'] = $item->periode ? 'Semester ' . $item->periode->semester . '/' . date('Y', strtotime($item->periode->tanggalMulai)) : '-';
+                return $item;
+            });
+
+            return response()->json(['data' => $kelas]);
+        } catch (\Exception $e) {
+            Log::error('Error get data: ' . $e->getMessage());
+        }
+    }
+
+    public function getSiswa(Request $request)
+    {
+        try {
+            $siswaWithKelas = Siswa::where(function ($query) use ($request) {
+                $kelasNama = $request->input('kelas_nama');
+                $periodeSiswa = $request->input('periode_siswa');
+
+                if (!empty($kelasNama)) {
+                    $query->whereHas('kelas', function ($subQuery) use ($kelasNama) {
+                        $subQuery->where('namaKelas', $kelasNama);
+                    });
+                } else {
+                    // Menampilkan siswa yang tidak memiliki kelas
+                    $query->doesntHave('kelas');
+                }
+
+                // Pengecekan untuk request periode_siswa
+                if (!empty($periodeSiswa)) {
+                    $query->whereHas('kelas.periode', function ($subQuery) use ($periodeSiswa) {
+                        $subQuery->where('idPeriode', $periodeSiswa);
+                    });
+                }
             })
-            ->addColumn('nipGuru', function ($d) {
-                return $d->guru->nip;
-            })
-            ->addColumn('kelas', function ($d) {
-                return 'Kelas ' . $d->namaKelas;
-            })
-            ->addColumn('semester', function ($d) {
-                return 'Semester ' . $d->periode->semester . '/' . date('Y', strtotime($d->periode->tanggalMulai));
-            })
-            ->addColumn('fase', function ($d) {
-                return $d->fase;
-            })
-            ->toJson();
+                ->with('kelas.periode')
+                ->get();
+
+            $data = $siswaWithKelas->map(function ($siswa, $key) {
+                $kelas = $siswa->kelas->isEmpty() ? null : $siswa->kelas->first();
+                $namaKelas = $kelas ? $kelas->namaKelas : '-';
+                $faseKelas = $kelas ? $kelas->fase : '-';
+                $semester = $kelas && $kelas->periode ? 'Semester ' . $kelas->periode->semester . '/' . date('Y', strtotime($kelas->periode->tanggalMulai)) : '-';
+
+                return [
+                    'nomor' => $key + 1,
+                    'kelas' => 'Kelas ' . $namaKelas,
+                    'fase' => $faseKelas,
+                    'namaSiswa' => $siswa->namaSiswa,
+                    'nis' => $siswa->nis,
+                    'semester' => $semester,
+                    'idSiswa' => $siswa->idSiswa,
+                ];
+            });
+
+            return response()->json(['data' => $data]);
+        } catch (\Exception $e) {
+            Log::error('Error get data: ' . $e->getMessage());
+            // Handle the exception here
+        }
     }
 
     public function getOptions()
@@ -64,56 +117,24 @@ class KelasController extends Controller
         return response()->json($data);
     }
 
-    public function getKelas()
+    public function getKelas(Request $request)
     {
-        $kelas = Kelas::with('periode')->get()
-            ->map(function ($kelas) {
-                $kelas->periode->formattedTanggalMulai = $kelas->periode->semester . '/' . date('Y', strtotime($kelas->periode->tanggalMulai));
-                return $kelas;
-            });
+        $periode = $request->input('periode');
+        $kelas = Kelas::orderBy('namaKelas', 'asc');
+        if ($periode) {
+            $kelas->where('idPeriode', $periode);
+        }
+        $kelas = $kelas->get()->map(function ($kelas) {
+            $kelas->periode->semester ? 'Semester ' . $kelas->periode->semester . '/' . date('Y', strtotime($kelas->periode->tanggalMulai)) : '-';
+            $kelas->guru->namaPegawai = $kelas->guru->namaPegawai ?? '-';
+            return $kelas;
+        });
+
         $siswa = Siswa::orderBy('idSiswa', 'desc')->get();
-        $periode = Periode::orderBy('idPeriode', 'desc')->get()->map(function ($periode) {
-            $periode->formattedTanggalMulai = $periode->semester . '/' . date('Y', strtotime($periode->tanggalMulai));
-            return $periode;
-        });
-        $guru = Pegawai::orderBy('idPegawai', 'desc')->where('jenisPegawai', 'Guru')->get();
-        $pegawai = Pegawai::orderBy('idPegawai', 'desc')->get();
 
-        return response()->json(['kelas' => $kelas, 'siswa' => $siswa, 'periode' => $periode, 'guru' => $guru, 'pegawai' => $pegawai]);
+        return response()->json(['siswa' => $siswa, 'kelas' => $kelas]);
     }
 
-    public function getPeriodeSiswa(Request $request)
-    {
-        $idPeriode = $request->input('periode_id');
-
-        $data = Tr_kelas::select(
-            'tr_kelas.idKelas',
-            'tr_kelas.idtrKelas',
-            'kelas.namaKelas',
-            'siswa.namaSiswa',
-            'siswa.status',
-            'siswa.idSiswa',
-            'periode.semester',
-            'periode.tanggalMulai'
-        )
-            ->join('kelas', 'tr_kelas.idKelas', '=', 'kelas.idKelas')
-            ->join('siswa', 'tr_kelas.idSiswa', '=', 'siswa.idSiswa')
-            ->join('periode', 'kelas.idPeriode', '=', 'periode.idPeriode')
-            ->where('periode.idPeriode', $idPeriode)
-            ->get()
-            ->map(function ($data) {
-                $data->formattedTanggalMulai = $data->semester . '/' . date('Y', strtotime($data->tanggalMulai));
-
-                return $data;
-            });
-
-        $data = $data->map(function ($item, $key) {
-            $item['nomor'] = $key + 1;
-            return $item;
-        });
-
-        return Datatables::of($data)->make(true);
-    }
 
     public function create()
     {
@@ -123,64 +144,101 @@ class KelasController extends Controller
     // store Periode
     public function storeSiswa(Request $request)
     {
+        try {
+            $idSiswa = $request->input('idSiswa');
+            $idKelas = $request->input('idKelas');
+            $idPeriode = $request->input('pilih_periode');
 
-        $idKelas = $request->idKelas;
-        $idSiswa = $request->idSiswa;
-        $insert = [];
-        for ($i = 0; $i < count($idSiswa); $i++) {
-            array_push($insert, ['idKelas' => $idKelas, 'idSiswa' => $idSiswa[$i]]);
+            foreach ($idSiswa as $data) {
+                $siswa = Siswa::findOrFail($data);
+
+                // Periksa apakah siswa sudah terdaftar dalam kelas dan periode yang diinputkan
+                if ($siswa->kelas()->where('kelas.idKelas', $idKelas)
+                    ->whereHas('periode', function ($query) use ($idPeriode) {
+                        $query->where('periode.idPeriode', $idPeriode);
+                    })->exists()
+                ) {
+                    return response()->json([
+                        'status' => 'error',
+                        'title' => 'Gagal',
+                        'message' => 'Siswa sudah terdaftar dalam kelas dan periode yang diinputkan.'
+                    ]);
+                }
+
+                $kelas = Kelas::findOrFail($idKelas);
+
+                $siswa->kelas()->attach($kelas);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Sukses',
+                'message' => 'Berhasil menyimpan data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal',
+                'message' => 'Terjadi kesalahan saat menyimpan data.'
+            ]);
         }
-        Tr_kelas::insertOrIgnore($insert);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Berhasil menyimpan data.'
-        ]);
     }
+
 
     //store Kelas
     public function store(Request $request)
     {
         try {
-            $validatedData = $request->validate([
-                'idPeriode' => 'required',
-                'idPegawai' => 'required',
-                'namaKelas' => 'required',
-            ]);
-
             // Periksa apakah kelas sudah ada
-            $kelas = Kelas::where('idPeriode', $validatedData['idPeriode'])
-                ->where('namaKelas', $validatedData['namaKelas'])
-                ->first();
+            $existingKelas = Kelas::where('idPeriode', $request->input('idPeriode'))
+                ->where('namaKelas', $request->input('namaKelas'))
+                ->exists();
 
-            if ($kelas) {
+            if ($existingKelas) {
                 return response()->json([
                     'status' => 'error',
+                    'title' => 'Gagal',
                     'message' => 'Kelas sudah ada.'
                 ]);
             }
 
-            // Tambahkan logika untuk menetapkan nilai fase berdasarkan namaKelas
-            $namaKelas = intval($validatedData['namaKelas']);
-            if ($namaKelas >= 1 && $namaKelas <= 2) {
-                $validatedData['fase'] = 'A';
-            } elseif ($namaKelas >= 3 && $namaKelas <= 4) {
-                $validatedData['fase'] = 'B';
-            } elseif ($namaKelas >= 5 && $namaKelas <= 6) {
-                $validatedData['fase'] = 'C';
+            // Buat instance baru dari model Kelas
+            $kelas = new Kelas([
+                'idPeriode' => $request->input('idPeriode'),
+                'namaKelas' => $request->input('namaKelas'),
+                'idPegawai' => $request->input('idPegawai')
+            ]);
+
+            // Tentukan nilai kolom fase
+            $namaKelas = $request->input('namaKelas');
+            if ($namaKelas == '1' || $namaKelas == '2') {
+                $kelas->fase = 'A';
+            } elseif ($namaKelas == '3' || $namaKelas == '4') {
+                $kelas->fase = 'B';
+            } elseif ($namaKelas == '5' || $namaKelas == '6') {
+                $kelas->fase = 'C';
             }
 
-            // Jika kelas belum ada, buat kelas baru
-            Kelas::create($validatedData);
+            // Simpan data ke dalam database
+            $kelas->save();
 
             return response()->json([
                 'status' => 'success',
+                'title' => 'Sukses',
                 'message' => 'Berhasil menyimpan data.'
             ]);
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal',
+                'message' => 'Terjadi kesalahan saat menyimpan data.'
+            ]);
         }
     }
+
+
 
 
     public function show($id)
@@ -191,67 +249,84 @@ class KelasController extends Controller
     public function edit($id)
     {
         $kelas = Kelas::find($id);
-        if (!$kelas) {
-            // Handle jika berita tidak ditemukan
-            return response()->json(['status' => 'error', 'message' => 'Data kelas tidak ditemukan.']);
-        }
 
         return response()->json(['kelas' => $kelas]);
     }
 
     public function editSiswa($id)
     {
-        $data = Tr_kelas::with('kelas')->find($id);
+        $data = Siswa::with('kelas:idKelas,namaKelas,idPeriode')->select('idSiswa', 'namaSiswa')->find($id);
 
-        if (!$data) {
-            // Handle jika berita tidak ditemukan
-            return response()->json(['status' => 'error', 'message' => 'Data kelas tidak ditemukan.']);
-        }
-
-        return response()->json(['tr_kelas' => $data]);
+        return response()->json($data);
     }
 
+    // Fungsi Update data Wali Kelas
     public function update(Request $request, $id)
     {
-        $kelas = Kelas::find($id);
+        try {
+            $kelas = Kelas::find($id);
 
-        if (!$kelas) {
-            return response()->json(['status' => 'error', 'message' => 'Data kelas tidak ditemukan.']);
+            // Periksa apakah kelas sudah ada
+            if ($kelas->idPeriode == $request->input('idPeriode') && $kelas->namaKelas == $request->input('namaKelas')) {
+                $existingKelas = false;
+            } else {
+                $existingKelas = Kelas::where('idPeriode', $request->input('idPeriode'))
+                    ->where('namaKelas', $request->input('namaKelas'))
+                    ->exists();
+            }
+
+            if ($existingKelas) {
+                return response()->json([
+                    'status' => 'error',
+                    'title' => 'Gagal',
+                    'message' => 'Kelas sudah ada.'
+                ]);
+            }
+
+            $kelas->idPeriode = $request->input('idPeriode');
+            $kelas->namaKelas = $request->input('namaKelas');
+            $kelas->idPegawai = $request->input('idPegawai');
+
+            $namaKelas = $request->input('namaKelas');
+            if ($namaKelas == '1' || $namaKelas == '2') {
+                $kelas->fase = 'A';
+            } elseif ($namaKelas == '3' || $namaKelas == '4') {
+                $kelas->fase = 'B';
+            } elseif ($namaKelas == '5' || $namaKelas == '6') {
+                $kelas->fase = 'C';
+            }
+
+            // Perbarui data kelas
+            $kelas->save();
+
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Sukses',
+                'message' => 'Berhasil mengubah data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error updating data: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal',
+                'message' => 'Terjadi kesalahan saat menyimpan data.'
+            ]);
         }
-        // Validasi input
-        $validatedData = $request->validate([
-            'idPeriode' => 'required',
-            'idPegawai' => 'required',
-            'namaKelas' => 'required',
-        ]);
-
-        // Perbarui data kelas
-        $kelas->update($validatedData);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Berhasil mengubah data.'
-        ]);
     }
+
+
+
 
     public function updateSiswa(Request $request, $id)
     {
-        $kelas = Tr_kelas::find($id);
+        $siswa = Siswa::findOrFail($id);
 
-        if (!$kelas) {
-            return response()->json(['status' => 'error', 'message' => 'Data kelas tidak ditemukan.']);
-        }
-        // Validasi input
-        $validatedData = $request->validate([
-            'idKelas' => 'required',
-            'idSiswa' => 'required',
-        ]);
-
-        // Perbarui data kelas
-        $kelas->update($validatedData);
+        $kelasIds = $request->input('idKelas'); // ID kelas yang dipilih dari form
+        $siswa->kelas()->sync($kelasIds);
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Sukses',
             'message' => 'Berhasil mengubah data.'
         ]);
     }
@@ -263,17 +338,21 @@ class KelasController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil menghapus data.'
         ]);
     }
 
     public function destroySiswa($id)
     {
-        $kelas = Tr_kelas::find($id);
-        $kelas->delete();
+        $siswa = Siswa::findOrFail($id);
+
+        // Hapus kelas siswa dengan detach
+        $siswa->kelas()->detach();
 
         return response()->json([
             'status' => 'success',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil menghapus data.'
         ]);
     }

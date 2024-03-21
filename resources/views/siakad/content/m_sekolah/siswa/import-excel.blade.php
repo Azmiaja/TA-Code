@@ -30,8 +30,8 @@
                                     accept=".xlsx, .xls">
                             </div>
                             <div class="mb-4 text-end">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> --}}
+                                <button type="submit" class="btn btn-success"><i class="fa-solid fa-file-import me-2"></i>Import</button>
                             </div>
                         </form>
                     </div>

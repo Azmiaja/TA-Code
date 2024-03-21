@@ -124,11 +124,13 @@ class Sekolah extends Controller
 
                 return response()->json([
                     'status' => 'success',
+                    'title' => 'Sukses',
                     'message' => 'Berhasil menyimpan data.'
                 ]);
             } else {
                 return response()->json([
                     'status' => 'error',
+                    'title' => 'Gagal',
                     'message' => 'Sekolah tidak ditemukan.'
                 ], 404);
             }
@@ -137,6 +139,7 @@ class Sekolah extends Controller
 
             return response()->json([
                 'status' => 'error',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.'  . $e->getMessage(),
             ], 422);
         }

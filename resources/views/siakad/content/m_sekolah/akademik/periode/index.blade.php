@@ -14,8 +14,7 @@
             </div>
             <div class="block-content block-content-full p-0">
                 <div class="table-responsive m-md-0 m-4 p-md-4 p-0">
-                    <table id="tabelPeriode"
-                        class="table w-100 table-bordered table-vcenter align-middle">
+                    <table id="tabelPeriode" class="table w-100 table-bordered table-vcenter align-middle">
                         <thead class="align-middle bg-body-light">
                             <tr>
                                 <th style="width: 5%;">No</th>
@@ -73,7 +72,8 @@
                                 data.idPeriode + '">' +
                                 '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
                                 '<button type="button" class="btn btn-sm btn-alt-danger" id="action-hapusPeriode" title="Delete" value="' +
-                                data.idPeriode + '" data-semester="' + data.semester + '" data-mulai="' + data
+                                data.idPeriode + '" data-semester="' + data.semester +
+                                '" data-mulai="' + data
                                 .tanggalMulai + '" data-selesai="' + data.tanggalSelesai + '">' +
                                 '<i class="fa fa-fw fa-times"></i></button>' +
                                 '</div>';
@@ -95,8 +95,7 @@
 
                     modal.modal('show');
                     modalUpdate('Tambah Periode Baru',
-                        `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary btn-tambah" id="btn-tambahPeriode">Simpan</button>`
+                        `<button type="submit" class="btn btn-primary btn-tambah" id="btn-tambahPeriode">Simpan</button>`
                     );
                     form.attr('action', '{{ route('periode.store') }}');
                 });
@@ -114,9 +113,11 @@
                         dataType: "json",
                         success: function(response) {
                             Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+                                icon: response.status,
+                                title: response.title,
                                 text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
                             });
                             modal.modal('hide');
                             tabel.DataTable().ajax.reload();
@@ -124,13 +125,21 @@
                     });
                 });
 
+                new AirDatepicker('#tanggalMulai', {
+                    container: '#modalPeriode',
+                    autoClose: true,
+                });
+                new AirDatepicker('#tanggalSelesai', {
+                    container: '#modalPeriode',
+                    autoClose: true,
+                });
+
                 // EDIT MODAL SHOW
                 $(document).on('click', '#action-editPeriode', function(e) {
                     e.preventDefault();
                     modal.modal('show');
                     modalUpdate('Edit Periode',
-                        `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary btn-tambah" id="btn-editPeriode">Simpan</button>`
+                        `<button type="submit" class="btn btn-primary btn-tambah" id="btn-editPeriode">Simpan</button>`
                     );
                     method.val('PUT');
                     var idPeriode = $(this).val();
@@ -140,8 +149,8 @@
                         url: `{{ url('periode/edit/${idPeriode}') }}`,
                         success: function(response) {
                             $('#semester').val(response.periode.semester);
-                            $('#tanggalMulai').val(response.periode.tanggalMulai);
-                            $('#tanggalSelesai').val(response.periode.tanggalSelesai);
+                            $('#tanggalMulai').val(moment(response.periode.tanggalMulai).format('DD/MM/YYYY'));
+                            $('#tanggalSelesai').val(moment(response.periode.tanggalSelesai).format('DD/MM/YYYY'));
                         },
                     });
                 });
@@ -159,9 +168,11 @@
                         processData: false,
                         success: function(response) {
                             Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+                                icon: response.status,
+                                title: response.title,
                                 text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
                             });
                             modal.modal('hide');
                             tabel.DataTable().ajax.reload();
@@ -195,9 +206,11 @@
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
-                                        icon: 'success',
-                                        title: 'Dihapus!',
+                                        icon: response.status,
+                                        title: response.title,
                                         text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
                                     });
                                     tabel.DataTable().ajax.reload();
                                 },

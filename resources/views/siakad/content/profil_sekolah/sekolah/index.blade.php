@@ -40,7 +40,7 @@
                 </div>
             </div>
         </div>
-        
+
         {{-- Sejarah --}}
         <div class="block block-rounded">
             <div class="block-header block-header-default">
@@ -286,9 +286,11 @@
                         dataType: 'json',
                         success: function(response) {
                             Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+                                icon: response.status,
+                                title: response.title,
                                 text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
                             });
 
                             modalProfilSekolah.modal('hide');
@@ -321,9 +323,11 @@
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
-                                        icon: 'success',
-                                        title: 'Dihapus!',
+                                        icon: response.status,
+                                        title: response.title,
                                         text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
                                     });
                                     resetForm();
                                     modalProfilSekolah.modal('hide');
@@ -630,9 +634,11 @@
                         dataType: 'json',
                         success: function(response) {
                             Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+                                icon: response.status,
+                                title: response.title,
                                 text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
                             });
 
                             modalVM.modal('hide');
@@ -659,11 +665,12 @@
                         dataType: 'json',
                         success: function(response) {
                             Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+                                icon: response.status,
+                                title: response.title,
                                 text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
                             });
-
                             modalSambutan.modal('hide');
                             resetForm();
                             fetchProfilData();
@@ -703,12 +710,58 @@
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
-                                        icon: 'success',
-                                        title: 'Success',
+                                        icon: response.status,
+                                        title: response.title,
                                         text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
                                     });
 
                                     modalVM.modal('hide');
+                                    resetForm();
+                                    fetchProfilData();
+                                },
+                            });
+                        }
+                    });
+                });
+                $(document).on('click', '#hapusDataSambutan', function(e) {
+                    e.preventDefault();
+
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: 'Menghapus Sambutan Kepala Sekolah',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Hapus!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            resetForm();
+
+                            var data = new FormData($('#formSambutan')[0]);
+                            var sam = sambutanKep.getData();
+                            data.append('sambutanKepsek', sam);
+
+                            $.ajax({
+                                type: 'POST',
+                                url: $('#formSambutan').attr('action'),
+                                data: data,
+                                contentType: false,
+                                processData: false,
+                                dataType: 'json',
+                                success: function(response) {
+                                    Swal.fire({
+                                        icon: response.status,
+                                        title: response.title,
+                                        text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+
+                                    modalSambutan.modal('hide');
                                     resetForm();
                                     fetchProfilData();
                                 },

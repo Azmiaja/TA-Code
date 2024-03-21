@@ -70,6 +70,84 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row items-push">
+                        <div class="col-12">
+                            <div class="block block-rounded">
+                                <div class="block-header block-header-default">
+                                    <h3 class="block-title">Jadwal Pelajaran</h3>
+                                    <div class="block-options">
+                                        <select name="pilih_periode" id="pilih_periode" class="form-select form-select-sm"
+                                            disabled>
+                                            {{-- <option value="" disabled selected>Pilih Periode</option> --}}
+                                            @foreach ($periode as $item)
+                                                @php
+                                                    $today = now();
+                                                    $startDate = \Carbon\Carbon::parse($item->tanggalMulai);
+                                                    $endDate = \Carbon\Carbon::parse($item->tanggalSelesai);
+
+                                                    $selected =
+                                                        $startDate <= $today && $today <= $endDate ? 'selected' : '';
+                                                @endphp
+                                                <option value="{{ $item->idPeriode }}" {{ $selected }}>
+                                                    Semester
+                                                    {{ $item->semester }}/{{ \Carbon\Carbon::parse($item->tanggalMulai)->format('Y') }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="block-content p-0">
+                                    <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
+                                        <div class="row g-3 mb-0 pt-1">
+                                            <div class="col-md-7 text-md-start text-center">
+                                                <div class="btn-group" role="group" aria-label="Horizontal Alternate Info">
+                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas active"
+                                                        value="1">Kelas
+                                                        1</button>
+                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                        value="2">Kelas
+                                                        2</button>
+                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                        value="3">Kelas
+                                                        3</button>
+                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                        value="4">Kelas
+                                                        4</button>
+                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                        value="5">Kelas
+                                                        5</button>
+                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                        value="6">Kelas
+                                                        6</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5 text-md-end text-center">
+                                                <button class="btn btn-sm btn-alt-primary" id="btn_print_jadwal"><i
+                                                        class="fa fa-print me-2"></i>Print</button>
+                                            </div>
+
+                                        </div>
+                                        <table id="tabel-JPSiswa" class="table table-bordered table-vcenter w-100">
+                                            <thead class="bg-body-light align-middle">
+                                                <tr>
+                                                    <th style="width: 13%;">Waktu</th>
+                                                    <th style="width: 15%;">Senin</th>
+                                                    <th style="width: 15%;">Selasa</th>
+                                                    <th style="width: 15%;">Rabu</th>
+                                                    <th style="width: 15%;">Kamis</th>
+                                                    <th style="width: 15%;">Jumat</th>
+                                                    <th style="width: 15%;">Sabtu</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{-- conten --}}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-lg-3 col-12">
                     <div class="block block-rounded">
@@ -133,7 +211,40 @@
                                 </div>
                             </div>
                         </div>
-                        
+                    </div>
+                    <div class="row items-push">
+                        <div class="block block-rounded">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title">Jadwal Pelajaran</h3>
+                                <div class="block-options">
+
+                                </div>
+                            </div>
+                            <div class="block-content p-0">
+                                <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
+                                    @can('siswa')
+                                        <input type="hidden" id="kelas_name"
+                                            value="{{ ucwords(Auth::user()->tr_kelas->first()->kelas->namaKelas) }}">
+                                    @endcan
+                                    <table id="tabel-JPSiswa" class="table table-bordered table-vcenter w-100">
+                                        <thead class="bg-body-light align-middle">
+                                            <tr>
+                                                <th style="width: 13%;">Waktu</th>
+                                                <th style="width: 15%;">Senin</th>
+                                                <th style="width: 15%;">Selasa</th>
+                                                <th style="width: 15%;">Rabu</th>
+                                                <th style="width: 15%;">Kamis</th>
+                                                <th style="width: 15%;">Jumat</th>
+                                                <th style="width: 15%;">Sabtu</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{-- conten --}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-12">
@@ -477,6 +588,93 @@
 
 
         @push('scripts')
+            <script>
+                $(document).ready(function() {
+                    const tabelViewJadwal = $('#tabel-JPSiswa');
+                    var table = tabelViewJadwal.DataTable({
+                        processing: true,
+                        ajax: {
+                            url: '{!! route('get-jadwal.siswa') !!}',
+                            data: function(d) {
+                                d.idPeriode = $('#pilih_periode').val();
+                                d.kelas = $(".btn_kelas.active").val();
+                                //     // console.log(d.kelas_id);
+                            }
+                        },
+                        columns: [{
+                                data: 'waktu',
+                                name: 'waktu',
+                                className: 'text-center'
+                            },
+                            {
+                                data: 'Senin',
+                                name: 'Senin',
+                                className: 'text-center'
+                            },
+                            {
+                                data: 'Selasa',
+                                name: 'Selasa',
+                                className: 'text-center'
+                            },
+                            {
+                                data: 'Rabu',
+                                name: 'Rabu',
+                                className: 'text-center'
+                            },
+                            {
+                                data: 'Kamis',
+                                name: 'Kamis',
+                                className: 'text-center'
+                            },
+                            {
+                                data: 'Jumat',
+                                name: 'Jumat',
+                                className: 'text-center'
+                            },
+                            {
+                                data: 'Sabtu',
+                                name: 'Sabtu',
+                                className: 'text-center'
+                            },
+                        ],
+                        dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-7'><'col-12 col-sm-12 col-md-5 text-md-end'B>>" +
+                            "<'row my-2 '<'col-12 col-sm-12'tr>>" +
+                            "<'row mb-2'<'col-12 col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
+                        buttons: [{
+                            extend: 'print',
+                            title: `<h2>Jadwal Pelajaran</h2>`,
+                            className: 'd-none',
+                            filename: `Jadwal Pelajaran`,
+                            exportOptions: {
+                                columns: ':visible',
+                            },
+                            messageTop: null,
+                            messageBottom: null,
+                            customize: function(win) {
+                                $(win.document.body).css('text-align', 'center');
+                            },
+                        }],
+                        paging: false,
+                        ordering: true,
+                        searching: false,
+                        info: false,
+                    });$('.btn_kelas.active');
+                    $('#btn_print_jadwal').on('click', function() {
+                        $('.buttons-print').click();
+                    })
+                    $('.buttons-print').prop('hidden', true);
+
+                    // $('.buttons-print span').append('<i class="fa-solid ms-2 fa-print"></i>');
+
+                    $('.btn_kelas').on('click', function() {
+                        $('.btn_kelas').removeClass('active');
+                        $(this).addClass('active');
+                        // console.log($('.btn_kelas.active').val());
+                        // Muat ulang data tabel
+                        tabelViewJadwal.DataTable().ajax.reload();
+                    });
+                });
+            </script>
             @cannot('guru')
                 <script>
                     $(document).ready(function() {

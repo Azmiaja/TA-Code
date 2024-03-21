@@ -36,10 +36,10 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3" id="role_display">
                             <label class="form-label" for="hak_akses">Hak Akses</label>
                             <select name="hakAkses" id="hak_akses" class="form-select">
-                                <option value="" selected disabled>-- Pilih Hak Akses --</option>
+                                <option value="" selected disabled>Pilih Hak Akses</option>
                                 <option value="Guru">Guru</option>
                                 <option value="Admin">Admin</option>
                             </select>
