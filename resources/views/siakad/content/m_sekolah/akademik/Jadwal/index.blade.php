@@ -128,7 +128,7 @@
                             </div>
                             <div class="mb-3" id="map_1">
                                 <label class="form-label" for="idPengajaran">Mapel</label>
-                                <select name="idPengajaran" id="idPengajaran" class="form-select">
+                                <select name="idPengajaran" id="idPengajaran" class="form-select" data-placeholder="Pilih Mapel">
                                 </select>
                             </div>
                             <div class="row g-3 mb-3">
