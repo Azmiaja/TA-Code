@@ -145,7 +145,7 @@ class PenjadwalanController extends Controller
         $jadwal = Jadwal::find($id);
 
         $validatedData = $request->validate([
-            'idPengajaran_two' => 'required',
+            'idPengajaran' => 'required',
             'idKelas' => 'required',
             'idPeriode' => 'required',
             'hari' => 'required',
