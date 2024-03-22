@@ -27,7 +27,6 @@ class Pegawai extends Model
         return $this->hasOne(Jabatan::class, 'idJabatan', 'idJabatan');
     }
 
-
     // Define the relationship with the Periode model
     public function periode()
     {

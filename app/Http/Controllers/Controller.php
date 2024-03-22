@@ -380,12 +380,17 @@ class Controller extends BaseController
 
     private function getGabunganDataGuru()
     {
-        $guru = Pegawai::with('jabatanPegawai')->get();
+        // $guru = Pegawai::with('jabatanPegawai')->get();
+        $guru = Pegawai::whereNotIn('idPegawai', function ($query) {
+            $query->select('idPegawai')
+                ->from('user')
+                ->where('hakAkses', 'Super Admin');
+        })->orderBy('idJabatan', 'asc')->get();
 
         return $guru->map(function ($pegawai) {
             $namaPegawai = $pegawai->namaPegawai;
             $gambar = $pegawai->gambar ? asset('storage/' . $pegawai->gambar) : asset('assets/media/avatars/avatar1.jpg');
-            $namaJabatan = optional($pegawai->jabatanPegawai)->jabatan;
+            $namaJabatan = $pegawai->jabatanPegawai ? $pegawai->jabatanPegawai->jabatan : '-';
 
             return compact('namaPegawai', 'gambar', 'namaJabatan');
         });
