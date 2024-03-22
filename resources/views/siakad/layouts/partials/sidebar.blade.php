@@ -348,7 +348,7 @@
                         @endcan
                     </ul>
                 </li> --}}
-                @cannot('siswa')
+                @cannot(['siswa', 'guru'])
                     <li class="nav-main-heading">Akademik</li>
                     <li class="nav-main-item">
                         <a class="nav-main-link {{ Request::routeIs('absensi.index') ? 'active' : '' }}"
