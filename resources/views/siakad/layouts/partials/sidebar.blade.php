@@ -211,6 +211,14 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-main-heading">Akademik</li>
+                    <li class="nav-main-item">
+                        <a class="nav-main-link {{ Request::routeIs('absensi.index') ? 'active' : '' }}"
+                            href="{{ route('absensi.index') }}">
+                            <i class="nav-main-link-icon si si-note"></i>
+                            <span class="nav-main-link-name">Absensi</span>
+                        </a>
+                    </li>
                 @endcanany
                 {{-- <li class="nav-main-item {{ $judul === 'Manajemen Kelas' ? 'open' : '' }}">
                     <a class="nav-main-link nav-main-link-submenu {{ $judul === 'Manajemen Kelas' ? 'active' : '' }}"
@@ -348,16 +356,6 @@
                         @endcan
                     </ul>
                 </li> --}}
-                @cannot(['siswa', 'guru'])
-                    <li class="nav-main-heading">Akademik</li>
-                    <li class="nav-main-item">
-                        <a class="nav-main-link {{ Request::routeIs('absensi.index') ? 'active' : '' }}"
-                            href="{{ route('absensi.index') }}">
-                            <i class="nav-main-link-icon si si-note"></i>
-                            <span class="nav-main-link-name">Absensi</span>
-                        </a>
-                    </li>
-                @endcannot
             </ul>
         </div>
     </div>
