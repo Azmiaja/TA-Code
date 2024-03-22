@@ -213,35 +213,79 @@
                         </div>
                     </div>
                     <div class="row items-push">
-                        <div class="block block-rounded">
-                            <div class="block-header block-header-default">
-                                <h3 class="block-title">Jadwal Pelajaran</h3>
-                                <div class="block-options">
+                        <div class="col-12">
+                            <div class="block block-rounded">
+                                <div class="block-header block-header-default">
+                                    <h3 class="block-title">Jadwal Pelajaran</h3>
+                                    <div class="block-options">
+                                        <select name="pilih_periode" id="pilih_periode" class="form-select form-select-sm"
+                                            disabled>
+                                            {{-- <option value="" disabled selected>Pilih Periode</option> --}}
+                                            @foreach ($periode as $item)
+                                                @php
+                                                    $today = now();
+                                                    $startDate = \Carbon\Carbon::parse($item->tanggalMulai);
+                                                    $endDate = \Carbon\Carbon::parse($item->tanggalSelesai);
 
+                                                    $selected =
+                                                        $startDate <= $today && $today <= $endDate ? 'selected' : '';
+                                                @endphp
+                                                <option value="{{ $item->idPeriode }}" {{ $selected }}>
+                                                    Semester
+                                                    {{ $item->semester }}/{{ \Carbon\Carbon::parse($item->tanggalMulai)->format('Y') }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="block-content p-0">
-                                <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
-                                    @can('siswa')
-                                        <input type="hidden" id="kelas_name"
-                                            value="{{ ucwords(Auth::user()->tr_kelas->first()->kelas->namaKelas) }}">
-                                    @endcan
-                                    <table id="tabel-JPSiswa" class="table table-bordered table-vcenter w-100">
-                                        <thead class="bg-body-light align-middle">
-                                            <tr>
-                                                <th style="width: 13%;">Waktu</th>
-                                                <th style="width: 15%;">Senin</th>
-                                                <th style="width: 15%;">Selasa</th>
-                                                <th style="width: 15%;">Rabu</th>
-                                                <th style="width: 15%;">Kamis</th>
-                                                <th style="width: 15%;">Jumat</th>
-                                                <th style="width: 15%;">Sabtu</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {{-- conten --}}
-                                        </tbody>
-                                    </table>
+                                <div class="block-content p-0">
+                                    <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
+                                        <div class="row g-3 mb-0 pt-1">
+                                            <div class="col-md-7 text-md-start text-center">
+                                                <div class="btn-group" role="group" aria-label="Horizontal Alternate Info">
+                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas active"
+                                                        value="1">Kelas
+                                                        1</button>
+                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                        value="2">Kelas
+                                                        2</button>
+                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                        value="3">Kelas
+                                                        3</button>
+                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                        value="4">Kelas
+                                                        4</button>
+                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                        value="5">Kelas
+                                                        5</button>
+                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                        value="6">Kelas
+                                                        6</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5 text-md-end text-center">
+                                                <button class="btn btn-sm btn-alt-primary" id="btn_print_jadwal"><i
+                                                        class="fa fa-print me-2"></i>Print</button>
+                                            </div>
+
+                                        </div>
+                                        <table id="tabel-JPSiswa" class="table table-bordered table-vcenter w-100">
+                                            <thead class="bg-body-light align-middle">
+                                                <tr>
+                                                    <th style="width: 13%;">Waktu</th>
+                                                    <th style="width: 15%;">Senin</th>
+                                                    <th style="width: 15%;">Selasa</th>
+                                                    <th style="width: 15%;">Rabu</th>
+                                                    <th style="width: 15%;">Kamis</th>
+                                                    <th style="width: 15%;">Jumat</th>
+                                                    <th style="width: 15%;">Sabtu</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{-- conten --}}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -658,7 +702,8 @@
                         ordering: true,
                         searching: false,
                         info: false,
-                    });$('.btn_kelas.active');
+                    });
+                    $('.btn_kelas.active');
                     $('#btn_print_jadwal').on('click', function() {
                         $('.buttons-print').click();
                     })
