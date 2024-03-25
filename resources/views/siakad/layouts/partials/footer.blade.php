@@ -43,7 +43,8 @@
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonText: 'Ya, Logout',
-                cancelButtonText: 'Batal'
+                cancelButtonText: 'Batal',
+                reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Lakukan logout melalui AJAX
