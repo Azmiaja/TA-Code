@@ -14,7 +14,12 @@ class Periode extends Model
     protected $primaryKey = 'idPeriode';
     public $timestamps = false;
 
-    protected $fillable = ['semester', 'tanggalMulai', 'tanggalSelesai'];
+    // Define the relationship with the Kelas model
+    public function kelas()
+    {
+        return $this->hasMany(Kelas::class, 'idPeriode');
+    }
+    // protected $fillable = ['semester', 'tanggalMulai', 'tanggalSelesai'];
 
     // Define the relationship with the Pegawai model
     public function pegawai()
@@ -22,11 +27,6 @@ class Periode extends Model
         return $this->kelas->belongsTo(Pegawai::class, 'idPegawai');
     }
 
-    // Define the relationship with the Kelas model
-    public function kelas()
-    {
-        return $this->hasMany(Kelas::class, 'idPeriode');
-    }
     
     public function pengajar()
     {

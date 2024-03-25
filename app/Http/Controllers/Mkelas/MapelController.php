@@ -30,9 +30,9 @@ class MapelController extends Controller
         $mapel = Mapel::orderBy('idMapel', 'desc')->get()
             ->map(function ($item, $key) {
                 $item['nomor'] = $key + 1;
-                $item['mapel'] = $item->namaMapel;
-                $item['kkm'] = $item->kkm;
-                $item['deskripsi'] = $item->deskripsiMapel;
+                $item['mapel'] = $item->namaMapel ?: '-';
+                $item['kkm'] = $item->kkm ?: '-';
+                $item['deskripsi'] = $item->deskripsiMapel ?: '-';
 
                 return $item;
             });

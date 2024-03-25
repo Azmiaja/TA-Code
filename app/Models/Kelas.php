@@ -17,7 +17,7 @@ class Kelas extends Model
 
     public function periode()
     {
-        return $this->hasOne(Periode::class, 'idPeriode', 'idPeriode');
+        return $this->belongsTo(Periode::class, 'idPeriode');
     }
 
     public function guru()

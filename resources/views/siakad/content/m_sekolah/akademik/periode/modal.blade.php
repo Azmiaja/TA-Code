@@ -29,12 +29,27 @@
                              </select>
                          </div>
                          <div class="mb-3">
+                             <label class="form-label" for="tahun">Tahun Periode</label>
+                             <input type="text" class="form-control" id="tahun" name="tahun"
+                                 placeholder="Masukan Tahun Periode" required>
+                         </div>
+                         <div class="mb-3">
                              <label class="form-label" for="tanggalMulai">Tanggal Mulai</label>
-                             <input type="text" class="form-control" id="tanggalMulai" name="tanggalMulai" placeholder="Masukan Tanggal Mulai" required>
+                             <input type="text" class="form-control" id="tanggalMulai" name="tanggalMulai"
+                                 placeholder="Masukan Tanggal Mulai" required>
                          </div>
                          <div class="mb-3">
                              <label class="form-label" for="tanggalSelesai">Tanggal Selesai</label>
-                             <input type="text" class="form-control" id="tanggalSelesai" name="tanggalSelesai" placeholder="Masukan Tanggal Selesai" required>
+                             <input type="text" class="form-control" id="tanggalSelesai" name="tanggalSelesai"
+                                 placeholder="Masukan Tanggal Selesai" required>
+                         </div>
+                         <div class="mb-3">
+                             <label class="form-label" for="status">Status</label>
+                             <select name="status" id="status" class="form-select" required>
+                                 <option value="" disabled selected>Pilih Status</option>
+                                 <option value="Aktif">Aktif</option>
+                                 <option value="Tidak Aktif">Tidak Aktif</option>
+                             </select>
                          </div>
                          <div class="mb-4 text-end" id="btn-form">
                          </div>

@@ -11,13 +11,24 @@ class JabatanController extends Controller
 {
     public function getJabatan()
     {
-        $data = Jabatan::all();
-        return response()->json($data);
+        try {
+
+            $dataGuru = Jabatan::where('jenis', 'Guru')->get();
+            $dataTendik = Jabatan::where('jenis', 'Tendik')->get();
+
+            return response()->json([
+                'guru' => $dataGuru,
+                'tendik' => $dataTendik,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error get data: ' . $e->getMessage());
+        }
     }
+
 
     public function getJabatanOptions()
     {
-        $data = Jabatan::whereDoesntHave('pegawai')->get();
+        $data = Jabatan::whereDoesntHave('pegawai')->orderBy('idJabatan', 'desc')->get();
         return response()->json($data);
     }
 
@@ -33,6 +44,7 @@ class JabatanController extends Controller
             $jabatan = new Jabatan;
 
             $jabatan->jabatan = $request->input('jabatan');
+            $jabatan->jenis = $request->input('jenis');
 
             $jabatan->save();
 

@@ -15,8 +15,8 @@ class Absensi extends Controller
     public function index()
     {
         return view('siakad/content/absen/index', [
-            'judul' => 'Absensi',
-            'sub_judul' => 'Absensi Siswa',
+            'judul' => 'Akademik',
+            'sub_judul' => 'Presensi Siswa',
             'text_singkat' => 'Mengelola kehadiran siswa dalam kelas!',
             'link' => 'absensi.index',
         ]);

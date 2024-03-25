@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class PegawaiController extends Controller
@@ -46,6 +47,40 @@ class PegawaiController extends Controller
         //
     }
 
+    public function storeFoto(Request $request, $id)
+    {
+        try {
+            $pegawai = Pegawai::find($id);
+
+            $validator = Validator::make($request->all(), [
+                'gambar' => 'image|mimes:jpeg,jpg,png,svg|max:2048',
+            ], [
+                'gambar.image' => 'File yang anda pilih bukan gambar.',
+                'gambar.mimes' => 'Format gambar hanya JPEG,JPG,PNG,SVG.',
+                'gambar.max' => 'Ukuran file maksimal 2MB.'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 0, 'error' => $validator->errors()->first()]);
+            } else {
+                if ($request->hasFile('gambar')) {
+                    $imgName = uniqid() . '.' . $request->file('gambar')->getClientOriginalExtension();
+                    $gambarPath = $request->file('gambar')->storeAs('profil_pegawai', $imgName, 'public');
+
+                    if ($pegawai->gambar) {
+                        Storage::delete('public/' . $pegawai->gambar);
+                    }
+                }
+                $pegawai->gambar = $gambarPath;
+                $pegawai->save();
+
+                return response()->json(['status' => 'success', 'msg' => 'Foto pegawai berhasil diperbarui.']);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+        }
+    }
+
     public function store(Request $request)
     {
         try {
@@ -60,14 +95,11 @@ class PegawaiController extends Controller
                 'jenisPegawai' => 'required',
                 'noHp' => 'nullable|string|max:15',
                 'status' => 'required',
-                'gambar' => 'nullable|file|mimes:jpeg,png,jpg,svg|max:2048',
+                // 'gambar' => 'nullable|file|mimes:jpeg,png,jpg,svg|max:2048',
                 'idJabatan' => 'required|numeric',
             ]);
 
-            if ($request->file('gambarPegawai')) {
-                $imgName = uniqid() . '.' . $request->file('gambarPegawai')->getClientOriginalExtension();
-                $validatedData['gambar'] = $request->file('gambarPegawai')->storeAs('profil_pegawai', $imgName, 'public');
-            }
+            
             $validatedData['tanggalLahir'] = Carbon::createFromFormat('d/m/Y', $request->tanggalLahir)->format('Y-m-d');
 
             Pegawai::create($validatedData);
@@ -90,7 +122,7 @@ class PegawaiController extends Controller
 
     public function edit($id)
     {
-        $pegawai = Pegawai::find($id);
+        $pegawai = Pegawai::with('jabatanPegawai')->find($id);
         if (!$pegawai) {
             // Handle jika berita tidak ditemukan
             return back()->with('error', 'Data pegawai tidak ditemukan.');

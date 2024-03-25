@@ -45,7 +45,57 @@
                         </div>
                     </div>
                     <div class="block-content block-content-full">
-                        <div id="jabatanPegawai"></div>
+                        <p class="fs-sm text-center mb-2 fw-bold border-bottom">Guru</p>
+                        <div id="jabatanPegawai_1"></div>
+                        <p class="fs-sm text-center mb-2 fw-bold border-bottom">Tendik</p>
+                        <div id="jabatanPegawai_2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Image --}}
+    <div class="modal fade" id="modal_fotoPegawai" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="modal-modal_fotoPegawai" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="block block-rounded block-transparent mb-0">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title" id="title-modal">Ubah Foto Pegawai</h3>
+                        <div class="block-options">
+                            <button type="button" id="btn-close" class="btn-block-option" data-bs-dismiss="modal"
+                                aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content fs-sm">
+                        <form action="" method="POST" id="form_editFotoPegawai" enctype="multipart/form-data">
+                            @csrf
+                            @method('put')
+                            <div class="row">
+                                <div class="mb-2 text-center">
+                                    <div class="ratio mx-auto mb-2 rounded-circle border border-5"
+                                        style="width: 200px; height: 200px;">
+                                        <img src="" id="gambar_pegawai" class="img-preview d-block rounded-circle"
+                                            style="width: 100%; height: 100%; object-fit: cover;" alt="">
+                                    </div>
+                                    <span class="text-danger error-text gambar_error"></span>
+                                </div>
+                                <div class="mb-4 text-center">
+                                    <input type="file" class="form-control d-none" name="gambar"
+                                        accept=".jpg,.jpeg,.png,.svg" id="gambarPegawai" onchange="prevImg()">
+                                    <button type="button" id="fileButton" class="btn btn-primary">Pilih
+                                        File</button>
+                                    <button type="submit" class="btn btn-alt-primary">
+                                        Simpan
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="block-content block-content-full bg-body">
                     </div>
                 </div>
             </div>
@@ -74,6 +124,9 @@
                 const editPegawai = $('#action-editPegawai');
                 const vwJabatan = $("#jabatanView");
 
+                const modalFoto = $('#modal_fotoPegawai');
+                const formFoto = $('#form_editFotoPegawai');
+
                 const imgPrev = document.querySelector('.img-preview');
                 const idPegawai = document.getElementById("idPegawai");
                 const nip = document.getElementById("nip");
@@ -87,6 +140,8 @@
                 const idJabatan = document.getElementById("idJabatan");
                 const hp = document.getElementById("noHp");
                 const status = document.getElementById("status");
+                // const image = document.getElementById("gambar_pegawai");
+                const jenisPegawai = $('#jenisPegawai');
 
 
                 $('#fileButton').click(function() {
@@ -97,19 +152,33 @@
 
                 function getJabatanPegawai() {
                     let urlJabatan = `{{ route('get-jabatan') }}`;
+                    const jabatanGuru = $("#jabatanPegawai_1");
+                    const jabatanTendik = $("#jabatanPegawai_2");
                     // var id = $(this).val();
                     $.ajax({
                         url: urlJabatan,
                         type: 'GET',
                         dataType: 'json',
                         success: function(data) {
-
-                            jabatanP.html('');
+                            jabatanGuru.html('');
+                            jabatanTendik.html('');
                             // Append data ke select option
-                            $.each(data, function(i, item) {
+                            $.each(data.guru, function(i, item) {
                                 var jabatan = item.jabatan ?? null;
                                 var idJabatan = item.idJabatan ?? null;
-                                jabatanP.append(`<a href="javascript:void(0)" class="block block-rounded block-link-pop border shadow-sm mb-2 p-2" 
+                                // var jenis = item.jesnis ?? null;
+                                jabatanGuru.append(`<a href="javascript:void(0)" class="block block-rounded block-link-pop border shadow-sm mb-2 p-2" 
+                                data-id-jabatan="${idJabatan}" data-name-jabatan="${jabatan}" id="jabatanView">
+                                                    <span>
+                                                        <i class="text-primary fa-solid fa-paperclip me-2"></i>${jabatan}
+                                                    </span>
+                                                </a>`);
+                            });
+                            $.each(data.tendik, function(i, item) {
+                                var jabatan = item.jabatan ?? null;
+                                var idJabatan = item.idJabatan ?? null;
+                                var jenis = item.jesnis ?? null;
+                                jabatanTendik.append(`<a href="javascript:void(0)" class="block block-rounded block-link-pop border shadow-sm mb-2 p-2" 
                                 data-id-jabatan="${idJabatan}" data-name-jabatan="${jabatan}" id="jabatanView">
                                                     <span>
                                                         <i class="text-primary fa-solid fa-paperclip me-2"></i>${jabatan}
@@ -119,6 +188,7 @@
                         }
                     });
                 }
+
                 const jabatandd = $('#idJabatan');
 
                 function getJabatan(url) {
@@ -131,29 +201,96 @@
                             // Kosongkan select option
                             jabatandd.find('option').not(':first').remove();
 
-                            // Append data ke select option
                             $.each(data, function(i, item) {
-                                jabatandd.append($('<option>', {
-                                    value: item.idJabatan,
-                                    text: item.jabatan
-                                }));
+                                // Tambahkan filter berdasarkan jenisPegawai
+                                if ((jenisPegawai.val() === 'Guru' && item.jenis === 'Guru') ||
+                                    (jenisPegawai.val() === 'Tendik' && item.jenis === 'Tendik')) {
+                                    var option = $('<option>', {
+                                        value: item.idJabatan,
+                                        text: item.jabatan
+                                    });
+                                    if (item.idJabatan == jabatandd.val()) {
+                                        option.prop('selected', true);
+                                    }
+                                    jabatandd.append(option);
+                                    // jabatandd.append(option);
+                                }
                             });
                         }
                     });
                 }
+
+                $(document).on('click', '#action-editGambarPegawai', function(e) {
+                    e.preventDefault();
+
+                    const id = $(this).val();
+                    const foto = $(this).data('foto');
+
+                    // Tampilkan modal
+                    modalFoto.modal('show');
+
+                    // Set action form
+                    formFoto.attr('action', `{{ url('pegawai/ubah-image/${id}') }}`);
+
+                    imgPrev.src = foto ? `{{ asset('/storage/${foto}') }}` :
+                        `{{ asset('assets/media/avatars/avatar1.jpg') }}`;
+                });
+
+
+
+                formFoto.submit(function(e) {
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        method: 'POST',
+                        data: new FormData(this),
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        beforeSend: function() {
+                            $(document).find('span.error-text').text('');
+                        },
+                        success: function(data) {
+                            if (data.status == 0) {
+                                $('span.error-text').text(data.error);
+                            } else {
+                                Swal.fire({
+                                    icon: data.status,
+                                    title: 'Sukses',
+                                    text: data.msg,
+                                    showConfirmButton: false,
+                                    timer: 1300
+                                });
+                                modalFoto.modal('hide');
+                                tabel.DataTable().ajax.reload();
+
+                            }
+                        }
+                    });
+                });
+
+                modalFoto.on('hidden.bs.modal', function() {
+                    formFoto.trigger('reset');
+                    $('span.error-text').text('');
+                });
+
 
                 new AirDatepicker('#tanggalLahir', {
                     container: '#modalPegawai',
                     autoClose: true,
                 });
 
-
                 modalPegawai.on('hidden.bs.modal', function() {
                     // Reset form
                     resetForm(formPegawai, function() {
                         imgPrev.style.display = 'none';
-
-                    })
+                        jabatandd.find('option').not(':first').remove();
+                    });
+                    jenisPegawai.off('change');
+                });
+                modalJabatan.on('hidden.bs.modal', function() {
+                    $('.kategori-jabatan').prop('hidden', false);
                 });
 
                 // tabel pegawai
@@ -180,7 +317,8 @@
                             className: 'text-center',
                             render: function(data, type, row) {
                                 var statusClass = row.jenisPegawai === 'Guru' ?
-                                    'bg-success-light text-success' : 'bg-warning-light text-warning';
+                                    'bg-success-light text-success' :
+                                    'bg-warning-light text-warning';
                                 return `<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill ${statusClass}">${row.jenisPegawai}</span>`;
                             }
                         },
@@ -189,6 +327,9 @@
                             className: 'text-center',
                             render: function(data, type, row) {
                                 return `<div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-alt-secondary" title="Ubah Gambar" id="action-editGambarPegawai" value="${data.idPegawai}" data-foto="${data.gambar}">
+                                            <i class="fa-regular fa-image"></i>
+                                        </button>
                                         <button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editPegawai" value="${data.idPegawai}">
                                             <i class="fa fa-fw fa-pencil-alt"></i>
                                         </button>
@@ -215,7 +356,10 @@
                     );
                     formPegawai.attr('action', '{{ route('pegawai.store') }}');
                     formMethod.val('POST');
-                    getJabatan(`{{ route('get-jabatan.options') }}`);
+                    jenisPegawai.change(function() {
+                        jabatandd.val(null).change();
+                        getJabatan(`{{ route('get-jabatan.options.edit') }}`);
+                    });
                 });
 
                 insertJabatan.click(function(e) {
@@ -248,8 +392,10 @@
 
                     var id = $(this).data('id-jabatan');
                     var name = $(this).data('name-jabatan');
+                    var name_jenis = $(this).data('name-jenis');
 
                     modalJabatan.modal('show');
+                    $('.kategori-jabatan').prop('hidden', true);
                     updateModals($('#modal-title-jabatan'), $('#bt-form-jabatan'), 'Data Jabatan',
                         `<button type="button" class="btn btn-danger" id="btn-hapusJabatan">Hapus</button>`
                     );
@@ -268,7 +414,9 @@
                     );
                     formMethod.val('PUT');
 
-                    getJabatan(`{{ route('get-jabatan.options.edit') }}`);
+                    jenisPegawai.change(function() {
+                        getJabatan(`{{ route('get-jabatan.options.edit') }}`);
+                    });
 
                     var id = $(this).val();
                     // console.log(id);
@@ -285,15 +433,21 @@
                             $(nip).val(response.data.nip);
                             $(namaPegawai).val(response.data.namaPegawai);
                             $(tpLahir).val(response.data.tempatLahir);
-                            $(tglLahir).val(moment(response.data.tanggalLahir).format('DD/MM/YYYY'));
+                            $(tglLahir).val(moment(response.data.tanggalLahir).format(
+                                'DD/MM/YYYY'));
                             $(alamat).val(response.data.alamat);
                             $(jnKelamin).val(response.data.jenisKelamin);
                             $(agama).val(response.data.agama);
                             $(hp).val(response.data.noHp);
                             $(status).val(response.data.status);
-                            $(jnPegawai).val(response.data.jenisPegawai);
-                            $(idJabatan).val(response.data.idJabatan);
-
+                            jenisPegawai.val(response.data.jenisPegawai).change();
+                            setTimeout(() => {
+                                // $(idJabatan).val(response.data.idJabatan);
+                                $(idJabatan).val(response.data.idJabatan);
+                                // $(idJabatan).append(
+                                //     `<option value="${response.data.jabatan_pegawai.idJabatan} selected">${response.data.jabatan_pegawai.jabatan}</option>`
+                                //     ).change();
+                            }, 500);
                             if (response.data.gambar == null) {
                                 imgPrev.src = '';
                             } else {
@@ -320,7 +474,9 @@
                         cancelButtonText: 'Batal',
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, Hapus!'
+                        confirmButtonText: 'Ya, Hapus!',
+                        reverseButtons: true,
+
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
@@ -355,10 +511,11 @@
                         html: `Menghapus data <strong>${nama}</strong>`,
                         icon: 'warning',
                         showCancelButton: true,
+                        confirmButtonText: 'Ya, Hapus!',
                         cancelButtonText: 'Batal',
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, Hapus!'
+                        reverseButtons: true,
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({

@@ -33,6 +33,7 @@ class SiswaExport implements FromCollection, WithHeadings, WithEvents
                 'Alamat' => $siswa->alamat,
                 'Agama' => $siswa->agama,
                 'Status Siswa' => $siswa->status,
+                'Tahun Masuk' => $siswa->tahunMasuk,
                 'Nama Ayah' => $siswa->namaAyah,
                 'Pekerjaan Ayah' => $siswa->pekerjaanAyah,
                 'No Telepon Ayah' => $siswa->noTlpAyah,
@@ -64,6 +65,7 @@ class SiswaExport implements FromCollection, WithHeadings, WithEvents
             'Alamat',
             'Agama',
             'Status Siswa',
+            'Tahun Masuk',
             'Nama Ayah',
             'Pekerjaan Ayah',
             'No Telepon Ayah',
@@ -84,7 +86,7 @@ class SiswaExport implements FromCollection, WithHeadings, WithEvents
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 // Apply some basic styles to the header row
-                $event->sheet->getStyle('A1:W1')->applyFromArray([
+                $event->sheet->getStyle('A1:X1')->applyFromArray([
                     'font' => [
                         'bold' => true,
                         'size' => 14,
@@ -112,23 +114,24 @@ class SiswaExport implements FromCollection, WithHeadings, WithEvents
                 $event->sheet->getColumnDimension('I')->setWidth(25);
                 $event->sheet->getColumnDimension('J')->setWidth(20);
                 $event->sheet->getColumnDimension('K')->setWidth(20);
-                $event->sheet->getColumnDimension('L')->setWidth(30);
-                $event->sheet->getColumnDimension('M')->setWidth(20);
+                $event->sheet->getColumnDimension('L')->setWidth(20);
+                $event->sheet->getColumnDimension('M')->setWidth(30);
                 $event->sheet->getColumnDimension('N')->setWidth(20);
-                $event->sheet->getColumnDimension('O')->setWidth(25);
-                $event->sheet->getColumnDimension('P')->setWidth(30);
-                $event->sheet->getColumnDimension('Q')->setWidth(20);
+                $event->sheet->getColumnDimension('O')->setWidth(20);
+                $event->sheet->getColumnDimension('P')->setWidth(25);
+                $event->sheet->getColumnDimension('Q')->setWidth(30);
                 $event->sheet->getColumnDimension('R')->setWidth(20);
-                $event->sheet->getColumnDimension('S')->setWidth(25);
-                $event->sheet->getColumnDimension('T')->setWidth(30);
-                $event->sheet->getColumnDimension('U')->setWidth(20);
+                $event->sheet->getColumnDimension('S')->setWidth(20);
+                $event->sheet->getColumnDimension('T')->setWidth(25);
+                $event->sheet->getColumnDimension('U')->setWidth(30);
                 $event->sheet->getColumnDimension('V')->setWidth(20);
-                $event->sheet->getColumnDimension('W')->setWidth(25);
+                $event->sheet->getColumnDimension('W')->setWidth(20);
+                $event->sheet->getColumnDimension('X')->setWidth(25);
 
                 $event->sheet->getStyle('I')->getAlignment()->setWrapText(true);
-                $event->sheet->getStyle('O')->getAlignment()->setWrapText(true);
-                $event->sheet->getStyle('S')->getAlignment()->setWrapText(true);
-                $event->sheet->getStyle('W')->getAlignment()->setWrapText(true);
+                $event->sheet->getStyle('p')->getAlignment()->setWrapText(true);
+                $event->sheet->getStyle('T')->getAlignment()->setWrapText(true);
+                $event->sheet->getStyle('X')->getAlignment()->setWrapText(true);
 
                 $highestRow = $event->sheet->getHighestRow();
                 $highestColumn = $event->sheet->getHighestColumn();

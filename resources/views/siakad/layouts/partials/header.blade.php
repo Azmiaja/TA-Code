@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.css') }}">
     <link rel="stylesheet"
         href="{{ asset('assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/js/plugins/apexcharts/dist/apexcharts.css') }}">
     {{-- <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"> --}}
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/air-datepicker/dist/air-datepicker.css') }}">
@@ -33,6 +34,14 @@
             text-overflow: ellipsis;
             white-space: normal;
         }
+
+        .swal-confirm-right {
+            float: right; // Mengatur tombol konfirmasi ke kanan
+        }
+
+        .swal-cancel-left {
+            float: left; // Mengatur tombol batal ke kiri
+        }
     </style>
     @stack('style')
 
@@ -40,6 +49,7 @@
     <script src="{{ asset('assets/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/apexcharts/dist/apexcharts.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {

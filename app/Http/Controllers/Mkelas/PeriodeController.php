@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Periode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class PeriodeController extends Controller
 {
@@ -25,8 +26,10 @@ class PeriodeController extends Controller
         $data = Periode::orderBy("tanggalMulai", "desc")->get();
         $data = $data->map(function ($item, $key) {
             $item['nomor'] = $key + 1;
-            $item['tanggalMulai'] = Carbon::parse($item->tanggalMulai)->locale('id_ID')->isoFormat('Do MMMM YYYY') ?: null;;
-            $item['tanggalSelesai'] = Carbon::parse($item->tanggalSelesai)->locale('id_ID')->isoFormat('Do MMMM YYYY') ?: null;;
+            $item['semesterTahun'] = 'Semester ' . $item->semester . ' ' . $item->tahun ?: '-';
+            $item['tanggalMulai'] = Carbon::parse($item->tanggalMulai)->locale('id_ID')->isoFormat('Do MMMM YYYY') ?: '-';
+            $item['tanggalSelesai'] = Carbon::parse($item->tanggalSelesai)->locale('id_ID')->isoFormat('Do MMMM YYYY') ?: '-';
+            $item['status'] = $item->status === 'Aktif' ? '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-success-light text-success">' . $item->status . '</span>' : '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-danger-light text-danger">' . $item->status . '</span>';
             return $item;
         });
         return response()->json(['data' => $data]);
@@ -34,22 +37,29 @@ class PeriodeController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'semester' => 'required',
-            'tanggalMulai' => 'required',
-            'tanggalSelesai' => 'required',
-        ]);
+        try {
 
-        $validatedData['tanggalMulai'] = Carbon::createFromFormat('d/m/Y', $request->input('tanggalMulai'))->format('Y-m-d');
-        $validatedData['tanggalSelesai'] = Carbon::createFromFormat('d/m/Y', $request->input('tanggalSelesai'))->format('Y-m-d');
+            $validatedData = $request->validate([
+                'semester' => 'required',
+                'tahun' => 'required',
+                'status' => 'required',
+                'tanggalMulai' => 'required',
+                'tanggalSelesai' => 'required',
+            ]);
 
-        Periode::create($validatedData);
+            $validatedData['tanggalMulai'] = Carbon::createFromFormat('d/m/Y', $request->input('tanggalMulai'))->format('Y-m-d');
+            $validatedData['tanggalSelesai'] = Carbon::createFromFormat('d/m/Y', $request->input('tanggalSelesai'))->format('Y-m-d');
 
-        return response()->json([
-            'status' => 'success',
-            'title' => 'Sukses',
-            'message' => 'Berhasil menyimpan data.'
-        ]);
+            Periode::create($validatedData);
+
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Sukses',
+                'message' => 'Berhasil menyimpan data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+        }
     }
 
     public function edit($id)
@@ -70,6 +80,8 @@ class PeriodeController extends Controller
         // Validasi input
         $validatedData = $request->validate([
             'semester' => 'required',
+            'tahun' => 'required',
+            'status' => 'required',
             'tanggalMulai' => 'required',
             'tanggalSelesai' => 'required',
         ]);

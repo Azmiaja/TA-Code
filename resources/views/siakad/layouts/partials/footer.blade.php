@@ -117,11 +117,9 @@
     function select2Multiple(select, modal) {
         $(select).select2({
             width: "100%",
-            cache: false,
             dropdownParent: modal,
             theme: "bootstrap-5",
             multiple: true,
-            allowClear: true,
         });
     }
 

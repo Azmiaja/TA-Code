@@ -313,7 +313,8 @@
                         cancelButtonText: 'Batal',
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, Hapus!'
+                        confirmButtonText: 'Ya, Hapus!',
+                        reverseButtons: true
                     }).then((result) => {
                         if (result.isConfirmed) {
 
@@ -690,7 +691,8 @@
                         cancelButtonText: 'Batal',
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, Hapus!'
+                        confirmButtonText: 'Ya, Hapus!',
+                        reverseButtons: true
                     }).then((result) => {
                         if (result.isConfirmed) {
                             resetForm();
@@ -736,7 +738,8 @@
                         cancelButtonText: 'Batal',
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, Hapus!'
+                        confirmButtonText: 'Ya, Hapus!',
+                        reverseButtons: true
                     }).then((result) => {
                         if (result.isConfirmed) {
                             resetForm();

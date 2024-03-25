@@ -28,10 +28,7 @@ class Pegawai extends Model
     }
 
     // Define the relationship with the Periode model
-    public function periode()
-    {
-        return $this->belongsTo(Periode::class, 'idPeriode');
-    }
+    
 
     public function user()
     {
@@ -41,17 +38,5 @@ class Pegawai extends Model
     public function pengajar()
     {
         return $this->hasMany(Pengajaran::class, 'idPengajaran');
-    }
-
-    public function getPeriodeGuru($jenisPegawai, $idPeriode)
-    {
-        return $this->where('jenisPegawai', $jenisPegawai)
-            ->whereHas('kelas', function ($query) use ($idPeriode) {
-                $query->where('idPeriode', $idPeriode);
-            })
-            ->with(['kelas' => function ($query) use ($idPeriode) {
-                $query->where('idPeriode', $idPeriode);
-            }])
-            ->get(['namaPegawai', 'nip', 'jenisKelamin', 'kelas.namaKelas']);
     }
 }

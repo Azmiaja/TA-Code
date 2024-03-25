@@ -9,19 +9,11 @@
                 <div class="block-options">
                     <select name="pilih_periode" id="pilih_periode" class="form-select form-select-sm">
                         @foreach ($periode as $item)
-                            @php
-                                $today = now();
-                                $startDate = \Carbon\Carbon::parse($item->tanggalMulai);
-                                $endDate = \Carbon\Carbon::parse($item->tanggalSelesai);
-
-                                $selected = $startDate <= $today && $today <= $endDate ? 'selected' : '';
-                            @endphp
-                            <option value="{{ $item->idPeriode }}" {{ $selected }}>
+                            <option value="{{ $item->idPeriode }}">
                                 Semester
-                                {{ $item->semester }}/{{ \Carbon\Carbon::parse($item->tanggalMulai)->format('Y') }}
+                                {{ $item->semester }} {{ $item->tahun }}
                             </option>
                         @endforeach
-                        <option value="">Semua Semester</option>
                     </select>
                 </div>
             </div>
@@ -30,18 +22,18 @@
                     <div class="row g-3 pb-3 pt-1">
                         <div class="col-md-6 text-md-start text-center">
                             <div class="btn-group" role="group" aria-label="Horizontal Alternate Info">
-                                <button type="button" class="btn btn-sm btn-alt-warning btn_kelas active"
+                                <button type="button" class="btn btn-sm btn-outline-danger btn_kelas active"
                                     value="1">Kelas
                                     1</button>
-                                <button type="button" class="btn btn-sm btn-alt-warning btn_kelas" value="2">Kelas
+                                <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="2">Kelas
                                     2</button>
-                                <button type="button" class="btn btn-sm btn-alt-warning btn_kelas" value="3">Kelas
+                                <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="3">Kelas
                                     3</button>
-                                <button type="button" class="btn btn-sm btn-alt-warning btn_kelas" value="4">Kelas
+                                <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="4">Kelas
                                     4</button>
-                                <button type="button" class="btn btn-sm btn-alt-warning btn_kelas" value="5">Kelas
+                                <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="5">Kelas
                                     5</button>
-                                <button type="button" class="btn btn-sm btn-alt-warning btn_kelas" value="6">Kelas
+                                <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="6">Kelas
                                     6</button>
                             </div>
                         </div>
@@ -57,8 +49,8 @@
                                 <th style="width: 10%;">Kelas</th>
                                 <th>Nama Guru</th>
                                 <th style="width: 12%;">NIP</th>
-                                <th>Mapel Diapu</th>
-                                <th style="width: 22%;">Semester</th>
+                                <th style="width: 25%;">Mapel Diampu</th>
+                                <th style="width: 18%;">Semester</th>
                                 <th style="width: 10%;" class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -90,42 +82,36 @@
                             <form action="POST" enctype="multipart/form-data" id="form-pengajaran">
                                 @csrf
                                 <input type="hidden" name="_method" id="method" value="POST">
+                                <input type="hidden" name="idPengajaran[]" id="idPengajaran" value="POST">
                                 <div class="mb-3">
                                     <label class="form-label" for="idPeriode">Periode Semester</label>
-                                    <select name="idPeriode" id="idPeriode" class="form-select">
+                                    <select name="idPeriode" id="idPeriode" class="form-select" required>
                                         <option value="" selected>Pilih Periode</option>
                                         @foreach ($periode as $item)
-                                            @php
-                                                $today = now();
-                                                $startDate = \Carbon\Carbon::parse($item->tanggalMulai);
-                                                $endDate = \Carbon\Carbon::parse($item->tanggalSelesai);
-
-                                                $selected =
-                                                    $startDate <= $today && $today <= $endDate ? 'selected' : '';
-                                            @endphp
                                             <option value="{{ $item->idPeriode }}">
                                                 Semester
-                                                {{ $item->semester }}/{{ \Carbon\Carbon::parse($item->tanggalMulai)->format('Y') }}
+                                                {{ $item->semester }} {{ $item->tahun }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="idKelas">Kelas</label>
-                                    <select name="idKelas" id="idKelas" class="form-select"
-                                        data-placeholder="Pilih Kelas">
+                                    <select name="idKelas" id="idKelas" class="form-select" data-placeholder="Pilih Kelas"
+                                        required>
+                                        <option value="" disabled selected>Pilih Kelas</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="idPengajaran">Nama Pengajar</label>
                                     <select name="idPegawai" id="idPegawai" class="form-select"
-                                        data-placeholder="Pilih Guru">
+                                        data-placeholder="Pilih Guru" required>
                                     </select>
                                 </div>
                                 <div class="mb-3" id="multi_mapel">
                                     <label class="form-label" for="idMapel">Mapel</label>
                                     <select name="idMapel[]" id="idMapel" multiple="multiple" class="form-select"
-                                        data-placeholder="Pilih Mapel">
+                                        data-placeholder="Pilih Mapel" required>
                                     </select>
                                 </div>
                                 <div class="mb-3" id="mapel_two" hidden>
@@ -179,9 +165,12 @@
                             }
                         },
                         columns: [{
-                                data: 'nomor',
+                                data: null,
                                 name: 'nomor',
                                 className: 'text-center',
+                                render: function(data, type, row, meta) {
+                                    return meta.row + 1;
+                                }
                             },
                             {
                                 data: 'kelasPengajar',
@@ -196,8 +185,8 @@
                                 name: 'nipPengajar'
                             },
                             {
-                                data: 'mapelDiapu',
-                                name: 'mapelDiapu'
+                                data: 'mapelDiampu',
+                                name: 'mapelDiampu'
                             },
                             {
                                 data: 'semester',
@@ -207,13 +196,14 @@
                                 className: 'text-center',
                                 searchable: false,
                                 render: function(data, type, row) {
+                                    // console.log(data);
                                     return '<div class="btn-group">' +
                                         '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editPengajar" value="' +
                                         data.idPengajaran + '">' +
                                         '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
                                         '<button type="button" class="btn btn-sm btn-alt-danger"  id="action-hapusPengajar" title="Delete" value="' +
-                                        data.idPengajaran + '" data-nama-pengajar="' + data.guru
-                                        .namaPegawai + '" data-kelas="' + data.kelasPengajar + '">' +
+                                        data.idPengajaran + '" data-nama-pengajar="' + data
+                                        .namaPengajar + '" data-kelas="' + data.kelasPengajar + '">' +
                                         '<i class="fa fa-fw fa-times"></i></button>' +
                                         '</div>';
                                 }
@@ -234,9 +224,9 @@
                         `<button type="submit" class="btn btn-primary" id="sub">Simpan</button>`);
 
                     btnInsert.click(function() {
-                        $('#idKelas').val(null).change();
                         $('#idPegawai').val(null).change();
                         $('#idMapel').val(null).change();
+                        getSelectMapel();
                     });
 
                     function getSelectKelas() {
@@ -247,10 +237,16 @@
                                 periode: $('#idPeriode').val()
                             },
                             success: function(data) {
-                                $('#idKelas').empty();
+                                // $('#idKelas').prepend(`<option value="" disabled selected>Pilih Kelas</option>`);
+                                $('#idKelas').find('option').not(':first').remove();
+                                // $('#idKelas').html('');
                                 $.each(data.kelas, function(i, item) {
+                                    var selected = '';
+                                    if (item.idKelas === $('#idKelas').val()) {
+                                        selected = 'selected';
+                                    }
                                     $('#idKelas').append(
-                                        `<option value="${item.idKelas}">Kelas ${item.namaKelas}</option>`
+                                        `<option value="${item.idKelas}" ${selected}>Kelas ${item.namaKelas}</option>`
                                     );
                                 });
                             },
@@ -260,9 +256,10 @@
                     function getSelectPegawai() {
                         $.ajax({
                             type: "GET",
-                            url: `{{ route('pegawai.select') }}`,
+                            url: `{{ url('pengajar/option/guru') }}`,
                             success: function(data) {
                                 $('#idPegawai').empty();
+                                $('#idPegawai').prepend(`<option disabled selected>Pilih Guru</option>`);
                                 $.each(data, function(i, item) {
                                     $('#idPegawai').append(
                                         `<option value="${item.idPegawai}">${item.nip} - ${item.namaPegawai}</option>`
@@ -281,7 +278,7 @@
                                 $('#idMapel_two').empty();
                                 $.each(data.mapel, function(i, item) {
                                     $('#idMapel').append(
-                                        `<option value="${item.idMapel}">${item.namaMapel}</option>`
+                                        `<option ${i<10 ? 'selected' : ''} value="${item.idMapel}">${item.namaMapel}</option>`
                                     );
                                     $('#idMapel_two').append(
                                         `<option value="${item.idMapel}">${item.namaMapel}</option>`
@@ -291,35 +288,42 @@
                         });
                     }
 
-                    select2('#idKelas', modalPengajar);
+                    function getSelectMapel_2() {
+                        $.ajax({
+                            type: "GET",
+                            url: `{{ route('pengajar.form') }}`,
+                            success: function(data) {
+                                $('#idMapel').empty();
+                                // $('#idMapel_two').empty();
+                                $.each(data.mapel, function(i, item) {
+                                    $('#idMapel').append(
+                                        `<option value="${item.idMapel}">${item.namaMapel}</option>`
+                                    );
+                                });
+                            },
+                        });
+                    }
+
+                    // select2('#idKelas', modalPengajar);
                     select2('#idPegawai', modalPengajar);
                     select2Multiple('#idMapel', modalPengajar);
                     select2('#idMapel_two', modalPengajar);
 
                     getSelectPegawai();
-                    getSelectKelas();
+                    // getSelectKelas();
 
-                    modalPengajar.on('show.bs.modal', function() {
-                        // $('#idKelas').val(null).trigger('change');
-                        // $('#idPegawai').val(null).trigger('change');
-                        getSelectMapel();
-                        $('#idPeriode').on('change', function() {
-                            getSelectKelas();
-                        });
+                    $('#idPeriode').on('change', function() {
+                        getSelectKelas();
                     });
 
                     modalPengajar.on('hidden.bs.modal', function() {
                         resetForm(formPengajar, function() {
                             $('#idMapel').val(null).change();
+                            $('#idKelas').val(null).change();
+                            // $('#idPeriode').prop('disabled', false);
+                            $('#mapel_two').prop('hidden', true);
+                            $('#multi_mapel').prop('hidden', false);
                         });
-                        $('#mapel_two').prop('hidden', true);
-                        $('#multi_mapel').prop('hidden', false);
-                    });
-
-                    $('#sub').on('click', function(e) {
-                        e.preventDefault();
-
-                        console.log($('#idMapel').val());
                     });
 
                     insertOrUpdateData(formPengajar, function() {
@@ -335,24 +339,30 @@
                         updateModals(modalPengajar_title, modalPengajar_btn, 'Ubah Pengajar',
                             `<button type="submit" class="btn btn-primary">Simpan</button>`);
 
+                        formPengajar.attr('action', `{{ url('pengajar/update/${id}') }}`);
+                        method.val('PUT');
                         $('#idMapel_two').val(null).trigger('change');
 
                         $('#mapel_two').prop('hidden', false);
                         $('#multi_mapel').prop('hidden', true);
-
-                        formPengajar.attr('action', `{{ url('pengajar/update/${id}') }}`);
-                        method.val('PUT');
-
+                        // $('#idPeriode').prop('disabled', true);
+                        getSelectMapel();
                         $.ajax({
                             type: "GET",
                             url: `{{ url('pengajar/edit/${id}') }}`,
                             success: function(response) {
+                                // console.log(response.data);
                                 $('#idPeriode').val(response.data.idPeriode).trigger('change');
                                 setTimeout(function() {
                                     $('#idKelas').val(response.data.idKelas).trigger('change');
-                                }, 1000);
+                                }, 500);
                                 $('#idPegawai').val(response.data.idPegawai).trigger('change');
                                 $('#idMapel_two').val(response.data.idMapel).trigger('change');
+
+                                // $.each(response.data, function(i, item) {
+                                //     $('#idMapel').val(item.mapelDiampu).change();
+                                // });
+
                             },
                         });
                     });
@@ -372,7 +382,8 @@
                             cancelButtonText: 'Batal',
                             confirmButtonColor: '#3085d6',
                             cancelButtonColor: '#d33',
-                            confirmButtonText: 'Ya, Hapus!'
+                            confirmButtonText: 'Ya, Hapus!',
+                            reverseButtons: true
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 $.ajax({

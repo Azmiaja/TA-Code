@@ -52,10 +52,10 @@
                             <div class="col-md-6">
                                 <label class="form-label" for="tanggalLahir">Tanggal Lahir <span
                                     class="text-danger fs-sm">*</span></label>
-                                <input type="date" class="form-control" id="tanggalLahir" name="tanggalLahir"
+                                <input type="text" class="form-control" id="tanggalLahir" name="tanggalLahir"
                                     placeholder="Tanggal Lahir Siswa" required>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label class="form-label" for="jenisKelamin">Jenis Kelamin</label>
                                 <select name="jenisKelamin" id="jenisKelamin" class="form-select">
                                     <option value="" disabled selected>Pilih Jenis Kelamin</option>
@@ -63,7 +63,7 @@
                                     <option value="Perempuan">Perempuan</option>
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label class="form-label" for="agama">Agama</label>
                                 <select name="agama" id="agama" class="form-select add-agama">
                                     <option value="" disabled selected>Pilih Agama</option>
@@ -74,13 +74,18 @@
                                     <option value="Budha">Budha</option>
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label class="form-label" for="status">Status</label>
                                 <select name="status" id="status" class="form-select">
                                     <option value="" disabled selected>Pilih Status</option>
                                     <option value="Aktif">Aktif</option>
                                     <option value="Tidak Aktif">Tidak Aktif</option>
                                 </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="tahunMasuk">Tahun Angkatan <span
+                                    class="text-danger fs-sm">*</span></label>
+                                <input type="text" class="form-control" id="tahunMasuk" name="tahunMasuk" placeholder="Masukan Tahun Masuk Siswa" required>
                             </div>
                             <div class="col-md-12 mb-4">
                                 <label class="form-label" for="alamat">Alamat</label>

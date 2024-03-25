@@ -30,8 +30,9 @@ class SiswaController extends Controller
         $data = $data->map(function ($item, $key) {
             $item['nomor'] = $key + 1;
             $item['nama'] = $item->namaSiswa;
-            $item['ttl'] = $item->tempatLahir && $item->tanggalLahir ? $item->tempatLahir . ', ' . Carbon::createFromFormat('Y-m-d', $item->tanggalLahir)->format('d-m-Y') : null;
+            $item['ttl'] = $item->tempatLahir || $item->tanggalLahir ? $item->tempatLahir . ', ' . Carbon::createFromFormat('Y-m-d', $item->tanggalLahir)->format('d-m-Y') : '-';
             $item['status'] = $item->status === 'Aktif' ? '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-success-light text-success">' . $item->status . '</span>' : '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-danger-light text-danger">' . $item->status . '</span>';
+            $item['angkatan'] = $item->tahunMasuk ? $item->tahunMasuk : '-';
             return $item;
         });
         return response()->json(['data' => $data]);
@@ -45,39 +46,45 @@ class SiswaController extends Controller
 
     public function store(Request $request)
     {
-        $siswa = new Siswa;
+        try {
 
-        $siswa->nisn = $request->input('nisn');
-        $siswa->nis = $request->input('nis');
-        $siswa->namaSiswa = $request->input('namaSiswa');
-        $siswa->panggilan = $request->input('namaPanggilan');
-        $siswa->tempatLahir = $request->input('tempatLahir');
-        $siswa->tanggalLahir = $request->input('tanggalLahir');
-        $siswa->jenisKelamin = $request->input('jenisKelamin');
-        $siswa->agama = $request->input('agama');
-        $siswa->status = $request->input('status');
-        $siswa->alamat = $request->input('alamat');
-        $siswa->namaAyah = $request->input('namaAyah');
-        $siswa->pekerjaanAyah = $request->input('pekerjaanAyah');
-        $siswa->noTlpAyah = $request->input('noTlpAyah');
-        $siswa->alamatAyah = $request->input('alamatAyah');
-        $siswa->namaIbu = $request->input('namaIbu');
-        $siswa->pekerjaanIbu = $request->input('pekerjaanIbu');
-        $siswa->noTlpIbu = $request->input('noTlpIbu');
-        $siswa->alamatIbu = $request->input('alamatIbu');
-        $siswa->namaWali = $request->input('namaWali');
-        $siswa->pekerjaanWali = $request->input('pekerjaanWali');
-        $siswa->noTlpWali = $request->input('noTlpWali');
-        $siswa->alamatWali = $request->input('alamatWali');
+            $siswa = new Siswa;
+
+            $siswa->nisn = $request->input('nisn');
+            $siswa->nis = $request->input('nis');
+            $siswa->namaSiswa = $request->input('namaSiswa');
+            $siswa->panggilan = $request->input('namaPanggilan');
+            $siswa->tempatLahir = $request->input('tempatLahir');
+            $siswa->tanggalLahir = Carbon::createFromFormat('d/m/Y', $request->input('tanggalLahir'))->format('Y-m-d');
+            $siswa->tahunMasuk = $request->input('tahunMasuk');
+            $siswa->jenisKelamin = $request->input('jenisKelamin');
+            $siswa->agama = $request->input('agama');
+            $siswa->status = $request->input('status');
+            $siswa->alamat = $request->input('alamat');
+            $siswa->namaAyah = $request->input('namaAyah');
+            $siswa->pekerjaanAyah = $request->input('pekerjaanAyah');
+            $siswa->noTlpAyah = $request->input('noTlpAyah');
+            $siswa->alamatAyah = $request->input('alamatAyah');
+            $siswa->namaIbu = $request->input('namaIbu');
+            $siswa->pekerjaanIbu = $request->input('pekerjaanIbu');
+            $siswa->noTlpIbu = $request->input('noTlpIbu');
+            $siswa->alamatIbu = $request->input('alamatIbu');
+            $siswa->namaWali = $request->input('namaWali');
+            $siswa->pekerjaanWali = $request->input('pekerjaanWali');
+            $siswa->noTlpWali = $request->input('noTlpWali');
+            $siswa->alamatWali = $request->input('alamatWali');
 
 
-        $siswa->save();
+            $siswa->save();
 
-        return response()->json([
-            'status' => 'success',
-            'title' => 'Sukses',
-            'message' => 'Berhasil menyimpan data.'
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Sukses',
+                'message' => 'Berhasil menyimpan data.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+        }
     }
 
     public function edit($id)
@@ -101,7 +108,8 @@ class SiswaController extends Controller
             $siswa->namaSiswa = $request->input('namaSiswa');
             $siswa->panggilan = $request->input('namaPanggilan');
             $siswa->tempatLahir = $request->input('tempatLahir');
-            $siswa->tanggalLahir = $request->input('tanggalLahir');
+            $siswa->tanggalLahir = Carbon::createFromFormat('d/m/Y', $request->input('tanggalLahir'))->format('Y-m-d');
+            $siswa->tahunMasuk = $request->input('tahunMasuk');
             $siswa->jenisKelamin = $request->input('jenisKelamin');
             $siswa->agama = $request->input('agama');
             $siswa->status = $request->input('status');
@@ -128,12 +136,6 @@ class SiswaController extends Controller
             ]);
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 'error',
-                'title' => 'Gagal',
-                'message' => 'Error storing data.'  . $e->getMessage(),
-            ], 422);
         }
     }
 
@@ -185,13 +187,13 @@ class SiswaController extends Controller
             return response()->json([
                 'status' => 'error',
                 'title' => 'Import Gagal',
-                'message' => 'Error storing data.'  . $e->getMessage(),
+                'message' => 'Terjadi kesalahan saat import data.',
             ], 422);
         }
     }
 
     public function exportSiswa()
     {
-        return Excel::download(new SiswaExport, 'data-siswa.xlsx');
+        return Excel::download(new SiswaExport, 'Data Siswa.xlsx');
     }
 }

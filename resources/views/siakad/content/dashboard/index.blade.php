@@ -80,17 +80,9 @@
                                             disabled>
                                             {{-- <option value="" disabled selected>Pilih Periode</option> --}}
                                             @foreach ($periode as $item)
-                                                @php
-                                                    $today = now();
-                                                    $startDate = \Carbon\Carbon::parse($item->tanggalMulai);
-                                                    $endDate = \Carbon\Carbon::parse($item->tanggalSelesai);
-
-                                                    $selected =
-                                                        $startDate <= $today && $today <= $endDate ? 'selected' : '';
-                                                @endphp
-                                                <option value="{{ $item->idPeriode }}" {{ $selected }}>
+                                                <option value="{{ $item->idPeriode }}">
                                                     Semester
-                                                    {{ $item->semester }}/{{ \Carbon\Carbon::parse($item->tanggalMulai)->format('Y') }}
+                                                    {{ $item->semester }} {{ $item->tahun }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -101,22 +93,23 @@
                                         <div class="row g-3 mb-0 pt-1">
                                             <div class="col-md-7 text-md-start text-center">
                                                 <div class="btn-group" role="group" aria-label="Horizontal Alternate Info">
-                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas active"
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-danger btn_kelas active"
                                                         value="1">Kelas
                                                         1</button>
-                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
                                                         value="2">Kelas
                                                         2</button>
-                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
                                                         value="3">Kelas
                                                         3</button>
-                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
                                                         value="4">Kelas
                                                         4</button>
-                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
                                                         value="5">Kelas
                                                         5</button>
-                                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas"
+                                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
                                                         value="6">Kelas
                                                         6</button>
                                                 </div>
@@ -151,8 +144,8 @@
                 </div>
                 <div class="col-lg-3 col-12">
                     <div class="block block-rounded">
-                        <div class="block-content block-content-full ratio ratio-1x1">
-
+                        <div class="block-content block-content-full">
+                            <div id="chart_pengguna"></div>
                         </div>
                         <div class="bg-body-light rounded-bottom">
                             <span class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex">
@@ -635,7 +628,8 @@
             <script>
                 $(document).ready(function() {
                     const tabelViewJadwal = $('#tabel-JPSiswa');
-                    var table = tabelViewJadwal.DataTable({
+                    const chartUser = $('#chart_pengguna');
+                    tabelViewJadwal.DataTable({
                         processing: true,
                         ajax: {
                             url: '{!! route('get-jadwal.siswa') !!}',
@@ -648,37 +642,37 @@
                         columns: [{
                                 data: 'waktu',
                                 name: 'waktu',
-                                className: 'text-center'
+                                className: 'text-center fs-sm px-0'
                             },
                             {
                                 data: 'Senin',
                                 name: 'Senin',
-                                className: 'text-center'
+                                className: 'text-center fs-sm px-0'
                             },
                             {
                                 data: 'Selasa',
                                 name: 'Selasa',
-                                className: 'text-center'
+                                className: 'text-center fs-sm px-0'
                             },
                             {
                                 data: 'Rabu',
                                 name: 'Rabu',
-                                className: 'text-center'
+                                className: 'text-center fs-sm px-0'
                             },
                             {
                                 data: 'Kamis',
                                 name: 'Kamis',
-                                className: 'text-center'
+                                className: 'text-center fs-sm px-0'
                             },
                             {
                                 data: 'Jumat',
                                 name: 'Jumat',
-                                className: 'text-center'
+                                className: 'text-center fs-sm px-0'
                             },
                             {
                                 data: 'Sabtu',
                                 name: 'Sabtu',
-                                className: 'text-center'
+                                className: 'text-center fs-sm px-0'
                             },
                         ],
                         dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-7'><'col-12 col-sm-12 col-md-5 text-md-end'B>>" +
@@ -703,7 +697,6 @@
                         searching: false,
                         info: false,
                     });
-                    $('.btn_kelas.active');
                     $('#btn_print_jadwal').on('click', function() {
                         $('.buttons-print').click();
                     })
@@ -718,6 +711,91 @@
                         // Muat ulang data tabel
                         tabelViewJadwal.DataTable().ajax.reload();
                     });
+
+                    function renderChart(chartElement, chartOptions) {
+                        var chart = new ApexCharts(document.querySelector(chartElement), chartOptions);
+                        chart.render();
+                    }
+
+                    var options = {
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        plotOptions: {
+                            pie: {
+                                donut: {
+                                    labels: {
+                                        show: true,
+                                        name: {
+                                            show: true,
+                                        },
+                                        value: {
+                                            show: true,
+                                            text: '100',
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        chart: {
+                            width: '100%',
+                            height: '290px',
+                            type: 'donut',
+                            offsetY: 0,
+                            redrawOnParentResize: true,
+                            redrawOnWindowResize: true
+                        },
+                        series: [],
+                        labels: [],
+                        legend: {
+                            show: true,
+                            position: 'bottom',
+                        },
+                        plotOptions: {
+                            pie: {
+                                donut: {
+                                    labels: {
+                                        show: true,
+                                        total: {
+                                            show: true,
+                                            showAlways: true,
+                                            formatter: function(w) {
+                                                return w.globals.seriesTotals.reduce((a, b) => {
+                                                    return a + b
+                                                }, 0)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    };
+
+                    // renderChart('#chart_pengguna', options);
+
+                    // Fetch data from server
+                    var url = `{{ route('chart.pengguna') }}`;
+                    $.getJSON(url, function(response) {
+                        console.log(response);
+                        chart.updateSeries([{
+                            name: 'Sales',
+                            data: response
+                        }])
+                    });
+
+                    // getPengjar();
+
+                    function getPengjar() {
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ route('chart.pengguna') }}",
+                            success: function(data) {
+                                console.log(data);
+                            }
+                        });
+                    }
+
+
                 });
             </script>
             @cannot('guru')
@@ -826,7 +904,7 @@
                             url: "{{ url('chart/donat/user') }}",
                             method: 'GET',
                             success: function(data) {
-                                console.log(data);
+                                // console.log(data);
 
                                 var ctx = document.getElementById('chart_donut_jumlah_user').getContext('2d');
                                 var chart = new Chart(ctx, {

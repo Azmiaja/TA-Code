@@ -88,7 +88,7 @@
                 columns: [{
                     data: 'nomor',
                     name: 'nomor',
-                    className: 'text-center fw-bold'
+                    className: 'text-center'
                 }, {
                     data: 'mapel',
                     name: 'mapel'
@@ -167,7 +167,8 @@
                     cancelButtonText: 'Batal',
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, Hapus!'
+                    confirmButtonText: 'Ya, Hapus!',
+                    riverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({

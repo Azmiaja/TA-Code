@@ -14,6 +14,7 @@ use App\Models\userSiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -45,7 +46,7 @@ class HomeController extends Controller
 
         $jumlahUser = $jumlahUserPegawai + $jumlahUserSiswa;
 
-        
+
 
 
 
@@ -54,6 +55,18 @@ class HomeController extends Controller
             'sub_judul' => 'Dashboard',
             'text_singkat' => 'Selamat datang <a href="' . route('profil_pengguna.index') . '" class="fw-semibold">' . auth()->user()->pegawai->namaPegawai . '</a>, di SIAKAD SD Negeri Lemahbang',
         ]);
+    }
+
+    public function chart()
+    {
+        try {
+            $data = User::where('hakAkses', 'Admin')->count();
+
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            Log::error('Error updating data: ' . $e->getMessage());
+        }
     }
 
     public function getDataKalenderJadwal(Request $request)

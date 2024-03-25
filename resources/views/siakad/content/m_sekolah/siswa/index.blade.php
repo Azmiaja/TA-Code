@@ -33,9 +33,10 @@
                                 <th style="width: 5%;">No</th>
                                 <th style="width: 14%;">NIS</th>
                                 <th>Nama</th>
-                                <th style="width: 18%;">Tempat, Tgl Lahir</th>
-                                <th style="width: 16%;">Jenis Kelamin</th>
-                                <th style="width: 10%;">Status</th>
+                                <th style="width: 13%;">Tempat, Tgl Lahir</th>
+                                <th style="width: 14%;">Jenis Kelamin</th>
+                                <th style="width: 8%;">Status</th>
+                                <th style="width: 8%;">Angkatan</th>
                                 <th style="width: 10%;">Aksi</th>
                             </tr>
                         </thead>
@@ -91,7 +92,8 @@
                         cancelButtonText: 'Batal',
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, Hapus!'
+                        confirmButtonText: 'Ya, Hapus!',
+                        reverseButtons: true,
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
@@ -100,9 +102,11 @@
                                 dataType: 'json',
                                 success: function(response) {
                                     Swal.fire({
-                                        icon: 'success',
-                                        title: 'Dihapus!',
+                                        icon: response.status,
+                                        title: response.title,
                                         text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
                                     });
                                     tabel.DataTable().ajax.reload();
                                 }
@@ -111,11 +115,24 @@
                     });
                 });
 
+                new AirDatepicker('#tanggalLahir', {
+                    container: '#modalSiswa',
+                    autoClose: true,
+                });
+                new AirDatepicker('#tahunMasuk', {
+                    container: '#modalSiswa',
+                    autoClose: true,
+                    view: 'years',
+                    minView: 'years',
+                    dateFormat: 'yyyy'
+                });
+
 
                 btnInsert.click(function(e) {
                     e.preventDefault();
                     modal.modal('show');
-                    updateModal('Tambah Data Siswa', `<button type="submit" class="btn btn-primary">Simpan</button>`)
+                    updateModal('Tambah Data Siswa',
+                        `<button type="submit" class="btn btn-primary">Simpan</button>`)
                 });
 
                 form.submit(function(e) {
@@ -167,6 +184,10 @@
                         }, {
                             data: 'status',
                             className: 'text-center',
+                        }, {
+                            data: 'angkatan',
+                            name: 'angkatan',
+                            className: 'text-center',
                         },
                         {
                             data: null,
@@ -195,7 +216,8 @@
                     e.preventDefault();
                     var idSiswa = $(this).val();
                     modal.modal('show');
-                    updateModal('Ubah Data Siswa', `<button type="submit" class="btn btn-primary" id="btn-editSiswa">Simpan</button>`);
+                    updateModal('Ubah Data Siswa',
+                        `<button type="submit" class="btn btn-primary" id="btn-editSiswa">Simpan</button>`);
 
                     method.val('PUT');
                     form.attr('action', `{{ url('siswa/update/${idSiswa}') }}`);
@@ -213,7 +235,9 @@
                             $('#namaSiswa').val(response.siswa.namaSiswa);
                             $('#namaPanggilan').val(response.siswa.panggilan);
                             $('#tempatLahir').val(response.siswa.tempatLahir);
-                            $('#tanggalLahir').val(response.siswa.tanggalLahir);
+                            $('#tanggalLahir').val(moment(response.siswa.tanggalLahir).format(
+                                'DD/MM/YYYY'));
+                            $('#tahunMasuk').val(response.siswa.tahunMasuk);
                             $('#alamat').val(response.siswa.alamat);
                             $('#jenisKelamin').val(response.siswa.jenisKelamin);
                             $('#agama').val(response.siswa.agama);
@@ -270,13 +294,14 @@
 
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        html: `Menghapus data <b>${namaSiswa}</b> akan menghapus data <b>User</b>-nya juga`,
+                        html: `Menghapus data <b>${namaSiswa}</b> akan menghapus data lain yang terkait.`,
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonText: 'Batal',
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, Hapus!'
+                        confirmButtonText: 'Ya, Hapus!',
+                        reverseButtons: true,
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
@@ -311,6 +336,16 @@
                     var data = new FormData(formImport[0]);
                     var url = formImport.attr('action');
 
+                    // Tampilkan SweetAlert untuk menunjukkan proses loading
+                    Swal.fire({
+                        title: 'Mohon tunggu...',
+                        text: 'Proses impor data sedang berlangsung.',
+                        timerProgressBar: true,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
                     $.ajax({
                         url: url,
                         type: 'POST',
@@ -318,6 +353,7 @@
                         contentType: false,
                         processData: false,
                         success: function(response) {
+                            Swal.close();
                             Swal.fire({
                                 icon: response.status,
                                 title: response.title,
@@ -343,10 +379,49 @@
                         cancelButtonText: 'Batal',
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, Export!'
+                        confirmButtonText: 'Ya, Export!',
+                        reverseButtons: true,
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = '{{ route('siswa.export') }}';
+                            // window.location.href = '{{ route('siswa.export') }}';
+                            Swal.fire({
+                                title: 'Mohon tunggu...',
+                                text: 'Proses export data sedang berlangsung.',
+                                timerProgressBar: true,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+
+                            // Kirim permintaan unduhan ke server menggunakan AJAX
+                            $.ajax({
+                                url: '{{ route('siswa.export') }}',
+                                type: 'GET',
+                                xhrFields: {
+                                    responseType: 'blob' // Mengindikasikan respons akan berupa blob (file)
+                                },
+                                success: function(blob) {
+                                    Swal
+                                        .close(); // Tutup SweetAlert setelah proses export selesai
+                                    const url = window.URL.createObjectURL(new Blob([
+                                        blob
+                                    ]));
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download =
+                                        'Data Siswa.xlsx'; // Nama file yang akan diunduh
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    window.URL.revokeObjectURL(url);
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Export Sukses',
+                                        text: 'Export data siswa berhasil.',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                },
+                            });
                         }
                     });
                 });

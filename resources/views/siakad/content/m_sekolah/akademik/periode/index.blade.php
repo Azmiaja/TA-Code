@@ -21,6 +21,7 @@
                                 <th style="width: 25%;">Semester</th>
                                 <th style="width: 25%;">Tanggal Mulai</th>
                                 <th style="width: 25%;">Tanggal Selesai</th>
+                                <th style="width: 10%;">Status</th>
                                 <th style="width: 10%;">Aksi</th>
                             </tr>
                         </thead>
@@ -51,8 +52,8 @@
                         name: 'nomor',
                         className: 'text-center'
                     }, {
-                        data: 'semester',
-                        name: 'semester',
+                        data: 'semesterTahun',
+                        name: 'semesterTahun',
                         className: 'text-center'
                     }, {
                         data: 'tanggalMulai',
@@ -61,6 +62,10 @@
                     }, {
                         data: 'tanggalSelesai',
                         nema: 'tanggalSelesai',
+                        className: 'text-center'
+                    }, {
+                        data: 'status',
+                        nema: 'status',
                         className: 'text-center'
                     }, {
                         data: null,
@@ -72,9 +77,8 @@
                                 data.idPeriode + '">' +
                                 '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
                                 '<button type="button" class="btn btn-sm btn-alt-danger" id="action-hapusPeriode" title="Delete" value="' +
-                                data.idPeriode + '" data-semester="' + data.semester +
-                                '" data-mulai="' + data
-                                .tanggalMulai + '" data-selesai="' + data.tanggalSelesai + '">' +
+                                data.idPeriode + '" data-semester="' + data.semesterTahun +
+                                '">' +
                                 '<i class="fa fa-fw fa-times"></i></button>' +
                                 '</div>';
                         }
@@ -98,12 +102,25 @@
                         `<button type="submit" class="btn btn-primary btn-tambah" id="btn-tambahPeriode">Simpan</button>`
                     );
                     form.attr('action', '{{ route('periode.store') }}');
+                    method.val('POST');
+                });
+
+                modal.on('hidden.bs.modal', function() {
+                    form.trigger('reset');
                 });
 
                 // STORE DATA
                 form.submit(function(e) {
                     e.preventDefault();
                     var data = new FormData(form[0]);
+                    var dd = {
+                        tahun: $('#tahun').val(),
+                        status: $('#status').val(),
+                        semester: $('#semester').val(),
+                        tanggalMuali: $('#tanggalMulai').val(),
+                        tanggalSelesai: $('#tanggalSelesai').val(),
+                    };
+                    console.log(dd);
                     $.ajax({
                         type: "POST",
                         url: form.attr('action'),
@@ -124,6 +141,17 @@
                         },
                     });
                 });
+
+                new AirDatepicker('#tahun', {
+                    container: '#modalPeriode',
+                    autoClose: true,
+                    view: 'years',
+                    minView: 'years',
+                    dateFormat: 'yyyy',
+                    range: true,
+                    multipleDatesSeparator: '/',
+                });
+
 
                 new AirDatepicker('#tanggalMulai', {
                     container: '#modalPeriode',
@@ -149,8 +177,12 @@
                         url: `{{ url('periode/edit/${idPeriode}') }}`,
                         success: function(response) {
                             $('#semester').val(response.periode.semester);
-                            $('#tanggalMulai').val(moment(response.periode.tanggalMulai).format('DD/MM/YYYY'));
-                            $('#tanggalSelesai').val(moment(response.periode.tanggalSelesai).format('DD/MM/YYYY'));
+                            $('#tanggalMulai').val(moment(response.periode.tanggalMulai).format(
+                                'DD/MM/YYYY'));
+                            $('#tanggalSelesai').val(moment(response.periode.tanggalSelesai).format(
+                                'DD/MM/YYYY'));
+                            $('#tahun').val(response.periode.tahun);
+                            $('#status').val(response.periode.status);
                         },
                     });
                 });
@@ -186,18 +218,17 @@
                     e.preventDefault();
                     var idPeriode = $(this).val();
                     var smt = $(this).data('semester');
-                    var mulai = $(this).data('mulai');
-                    var selesai = $(this).data('selesai');
 
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        html: `Menghapus data <b>Semester ${smt}</b><br><b>${mulai}/${selesai}</b><br>`,
+                        html: `Menghapus data <b>${smt}</b> dapat berpengaruh pada data lain yang terkait.`,
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonText: 'Batal',
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, Hapus!'
+                        confirmButtonText: 'Ya, Hapus!',
+                        reverseButtons: true,
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({

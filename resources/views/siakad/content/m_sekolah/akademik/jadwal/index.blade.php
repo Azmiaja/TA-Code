@@ -9,16 +9,9 @@
                     <div class="block-options">
                         <select name="periode" id="periode" class="form-select form-select-sm">
                             @foreach ($periode as $item)
-                                @php
-                                    $today = now();
-                                    $startDate = \Carbon\Carbon::parse($item->tanggalMulai);
-                                    $endDate = \Carbon\Carbon::parse($item->tanggalSelesai);
-
-                                    $selected = $startDate <= $today && $today <= $endDate ? 'selected' : '';
-                                @endphp
-                                <option value="{{ $item->idPeriode }}" {{ $selected }}>
+                                <option value="{{ $item->idPeriode }}">
                                     Semester
-                                    {{ $item->semester }}/{{ \Carbon\Carbon::parse($item->tanggalMulai)->format('Y') }}
+                                    {{ $item->semester }} {{ $item->tahun }}
                                 </option>
                             @endforeach
                         </select>
@@ -29,18 +22,18 @@
                         <div class="row g-3 pb-3 pt-1">
                             <div class="col-md-6 text-md-start text-center">
                                 <div class="btn-group" role="group" aria-label="Horizontal Alternate Info">
-                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas active"
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas active"
                                         value="1">Kelas
                                         1</button>
-                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas" value="2">Kelas
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="2">Kelas
                                         2</button>
-                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas" value="3">Kelas
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="3">Kelas
                                         3</button>
-                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas" value="4">Kelas
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="4">Kelas
                                         4</button>
-                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas" value="5">Kelas
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="5">Kelas
                                         5</button>
-                                    <button type="button" class="btn btn-sm btn-alt-warning btn_kelas" value="6">Kelas
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="6">Kelas
                                         6</button>
                                 </div>
                             </div>
@@ -101,20 +94,13 @@
                             <input type="hidden" name="idJadwal" id="idJadwal">
                             <div class="mb-3">
                                 <label class="form-label" for="idPeriode">Semester</label>
-                                <select name="idPeriode" id="idPeriode" class="form-select"
-                                    data-placeholder="Pilih Periode" required>
+                                <select name="idPeriode" id="idPeriode" class="form-select" data-placeholder="Pilih Periode"
+                                    required>
                                     <option value="" disabled selected>Pilih Periode</option>
                                     @foreach ($periode as $item)
-                                        @php
-                                            $today = now();
-                                            $startDate = \Carbon\Carbon::parse($item->tanggalMulai);
-                                            $endDate = \Carbon\Carbon::parse($item->tanggalSelesai);
-
-                                            $selected = $startDate <= $today && $today <= $endDate ? 'selected' : '';
-                                        @endphp
                                         <option value="{{ $item->idPeriode }}">
                                             Semester
-                                            {{ $item->semester }}/{{ \Carbon\Carbon::parse($item->tanggalMulai)->format('Y') }}
+                                            {{ $item->semester }} {{ $item->tahun }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -128,7 +114,8 @@
                             </div>
                             <div class="mb-3" id="map_1">
                                 <label class="form-label" for="idPengajaran">Mapel</label>
-                                <select name="idPengajaran" id="idPengajaran" class="form-select" data-placeholder="Pilih Mapel">
+                                <select name="idPengajaran" id="idPengajaran" class="form-select"
+                                    data-placeholder="Pilih Mapel">
                                 </select>
                             </div>
                             <div class="row g-3 mb-3">
@@ -262,6 +249,11 @@
                         tabelJadwal.DataTable().ajax.reload();
                     });
 
+                    $('#periode').on('change', function() {
+                        tabelJadwal.DataTable().ajax.reload();
+
+                    });
+
                     tabelJadwal.DataTable({
                         processing: true,
                         ajax: {
@@ -273,9 +265,12 @@
                             }
                         },
                         columns: [{
-                                data: 'nomor',
+                                data: null,
                                 name: 'nomor',
                                 className: 'text-center',
+                                render: function(data, type, row, meta) {
+                                    return meta.row + 1;
+                                }
                             },
                             {
                                 data: 'kelasMapel',
@@ -345,7 +340,7 @@
                             }
                         ],
                         order: [
-                            [2, 'desc']
+                            [0, 'asc']
                         ],
                         dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'><'col-12 col-sm-12 col-md-6'f>>" +
                             "<'row my-2 '<'col-12 col-sm-12'tr>>" +
@@ -416,7 +411,7 @@
                     });
 
 
-                    
+
 
                 });
             </script>

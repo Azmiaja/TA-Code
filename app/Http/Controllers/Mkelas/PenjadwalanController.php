@@ -42,6 +42,49 @@ class PenjadwalanController extends Controller
     {
         try {
 
+            // $periode = $request->input('periode');
+            // $kelas = $request->input('kelas_id');
+
+            // $query = Jadwal::with('pengajaran.mapel')
+            //     ->when(!empty($kelas), function ($query) use ($kelas) {
+            //         $query->whereHas('kelas', function ($subQuery) use ($kelas) {
+            //             $subQuery->where('namaKelas', $kelas);
+            //         });
+            //     })
+            //     ->when(!empty($periode), function ($query) use ($periode) {
+            //         $query->where('idPeriode', $periode);
+            //     });
+
+            // $data = $query->get();
+
+            // $data = $data->groupBy(function ($jadwal) {
+            //     return $jadwal->jamMulai . '-' . $jadwal->jamSelesai;
+            // })->map(function ($groupedData) {
+            //     $formattedData = [
+            //         'nomor' => $groupedData->keys()->first() + 1,
+            //         'Senin' => '-',
+            //         'Selasa' => '-',
+            //         'Rabu' => '-',
+            //         'Kamis' => '-',
+            //         'Jumat' => '-',
+            //         'Sabtu' => '-',
+            //         'waktu' => '',
+            //         'idJadwal' => $groupedData->first()->idJadwal,
+            //         'idPeriode' => $groupedData->first()->idPeriode,
+            //         'idKelas' => $groupedData->first()->idKelas,
+            //     ];
+
+            //     foreach ($groupedData as $item) {
+            //         $jamMulai = date('H:i', strtotime($item->jamMulai));
+            //         $jamSelesai = date('H:i', strtotime($item->jamSelesai));
+            //         $formattedData[$item->hari] = $item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-';
+            //         $formattedData['waktu'] = $jamMulai . ' - ' . $jamSelesai;
+            //     }
+
+            //     return $formattedData;
+            // });
+
+            // return DataTables::of($data)->toJson();
             $periode = $request->input('periode');
             $kelas = $request->input('kelas_id');
 
@@ -59,7 +102,7 @@ class PenjadwalanController extends Controller
                 $jamMulai = Carbon::parse($item->jamMulai);
                 $jamSelesai = Carbon::parse($item->jamSelesai);
                 $perbedaanMenit = $jamMulai->diffInMinutes($jamSelesai);
-                $item['nomor'] = $key + 1;
+                // $item['nomor'] = $key + 1;
                 $item['hari'] = $item->hari ? $item->hari : '-';
                 $item['kelasMapel'] = $item->kelas ? 'Kelas ' . $item->kelas->namaKelas : '-';
                 $item['mapel'] = $item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-';
@@ -182,31 +225,74 @@ class PenjadwalanController extends Controller
             $periode = $request->input('idPeriode');
             $kelas = $request->input('kelas');
 
-            $data = Jadwal::when(!empty($kelas), function ($query) use ($kelas) {
-                $query->whereHas('kelas', function ($subQuery) use ($kelas) {
-                    $subQuery->where('namaKelas', $kelas);
-                });
-            })
+            $query = Jadwal::with('pengajaran.mapel')
+                ->when(!empty($kelas), function ($query) use ($kelas) {
+                    $query->whereHas('kelas', function ($subQuery) use ($kelas) {
+                        $subQuery->where('namaKelas', $kelas);
+                    });
+                })
                 ->when(!empty($periode), function ($query) use ($periode) {
                     $query->where('idPeriode', $periode);
-                })
-                ->get();
+                });
 
-            $data = $data->map(function ($item, $key) {
-                $jamMulai = date('H:i', strtotime($item->jamMulai));
-                $jamSelesai = date('H:i', strtotime($item->jamSelesai));
-                $item['Senin'] = $item->hari === 'Senin' ? ($item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-') : '-';
-                $item['Selasa'] = $item->hari === 'Selasa' ? ($item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-') : '-';
-                $item['Rabu'] = $item->hari === 'Rabu' ? ($item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-') : '-';
-                $item['Kamis'] = $item->hari === 'Kamis' ? ($item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-') : '-';
-                $item['Jumat'] = $item->hari === 'Jumat' ? ($item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-') : '-';
-                $item['Sabtu'] = $item->hari === 'Sabtu' ? ($item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-') : '-';
-                $item['waktu'] = $jamMulai . ' - ' . $jamSelesai ?: '-';
-                return $item;
+            $data = $query->get();
+
+            $data = $data->groupBy(function ($jadwal) {
+                return $jadwal->jamMulai . '-' . $jadwal->jamSelesai;
+            })->map(function ($groupedData) {
+                $formattedData = [
+                    'nomor' => $groupedData->keys()->first() + 1,
+                    'Senin' => '-',
+                    'Selasa' => '-',
+                    'Rabu' => '-',
+                    'Kamis' => '-',
+                    'Jumat' => '-',
+                    'Sabtu' => '-',
+                    'waktu' => '',
+                    'idJadwal' => $groupedData->first()->idJadwal,
+                    'idPeriode' => $groupedData->first()->idPeriode,
+                    'idKelas' => $groupedData->first()->idKelas,
+                ];
+
+                foreach ($groupedData as $item) {
+                    $jamMulai = date('H:i', strtotime($item->jamMulai));
+                    $jamSelesai = date('H:i', strtotime($item->jamSelesai));
+                    $formattedData[$item->hari] = $item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-';
+                    $formattedData['waktu'] = $jamMulai . ' - ' . $jamSelesai;
+                }
+
+                return $formattedData;
             });
 
-
             return DataTables::of($data)->toJson();
+            // $periode = $request->input('idPeriode');
+            // $kelas = $request->input('kelas');
+
+            // $data = Jadwal::when(!empty($kelas), function ($query) use ($kelas) {
+            //     $query->whereHas('kelas', function ($subQuery) use ($kelas) {
+            //         $subQuery->where('namaKelas', $kelas);
+            //     });
+            // })
+            //     ->when(!empty($periode), function ($query) use ($periode) {
+            //         $query->where('idPeriode', $periode);
+            //     })
+            //     ->get();
+
+            // $data = $data->map(function ($item, $key) {
+            //     $jamMulai = date('H:i', strtotime($item->jamMulai));
+            //     $jamSelesai = date('H:i', strtotime($item->jamSelesai));
+            //     $item['Senin'] = $item->hari === 'Senin' ? ($item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-') : '-';
+            //     $item['Selasa'] = $item->hari === 'Selasa' ? ($item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-') : '-';
+            //     $item['Rabu'] = $item->hari === 'Rabu' ? ($item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-') : '-';
+            //     $item['Kamis'] = $item->hari === 'Kamis' ? ($item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-') : '-';
+            //     $item['Jumat'] = $item->hari === 'Jumat' ? ($item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-') : '-';
+            //     $item['Sabtu'] = $item->hari === 'Sabtu' ? ($item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '-') : '-';
+            //     $item['waktu'] = $jamMulai . ' - ' . $jamSelesai ?: '-';
+            //     return $item;
+            // });
+
+
+            // return DataTables::of($data)->toJson();
         } catch (\Exception $e) {
             Log::error('Error get data: ' . $e->getMessage());
             // Handle the exception here

@@ -91,19 +91,14 @@ Route::middleware(['auth:user,siswa'])->group(function () {
     Route::delete('profil-guru/destroy/{id}', [GuruProfilController::class, 'destroy'])->name('profil-guru.destroy');
     Route::post('profil-guru/store', [GuruProfilController::class, 'store'])->name('profil-guru.store');
 
-    // MASTER DATA
-    Route::get('data-kelas/get/guru', [KelasController::class, 'getGuru']);
-    Route::get('data-kelas/get/siswa', [KelasController::class, 'getSiswa']);
-
-    Route::get('periode/siswa/get-data', [KelasController::class, 'getPeriodeSiswa']);
-
+    
     // PERIODE
     Route::get('get-data/periode', [Mkelas\PeriodeController::class, 'getPeriode'])->name('get.periode');
     Route::post('periode/store', [Mkelas\PeriodeController::class, 'store'])->name('periode.store');
     Route::get('periode/edit/{id}', [Mkelas\PeriodeController::class, 'edit']);
     Route::put('periode/update/{id}', [Mkelas\PeriodeController::class, 'update']);
     Route::delete('periode/destroy/{id}', [Mkelas\PeriodeController::class, 'destroy']);
-
+    
     // NILAI SISWA
     Route::get('get-nilai-data', [NilaiSiswaController::class, 'getNilaiData'])->name('nilai.get-data');
     Route::get('nilai_siswa/edit/{id}/{idPengajaran}/{idPeriode}', [NilaiSiswaController::class, 'edit'])->name('nilai_siswa.edit');
@@ -114,16 +109,16 @@ Route::middleware(['auth:user,siswa'])->group(function () {
 
     // Get chart donut user
     Route::get('chart/donat/user', [HomeController::class, 'getChartDuser']);
-
+    
     // get chart bar pengajar per kelas
     Route::get('jumlah-pengajar-per-kelas/{periode}', [HomeController::class, 'jumlahPengajarPerKelas']);
 
     // get chart bar jenis kelamin
     Route::get('chart/jenis-kelamin', [HomeController::class, 'getChartJK']);
-
+    
     // jumlah siswa kelas
     Route::get('jumlah-siswa/{periode}', [HomeController::class, 'jumlahSiswa']);
-
+    
     // PENJADWALAN
     Route::get('penjadwalan/get-form', [Mkelas\PenjadwalanController::class, 'getForm']);
     Route::get('penjadwalan/get-data', [Mkelas\PenjadwalanController::class, 'getJPkelas1']);
@@ -131,20 +126,26 @@ Route::middleware(['auth:user,siswa'])->group(function () {
     Route::post('penjadwalan/store', [Mkelas\PenjadwalanController::class, 'store']);
     Route::put('penjadwalan/update/{id}', [Mkelas\PenjadwalanController::class, 'update']);
     Route::delete('penjadwalan/destroy/{id}', [Mkelas\PenjadwalanController::class, 'destroy']);
-
+    
     //manajemen guru kelas siswa
     Route::get('kelas/options', [KelasController::class, 'getOptions'])->name('get.kelas.options');
+    Route::get('/get-existing-classes/{id}', [KelasController::class, 'getExistingClasses'])->name('get-existing-classes');
 
+    
     Route::get('data-kelas/edit/guru/{id}', [KelasController::class, 'edit']);
     Route::put('data-kelas/update/guru/{id}', [KelasController::class, 'update']);
     Route::delete('data-kelas/destroy/guru/{id}', [KelasController::class, 'destroy']);
-
-    // manajemen siswa kelas
     Route::post('data-kelas/store/guru', [KelasController::class, 'store'])->name('data-kelas.store.guru');
-    Route::post('data-kelas/store/siswa', [KelasController::class, 'storeSiswa'])->name('data-kelas.store.siswa');
-    Route::get('data-kelas/edit/siswa/{id}', [KelasController::class, 'editSiswa']);
-    Route::put('data-kelas/update/siswa/{id}', [KelasController::class, 'updateSiswa']);
-    Route::delete('data-kelas/destroy/siswa/{id}', [KelasController::class, 'destroySiswa']);
+    Route::get('data-kelas/get/guru', [KelasController::class, 'getGuru']);
+    Route::get('data-kelas/option/guru/{id}', [KelasController::class, 'getGuruOption']);
+    
+    // manajemen siswa kelas
+    Route::get('data-kelas/get/siswa', [Mkelas\DataSiswaController::class, 'getSiswa']);
+    Route::post('data-kelas/store/siswa', [Mkelas\DataSiswaController::class, 'storeSiswa'])->name('data-kelas.store.siswa');
+    Route::get('data-kelas/edit/siswa/{id}', [Mkelas\DataSiswaController::class, 'editSiswa']);
+    Route::put('data-kelas/update/siswa/{id}', [Mkelas\DataSiswaController::class, 'updateSiswa']);
+    Route::delete('data-kelas/destroy/siswa/{id}', [Mkelas\DataSiswaController::class, 'destroySiswa']);
+    Route::get('data-kelas/option/siswa', [Mkelas\DataSiswaController::class, 'getSiswaOption']);
 
     // show kelas
     Route::get('data-kelas/kelas/form', [KelasController::class, 'getKelas'])->name('form.kelas');
@@ -177,6 +178,7 @@ Route::middleware(['auth:user,siswa'])->group(function () {
 
 Route::middleware(['auth:user'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'indexBeranda'])->name('dashboard.index');
+    Route::get('/chart/pengguna', [HomeController::class, 'chart'])->name('chart.pengguna');
 
     // Data master sekolah
     Route::prefix('data-master')->group(function () {
@@ -189,8 +191,10 @@ Route::middleware(['auth:user'])->group(function () {
             Route::resource('mapel', Mkelas\MapelController::class);
             Route::resource('pengajaran', Mkelas\PengajarController::class);
             Route::resource('penjadwalan', Mkelas\PenjadwalanController::class);
+            Route::get('data_siswa', [Mkelas\DataSiswaController::class, 'index'])->name('data_siswa.index');
         });
     });
+
     //manajemen profil sekolah
     Route::prefix('profil-sekolah')->group(function () {
         Route::get('berita', [Mcompany\BeritaController::class, 'index'])->name('berita.index');
@@ -202,6 +206,7 @@ Route::middleware(['auth:user'])->group(function () {
     // PENGAJARAN.BLADE
     Route::get('pengajar/get-data', [Mkelas\PengajarController::class, 'getPengajar']);
     Route::get('pengajar/get-form', [Mkelas\PengajarController::class, 'getForm'])->name('pengajar.form');
+    Route::get('pengajar/option/guru', [Mkelas\PengajarController::class, 'getPegawaiOption']);
     Route::post('pengajar/store', [Mkelas\PengajarController::class, 'store'])->name('pengajar.store');
     Route::get('pengajar/edit/{id}', [Mkelas\PengajarController::class, 'edit']);
     Route::put('pengajar/update/{id}', [Mkelas\PengajarController::class, 'update'])->name('pengajar.update');
@@ -264,6 +269,7 @@ Route::middleware(['auth:user'])->group(function () {
     Route::put('pegawai/update/{id}', [Muser\PegawaiController::class, 'update']);
     Route::delete('pegawai/destroy/{id}', [Muser\PegawaiController::class, 'destroy']);
     Route::get('pegawai/get-data', [Muser\PegawaiController::class, 'getData'])->name('pegawai.get-data');
+    Route::put('pegawai/ubah-image/{id}', [Muser\PegawaiController::class, 'storeFoto']);
 
     Route::get('get-jabatan', [Muser\JabatanController::class, 'getJabatan'])->name('get-jabatan');
     Route::get('get-jabatan/options', [Muser\JabatanController::class, 'getJabatanOptions'])->name('get-jabatan.options');

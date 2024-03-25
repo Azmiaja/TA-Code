@@ -21,6 +21,14 @@
                         @csrf
                         <input type="hidden" name="_method" id="method" value="POST">
                         <input type="hidden" name="idJabatan" id="idJ">
+                        <div class="mb-3 kategori-jabatan">
+                            <label for="jenis" class="form-label">Kategori</label>
+                            <select type="text" name="jenis" id="jenis" class="form-select" required>
+                                <option value="" selected disabled>Pilih Kategori</option>
+                                <option value="Guru">Guru</option>
+                                <option value="Tendik">Tenaga Kependidikan</option>
+                            </select>
+                        </div>
                         <div class="mb-3">
                             <label for="jabatan" class="form-label">Jabatan</label>
                             <input type="text" name="jabatan" id="jabatan" class="form-control" placeholder="Masukan Jabatan Pegawai" required>

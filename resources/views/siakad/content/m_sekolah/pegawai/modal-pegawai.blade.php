@@ -28,7 +28,7 @@
                                 <div class="mb-2">
                                     <label class="form-label" for="nip">NIP <span
                                             class="text-danger fs-sm">*</span></label>
-                                    <input type="text" class="form-control" id="nip" name="nip"
+                                    <input type="number" class="form-control" id="nip" name="nip"
                                         placeholder="Masukan NIP" required>
                                 </div>
                                 <!-- Nama Pegawai -->
@@ -74,7 +74,15 @@
                                     <select name="jenisPegawai" id="jenisPegawai" class="form-select" required>
                                         <option value="" selected disabled>Pilih Jenis Pegawai</option>
                                         <option value="Guru">Guru</option>
-                                        <option value="Tapen">Tenaga Pengajar</option>
+                                        <option value="Tendik">Tenaga Kependidikan</option>
+                                    </select>
+                                </div>
+                                <!-- Jabatan -->
+                                <div class="mb-2">
+                                    <label class="form-label" for="jabatan">Jabatan <span
+                                            class="text-danger fs-sm">*</span></label>
+                                    <select name="idJabatan" id="idJabatan" class="form-select">
+                                        <option value="" selected disabled>Pilih Jabatan</option>
                                     </select>
                                 </div>
                                 <!-- Agama -->
@@ -88,14 +96,6 @@
                                         <option value="Hindu">Hindu</option>
                                         <option value="Budha">Budha</option>
                                         <option value="Konghucu">Konghucu</option>
-                                    </select>
-                                </div>
-                                <!-- Jabatan -->
-                                <div class="mb-2">
-                                    <label class="form-label" for="jabatan">Jabatan <span
-                                            class="text-danger fs-sm">*</span></label>
-                                    <select name="idJabatan" id="idJabatan" class="form-select">
-                                        <option value="" selected disabled>Pilih Jabatan</option>
                                     </select>
                                 </div>
                                 <!-- No Handphone -->
@@ -114,7 +114,7 @@
                                         <option value="Tidak Aktif">Tidak Aktif</option>
                                     </select>
                                 </div>
-                                {{-- Gambar --}}
+                                {{-- Gambar
                                 <div class="mb-2">
                                     <label class="form-label" for="gambarPegawai">Gambar</label>
                                     <img src="" class="img-preview img-fluid rounded-2 col-12 mb-2"
@@ -127,7 +127,7 @@
                                                 class="fa-solid fa-file-image me-2"></i>Pilih
                                             File</button>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             <hr>
                             <div class="mb-2 text-end" id="bt-form-pegawai">
@@ -153,7 +153,7 @@
 
         function prevImg() {
 
-            imgPrev.style.display = 'block';
+            // imgPrev.style.display = 'block';
 
             oFReader.readAsDataURL(gambarPegawai.files[0]);
 
