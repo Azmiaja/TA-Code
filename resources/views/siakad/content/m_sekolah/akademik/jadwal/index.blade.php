@@ -354,7 +354,7 @@
                         var id = $(this).val();
                         modalJadwal.modal('show');
                         updateModals(modalJadwal_title, modalJadwal_btn, 'Ubah Jadwal',
-                            `<button type="submit" class="btn btn-primary">Sumpan</button>`);
+                            `<button type="submit" class="btn btn-primary">Simpan</button>`);
                         formJadwal.attr('action', `{{ url('penjadwalan/update/${id}') }}`);
                         method.val('PUT');
 
@@ -388,7 +388,8 @@
                             cancelButtonText: 'Batal',
                             confirmButtonColor: '#3085d6',
                             cancelButtonColor: '#d33',
-                            confirmButtonText: 'Ya, Hapus!'
+                            confirmButtonText: 'Ya, Hapus!',
+                            reverseButtons: true
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 $.ajax({
