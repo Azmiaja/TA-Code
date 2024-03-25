@@ -442,12 +442,8 @@
                             $(status).val(response.data.status);
                             jenisPegawai.val(response.data.jenisPegawai).change();
                             setTimeout(() => {
-                                // $(idJabatan).val(response.data.idJabatan);
-                                $(idJabatan).val(response.data.idJabatan);
-                                // $(idJabatan).append(
-                                //     `<option value="${response.data.jabatan_pegawai.idJabatan} selected">${response.data.jabatan_pegawai.jabatan}</option>`
-                                //     ).change();
-                            }, 500);
+                                $(idJabatan).val(response.data.idJabatan).change();
+                            }, 300);
                             if (response.data.gambar == null) {
                                 imgPrev.src = '';
                             } else {
