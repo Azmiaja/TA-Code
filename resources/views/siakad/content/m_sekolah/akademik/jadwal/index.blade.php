@@ -366,7 +366,10 @@
                                 setTimeout(function() {
                                     $('#idKelas').val(response.jadwal.idKelas).change();
                                 }, 500);
-                                $('#idPengajaran').val(response.jadwal.idPengajaran).change();
+                                setTimeout(() => {
+                                    $('#idPengajaran').val(response.jadwal.idPengajaran)
+                                    .change();
+                                }, 1000);
                                 $('#hari').val(response.jadwal.hari);
                                 $('#jamMulai').val(response.jadwal.jamMulai);
                                 $('#jamSelesai').val(response.jadwal.jamSelesai);
