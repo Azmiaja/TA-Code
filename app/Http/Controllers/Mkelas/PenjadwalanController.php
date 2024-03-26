@@ -19,7 +19,7 @@ class PenjadwalanController extends Controller
 {
     public function index()
     {
-        $periode = Periode::orderBy('idPeriode', 'desc')->get();
+        $periode = Periode::where('status', 'Aktif')->orderBy('tanggalMulai', 'desc')->get();
         return view('siakad.content.m_sekolah.akademik.jadwal.index', compact('periode'), [
             'judul' => 'Data Master',
             'sub_judul' => 'Akademik',
