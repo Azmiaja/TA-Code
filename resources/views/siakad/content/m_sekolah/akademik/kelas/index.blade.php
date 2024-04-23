@@ -8,12 +8,12 @@
                 <div class="block-options">
                     <select name="pilih_periode" id="pilih_periode_guru" class="form-select form-select-sm">
                         @foreach ($periode as $item)
-                            <option value="{{ $item->idPeriode }}">
+                            <option value="{{ $item->idPeriode }}" {{ $item->status === 'Aktif' ? 'selected' : '' }}>
                                 Semester
                                 {{ $item->semester }} {{ $item->tahun }}
                             </option>
                         @endforeach
-                        <option value="">-</option>
+                        {{-- <option value="">-</option> --}}
                     </select>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                     <div class="row pb-3 pt-1">
                         <div class="col-md text-md-end text-center">
                             <button class="btn btn-sm btn-alt-success" id="btn_tambahKelasGuru"><i
-                                    class="fa fa-plus me-2"></i>Tambah Kelas</button>
+                                    class="fa fa-plus me-2"></i>Kelola Kelas</button>
                         </div>
                     </div>
                     <table id="tabel_waliKelas" class="table table-bordered table-vcenter w-100">
@@ -172,9 +172,9 @@
                             className: 'text-center',
                             render: function(data, type, row) {
                                 return '<div class="btn-group">' +
-                                    '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editGuru" value="' +
-                                    data.idKelas + '">' +
-                                    '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
+                                    // '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editGuru" value="' +
+                                    // data.idKelas + '">' +
+                                    // '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
                                     '<button type="button" class="btn btn-sm btn-alt-danger" id="action-hapusGuru" title="Delete" value="' +
                                     data.idKelas + '" data-nama-guru="' + data.namaGuru +
                                     '" data-nama-kelas="Kelas ' + data.namaKelas + '">' +
@@ -245,9 +245,11 @@
                         success: function(response) {
                             $('#idPeriode').val(response.kelas.idPeriode).trigger('change');
                             if ($('#pilih_periode_guru').val() !== '') {
-                                $('#namaKelas').prepend(
-                                    `<option value="${response.kelas.namaKelas}">Kelas ${response.kelas.namaKelas}</option>`
-                                );
+                                setTimeout(() => {
+                                    $('#namaKelas').append(
+                                        `<option selected value="${response.kelas.namaKelas}">Kelas ${response.kelas.namaKelas}</option>`
+                                    );
+                                }, 500);
                             } else {
                                 $('#namaKelas').find('option').not(':first').remove();
                                 $('#namaKelas').val(response.kelas.namaKelas).trigger('change');
@@ -304,6 +306,8 @@
                         formWaliKelas,
                         function() {
                             $('#idPegawai').val(null).change();
+                            $('#idPeriode').prop('disabled', false);
+                            $('#namaKelas').find('option').not(':first').remove();
                         }
                     );
                 });

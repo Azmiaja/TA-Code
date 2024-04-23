@@ -19,7 +19,8 @@
                                 <th style="width: 5%">No</th>
                                 <th>Mata Pelajaran</th>
                                 <th style="width: 10%;">KKM</th>
-                                <th style="width: 50%;">Deskripsi</th>
+                                <th style="width: 15%;">Singkatan</th>
+                                <th style="width: 35%;">Deskripsi</th>
                                 <th style="width: 10%;">Aksi</th>
                             </tr>
                         </thead>
@@ -58,9 +59,15 @@
                                         placeholder="Masukan mata pelajaran" required>
                                 </div>
                                 <div class="mb-3">
+                                    <label class="form-label" for="singkatan">Singkatan</label>
+                                    <input type="text" class="form-control" id="singkatan" name="singkatan"
+                                        placeholder="Masukan nama singkatan mapel">
+                                </div>
+                                <div class="mb-3">
                                     <label class="form-label" for="kkm">KKM</label>
                                     <input type="number" class="form-control" id="kkm" name="kkm"
-                                        placeholder="Masukan Kriteria Ketuntasan Minimal (KKM)" required inputmode="numeric">
+                                        placeholder="Masukan Kriteria Ketuntasan Minimal (KKM)" required
+                                        inputmode="numeric">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="deskripsiMapel">Deskripsi</label>
@@ -96,6 +103,13 @@
                     data: 'kkm',
                     name: 'kkm',
                     className: 'text-center'
+                }, {
+                    data: 'singkatan',
+                    name: 'singkatan',
+                    className: 'text-center',
+                    render: function(data) {
+                        return data ?? '-';
+                    }
                 }, {
                     data: 'deskripsi',
                     name: 'deskripsi',
@@ -150,6 +164,7 @@
                         $('#namaMapel').val(response.data.namaMapel);
                         $('#deskripsiMapel').val(response.data.deskripsiMapel);
                         $('#kkm').val(response.data.kkm);
+                        $('#singkatan').val(response.data.singkatan);
                     },
                 });
             });
@@ -168,7 +183,7 @@
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Ya, Hapus!',
-                    riverseButtons: true
+                    reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
@@ -176,14 +191,24 @@
                             url: `{{ url('/mapel/destroy/${id}') }}`,
                             dataType: 'json',
                             success: function(response) {
-                                Swal.fire({
-                                    icon: response.status,
-                                    title: response.title,
-                                    text: response.message,
-                                    showConfirmButton: false,
-                                    timer: 2000
-                                });
-                                tabelMapel.DataTable().ajax.reload();
+                                if (response.status === 'success') {
+                                    Swal.fire({
+                                        icon: response.status,
+                                        title: response.title,
+                                        text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                    tabelMapel.DataTable().ajax.reload();
+                                } else {
+                                    Swal.fire({
+                                        icon: response.status,
+                                        title: response.title,
+                                        text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+                                }
                             },
                         });
                     }

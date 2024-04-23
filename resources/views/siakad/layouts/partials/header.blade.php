@@ -51,6 +51,7 @@
     <script src="{{ asset('assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/apexcharts/dist/apexcharts.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             $.ajaxSetup({
@@ -122,7 +123,7 @@
                             aria-labelledby="page-header-user-dropdown">
                             <div class="p-3 text-center  bg-body-light border-bottom rounded-top">
                                 <div class="ratio mx-auto" style="width: 70px; height: 70px;">
-                                    @canany(['super.admin', 'admin', 'guru'])
+                                    @cannot('siswa')
                                         @if (Auth::user()->pegawai->gambar)
                                             <img class="rounded-circle border border-3 border-white"
                                                 style="width: 100%; height: 100%; object-fit: cover"
@@ -133,7 +134,7 @@
                                                 style="width: 100%; height: 100%; object-fit: cover"
                                                 src="{{ asset('assets/media/avatars/avatar1.jpg') }}" alt="">
                                         @endif
-                                    @endcanany
+                                    @endcannot
                                     @can('siswa')
                                         <img class="rounded-circle border border-3 border-white"
                                             style="width: 100%; height: 100%; object-fit: cover"
@@ -150,8 +151,23 @@
                                         {{ Auth::user()->siswa->namaSiswa }}
                                     @endcan
                                 </p> {{-- Nama Lengkap --}}
-                                <p class="mb-0text-muted fs-sm fw-medium">
+                                <p class="mb-0 text-muted fs-sm fw-medium">
                                     {{ Auth::user()->hakAkses }}</p>
+                                @can('siswa')
+                                        @php
+                                            $app = Auth::user()->siswa->idSiswa;
+                                            $periode = \App\Models\Periode::where('status', 'Aktif')
+                                                ->orderBy('tanggalMulai', 'desc')
+                                                ->first();
+                                            $kelas = \App\Models\Kelas::where('idPeriode', $periode->idPeriode)
+                                                ->whereHas('siswa', function ($query) use ($app) {
+                                                    $query->where('siswa.idSiswa', $app); // Menambahkan alias pada kolom idSiswa
+                                                })
+                                                ->select('namaKelas')
+                                                ->first();
+                                        @endphp
+                                    <p class="mb-0 text-muted fs-sm fw-semibold">Kelas {{ $kelas->namaKelas }}</p>
+                                @endcan
                                 {{-- Role --}}
                             </div>
                             <div class="p-2">

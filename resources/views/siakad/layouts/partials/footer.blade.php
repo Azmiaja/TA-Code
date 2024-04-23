@@ -34,6 +34,23 @@
 <script src="{{ asset('assets/js/plugins/air-datepicker/dist/air-datepicker.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
 
+@if (session('status') === 'success')
+    <script>
+        var title = `{{ session('title') }}`;
+        var msg = `{{ session('message') }}`;
+        // alert(title, msg);
+        document.addEventListener("DOMContentLoaded", () => {
+            Swal.fire({
+                icon: 'success',
+                title: title,
+                text: msg,
+                showConfirmButton: false,
+                timer: 1500 // Optional: Auto-close after 1.5 seconds
+            });
+        });
+    </script>
+@endif
+
 <script>
     $(document).ready(function() {
         $('#logoutBtn').on('click', function() {
@@ -95,14 +112,24 @@
                 contentType: false,
                 processData: false,
                 success: function(response) {
-                    Swal.fire({
-                        icon: response.status,
-                        title: response.title,
-                        text: response.message,
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                    options();
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            icon: response.status,
+                            title: response.title,
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        options();
+                    } else {
+                        Swal.fire({
+                            icon: response.status,
+                            title: response.title,
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    }
                 },
             });
         });
@@ -131,12 +158,10 @@
             cache: false,
             dropdownParent: modal,
             theme: "bootstrap-5",
-            placeholder: $( this ).data('placeholder'),
+            placeholder: $(this).data('placeholder'),
             allowClear: true,
         });
     }
-
-    
 </script>
 </body>
 

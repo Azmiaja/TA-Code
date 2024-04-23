@@ -4,11 +4,11 @@
     <div class="content">
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Siswa Kelas</h3>
+                <h3 class="block-title"></h3>
                 <div class="block-options">
                     <select name="pilih_periode" id="pilih_periode_siswa" class="form-select form-select-sm">
                         @foreach ($periode as $item)
-                            <option value="{{ $item->idPeriode }}">
+                            <option value="{{ $item->idPeriode }}" {{ $item->status === 'Aktif' ? 'selected' : '' }}>
                                 Semester
                                 {{ $item->semester }} {{ $item->tahun }}
                             </option>
@@ -20,7 +20,7 @@
                 <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
                     <div class="row g-3 pb-3 pt-1">
                         <div class="col-md-6 text-md-start text-center">
-                            <div class="btn-group" role="group" aria-label="Horizontal Alternate Info">
+                            <div class="btn-group" role="group" id="gb_kelas" aria-label="Horizontal Alternate Info">
                                 <button type="button" class="btn btn-sm btn-outline-danger btn_kelas active"
                                     value="1">Kelas
                                     1</button>
@@ -38,17 +38,17 @@
                         </div>
                         <div class="col-md-6 text-md-end text-center">
                             <button class="btn btn-sm btn-alt-success" id="btn_tambahKelasSiswa"><i
-                                    class="fa fa-plus me-2"></i>Tambah Siswa Kelas</button>
+                                    class="fa fa-plus me-2"></i>Kelola Siswa</button>
                         </div>
                     </div>
                     <table id="tabel_siswaKelas" class="table table-bordered table-vcenter w-100">
                         <thead class="bg-body-light align-middle">
                             <tr>
                                 <th style="width: 5%;" class="text-center">No</th>
-                                <th style="width: 10%;">Kelas</th>
+                                {{-- <th style="width: 10%;">Kelas</th> --}}
                                 <th style="width: 10%;">Fase</th>
+                                <th style="width: 8%;">NIS</th>
                                 <th>Nama Siswa</th>
-                                <th style="width: 12%;">NIS</th>
                                 <th style="width: 22%;">Semester</th>
                                 <th style="width: 10%;" class="text-center">Aksi</th>
                             </tr>
@@ -96,13 +96,13 @@
                                 </select>
                             </div>
                             <div class="mb-3">
+                                <label class="form-label" for="idSiswa">Nama Siswa</label>
+                                <select name="idSiswa[]" multiple="multiple" id="idSiswa" class="form-select"></select>
+                            </div>
+                            <div class="mb-3">
                                 <label class="form-label" for="idKelas">Kelas</label>
                                 <select name="idKelas" id="idKelas" class="form-select"
                                     data-placeholder="Pilih Kelas"></select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="idSiswa">Nama Siswa</label>
-                                <select name="idSiswa[]" multiple="multiple" id="idSiswa" class="form-select"></select>
                             </div>
 
                             <div class="mb-4 text-end" id="cn-btn-siswa">
@@ -132,15 +132,24 @@
                 insertSiswaKelas.click(function() {
                     // $('#idKelas').val(null).change();
                     // $('#idSiswa').val(null).change();
-                    getSelectSiswa();
+                    $('#pilih_periode').change(function() {
+                        var id = $(this).val();
+                        getSelectSiswa(id);
+                    });
                 });
 
                 // selet2 from kelas siswa
                 select2('#idKelas', modalSiswaKelas);
 
-                $('.btn_kelas').on('click', function() {
+                let kelas = $('.btn_kelas.active').val();
+                $('.content .block-title').text('Data Siswa Kelas ' + kelas);
+
+                $('#gb_kelas').on('click', '.btn_kelas', function() {
                     $('.btn_kelas').removeClass('active');
                     $(this).addClass('active');
+                    let kelas = $('.btn_kelas.active').val();
+                    $('.content .block-title').text('Data Siswa Kelas ' + kelas);
+                    // getAppKelas();
 
                     // Muat ulang data tabel
                     tabelSiswaKelas.DataTable().ajax.reload();
@@ -148,11 +157,14 @@
 
 
                 function getSelectSiswa(id) {
-                    $('#idSiswa').html('');
                     $.ajax({
                         type: "GET",
                         url: `{{ url('data-kelas/option/siswa') }}`,
+                        data: {
+                            idPeriode: id
+                        },
                         success: function(data) {
+                            $('#idSiswa').empty();
                             $.each(data.siswa, function(i, item) {
                                 $('#idSiswa').append(
                                     `<option ${i<10 ? 'selected' : ''} value="${item.idSiswa}">${item.nis} - ${item.namaSiswa}</option>`
@@ -161,6 +173,21 @@
                         },
                     });
                 }
+
+                function getAppKelas() {
+                    $.ajax({
+                        type: "GET",
+                        url: `{{ url('data-kelas/get/siswa') }}`,
+                        data: {
+                            periode_siswa: $('#pilih_periode_siswa').val(),
+                            kelas_nama: $('.btn_kelas.active').val(),
+                        },
+                        success: function(data) {
+                            console.log(data);
+                        },
+                    });
+                }
+
 
                 function getSelectKelas() {
                     $('#idKelas').html('');
@@ -190,7 +217,9 @@
                 });
 
 
+                // getAppKelas();
                 $('#pilih_periode_siswa').on('change', function() {
+                    // getAppKelas();
                     tabelSiswaKelas.DataTable().ajax.reload();
                 });
 
@@ -210,10 +239,6 @@
                             className: 'text-center',
                         },
                         {
-                            data: 'kelas',
-                            name: 'kelas',
-                        },
-                        {
                             data: 'fase',
                             name: 'fase',
                             className: 'text-center',
@@ -230,12 +255,12 @@
                             },
                         },
                         {
-                            data: 'namaSiswa',
-                            name: 'namaSiswa'
-                        },
-                        {
                             data: 'nis',
                             name: 'nis'
+                        },
+                        {
+                            data: 'namaSiswa',
+                            name: 'namaSiswa'
                         },
                         {
                             data: 'semester',
@@ -245,10 +270,11 @@
                             data: null,
                             className: 'text-center',
                             render: function(data, type, row) {
+                                // console.log(data);
                                 return `<div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editSiswa" value="${data.idSiswa}"><i class="fa fa-fw fa-pencil-alt"></i></button>
                                     <button type="button" class="btn btn-sm btn-alt-danger" title="Delete" id="action-deleteSiswa" value="${data.idSiswa}" data-kelas="${data.kelas}" data-nama="${data.namaSiswa}"><i class="fa fa-fw fa-times"></i></button>
                                     </div>`;
+                                // <button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editSiswa" value="${data.idSiswa}"><i class="fa fa-fw fa-pencil-alt"></i></button>
                             }
                         }
                     ],

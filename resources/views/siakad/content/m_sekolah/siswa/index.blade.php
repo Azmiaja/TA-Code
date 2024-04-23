@@ -132,34 +132,14 @@
                     e.preventDefault();
                     modal.modal('show');
                     updateModal('Tambah Data Siswa',
-                        `<button type="submit" class="btn btn-primary">Simpan</button>`)
+                        `<button type="submit" class="btn btn-primary">Simpan</button>`);
+                    form.attr("action", "{{ route('siswa.store') }}");
+                    method.val('POST');
                 });
 
-                form.submit(function(e) {
-                    e.preventDefault();
-
-                    var data = new FormData(form[0]);
-                    var url = `{{ route('siswa.store') }}`;
-
-                    $.ajax({
-                        type: "POST",
-                        url: url,
-                        data: data,
-                        contentType: false,
-                        processData: false,
-                        dataType: "json",
-                        success: function(response) {
-                            Swal.fire({
-                                icon: response.status,
-                                title: response.title,
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                            modal.modal('hide');
-                            tabel.DataTable().ajax.reload();
-                        }
-                    });
+                insertOrUpdateData(form, function() {
+                    modal.modal('hide');
+                    tabel.DataTable().ajax.reload();
                 });
                 // DATATABLES SISWA 
                 tabel.DataTable({
@@ -225,10 +205,6 @@
                     $.ajax({
                         type: "GET",
                         url: url,
-                        headers: {
-                            "Cache-Control": "no-cache, no-store, must-revalidate",
-                            "Pragma": "no-cache"
-                        },
                         success: function(response) {
                             $('#nisn').val(response.siswa.nisn);
                             $('#nis').val(response.siswa.nis);
@@ -255,33 +231,6 @@
                             $('#noTlpWali').val(response.siswa.noTlpWali);
                             $('#alamatWali').val(response.siswa.alamatWali);
                             $('#idSiswa').val(response.siswa.idSiswa);
-                        }
-                    });
-                });
-
-                //AJAX UNTUK UPDATE DATA
-                $(document).on('click', '#btn-editSiswa', function(e) {
-                    e.preventDefault();
-                    var idSiswa = $('#idSiswa').val();
-                    var data = new FormData(form[0]);
-
-                    $.ajax({
-                        type: "POST",
-                        url: form.attr('action'),
-                        data: data,
-                        dataType: "json",
-                        contentType: false,
-                        processData: false,
-                        success: function(response) {
-                            Swal.fire({
-                                icon: response.status,
-                                title: response.title,
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                            modal.modal('hide');
-                            tabel.DataTable().ajax.reload();
                         }
                     });
                 });

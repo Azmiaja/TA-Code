@@ -17,6 +17,6 @@ class Jabatan extends Model
 
     public function pegawai()
     {
-        return $this->hasOne(Pegawai::class, 'idJabatan');
+        return $this->hasOne(Pegawai::class, 'idJabatan', 'idJabatan');
     }
 }

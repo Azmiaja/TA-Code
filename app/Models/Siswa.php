@@ -27,6 +27,10 @@ class Siswa extends Model
     {
         return $this->hasOne(userSiswa::class, 'idSiswa');
     }
+    public function absen()
+    {
+        return $this->hasOne(Absensi::class, 'idSiswa');
+    }
     public function kelas()
     {
         return $this->belongsToMany(Kelas::class, 'tr_kelas', 'idSiswa', 'idKelas');

@@ -13,7 +13,7 @@ class DataSiswaController extends Controller
 {
     public function index()
     {
-        $periode = Periode::where('status', 'Aktif')->orderBy('tanggalMulai', 'desc')->get();
+        $periode = Periode::orderBy('tanggalMulai', 'desc')->get();
         return view('siakad.content.m_sekolah.akademik.kelas.data_siswa', compact('periode'), [
             'judul' => 'Data Master',
             'sub_judul' => 'Akademik',
@@ -25,34 +25,24 @@ class DataSiswaController extends Controller
     public function getSiswa(Request $request)
     {
         try {
-            $siswaWithKelas = Siswa::where(function ($query) use ($request) {
-                $kelasNama = $request->input('kelas_nama');
-                $periodeSiswa = $request->input('periode_siswa');
+            $kelasNama = $request->kelas_nama;
+            $periodeSiswa = $request->periode_siswa;
 
-                if (!empty($kelasNama)) {
-                    $query->whereHas('kelas', function ($subQuery) use ($kelasNama) {
-                        $subQuery->where('namaKelas', $kelasNama);
-                    });
-                } else {
-                    // Menampilkan siswa yang tidak memiliki kelas
-                    $query->doesntHave('kelas');
-                }
-
-                // Pengecekan untuk request periode_siswa
-                if (!empty($periodeSiswa)) {
-                    $query->whereHas('kelas.periode', function ($subQuery) use ($periodeSiswa) {
-                        $subQuery->where('idPeriode', $periodeSiswa);
-                    });
-                }
+            // Ambil siswa dengan kelas dan periode yang sesuai
+            $siswaWithKelas = Siswa::whereHas('kelas', function ($query) use ($kelasNama, $periodeSiswa) {
+                $query->where('namaKelas', $kelasNama)
+                    ->where('idPeriode', $periodeSiswa);
             })
-                ->with('kelas.periode')
-                ->get();
+            ->orderBy('namaSiswa', 'asc')
+            ->get();
 
-            $data = $siswaWithKelas->map(function ($siswa, $key) {
-                $kelas = $siswa->kelas->isEmpty() ? null : $siswa->kelas->first();
+            // Map data siswa
+            $data = $siswaWithKelas->map(function ($siswa, $key) use ($kelasNama) {
+                // Ambil informasi kelas dari siswa
+                $kelas = $siswa->kelas->where('namaKelas', $kelasNama)->first();
                 $namaKelas = $kelas ? $kelas->namaKelas : '-';
                 $faseKelas = $kelas ? $kelas->fase : '-';
-                $semester = $kelas && $kelas->periode ? 'Semester ' . $kelas->periode->semester . '/' . date('Y', strtotime($kelas->periode->tanggalMulai)) : '-';
+                $semester = $kelas && $kelas->periode ? $kelas->periode->semester . ' ' . $kelas->periode->tahun : '-';
 
                 return [
                     'nomor' => $key + 1,
@@ -65,6 +55,7 @@ class DataSiswaController extends Controller
                 ];
             });
 
+            // Return response JSON
             return response()->json(['data' => $data]);
         } catch (\Exception $e) {
             Log::error('Error get data: ' . $e->getMessage());
@@ -72,11 +63,15 @@ class DataSiswaController extends Controller
         }
     }
 
-    public function getSiswaOption()
+    public function getSiswaOption(Request $request)
     {
         // $kelasNama = $id;
+        $periodeId = $request->input('idPeriode'); // Ganti dengan ID periode yang Anda inginkan
 
-        $siswaWithoutKelas = Siswa::whereDoesntHave('kelas')->get();
+        $siswaWithoutKelas = Siswa::whereDoesntHave('kelas', function ($query) use ($periodeId) {
+            $query->where('idPeriode', $periodeId);
+        })->get();
+        // $siswaWithoutKelas = Siswa::whereDoesntHave('kelas')->get();
 
         return response()->json(['siswa' => $siswaWithoutKelas]);
     }

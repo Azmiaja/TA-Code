@@ -33,6 +33,7 @@ class MapelController extends Controller
                 $item['mapel'] = $item->namaMapel ?: '-';
                 $item['kkm'] = $item->kkm ?: '-';
                 $item['deskripsi'] = $item->deskripsiMapel ?: '-';
+                $item['sngkatan'] = $item->singkatan ?: '-';
 
                 return $item;
             });
@@ -62,6 +63,7 @@ class MapelController extends Controller
             'namaMapel' => 'required',
             'deskripsiMapel' => 'nullable',
             'kkm' => 'required',
+            'singkatan' => 'nullable',
         ]);
 
         Mapel::create($validatedData);
@@ -99,6 +101,7 @@ class MapelController extends Controller
             'namaMapel' => 'required',
             'deskripsiMapel' => 'nullable',
             'kkm' => 'required',
+            'singkatan' => 'nullable',
         ]);
 
         // Perbarui data mapel
@@ -114,12 +117,22 @@ class MapelController extends Controller
     public function destroy($id)
     {
         $mapel = Mapel::find($id);
+
+        // Pengecekan apakah mapel digunakan dalam tabel kelas
+        if ($mapel->pengajar()->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal',
+                'message' => 'Mapel tidak dapat dihapus karena sudah digunakan ditetapkan pada pengajar.'
+            ]);
+        }
+
         $mapel->delete();
 
         return response()->json([
             'status' => 'success',
             'title' => 'Dihapus!',
-            'message' => 'Berhasil mengapus data.'
+            'message' => 'Berhasil menghapus data.'
         ]);
     }
 }

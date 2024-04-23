@@ -16,6 +16,6 @@ class Mapel extends Model
 
     public function pengajar()
     {
-        return $this->hasMany(Pengajaran::class, 'idPengajran');
+        return $this->hasMany(Pengajaran::class, 'idMapel');
     }
 }

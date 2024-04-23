@@ -22,54 +22,54 @@
                         <input type="hidden" name="_method" id="method" value="PUT">
                         <input type="hidden" name="idSekolah" id="idSekolah">
                         <div class="row g-2">
-                            <div class="col-md-8 col-12">
+                            <div class="col-lg-8 col-12">
                                 <div class="row g-2 p-0 mb-2">
-                                    <div class="col-md-6">
+                                    <div class="col-lg-6">
                                         <label for="fm_namaSekolah" class="form-label">Nama Sekolah</label>
                                         <input type="text" name="namaSekolah" class="form-control"
                                             id="fm_namaSekolah">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-lg-6">
                                         <label for="fm_npsn" class="form-label">NPSN</label>
                                         <input type="text" name="npsn" class="form-control" id="fm_npsn">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-lg-6">
                                         <label for="fm_alamat" class="form-label">Alamat</label>
                                         <input type="text" name="alamat" class="form-control" id="fm_alamat">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-lg-6">
                                         <label for="fm_desa" class="form-label">Desa</label>
                                         <input type="text" name="desa" class="form-control" id="fm_desa">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-lg-6">
                                         <label for="fm_kecamatan" class="form-label">Kecamatan</label>
                                         <input type="text" name="kecamatan" class="form-control" id="fm_kecamatan">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-lg-6">
                                         <label for="fm_kabupaten" class="form-label">Kabupate/Kota</label>
                                         <input type="text" name="kabupaten" class="form-control" id="fm_kabupaten">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-lg-6">
                                         <label for="fm_provinsi" class="form-label">Provinsi</label>
                                         <input type="text" name="provinsi" class="form-control" id="fm_provinsi">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-lg-6">
                                         <label for="fm_kodePos" class="form-label">Kode Pos</label>
                                         <input type="number" name="kodePos" class="form-control" id="fm_kodePos">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-lg-6">
                                         <label for="fm_telp" class="form-label">Telepon</label>
                                         <input type="tel" name="telp" class="form-control" id="fm_telp">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-lg-6">
                                         <label for="fm_website" class="form-label">Website</label>
                                         <input type="url" name="website" class="form-control" id="fm_website">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-lg-6">
                                         <label for="fm_email" class="form-label">Email</label>
                                         <input type="email" name="email" class="form-control" id="fm_email">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-lg-6">
                                         <label for="fm_slogan" class="form-label">Slogan</label>
                                         <input type="text" name="slogan" class="form-control" id="fm_slogan">
                                     </div>

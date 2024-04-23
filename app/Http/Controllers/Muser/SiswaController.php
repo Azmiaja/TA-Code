@@ -47,41 +47,86 @@ class SiswaController extends Controller
     public function store(Request $request)
     {
         try {
-
-            $siswa = new Siswa;
-
-            $siswa->nisn = $request->input('nisn');
-            $siswa->nis = $request->input('nis');
-            $siswa->namaSiswa = $request->input('namaSiswa');
-            $siswa->panggilan = $request->input('namaPanggilan');
-            $siswa->tempatLahir = $request->input('tempatLahir');
-            $siswa->tanggalLahir = Carbon::createFromFormat('d/m/Y', $request->input('tanggalLahir'))->format('Y-m-d');
-            $siswa->tahunMasuk = $request->input('tahunMasuk');
-            $siswa->jenisKelamin = $request->input('jenisKelamin');
-            $siswa->agama = $request->input('agama');
-            $siswa->status = $request->input('status');
-            $siswa->alamat = $request->input('alamat');
-            $siswa->namaAyah = $request->input('namaAyah');
-            $siswa->pekerjaanAyah = $request->input('pekerjaanAyah');
-            $siswa->noTlpAyah = $request->input('noTlpAyah');
-            $siswa->alamatAyah = $request->input('alamatAyah');
-            $siswa->namaIbu = $request->input('namaIbu');
-            $siswa->pekerjaanIbu = $request->input('pekerjaanIbu');
-            $siswa->noTlpIbu = $request->input('noTlpIbu');
-            $siswa->alamatIbu = $request->input('alamatIbu');
-            $siswa->namaWali = $request->input('namaWali');
-            $siswa->pekerjaanWali = $request->input('pekerjaanWali');
-            $siswa->noTlpWali = $request->input('noTlpWali');
-            $siswa->alamatWali = $request->input('alamatWali');
-
-
-            $siswa->save();
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil menyimpan data.'
+            $validator = Validator::make($request->all(), [
+                'nisn' => [
+                    'integer',
+                    'digits:10',
+                    'unique:siswa,nisn'
+                ],
+                'nis' => 'integer|unique:siswa,nis|digits:4',
+                'namaSiswa' => 'max:45',
+                'panggilan' => 'max:20',
+                'alamat' => 'max:125',
+                'namaAyah' => 'max:45',
+                'namaIbu' => 'max:45',
+                'namaWali' => 'max:45',
+                'alamatAyah' => 'max:125',
+                'alamatIbu' => 'max:125',
+                'alamatWali' => 'max:125',
+                'pekerjaanAyah' => 'max:45',
+                'pekerjaanIbu' => 'max:45',
+                'pekerjaanWali' => 'max:45',
+                'noTlpAyah' => 'max:15',
+                'noTlpIbu' => 'max:15',
+                'noTlpWali' => 'max:15',
+            ], [
+                'nisn.integer' => 'NISN harus berupa angka.',
+                'nis.integer' => 'NIS harus berupa angka.',
+                'nisn.unique' => 'NISN sudah terdaftar.',
+                'nis.unique' => 'NIS sudah terdaftar.',
+                'nisn.digits' => 'Panjang NISN harus 10 digit.',
+                'nis.digits' => 'Panjang NIS harus 4 digit.',
+                'namaSiswa.max' => 'Panjang nama lengkap maksimal 45 karakter.',
+                'namaAyah.max' => 'Panjang nama ayah maksimal 45 karakter.',
+                'namaIbu.max' => 'Panjang nama ibu maksimal 45 karakter.',
+                'namaWali.max' => 'Panjang nama wali maksimal 45 karakter.',
+                'panggilan.max' => 'Panjang nama panggilan maksimal 20 karakter.',
+                'alamat.max' => 'Alamat terlalu panjang maksimal 125 karakter.',
+                'alamatAyah.max' => 'Alamat ayah terlalu panjang maksimal 125 karakter.',
+                'alamatIbu.max' => 'Alamat ibu terlalu panjang maksimal 125 karakter.',
+                'alamatWali.max' => 'Alamat wali terlalu panjang maksimal 125 karakter.',
+                'noTlpAyah.max' => 'Nomor telepon ayah maksimal 15',
+                'noTlpIbu.max' => 'Nomor telepon ibu maksimal 15',
+                'noTlpWali.max' => 'Nomor telepon wali maksimal 15',
+                'pekerjaanAyah' => 'Pekerjaan ayah terlalu pajang maksimal 45 karakter.',
+                'pekerjaanIbu' => 'Pekerjaan ibu terlalu pajang maksimal 45 karakter.',
+                'pekerjaanWali' => 'Pekerjaan wali terlalu pajang maksimal 45 karakter.',
             ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+                Siswa::create([
+                    'nisn' => $request->nisn,
+                    'nis' => $request->nis,
+                    'namaSiswa' => $request->namaSiswa,
+                    'panggilan' => $request->namaPanggilan,
+                    'tempatLahir' => $request->tempatLahir,
+                    'tanggalLahir' => Carbon::createFromFormat('d/m/Y', $request->tanggalLahir)->format('Y-m-d'),
+                    'jenisKelamin' => $request->jenisKelamin,
+                    'agama' => $request->agama,
+                    'alamat' => $request->alamat,
+                    'namaAyah' => $request->namaAyah,
+                    'namaIbu' => $request->namaIbu,
+                    'namaWali' => $request->namaWali,
+                    'pekerjaanAyah' => $request->pekerjaanAyah,
+                    'pekerjaanIbu' => $request->pekerjaanIbu,
+                    'pekerjaanWali' => $request->pekerjaanWali,
+                    'noTlpAyah' => $request->noTlpAyah,
+                    'noTlpIbu' => $request->noTlpIbu,
+                    'noTlpWali' => $request->noTlpWali,
+                    'alamatAyah' => $request->alamatAyah,
+                    'alamatIbu' => $request->alamatIbu,
+                    'alamatWali' => $request->alamatWali,
+                    'tahunMasuk' => $request->tahunMasuk
+                ]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil menyimpan data.'
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
         }
@@ -103,39 +148,94 @@ class SiswaController extends Controller
         try {
             $siswa = Siswa::find($id);
 
-            $siswa->nisn = $request->input('nisn');
-            $siswa->nis = $request->input('nis');
-            $siswa->namaSiswa = $request->input('namaSiswa');
-            $siswa->panggilan = $request->input('namaPanggilan');
-            $siswa->tempatLahir = $request->input('tempatLahir');
-            $siswa->tanggalLahir = Carbon::createFromFormat('d/m/Y', $request->input('tanggalLahir'))->format('Y-m-d');
-            $siswa->tahunMasuk = $request->input('tahunMasuk');
-            $siswa->jenisKelamin = $request->input('jenisKelamin');
-            $siswa->agama = $request->input('agama');
-            $siswa->status = $request->input('status');
-            $siswa->alamat = $request->input('alamat');
-            $siswa->namaAyah = $request->input('namaAyah');
-            $siswa->pekerjaanAyah = $request->input('pekerjaanAyah');
-            $siswa->noTlpAyah = $request->input('noTlpAyah');
-            $siswa->alamatAyah = $request->input('alamatAyah');
-            $siswa->namaIbu = $request->input('namaIbu');
-            $siswa->pekerjaanIbu = $request->input('pekerjaanIbu');
-            $siswa->noTlpIbu = $request->input('noTlpIbu');
-            $siswa->alamatIbu = $request->input('alamatIbu');
-            $siswa->namaWali = $request->input('namaWali');
-            $siswa->pekerjaanWali = $request->input('pekerjaanWali');
-            $siswa->noTlpWali = $request->input('noTlpWali');
-            $siswa->alamatWali = $request->input('alamatWali');
-
-            $siswa->update();
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil mengubah data.'
+            $validator = Validator::make($request->all(), [
+                'nisn' => [
+                    'integer',
+                    'digits:10',
+                    'unique:siswa,nisn,' . $id . ',idSiswa'
+                ],
+                'nis' => [
+                    'integer',
+                    'digits:4',
+                    'unique:siswa,nis,' . $id . ',idSiswa',
+                ],
+                'namaSiswa' => 'max:45',
+                'panggilan' => 'max:20',
+                'alamat' => 'max:125',
+                'namaAyah' => 'max:45',
+                'namaIbu' => 'max:45',
+                'namaWali' => 'max:45',
+                'alamatAyah' => 'max:125',
+                'alamatIbu' => 'max:125',
+                'alamatWali' => 'max:125',
+                'pekerjaanAyah' => 'max:45',
+                'pekerjaanIbu' => 'max:45',
+                'pekerjaanWali' => 'max:45',
+                'noTlpAyah' => 'max:15',
+                'noTlpIbu' => 'max:15',
+                'noTlpWali' => 'max:15',
+            ], [
+                'nisn.integer' => 'NISN harus berupa angka.',
+                'nis.integer' => 'NIS harus berupa angka.',
+                'nisn.unique' => 'NISN sudah terdaftar.',
+                'nis.unique' => 'NIS sudah terdaftar.',
+                'nisn.digits' => 'Panjang NISN harus 10 digit.',
+                'nis.digits' => 'Panjang NIS harus 4 digit.',
+                'namaSiswa.max' => 'Panjang nama lengkap maksimal 45 karakter.',
+                'namaAyah.max' => 'Panjang nama ayah maksimal 45 karakter.',
+                'namaIbu.max' => 'Panjang nama ibu maksimal 45 karakter.',
+                'namaWali.max' => 'Panjang nama wali maksimal 45 karakter.',
+                'panggilan.max' => 'Panjang nama panggilan maksimal 20 karakter.',
+                'alamat.max' => 'Alamat terlalu panjang maksimal 125 karakter.',
+                'alamatAyah.max' => 'Alamat ayah terlalu panjang maksimal 125 karakter.',
+                'alamatIbu.max' => 'Alamat ibu terlalu panjang maksimal 125 karakter.',
+                'alamatWali.max' => 'Alamat wali terlalu panjang maksimal 125 karakter.',
+                'noTlpAyah.max' => 'Nomor telepon ayah maksimal 15',
+                'noTlpIbu.max' => 'Nomor telepon ibu maksimal 15',
+                'noTlpWali.max' => 'Nomor telepon wali maksimal 15',
+                'pekerjaanAyah' => 'Pekerjaan ayah terlalu pajang maksimal 45 karakter.',
+                'pekerjaanIbu' => 'Pekerjaan ibu terlalu pajang maksimal 45 karakter.',
+                'pekerjaanWali' => 'Pekerjaan wali terlalu pajang maksimal 45 karakter.',
             ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+                $siswa->update([
+                    'nisn' => $request->nisn,
+                    'nis' => $request->nis,
+                    'namaSiswa' => $request->namaSiswa,
+                    'panggilan' => $request->namaPanggilan,
+                    'tempatLahir' => $request->tempatLahir,
+                    'tanggalLahir' => Carbon::createFromFormat('d/m/Y', $request->tanggalLahir)->format('Y-m-d'),
+                    'jenisKelamin' => $request->jenisKelamin,
+                    'agama' => $request->agama,
+                    'alamat' => $request->alamat,
+                    'namaAyah' => $request->namaAyah,
+                    'namaIbu' => $request->namaIbu,
+                    'namaWali' => $request->namaWali,
+                    'pekerjaanAyah' => $request->pekerjaanAyah,
+                    'pekerjaanIbu' => $request->pekerjaanIbu,
+                    'pekerjaanWali' => $request->pekerjaanWali,
+                    'noTlpAyah' => $request->noTlpAyah,
+                    'noTlpIbu' => $request->noTlpIbu,
+                    'noTlpWali' => $request->noTlpWali,
+                    'alamatAyah' => $request->alamatAyah,
+                    'alamatIbu' => $request->alamatIbu,
+                    'alamatWali' => $request->alamatWali,
+                    'tahunMasuk' => $request->tahunMasuk,
+                    'status' => $request->status
+                ]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil mengubah data.'
+                ]);
+            }
+
         } catch (\Exception $e) {
-            Log::error('Error storing data: ' . $e->getMessage());
+            Log::error('Error update data: ' . $e->getMessage());
         }
     }
 
@@ -147,7 +247,7 @@ class SiswaController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'title' => 'Sukses',
+            'title' => 'Dihapus!',
             'message' => 'Berhasil mengapus data.'
         ]);
     }

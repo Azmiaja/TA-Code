@@ -19,7 +19,7 @@ class Pegawai extends Model
     // Define the relationship with the Kelas model
     public function kelas()
     {
-        return $this->hasMany(Kelas::class, 'idPegawai', 'idPegawai');
+        return $this->hasMany(Kelas::class, 'idPegawai');
     }
 
     public function jabatanPegawai()

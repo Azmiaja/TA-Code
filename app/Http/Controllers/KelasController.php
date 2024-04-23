@@ -18,7 +18,7 @@ class KelasController extends Controller
 {
     public function index()
     {
-        $periode = Periode::where('status', 'Aktif')->orderBy('tanggalMulai', 'desc')->get();
+        $periode = Periode::orderBy('tanggalMulai', 'desc')->get();
         return view('siakad.content.m_sekolah.akademik.kelas.index', compact('periode'), [
             'judul' => 'Data Master',
             'sub_judul' => 'Akademik',

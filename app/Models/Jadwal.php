@@ -27,4 +27,8 @@ class Jadwal extends Model
     {
         return $this->hasOne(Kelas::class, 'idKelas', 'idKelas');
     }
+    public function jamke()
+    {
+        return $this->hasOne(JamKe::class, 'idjamKe', 'idjamKe');
+    }
 }

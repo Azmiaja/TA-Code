@@ -3,163 +3,238 @@
     @include('siakad/layouts/partials/hero')
     <div class="content">
         @canany(['super.admin', 'admin'])
-            <div class="block block-rounded">
-                <div class="block-header block-header-default">
-                    <h3 class="block-title">Jadwal Pelajaran</h3>
-                    <div class="block-options">
-                        <select name="periode" id="periode" class="form-select form-select-sm">
-                            @foreach ($periode as $item)
-                                <option value="{{ $item->idPeriode }}">
-                                    Semester
-                                    {{ $item->semester }} {{ $item->tahun }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="block-content p-0">
-                    <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
-                        <div class="row g-3 pb-3 pt-1">
-                            <div class="col-md-6 text-md-start text-center">
-                                <div class="btn-group" role="group" aria-label="Horizontal Alternate Info">
-                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas active"
-                                        value="1">Kelas
-                                        1</button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="2">Kelas
-                                        2</button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="3">Kelas
-                                        3</button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="4">Kelas
-                                        4</button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="5">Kelas
-                                        5</button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas" value="6">Kelas
-                                        6</button>
-                                </div>
-                            </div>
-                            <div class="col-md-6 text-md-end text-center">
-                                <button class="btn btn-sm btn-alt-success" id="tambah_jadwal"><i
-                                        class="fa fa-plus mx-2"></i>Tambah
-                                    Jadwal</button>
-                            </div>
-                        </div>
-                        <table id="tabel-JPkelas" class="table table-bordered table-vcenter w-100">
-                            <thead class="bg-body-light align-middle">
-                                <tr>
-                                    <th style="width: 5%">No</th>
-                                    <th style="width: 10%;">Kelas</th>
-                                    <th style="width: 10%;">Hari</th>
-                                    <th>Mata Pelajaran</th>
-                                    <th>Nama Pengajar</th>
-                                    <th>Lama Waktu</th>
-                                    <th>Jam Mulai</th>
-                                    <th>Jam Selesai</th>
-                                    <th style="width: 10%;">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{-- conten --}}
-                            </tbody>
-                        </table>
-
-                        <table>
-
-                        </table>
-                    </div>
-                </div>
-            </div>
-        @endcanany
-    </div>
-
-    {{-- MODAL INSERT --}}
-    <div class="modal fade" id="modal_Jadwal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="modalMapeltLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content">
-                <div class="block block-rounded block-transparent mb-0">
-                    <div class="block-header block-header-default">
-                        <h3 class="block-title" id="title-modal"></h3>
-                        <div class="block-options">
-                            <button type="button" id="btn-close" class="btn-block-option" data-bs-dismiss="modal"
-                                aria-label="Close">
-                                <i class="fa fa-fw fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="block-content fs-sm">
-                        {{-- FORM --}}
-                        <form action="" id="form_jadwal" method="post">
-                            @csrf
-                            <input type="hidden" name="_method" id="method" value="POST">
-                            <input type="hidden" name="idJadwal" id="idJadwal">
-                            <div class="mb-3">
-                                <label class="form-label" for="idPeriode">Semester</label>
-                                <select name="idPeriode" id="idPeriode" class="form-select" data-placeholder="Pilih Periode"
-                                    required>
-                                    <option value="" disabled selected>Pilih Periode</option>
+            <div class="row g-3">
+                <div class="col-lg-9 col-12">
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">Jadwal Pelajaran</h3>
+                            <div class="block-options">
+                                <select name="periode" id="periode" class="form-select form-select-sm">
                                     @foreach ($periode as $item)
-                                        <option value="{{ $item->idPeriode }}">
+                                        <option value="{{ $item->idPeriode }}" data-tahun="{{ $item->tahun }}"
+                                            {{ $item->status === 'Aktif' ? 'selected' : '' }}>
                                             Semester
                                             {{ $item->semester }} {{ $item->tahun }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="idKelas">Kelas</label>
-                                <select name="idKelas" id="idKelas" class="form-select" data-placeholder="Pilih Kelas"
-                                    required>
-                                    <option value="" disabled selected>Pilih Kelas</option>
-                                </select>
-                            </div>
-                            <div class="mb-3" id="map_1">
-                                <label class="form-label" for="idPengajaran">Mapel</label>
-                                <select name="idPengajaran" id="idPengajaran" class="form-select"
-                                    data-placeholder="Pilih Mapel">
-                                </select>
-                            </div>
-                            <div class="row g-3 mb-3">
-                                {{-- isian form --}}
-                                <div class="col-md-4">
-                                    <label class="form-label" for="hari">Hari</label>
-                                    <select name="hari" id="hari" class="form-select" required>
-                                        <option value="" disabled selected>Pilih Hari</option>
-                                        <option value="Senin">Senin</option>
-                                        <option value="Selasa">Selasa</option>
-                                        <option value="Rabu">Rabu</option>
-                                        <option value="Kamis">Kamis</option>
-                                        <option value="Jumat">Jumat</option>
-                                        <option value="Sabtu">Sabtu</option>
-                                    </select>
+                        </div>
+                        <div class="block-content p-0">
+                            <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
+                                <div class="row g-3 pt-1">
+                                    <div class="col-md-7 col-12 text-md-start text-center">
+                                        <div class="btn-group" role="group" aria-label="Horizontal Alternate Info">
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn_kelas active"
+                                                value="1">Kelas
+                                                1</button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
+                                                value="2">Kelas
+                                                2</button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
+                                                value="3">Kelas
+                                                3</button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
+                                                value="4">Kelas
+                                                4</button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
+                                                value="5">Kelas
+                                                5</button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
+                                                value="6">Kelas
+                                                6</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 col-12 text-md-end text-center">
+                                        <button class="btn btn-sm btn-alt-success" id="tambah_jadwal" title="Kelola Jadwal"><i
+                                                class="fa fa-plus mx-2"></i>Kelola
+                                            Jadwal</button>
+                                    </div>
+                                    <div class="col-12 text-md-end text-center">
+                                        <button class="btn btn-sm btn-primary" id="btn_print_jadwal">
+                                            <i class="fa fa-print me-2"></i>Cetak</button>
+                                    </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label class="form-label" for="jamMulai">Jam Mulai</label>
-                                    <input type="text" class="form-control" id="jamMulai" name="jamMulai"
-                                        data-timepicker="true" placeholder="Jam Mulai" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label" for="jamSelesai">Jam Selesai</label>
-                                    <input type="text" class="form-control" id="jamSelesai" name="jamSelesai"
-                                        data-timepicker="true" placeholder="Jam Selesai" required>
-                                </div>
+                                <table id="tabel-JPSiswa"  class="table table-bordered w-100">
+                                    <thead class="table-light align-middle">
+                                        <tr>
+                                            <th width="14%">Waktu</th>
+                                            <th width="14%">Senin</th>
+                                            <th width="14%">Selasa</th>
+                                            <th width="14%">Rabu</th>
+                                            <th width="14%">Kamis</th>
+                                            <th width="14%">Jumat</th>
+                                            <th width="14%">Sabtu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{-- conten --}}
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="mb-4 text-end" id="cn-btn">
-                                {{-- conten button --}}
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                    <div class="block-content block-content-full bg-body">
+                </div>
+                <div class="col-lg-3 col-12">
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">Jam Pelajaran</h3>
+                            <div class="block-options">
+                                <button class="btn btn-sm btn-alt-success" title="Kelola Jam Pelajaran" id="atur_jam">
+                                    <i class="fa fa-plus mx-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div id="container_jam">
+                                <div class="row">
+                                    {{-- Konten --}}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            {{-- MODAL INSERT --}}
+            <div class="modal fade" id="modal_Jadwal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+                aria-labelledby="modalMapeltLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="block block-rounded block-transparent mb-0">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title" id="title-modal"></h3>
+                                <div class="block-options">
+                                    <button type="button" id="btn-close" class="btn-block-option" data-bs-dismiss="modal"
+                                        aria-label="Close">
+                                        <i class="fa fa-fw fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content fs-sm">
+                                {{-- FORM --}}
+                                <form action="" id="form_jadwal" method="post">
+                                    @csrf
+                                    <input type="hidden" name="_method" id="method" value="POST">
+                                    <input type="hidden" name="idJadwal" id="idJadwal">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="idPeriode">Semester</label>
+                                        <select name="idPeriode" id="idPeriode" class="form-select"
+                                            data-placeholder="Pilih Periode" required>
+                                            <option value="" disabled selected>Pilih Periode</option>
+                                            @foreach ($periode as $item)
+                                                <option value="{{ $item->idPeriode }}">
+                                                    Semester
+                                                    {{ $item->semester }} {{ $item->tahun }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="idKelas">Kelas</label>
+                                        <select name="idKelas" id="idKelas" class="form-select"
+                                            data-placeholder="Pilih Kelas" required>
+                                            <option value="" disabled selected>Pilih Kelas</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3" id="map_1">
+                                        <label class="form-label" for="idPengajaran">Mapel</label>
+                                        <select name="idPengajaran" id="idPengajaran" class="form-select"
+                                            data-placeholder="Pilih Mapel">
+                                            <option value="" disabled selected>Pilih Mapel</option>
+                                        </select>
+                                    </div>
+                                    <div class="row g-3 mb-4">
+                                        {{-- isian form --}}
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="hari">Hari</label>
+                                            <select name="hari" id="hari" class="form-select" required>
+                                                <option value="" disabled selected>Pilih Hari</option>
+                                                <option value="Senin">Senin</option>
+                                                <option value="Selasa">Selasa</option>
+                                                <option value="Rabu">Rabu</option>
+                                                <option value="Kamis">Kamis</option>
+                                                <option value="Jumat">Jumat</option>
+                                                <option value="Sabtu">Sabtu</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="jamMulai">Jam Ke</label>
+                                            <select class="form-select" id="idjamKe" name="idjamKe" data-timepicker="true"
+                                                required>
+                                                <option value="" selected>Pilih Jam</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4 text-end" id="cn-btn">
+                                        {{-- conten button --}}
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="block-content block-content-full bg-body">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Modal Atur Jam --}}
+            <div class="modal fade" id="modal_jam_Jadwal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+                aria-labelledby="modalMapeltLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="block block-rounded block-transparent mb-0">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title" id="title-modal_jam"></h3>
+                                <div class="block-options">
+                                    <button type="button" id="btn-close" class="btn-block-option" data-bs-dismiss="modal"
+                                        aria-label="Close">
+                                        <i class="fa fa-fw fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content fs-sm">
+                                {{-- FORM --}}
+                                <form action="" id="form_jam_jadwal" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="_method" id="method_jam" value="POST">
+                                    <div class="row g-2 mb-4">
+                                        <div class="col-md-4">
+                                            <label for="jamKe" class="form-label">Jam Ke</label>
+                                            <input type="number" class="form-control" id="jamKe" name="jamKe"
+                                                placeholder="Jam Ke" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="jamMulai" class="form-label">Jam Mulai</label>
+                                            <input type="time" class="form-control" id="jamMulai" name="jamMulai"
+                                                required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="jamSelesai" class="form-label">Jam Selesai</label>
+                                            <input type="time" class="form-control" id="jamSelesai" name="jamSelesai"
+                                                required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4 text-end" id="cn-btn_jam">
+                                        {{-- conten button --}}
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="block-content block-content-full bg-body">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endcanany
     </div>
 
+
+
     @push('scripts')
-        @cannot('guru')
             <script>
                 $(document).ready(function() {
-                    const tabelJadwal = $('#tabel-JPkelas');
+                    const tabelJadwal = $('#tabel-JPkelas1');
                     const btnInsert = $('#tambah_jadwal');
                     const modalJadwal = $('#modal_Jadwal');
                     const modalJadwal_title = $('#title-modal');
@@ -167,20 +242,243 @@
                     const formJadwal = $('#form_jadwal');
                     const method = $('#method');
 
+                    const tabelViewJadwal = $('#tabel-JPSiswa');
+                    tabelViewJadwal.DataTable({
+                        processing: true,
+                        ajax: {
+                            url: '{!! route('get-jadwal.siswa') !!}',
+                            data: function(d) {
+                                d.idPeriode = $('#periode').val();
+                                d.kelas = $(".btn_kelas.active").val();
+                                //     // console.log(d.kelas_id);
+                            }
+                        },
+                        columns: [{
+                                data: 'waktu',
+                                name: 'waktu',
+                                className: 'text-center fs-sm px-0 text-nowrap'
+                            },
+                            {
+                                data: 'Senin',
+                                name: 'Senin',
+                                className: 'text-center fs-sm px-0'
+                            },
+                            {
+                                data: 'Selasa',
+                                name: 'Selasa',
+                                className: 'text-center fs-sm px-0'
+                            },
+                            {
+                                data: 'Rabu',
+                                name: 'Rabu',
+                                className: 'text-center fs-sm px-0'
+                            },
+                            {
+                                data: 'Kamis',
+                                name: 'Kamis',
+                                className: 'text-center fs-sm px-0'
+                            },
+                            {
+                                data: 'Jumat',
+                                name: 'Jumat',
+                                className: 'text-center fs-sm px-0'
+                            },
+                            {
+                                data: 'Sabtu',
+                                name: 'Sabtu',
+                                className: 'text-center fs-sm px-0'
+                            },
+                        ],
+                        dom: "<'row my-0 '<'col-12 col-sm-12 col-md-7'><'col-12 col-sm-12 col-md-5 text-md-end'B>>" +
+                            "<'row my-0 '<'col-12 col-sm-12'tr>>" +
+                            "<'row mb-0'<'col-12 col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
+                        buttons: [{
+                            extend: 'print',
+                            title: function() {
+                                let periode = $('#periode option:selected').data('tahun');
+                                let kelas = $(".btn_kelas.active").val();
+                                return '<h3 style="margin-bottom: 3rem; font-family: Times New Roman, Times, serif;">JADWAL PELAJARAN KELAS ' +
+                                    kelas + '<br>' + 'SD NEGERI LEMAHBANG' +
+                                    '<br>' +
+                                    'TAHUN PELAJARAN ' + periode + '</h3>';
+                            },
+                            className: 'd-none',
+                            exportOptions: {
+                                columns: ':visible'
+                            },
+                            messageTop: null,
+                            messageBottom: null,
+                            customize: function(win) {
+                                $(win.document.body).css('text-align', 'center');
+                                $(win.document.body).find('table').css({
+                                    'text-transform': 'uppercase',
+                                    'font-size': '12pt',
+                                    'border-color': '#000'
+                                });
+                                $(win.document.body).find('th').css('font-size', '1.25rem').width(
+                                    '14%');
+                            }
+
+                        }],
+                        paging: false,
+                        ordering: true,
+                        searching: false,
+                        info: false,
+                    });
+
+                    $('#btn_print_jadwal').on('click', function() {
+                        $('.buttons-print').click();
+                    })
+                    $('.buttons-print').prop('hidden', true);
+
+                    fatchDataJam();
+
+                    function fatchDataJam() {
+                        $.ajax({
+                            type: "GET",
+                            url: `{{ url('penjadwalan/get-jam') }}`,
+                            success: function(data) {
+                                $('#container_jam div').empty();
+                                let data_jam = '';
+                                $.each(data, function(i, item) {
+                                    data_jam += `
+                                    <div class="col-lg-12 col-md-4">
+                                        <a href="javascript:void(0)" id="action_jamKe" class="block block-rounded block-link-pop shadow-sm mb-2" 
+                                        data-id="${item.idjamKe}" data-name="${item.jamKe}" id="jabatanView">
+                                            <div class="input-group">
+                                                <span class="input-group-text">${item.jamKe}</span>
+                                                <spam class="form-control text-center">${item.jamMulai} - ${item.jamSelesai}</spam>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    `;
+                                });
+                                $('#container_jam div').append(data_jam);
+                            },
+                        });
+                    }
+
                     showModalInsert(btnInsert, modalJadwal, formJadwal, `{{ route('penjadwalan.store') }}`, method,
                         modalJadwal_title, modalJadwal_btn,
-                        'Tambah Jadwal', `<button type="submit" class="btn btn-primary">Simpan</button>`);
+                        'Kelola Jadwal', `<button type="submit" class="btn btn-primary">Simpan</button>`);
+
+                    // Kelola JAm
+                    showModalInsert($('#atur_jam'), $('#modal_jam_Jadwal'), $('#form_jam_jadwal'),
+                        `{{ route('penjadawalan.store.jam') }}`, $('#method_jam'),
+                        $('#title-modal_jam'), $('#cn-btn_jam'),
+                        'Kelola Jam Pelajaran', `<button type="submit" class="btn btn-primary">Simpan</button>`);
+
+                    insertOrUpdateData($('#form_jam_jadwal'), function() {
+                        $('#modal_jam_Jadwal').modal('hide');
+                        fatchDataJam();
+                    });
+
+                    $('#container_jam').on('click', '#action_jamKe', function(e) {
+                        e.preventDefault();
+                        var id = $(this).data('id');
+                        var jam = $(this).data('nama');
+
+
+                        $('#modal_jam_Jadwal').modal('show');
+                        $('#form_jam_jadwal').attr('action', `{{ url('penjadwalan/update/jam/${id}') }}`);
+                        $('#method_jam').val('PUT');
+                        updateModals($('#title-modal_jam'), $('#cn-btn_jam'),
+                            'Kelola Jam Pelajaran',
+                            `<button type="button" id="delete_jam" class="btn btn-danger me-2">Hapus</button><button type="submit" class="btn btn-primary">Simpan</button>`
+                        );
+
+                        $.ajax({
+                            type: "GET",
+                            url: `{{ url('penjadwalan/jam/${id}') }}`,
+                            success: function(item) {
+                                $('#jamKe').val(item.jamKe);
+                                $('#jamMulai').val(item.jamMulai);
+                                $('#jamSelesai').val(item.jamSelesai);
+                                $('#delete_jam').val(item.idjamKe);
+                            },
+                        });
+                    });
+
+                    $('#modal_jam_Jadwal').on('click', '#delete_jam', function(e) {
+                        e.preventDefault();
+                        var id = $(this).val();
+                        var jam = $('#jamKe').val();
+
+                        Swal.fire({
+                            title: 'Apakah Anda yakin?',
+                            html: `Menghapus jam pelajaran ke <b>${jam}</b>`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            cancelButtonText: 'Batal',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Ya, Hapus!',
+                            reverseButtons: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    type: "DELETE",
+                                    url: "{{ url('penjadwalan/destroy/jam') }}/" + id,
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+                                        $('#modal_jam_Jadwal').modal('hide');
+                                        fatchDataJam();
+                                    },
+                                });
+                            }
+                        });
+                    });
+
+                    $('#modal_jam_Jadwal').on('hidden.bs.modal', function() {
+                        resetForm($('#form_jam_jadwal'), function() {});
+                    });
+
+                    function getJamKe() {
+                        $.ajax({
+                            type: "GET",
+                            url: `{{ url('penjadwalan/get-jam') }}`,
+                            success: function(data) {
+                                $('#idjamKe').find('option').not(':first').remove();
+                                $.each(data, function(i, item) {
+                                    $('#idjamKe').append(`
+                                        <option value="${item.idjamKe}">Jam ke -${item.jamKe}</option>
+                                    `);
+                                });
+                            },
+                        });
+                    }
+
+                    modalJadwal.on('show.bs.modal', function() {
+                        getJamKe();
+                        $('#idPeriode').on('change', function() {
+                            getSelectKelas();
+                            $('#idKelas').find('option:first').prop('selected', true);
+                            $('#idKelas').find('option').not(':first').remove();
+                        });
+                        $('#idKelas').change(function() {
+                            getPengjar();
+                        });
+                    });
 
                     modalJadwal.on('hidden.bs.modal', function() {
                         resetForm(formJadwal, function() {
                             $('#idPengajaran').val(null).change();
+                            $('#idKelas').find('option').not(':first').remove();
                         });
                     });
 
                     insertOrUpdateData(formJadwal, function() {
                         modalJadwal.modal('hide');
-                        tabelJadwal.DataTable().ajax.reload();
+                        tabelViewJadwal.DataTable().ajax.reload();
                     });
+
 
                     function getSelectKelas() {
                         $.ajax({
@@ -190,8 +488,7 @@
                                 periode: $('#idPeriode').val()
                             },
                             success: function(data) {
-                                $('#idKelas').empty();
-                                $('#idKelas').append(`<option value="" disabled selected>Pilih Kelas</option>`);
+                                $('#idKelas').find('option').not(':first').remove();
                                 $.each(data.kelas, function(i, item) {
                                     $('#idKelas').append(
                                         `<option value="${item.idKelas}">Kelas ${item.namaKelas}</option>`
@@ -209,7 +506,7 @@
                                 kelas_id: $('#idKelas').val()
                             },
                             success: function(data) {
-                                $('#idPengajaran').empty();
+                                $('#idPengajaran').find('option').not(':first').remove();
                                 $.each(data.pengajaran, function(key, value) {
                                     $('#idPengajaran').append(
                                         `<option value="${value.idPengajaran}">${value.mapel.namaMapel}</option>`
@@ -229,197 +526,23 @@
                             minuteStep: 15,
                         });
                     }
-                    timePicker('#jamMulai', '#modal_Jadwal');
-                    timePicker('#jamSelesai', '#modal_Jadwal');
+                    // timePicker('#jamMulai', '#modal_Jadwal');
+                    // timePicker('#jamSelesai', '#modal_Jadwal');
 
                     select2('#idPengajaran', modalJadwal);
-
-                    $('#idPeriode').on('change', function() {
-                        getSelectKelas();
-                    });
-                    $('#idKelas').change(function() {
-                        getPengjar();
-                    });
 
                     $('.btn_kelas').on('click', function() {
                         $('.btn_kelas').removeClass('active');
                         $(this).addClass('active');
-
                         // Muat ulang data tabel
-                        tabelJadwal.DataTable().ajax.reload();
+                        tabelViewJadwal.DataTable().ajax.reload();
                     });
 
                     $('#periode').on('change', function() {
-                        tabelJadwal.DataTable().ajax.reload();
-
+                        tabelViewJadwal.DataTable().ajax.reload();
                     });
-
-                    tabelJadwal.DataTable({
-                        processing: true,
-                        ajax: {
-                            url: "{{ url('penjadwalan/get-data') }}",
-                            data: function(d) {
-                                d.periode = $('#periode').val();
-                                d.kelas_id = $(".btn_kelas.active").val();
-                                // console.log(d.kelas_id);
-                            }
-                        },
-                        columns: [{
-                                data: null,
-                                name: 'nomor',
-                                className: 'text-center',
-                                render: function(data, type, row, meta) {
-                                    return meta.row + 1;
-                                }
-                            },
-                            {
-                                data: 'kelasMapel',
-                                name: 'kelasMapel',
-                            },
-                            {
-                                data: 'hari',
-                                name: 'hari',
-                                className: 'text-center',
-                                render: function(data) {
-                                    var hari = data;
-                                    if (hari === 'Senin') {
-                                        return '<span class="fs-6 badge bg-primary">Senin</span>';
-                                    } else if (hari === 'Selasa') {
-                                        return '<span class="fs-6 badge bg-secondary">Selasa</span>';
-                                    } else if (hari === 'Rabu') {
-                                        return '<span class="fs-6 badge bg-success">Rabu</span>';
-                                    } else if (hari === 'Kamis') {
-                                        return '<span class="fs-6 badge bg-info">Kamis</span>';
-                                    } else if (hari === 'Jumat') {
-                                        return '<span class="fs-6 badge bg-warning">Jumat</span>';
-                                    } else if (hari === 'Sabtu') {
-                                        return '<span class="fs-6 badge bg-danger">Sabtu</span>';
-                                    }
-                                },
-                            },
-                            {
-                                data: 'mapel',
-                                name: 'mapel'
-                            },
-                            {
-                                data: 'guru',
-                                name: 'guru',
-                            },
-                            {
-                                data: "waktu",
-                                name: "waktu",
-                                className: 'text-center'
-                            },
-                            {
-                                data: 'jamMulai',
-                                name: 'jamMulai',
-                                className: 'text-center',
-                            },
-                            {
-                                data: 'jamSelesai',
-                                name: 'jamSelesai',
-                                className: 'text-center'
-                            },
-                            {
-                                data: null,
-                                className: 'text-center',
-                                searchable: false,
-                                render: function(data, type, row) {
-                                    return '<div class="btn-group">' +
-                                        '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editJadwal" value="' +
-                                        data.idJadwal + '">' +
-                                        '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
-                                        '<button type="button" class="btn btn-sm btn-alt-danger" id="action-hapusJadwal" title="Delete" value="' +
-                                        data.idJadwal + '" data-nama-jadwal=" Hari ' + data.hari +
-                                        ' Mapel ' + data
-                                        .mapel +
-                                        '">' +
-                                        '<i class="fa fa-fw fa-times"></i></button>' +
-                                        '</div>';
-                                }
-                            }
-                        ],
-                        order: [
-                            [0, 'asc']
-                        ],
-                        dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'><'col-12 col-sm-12 col-md-6'f>>" +
-                            "<'row my-2 '<'col-12 col-sm-12'tr>>" +
-                            "<'row mb-2'<'col-12 col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
-                        lengthMenu: [10, 25],
-                    });
-
-
-                    $(document).on('click', '#action-editJadwal', function(e) {
-                        e.preventDefault();
-                        var id = $(this).val();
-                        modalJadwal.modal('show');
-                        updateModals(modalJadwal_title, modalJadwal_btn, 'Ubah Jadwal',
-                            `<button type="submit" class="btn btn-primary">Simpan</button>`);
-                        formJadwal.attr('action', `{{ url('penjadwalan/update/${id}') }}`);
-                        method.val('PUT');
-
-                        $.ajax({
-                            type: "GET",
-                            url: `{{ url('penjadwalan/edit/${id}') }}`,
-                            success: function(response) {
-                                $('#idPeriode').val(response.jadwal.idPeriode).change();
-                                setTimeout(function() {
-                                    $('#idKelas').val(response.jadwal.idKelas).change();
-                                }, 500);
-                                setTimeout(() => {
-                                    $('#idPengajaran').val(response.jadwal.idPengajaran)
-                                    .change();
-                                }, 1000);
-                                $('#hari').val(response.jadwal.hari);
-                                $('#jamMulai').val(response.jadwal.jamMulai);
-                                $('#jamSelesai').val(response.jadwal.jamSelesai);
-                                // loadDropdownOptionsJadwal();
-                            },
-                        });
-
-                    });
-                    $(document).on('click', '#action-hapusJadwal', function(e) {
-                        e.preventDefault();
-                        var id = $(this).val();
-                        var nama = $(this).data('nama-jadwal');
-
-                        Swal.fire({
-                            title: 'Apakah Anda yakin?',
-                            html: `Menghapus jadwal <b>${nama}</b>`,
-                            icon: 'warning',
-                            showCancelButton: true,
-                            cancelButtonText: 'Batal',
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Ya, Hapus!',
-                            reverseButtons: true
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                $.ajax({
-                                    type: "DELETE",
-                                    url: "{{ url('penjadwalan/destroy') }}/" + id,
-                                    dataType: 'json',
-                                    success: function(response) {
-                                        Swal.fire({
-                                            icon: response.status,
-                                            title: response.title,
-                                            text: response.message,
-                                            showConfirmButton: false,
-                                            timer: 2000
-                                        });
-                                        tabelJadwal.DataTable().ajax.reload();
-                                    },
-                                });
-                            }
-                        });
-                    });
-
-
-
-
                 });
             </script>
-        @endcannot
         @can('guru')
             <script>
                 $(document).ready(function() {

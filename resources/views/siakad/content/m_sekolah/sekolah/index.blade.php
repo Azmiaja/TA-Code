@@ -194,20 +194,20 @@
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {
-                            tbl_namsklh.innerHTML = data.namaSekolah ?? '<em><u>null<u></em>';
-                            tbl_npsn.innerHTML = data.npsn ?? '<em><u>null<u></em>';
-                            tbl_alamat.innerHTML = data.alamat ?? '<em><u>null<u></em>';
-                            tbl_desa.innerHTML = data.desa ?? '<em><u>null<u></em>';
-                            tbl_kec.innerHTML = data.kec ?? '<em><u>null<u></em>';
-                            tbl_kab.innerHTML = data.kab ?? '<em><u>null<u></em>';
-                            tbl_prov.innerHTML = data.prov ?? '<em><u>null<u></em>';
-                            tbl_kdpos.innerHTML = data.kd_pos ?? '<em><u>null<u></em>';
-                            tbl_telp.innerHTML = data.telp ?? '<em><u>null<u></em>';
-                            tbl_web.innerHTML = data.web ?? '<em><u>null<u></em>';
-                            tbl_email.innerHTML = data.email ?? '<em><u>null<u></em>';
-                            tbl_slogan.innerHTML = data.slogan ?? '<em><u>null<u></em>';
+                            tbl_namsklh.innerHTML = data.namaSekolah ?? '-';
+                            tbl_npsn.innerHTML = data.npsn ?? '-';
+                            tbl_alamat.innerHTML = data.alamat ?? '-';
+                            tbl_desa.innerHTML = data.desa ?? '-';
+                            tbl_kec.innerHTML = data.kec ?? '-';
+                            tbl_kab.innerHTML = data.kab ?? '-';
+                            tbl_prov.innerHTML = data.prov ?? '-';
+                            tbl_kdpos.innerHTML = data.kd_pos ?? '-';
+                            tbl_telp.innerHTML = data.telp ?? '-';
+                            tbl_web.innerHTML = data.web ?? '-';
+                            tbl_email.innerHTML = data.email ?? '-';
+                            tbl_slogan.innerHTML = data.slogan ?? '-';
                             tbl_logo.src = data.logo;
-                            tbl_mlink.innerHTML = data.mapsLink ?? '<em><u>null<u></em>';
+                            tbl_mlink.innerHTML = data.mapsLink ?? '-';
                             $(tbl_membed).html(data.mapsEmbed ?? '<iframe></iframe>');
 
                             $('#updateData').val(data.idSekolah);

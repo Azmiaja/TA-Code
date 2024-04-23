@@ -102,6 +102,7 @@
         </div>
     </div>
 
+
     @include('siakad/content/m_sekolah/pegawai/modal-pegawai')
     @include('siakad/content/m_sekolah/pegawai/modal-jabatan')
 
@@ -191,17 +192,17 @@
 
                 const jabatandd = $('#idJabatan');
 
-                function getJabatan(url) {
+                function getJabatan() {
                     // var id = $(this).val();
                     $.ajax({
-                        url: url,
+                        url: `{{ route('get-jabatan.options') }}`,
                         type: 'GET',
                         dataType: 'json',
                         success: function(data) {
                             // Kosongkan select option
                             jabatandd.find('option').not(':first').remove();
 
-                            $.each(data, function(i, item) {
+                            $.each(data.jabatan2, function(i, item) {
                                 // Tambahkan filter berdasarkan jenisPegawai
                                 if ((jenisPegawai.val() === 'Guru' && item.jenis === 'Guru') ||
                                     (jenisPegawai.val() === 'Tendik' && item.jenis === 'Tendik')) {
@@ -209,11 +210,41 @@
                                         value: item.idJabatan,
                                         text: item.jabatan
                                     });
-                                    if (item.idJabatan == jabatandd.val()) {
-                                        option.prop('selected', true);
-                                    }
                                     jabatandd.append(option);
-                                    // jabatandd.append(option);
+                                }
+                            });
+                        }
+                    });
+                }
+
+                function getJabatanEdit(id) {
+                    // var id = $(this).val();
+                    $.ajax({
+                        url: `{{ route('get-jabatan.options') }}`,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            // Kosongkan select option
+                            jabatandd.find('option').not(':first').remove();
+
+                            // Perulangan untuk jabatan1
+                            $.each(data.jabatan1, function(i, item) {
+                                // Tambahkan filter berdasarkan jenisPegawai
+                                if ((jenisPegawai.val() === 'Guru' && item.jenis === 'Guru') ||
+                                    (jenisPegawai.val() === 'Tendik' && item.jenis === 'Tendik')) {
+                                    var option =
+                                        `<option value="${item.idJabatan}" ${item.idJabatan !== id ? 'hidden' : ''} ${item.idJabatan === id ? 'selected' : ''}>${item.jabatan}</option>`;
+                                    jabatandd.append(option);
+                                }
+                            });
+
+                            // Lakukan perulangan untuk jabatan2 hanya jika ada jabatan yang sesuai
+                            $.each(data.jabatan2, function(i, jabatan) {
+                                if ((jenisPegawai.val() === 'Guru' && jabatan.jenis === 'Guru') ||
+                                    (jenisPegawai.val() === 'Tendik' && jabatan.jenis === 'Tendik')
+                                    ) {
+                                    var option = `<option value="${jabatan.idJabatan}">${jabatan.jabatan}</option>`;
+                                    jabatandd.append(option);
                                 }
                             });
                         }
@@ -285,9 +316,9 @@
                     // Reset form
                     resetForm(formPegawai, function() {
                         imgPrev.style.display = 'none';
-                        jabatandd.find('option').not(':first').remove();
                     });
-                    jenisPegawai.off('change');
+                    jabatandd.val(null).trigger('change');
+                    jabatandd.find('option').not(':first').remove();
                 });
                 modalJabatan.on('hidden.bs.modal', function() {
                     $('.kategori-jabatan').prop('hidden', false);
@@ -358,7 +389,7 @@
                     formMethod.val('POST');
                     jenisPegawai.change(function() {
                         jabatandd.val(null).change();
-                        getJabatan(`{{ route('get-jabatan.options.edit') }}`);
+                        getJabatan();
                     });
                 });
 
@@ -414,9 +445,7 @@
                     );
                     formMethod.val('PUT');
 
-                    jenisPegawai.change(function() {
-                        getJabatan(`{{ route('get-jabatan.options.edit') }}`);
-                    });
+
 
                     var id = $(this).val();
                     // console.log(id);
@@ -440,10 +469,14 @@
                             $(agama).val(response.data.agama);
                             $(hp).val(response.data.noHp);
                             $(status).val(response.data.status);
-                            jenisPegawai.val(response.data.jenisPegawai).change();
-                            setTimeout(() => {
-                                $(idJabatan).val(response.data.idJabatan).change();
-                            }, 300);
+
+                            // var idJ = response.data.idJabatan;
+                            $(jnPegawai).val(response.data.jenisPegawai).trigger('change');
+                            getJabatanEdit(response.data.idJabatan);
+                            $(jnPegawai).change(function() {
+                                getJabatanEdit(response.data.idJabatan);
+                            });
+                            // $(idJabatan).val(response.data.idJabatan);
                             if (response.data.gambar == null) {
                                 imgPrev.src = '';
                             } else {

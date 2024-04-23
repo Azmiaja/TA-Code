@@ -13,6 +13,7 @@ class BerandaController extends Controller
             'judul' => 'Beranda',
             'sub_judul' => 'Beranda',
             'text_singkat' => 'Selamat datang <a href="' . route('profil_pengguna.index') . '" class="fw-semibold">' . $auth . '</a>, di SIAKAD SD Negeri Lemahbang',
+            's_idKelas' => ''
         ]);
     }
 }

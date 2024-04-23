@@ -28,14 +28,19 @@ class JabatanController extends Controller
 
     public function getJabatanOptions()
     {
-        $data = Jabatan::whereDoesntHave('pegawai')->orderBy('idJabatan', 'desc')->get();
-        return response()->json($data);
+        // $data = Jabatan::whereDoesntHave('pegawai')->orderBy('idJabatan', 'desc')->get();
+        // // $data = Jabatan::orderBy('idJabatan', 'desc')->get();
+        // return response()->json($data);
+        $data = Jabatan::orderBy('idJabatan', 'desc')->get();
+        $data_2 = Jabatan::whereDoesntHave('pegawai')->orderBy('idJabatan', 'desc')->get();
+        return response()->json(['jabatan1' => $data, 'jabatan2' => $data_2]);
     }
 
     public function getJabatanOptionsEdit()
     {
-        $data = Jabatan::all();
-        return response()->json($data);
+        $data = Jabatan::orderBy('idJabatan', 'desc')->get();
+        $data_2 = Jabatan::whereDoesntHave('pegawai')->orderBy('idJabatan', 'desc')->get();
+        return response()->json(['jabatan1' => $data, 'jabatan2' => $data_2]);
     }
 
     public function store(Request $request)

@@ -58,7 +58,7 @@
                                 <div class="mb-2">
                                     <label class="form-label" for="tanggalLahir">Tanggal Lahir <span
                                         class="text-danger fs-sm">*</span></label>
-                                    <input type="text" class="form-control" id="tanggalLahir" name="tanggalLahir" required>
+                                    <input type="text" class="form-control" id="tanggalLahir" name="tanggalLahir" required placeholder="Masukan Tanggal Lahir">
                                 </div>
                                 <!-- Alamat -->
                                 <div class="mb-2">
@@ -106,9 +106,8 @@
                                 </div>
                                 <!-- Status -->
                                 <div class="mb-2">
-                                    <label class="form-label" for="status">Status <span
-                                            class="text-danger fs-sm">*</span></label>
-                                    <select name="status" id="status" class="form-select" required>
+                                    <label class="form-label" for="status">Status</label>
+                                    <select name="status" id="status" class="form-select">
                                         <option value="" selected disabled>Pilih Status</option>
                                         <option value="Aktif">Aktif</option>
                                         <option value="Tidak Aktif">Tidak Aktif</option>

@@ -1,9 +1,18 @@
-<nav id="sidebar" aria-label="Main Navigation" class="bg-city">
+<nav id="sidebar" aria-label="Main Navigation" class="" style="background-color: #004E8B;">
     {{-- Sidebar header --}}
-    <div class="content-header bg-city p-0 shadow-sm">
+    <div class="content-header p-0 shadow-sm" style="background-color: #004E8B;">
         <a class="fw-bold text-dual d-flex" href="#">
+            @php
+                use App\Models\Sekolah;
+                use App\Models\Pengajaran;
+                use App\Models\Periode;
+                use App\Models\Kelas;
+                $data = Sekolah::first();
+            @endphp
+            {{-- {{ $data->logo }} --}}
             <div class="smini-visible d-inline-block">
-                <img height="45" style="margin-left: .35rem;" src="{{ asset('assets/media/img/tut-wuri.png') }}">
+                <img height="45" style="margin-left: .35rem;"
+                    src="{{ $data->logo ? asset('storage/' . $data->logo) : asset('assets/media/img/tut-wuri.png') }}">
             </div>
             <div class="row m-0 px-2 smini-hide tracking-wider fw-normal">
                 <p class="p-0 m-0 fw-bold" style="padding: 0;">SIAKAD</p>
@@ -47,10 +56,10 @@
                 </li>
                 @can('siswa')
                     <li class="nav-main-item">
-                        <a class="nav-main-link {{ Request::routeIs('ss.beranda.index') ? 'active' : '' }}"
-                            href="{{ route('ss.beranda.index') }}">
+                        <a class="nav-main-link {{ Request::routeIs('absen-siswa.index') ? 'active' : '' }}"
+                            href="{{ route('absen-siswa.index') }}">
                             <i class="nav-main-link-icon si si-check"></i>
-                            <span class="nav-main-link-name">Absensi</span>
+                            <span class="nav-main-link-name">Catatan Kehadiran</span>
                         </a>
                     </li>
                     <li class="nav-main-item">
@@ -61,20 +70,59 @@
                         </a>
                     </li>
                     <li class="nav-main-item">
-                        <a class="nav-main-link {{ Request::routeIs('ss.beranda.index') ? 'active' : '' }}"
-                            href="{{ route('ss.beranda.index') }}">
+                        <a class="nav-main-link {{ Request::routeIs('jadwal.siswa') ? 'active' : '' }}"
+                            href="{{ route('jadwal.siswa') }}">
                             <i class="nav-main-link-icon si si-event"></i>
                             <span class="nav-main-link-name">Jadwal</span>
                         </a>
                     </li>
                 @endcan
                 @can('guru')
-                    <li class="nav-main-item">
-                        <a class="nav-main-link {{ Request::routeIs('ss.beranda.index') ? 'active' : '' }}"
-                            href="{{ route('ss.beranda.index') }}">
+                    <li
+                        class="nav-main-item {{ Request::routeIs('presensi.index', 'rekapitulasi.index', 'rekap.index') ? 'open' : '' }}">
+                        <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('presensi.index', 'rekapitulasi.index', 'rekap.index') ? 'active' : '' }}"
+                            data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="?#">
                             <i class="nav-main-link-icon si si-check"></i>
-                            <span class="nav-main-link-name">Absen Siswa</span>
+                            <span class="nav-main-link-name">Presensi Siswa</span>
                         </a>
+                        @php
+                            $periode = Periode::where('status', 'Aktif')->orderBy('tanggalMulai', 'desc')->first();
+                            $kelas = Pengajaran::where('idPegawai', Auth::user()->pegawai->idPegawai)
+                                ->where('idPeriode', $periode->idPeriode ?? '')
+                                ->whereHas('kelas', function ($query) {
+                                    $query->orderBy('namaKelas', 'asc');
+                                })
+                                ->with('kelas')
+                                ->select('idKelas')
+                                ->distinct()
+                                ->get();
+                            $pegawai = Kelas::where('idPegawai', Auth::user()->pegawai->idPegawai)
+                                ->where('idPeriode', $periode->idPeriode)
+                                ->first();
+                        @endphp
+                        <ul class="nav-main-submenu">
+                            @if ($kelas)
+                                <li class="nav-main-item p-0">
+                                    @foreach ($kelas as $item)
+                                        <a id="btn_side_kelas_{{ $item->idKelas }}"
+                                            data-periode="{{ $item->kelas->idPeriode }}"
+                                            data-kelas="{{ $item->kelas->namaKelas }}"
+                                            class="nav-main-link {{ $item->idKelas === $s_idKelas ? 'active' : '' }}"
+                                            href="{{ route('presensi.index', ['name' => $item->kelas->namaKelas]) }}">
+                                            <span class="nav-main-link-name">Kelas {{ $item->kelas->namaKelas }}</span>
+                                        </a>
+                                    @endforeach
+                                </li>
+                            @endif
+                            @if ($pegawai)
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link {{ Request::routeIs('rekap.index') ? 'active' : '' }}"
+                                        href="{{ route('rekap.index') }}">
+                                        <span class="nav-main-link-name">Rekapitulasi</span>
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
                     </li>
                     <li class="nav-main-item">
                         <a class="nav-main-link {{ Request::routeIs('ss.beranda.index') ? 'active' : '' }}"
@@ -117,7 +165,7 @@
                         </a>
                         <ul class="nav-main-submenu">
                             <li class="nav-main-item p-0">
-                                <a class="nav-main-link {{ $sub_judul === 'Sekolah' ? 'active' : '' }}"
+                                <a class="nav-main-link {{ Request::routeIs('sekolah.index') ? 'active' : '' }}"
                                     href="{{ route('sekolah.index') }}">
                                     <span class="nav-main-link-name">Sekolah</span>
                                 </a>
@@ -219,8 +267,8 @@
                     </li>
                     <li class="nav-main-heading">Akademik</li>
                     <li class="nav-main-item">
-                        <a class="nav-main-link {{ Request::routeIs('absensi.index') ? 'active' : '' }}"
-                            href="{{ route('absensi.index') }}">
+                        <a class="nav-main-link {{ Request::routeIs('re-presensi.index') ? 'active' : '' }}"
+                            href="{{ route('re-presensi.index') }}">
                             <i class="nav-main-link-icon si si-note"></i>
                             <span class="nav-main-link-name">Presensi</span>
                         </a>

@@ -5,11 +5,11 @@
     <div class="content">
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Daftar Pengajar</h3>
+                <h3 class="block-title"></h3>
                 <div class="block-options">
                     <select name="pilih_periode" id="pilih_periode" class="form-select form-select-sm">
                         @foreach ($periode as $item)
-                            <option value="{{ $item->idPeriode }}">
+                            <option value="{{ $item->idPeriode }}" {{ $item->status === 'Aktif' ? 'selected' : '' }}>
                                 Semester
                                 {{ $item->semester }} {{ $item->tahun }}
                             </option>
@@ -39,19 +39,19 @@
                         </div>
                         <div class="col-md-6 text-md-end text-center">
                             <button class="btn btn-sm btn-alt-success" id="btn_tambahPengajar"><i
-                                    class="fa fa-plus me-2"></i>Tambah Pengajar</button>
+                                    class="fa fa-plus me-2"></i>Kelola Pengajar</button>
                         </div>
                     </div>
                     <table id="tabel_Pengajar" class="table table-bordered table-vcenter w-100">
                         <thead class="bg-body-light align-middle">
                             <tr>
-                                <th style="width: 5%;" class="text-center">No</th>
-                                <th style="width: 10%;">Kelas</th>
-                                <th>Nama Guru</th>
-                                <th style="width: 12%;">NIP</th>
-                                <th style="width: 25%;">Mapel Diampu</th>
+                                <th style="width: 4%;" class="text-center">No</th>
+                                {{-- <th style="width: 10%;">Kelas</th> --}}
+                                <th style="width: 8%;">NIP</th>
+                                <th style="width: 20%;">Nama Guru</th>
+                                <th>Mapel Diampu</th>
                                 <th style="width: 18%;">Semester</th>
-                                <th style="width: 10%;" class="text-center">Aksi</th>
+                                <th style="width: 7%;" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -103,7 +103,7 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label" for="idPengajaran">Nama Pengajar</label>
+                                    <label class="form-label" for="idPengajaran">Nama Guru</label>
                                     <select name="idPegawai" id="idPegawai" class="form-select"
                                         data-placeholder="Pilih Guru" required>
                                     </select>
@@ -147,9 +147,14 @@
                         tabelPengajar.DataTable().ajax.reload();
                     });
 
+                    let kelas = $('.btn_kelas').val();
+                    $('.content .block-title').text('Data Pengajar Kelas ' + kelas);
+
                     $('.btn_kelas').on('click', function() {
                         $('.btn_kelas').removeClass('active');
                         $(this).addClass('active');
+                        let kelas = $(this).val();
+                        $('.content .block-title').text('Data Pengajar Kelas ' + kelas);
 
                         // Muat ulang data tabel
                         tabelPengajar.DataTable().ajax.reload();
@@ -173,20 +178,17 @@
                                 }
                             },
                             {
-                                data: 'kelasPengajar',
-                                name: 'kelasPengajar',
+                                data: 'nipPengajar',
+                                name: 'nipPengajar'
                             },
                             {
                                 data: 'namaPengajar',
                                 name: 'namaPengajar'
                             },
                             {
-                                data: 'nipPengajar',
-                                name: 'nipPengajar'
-                            },
-                            {
                                 data: 'mapelDiampu',
-                                name: 'mapelDiampu'
+                                name: 'mapelDiampu',
+                                className: 'fw-medium lh-3'
                             },
                             {
                                 data: 'semester',
@@ -198,9 +200,9 @@
                                 render: function(data, type, row) {
                                     // console.log(data);
                                     return '<div class="btn-group">' +
-                                        '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editPengajar" value="' +
-                                        data.idPengajaran + '">' +
-                                        '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
+                                        // '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editPengajar" value="' +
+                                        // data.idPengajaran + '">' +
+                                        // '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
                                         '<button type="button" class="btn btn-sm btn-alt-danger"  id="action-hapusPengajar" title="Delete" value="' +
                                         data.idPengajaran + '" data-nama-pengajar="' + data
                                         .namaPengajar + '" data-kelas="' + data.kelasPengajar + '">' +
@@ -226,8 +228,10 @@
                     btnInsert.click(function() {
                         $('#idPegawai').val(null).change();
                         $('#idMapel').val(null).change();
-                        getSelectMapel();
+                        // getSelectMapel();
                     });
+
+
 
                     function getSelectKelas() {
                         $.ajax({
@@ -241,63 +245,46 @@
                                 $('#idKelas').find('option').not(':first').remove();
                                 // $('#idKelas').html('');
                                 $.each(data.kelas, function(i, item) {
-                                    var selected = '';
-                                    if (item.idKelas === $('#idKelas').val()) {
-                                        selected = 'selected';
-                                    }
                                     $('#idKelas').append(
-                                        `<option value="${item.idKelas}" ${selected}>Kelas ${item.namaKelas}</option>`
+                                        `<option value="${item.idKelas}" >Kelas ${item.namaKelas}</option>`
                                     );
                                 });
                             },
                         });
                     }
 
-                    function getSelectPegawai() {
+                    function getSelectPegawai(id) {
                         $.ajax({
                             type: "GET",
                             url: `{{ url('pengajar/option/guru') }}`,
                             success: function(data) {
                                 $('#idPegawai').empty();
-                                $('#idPegawai').prepend(`<option disabled selected>Pilih Guru</option>`);
+                                // $('#idPegawai').prepend(`<option disabled selected>Pilih Guru</option>`);
                                 $.each(data, function(i, item) {
+                                    var idKelas = item.kelas[0] ? item.kelas[0].idKelas : '';
+                                    var selected = idKelas == id ? 'selected' :
+                                        '';
                                     $('#idPegawai').append(
-                                        `<option value="${item.idPegawai}">${item.nip} - ${item.namaPegawai}</option>`
+                                        `<option ${selected} value="${item.idPegawai}">${item.nip} - ${item.namaPegawai}</option>`
                                     );
                                 });
                             },
                         });
                     }
 
-                    function getSelectMapel() {
+                    function getSelectMapel(id) {
                         $.ajax({
                             type: "GET",
-                            url: `{{ route('pengajar.form') }}`,
+                            url: `{{ url('pengajar/get-mapel/${id}') }}`,
                             success: function(data) {
-                                $('#idMapel').empty();
+                                $('#idMapel').html('');
                                 $('#idMapel_two').empty();
-                                $.each(data.mapel, function(i, item) {
+                                $.each(data, function(i, item) {
                                     $('#idMapel').append(
-                                        `<option ${i<10 ? 'selected' : ''} value="${item.idMapel}">${item.namaMapel}</option>`
+                                        `<option ${i<10 ? 'selected' : ''} value="${item.idMapel}">${item.singkatan ?? item.namaMapel}</option>`
                                     );
                                     $('#idMapel_two').append(
-                                        `<option value="${item.idMapel}">${item.namaMapel}</option>`
-                                    );
-                                });
-                            },
-                        });
-                    }
-
-                    function getSelectMapel_2() {
-                        $.ajax({
-                            type: "GET",
-                            url: `{{ route('pengajar.form') }}`,
-                            success: function(data) {
-                                $('#idMapel').empty();
-                                // $('#idMapel_two').empty();
-                                $.each(data.mapel, function(i, item) {
-                                    $('#idMapel').append(
-                                        `<option value="${item.idMapel}">${item.namaMapel}</option>`
+                                        `<option value="${item.idMapel}">${item.singkatan ?? item.namaMapel}</option>`
                                     );
                                 });
                             },
@@ -309,21 +296,34 @@
                     select2Multiple('#idMapel', modalPengajar);
                     select2('#idMapel_two', modalPengajar);
 
-                    getSelectPegawai();
                     // getSelectKelas();
 
-                    $('#idPeriode').on('change', function() {
-                        getSelectKelas();
-                    });
+
 
                     modalPengajar.on('hidden.bs.modal', function() {
                         resetForm(formPengajar, function() {
-                            $('#idMapel').val(null).change();
-                            $('#idKelas').val(null).change();
-                            // $('#idPeriode').prop('disabled', false);
+                            $('#idKelas').find('option').not(':first').remove();
                             $('#mapel_two').prop('hidden', true);
                             $('#multi_mapel').prop('hidden', false);
                         });
+                        $('#idMapel').empty();
+                        $('#idPegawai').empty();
+                    });
+
+                    modalPengajar.on('show.bs.modal', function() {
+                        $('#idPeriode').on('change', function() {
+                            getSelectKelas();
+                            $('#idKelas').find('option:first').prop('selected', true);
+                            $('#idKelas').find('option').not(':first').remove();
+                            $('#idPegawai').val(null).change();
+                        });
+                        $('#idKelas').on('change', function() {
+                            var id = $(this).val();
+                            // console.log(id);
+                            getSelectMapel(id);
+                            getSelectPegawai(id);
+                        });
+
                     });
 
                     insertOrUpdateData(formPengajar, function() {
@@ -331,6 +331,7 @@
                         tabelPengajar.DataTable().ajax.reload();
 
                     });
+
 
                     $(document).on('click', '#action-editPengajar', function(e) {
                         e.preventDefault();
@@ -371,6 +372,7 @@
                     $(document).on('click', '#action-hapusPengajar', function(e) {
                         e.preventDefault();
                         var id = $(this).val();
+                        var idP = $('#pilih_periode').val();
                         var nama = $(this).data('nama-pengajar');
                         var kelas = $(this).data('kelas');
 
@@ -388,7 +390,7 @@
                             if (result.isConfirmed) {
                                 $.ajax({
                                     type: "DELETE",
-                                    url: "/pengajar/destroy/" + id,
+                                    url: `{{ url('pengajar/destroy/${id}/${idP}') }}`,
                                     dataType: 'json',
                                     success: function(response) {
                                         Swal.fire({

@@ -113,9 +113,18 @@ class UserController extends Controller
             // Handle jika berita tidak ditemukan
             return response()->json(['status' => 'error', 'message' => 'Data user tidak ditemukan.']);
         }
-        $kelas =  $siswa->siswa->kelas->pluck('namaKelas')->transform(function ($kelas) {
-            return 'Kelas ' . $kelas;
-        })->toArray() ?: ['N/A'];
+        $now = Carbon::now();
+
+        $kelas =  $siswa->siswa->kelas()
+            ->whereHas('periode', function ($query) use ($now) {
+                $query->where('tanggalMulai', '<=', $now)
+                    ->where('tanggalSelesai', '>=', $now);
+            })
+            ->pluck('namaKelas')
+            ->transform(function ($kelas) {
+                return 'Kelas ' . $kelas;
+            })
+            ->toArray() ?: ['N/A'];
 
         return response()->json(['user' => $siswa, 'kelas' => $kelas]);
     }

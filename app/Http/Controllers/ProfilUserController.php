@@ -27,6 +27,7 @@ class ProfilUserController extends Controller
             'sub_judul' => 'Profil',
             'text_singkat' => 'Mengelola data informasi profil Anda!',
             'auths' => $auth,
+            's_idKelas' => ''
         ]);
     }
 

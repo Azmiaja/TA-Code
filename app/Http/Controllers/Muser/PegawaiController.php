@@ -84,31 +84,42 @@ class PegawaiController extends Controller
     public function store(Request $request)
     {
         try {
-            $validatedData = $request->validate([
-                'nip' => 'required|numeric',
-                'namaPegawai' => 'required|string',
-                'tempatLahir' => 'nullable|string',
-                'tanggalLahir' => 'required',
-                'jenisKelamin' => 'nullable',
-                'agama' => 'nullable',
-                'alamat' => 'nullable|string',
-                'jenisPegawai' => 'required',
-                'noHp' => 'nullable|string|max:15',
-                'status' => 'required',
-                // 'gambar' => 'nullable|file|mimes:jpeg,png,jpg,svg|max:2048',
-                'idJabatan' => 'required|numeric',
+            $validator = Validator::make($request->all(), [
+                'nip' => 'integer|digits:18|unique:pegawai,nip',
+                'alamat' => 'max:125',
+                'noHp' => 'max:15',
+                'namaPegawai' => 'max:45'
+            ], [
+                'nip.integer' => 'NIP harus berupa angka.',
+                'nip.unique' => 'NIP sudah terdaftar.',
+                'nip.digits' => 'Panjang NIP harus 18 digit.',
+                'alamat.max' => 'Alamat terlalu panjang maksimal 125 karakter.',
+                'noHp.max' => 'Panjang Nomor telepon maksimal 15',
+                'namaPegawai.max' => 'Nama pegawai terlalu panjang maksimal 45 karakter.'
             ]);
 
-            
-            $validatedData['tanggalLahir'] = Carbon::createFromFormat('d/m/Y', $request->tanggalLahir)->format('Y-m-d');
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+                Pegawai::create([
+                    'nip'  => $request->nip,
+                    'namaPegawai' => $request->namaPegawai,
+                    'tempatLahir' => $request->tempatLahir,
+                    'tanggalLahir' => Carbon::createFromFormat('d/m/Y', $request->tanggalLahir)->format('Y-m-d'),
+                    'jenisKelamin' => $request->jenisKelamin,
+                    'agama' => $request->agama,
+                    'alamat' => $request->alamat,
+                    'jenisPegawai' => $request->jenisPegawai,
+                    'noHp' => $request->noHp,
+                    'idJabatan' => $request->idJabatan
+                ]);
 
-            Pegawai::create($validatedData);
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil menambahkan data.',
-            ]);
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil menambahkan data.',
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
 
@@ -136,34 +147,51 @@ class PegawaiController extends Controller
         try {
             $pegawai = Pegawai::find($id);
 
-            $pegawai->fill($request->except(['some_field_to_exclude']));
-
-            if ($request->file('gambarPegawai')) {
-                if ($pegawai->gambar) {
-                    Storage::delete('public/' . $pegawai->gambar);
-                }
-                $imgName = uniqid() . '.' . $request->file('gambarPegawai')->getClientOriginalExtension();
-                $pegawai->gambar = $request->file('gambarPegawai')->storeAs('profil_pegawai', $imgName, 'public');
-            }
-
-            $pegawai->tanggalLahir = Carbon::createFromFormat('d/m/Y', $request->input('tanggalLahir'))->format('Y-m-d');
-
-            // Perbarui data pegawai
-            $pegawai->update();
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil memprbarui data.'
+            $validator = Validator::make($request->all(), [
+                'nip' => [
+                    'integer',
+                    'digits:18',
+                    'unique:pegawai,nip,' . $id . ',idPegawai'
+                ],
+                'alamat' => 'max:125',
+                'noHp' => 'max:15',
+                'idJabatan' => 'unique:pegawai,idJabatan,' . $id . ',idPegawai',
+                'namaPegawai' => 'max:45'
+            ], [
+                'nip.integer' => 'NIP harus berupa angka.',
+                'nip.unique' => 'NIP sudah terdaftar.',
+                'nip.digits' => 'Panjang NIP harus 18 digit.',
+                'alamat.max' => 'Alamat terlalu panjang maksimal 125 karakter.',
+                'noHp.max' => 'Panjang Nomor telepon maksimal 15',
+                'idJabatan.unique' => 'Jabatan sudah digunakan pegawai lain.',
+                'namaPegawai.max' => 'Nama pegawai terlalu panjang maksimal 45 karakter.'
             ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+                $pegawai->update([
+                    'nip'  => $request->nip,
+                    'namaPegawai' => $request->namaPegawai,
+                    'tempatLahir' => $request->tempatLahir,
+                    'tanggalLahir' => Carbon::createFromFormat('d/m/Y', $request->tanggalLahir)->format('Y-m-d'),
+                    'jenisKelamin' => $request->jenisKelamin,
+                    'agama' => $request->agama,
+                    'alamat' => $request->alamat,
+                    'jenisPegawai' => $request->jenisPegawai,
+                    'noHp' => $request->noHp,
+                    'idJabatan' => $request->idJabatan,
+                    'status' => $request->status
+                ]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil memprbarui data.'
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 'error',
-                'title' => 'Gagal',
-                'message' => 'Error storing data.'  . $e->getMessage(),
-            ], 422);
         }
     }
 
