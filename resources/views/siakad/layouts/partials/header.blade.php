@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Sistem Informasi Akademik | {{ $judul }}</title>
-    <link rel="shortcut icon" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/media/favicons/logo-tutwuri.png') }}">
+    <link rel="shortcut icon" href="{{ asset('assets/media/img/tut-wuri.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/media/img/tut-wuri.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/media/img/tut-wuri.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet"
         href="{{ asset('assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css') }}">
@@ -93,15 +93,17 @@
                             aria-expanded="false">
                             <div class="ratio" style="width: 21px; height: 21px;">
                                 @canany(['super.admin', 'admin', 'guru'])
-                                    @if (Auth::user()->pegawai->gambar)
+                                    @php
+                                        $pegawai = Auth::user()->pegawai;
+                                        $gambar = $pegawai->gambar
+                                            ? (file_exists(public_path('storage/' . $pegawai->gambar))
+                                                ? asset('storage/' . $pegawai->gambar)
+                                                : asset('assets/media/avatars/avatar1.jpg'))
+                                            : asset('assets/media/avatars/avatar1.jpg');
+                                    @endphp
                                         <img class="rounded-circle"
-                                            src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}"
+                                            src="{{ $gambar }}"
                                             alt="Header Avatar" style="width: 100%; height: 100%; object-fit: cover">
-                                    @else
-                                        <img class="rounded-circle border border-3 border-white"
-                                            style="width: 100%; height: 100%; object-fit: cover"
-                                            src="{{ asset('assets/media/avatars/avatar1.jpg') }}" alt="">
-                                    @endif
                                 @endcanany
                                 @can('siswa')
                                     <img class="rounded-circle" src="{{ asset('assets/media/avatars/avatar0.jpg') }}"
@@ -124,16 +126,9 @@
                             <div class="p-3 text-center  bg-body-light border-bottom rounded-top">
                                 <div class="ratio mx-auto" style="width: 70px; height: 70px;">
                                     @cannot('siswa')
-                                        @if (Auth::user()->pegawai->gambar)
-                                            <img class="rounded-circle border border-3 border-white"
-                                                style="width: 100%; height: 100%; object-fit: cover"
-                                                src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}"
-                                                alt="">
-                                        @else
-                                            <img class="rounded-circle border border-3 border-white"
-                                                style="width: 100%; height: 100%; object-fit: cover"
-                                                src="{{ asset('assets/media/avatars/avatar1.jpg') }}" alt="">
-                                        @endif
+                                        <img class="rounded-circle border border-3 border-white"
+                                            style="width: 100%; height: 100%; object-fit: cover" src="{{ $gambar }}"
+                                            alt="">
                                     @endcannot
                                     @can('siswa')
                                         <img class="rounded-circle border border-3 border-white"
@@ -154,18 +149,18 @@
                                 <p class="mb-0 text-muted fs-sm fw-medium">
                                     {{ Auth::user()->hakAkses }}</p>
                                 @can('siswa')
-                                        @php
-                                            $app = Auth::user()->siswa->idSiswa;
-                                            $periode = \App\Models\Periode::where('status', 'Aktif')
-                                                ->orderBy('tanggalMulai', 'desc')
-                                                ->first();
-                                            $kelas = \App\Models\Kelas::where('idPeriode', $periode->idPeriode)
-                                                ->whereHas('siswa', function ($query) use ($app) {
-                                                    $query->where('siswa.idSiswa', $app); // Menambahkan alias pada kolom idSiswa
-                                                })
-                                                ->select('namaKelas')
-                                                ->first();
-                                        @endphp
+                                    @php
+                                        $app = Auth::user()->siswa->idSiswa;
+                                        $periode = \App\Models\Periode::where('status', 'Aktif')
+                                            ->orderBy('tanggalMulai', 'desc')
+                                            ->first();
+                                        $kelas = \App\Models\Kelas::where('idPeriode', $periode->idPeriode)
+                                            ->whereHas('siswa', function ($query) use ($app) {
+                                                $query->where('siswa.idSiswa', $app); // Menambahkan alias pada kolom idSiswa
+                                            })
+                                            ->select('namaKelas')
+                                            ->first();
+                                    @endphp
                                     <p class="mb-0 text-muted fs-sm fw-semibold">Kelas {{ $kelas->namaKelas }}</p>
                                 @endcan
                                 {{-- Role --}}

@@ -242,8 +242,9 @@
                             $.each(data.jabatan2, function(i, jabatan) {
                                 if ((jenisPegawai.val() === 'Guru' && jabatan.jenis === 'Guru') ||
                                     (jenisPegawai.val() === 'Tendik' && jabatan.jenis === 'Tendik')
-                                    ) {
-                                    var option = `<option value="${jabatan.idJabatan}">${jabatan.jabatan}</option>`;
+                                ) {
+                                    var option =
+                                        `<option value="${jabatan.idJabatan}">${jabatan.jabatan}</option>`;
                                     jabatandd.append(option);
                                 }
                             });
@@ -255,17 +256,25 @@
                     e.preventDefault();
 
                     const id = $(this).val();
-                    const foto = $(this).data('foto');
-
+                    // const foto = $(this).data('foto');
+                    let gambar = $(this).data('foto');
                     // Tampilkan modal
                     modalFoto.modal('show');
-
+                    
                     // Set action form
                     formFoto.attr('action', `{{ url('pegawai/ubah-image/${id}') }}`);
 
-                    imgPrev.src = foto ? `{{ asset('/storage/${foto}') }}` :
-                        `{{ asset('assets/media/avatars/avatar1.jpg') }}`;
+                    if (gambar && fileExists(`{!! asset('storage/${gambar}') !!}`)) {
+                        gambar = `{!! asset('storage/${gambar}') !!}`; // Tampilkan URL gambar
+                    } else {
+                        gambar = '{!! asset('assets/media/avatars/avatar1.jpg') !!}'; // Atur URL gambar default
+                    }
+                    // console.log(gambar);
+
+                    imgPrev.src = gambar;
                 });
+
+                
 
 
 

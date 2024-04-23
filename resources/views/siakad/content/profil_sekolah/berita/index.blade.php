@@ -175,7 +175,12 @@
                             if (response.berita.gambar == null) {
                                 imgPrev.src = '';
                             } else {
-                                var image = `{{ asset('storage/${response.berita.gambar}') }}`;
+                                var image = response.berita.gambar;
+                                if (image && fileExists(`{!! asset('storage/${image}') !!}`)) {
+                                    image = `{!! asset('storage/${image}') !!}`; // Tampilkan URL image
+                                } else {
+                                    image = `{!! asset('assets/media/img/empty-image.jpg') !!}`; // Atur URL imageUrl default
+                                }
                                 imgPrev.style.display = 'block';
                                 imgPrev.src = image;
                             }
@@ -259,7 +264,13 @@
                         {
                             data: null,
                             render: function(data, type, row) {
-                                var imageUrl = `{{ asset('storage/${row.gambar}') }}`;
+                                var imageUrl = row.gambar;
+
+                                if (imageUrl && fileExists(`{!! asset('storage/${imageUrl}') !!}`)) {
+                                    imageUrl = `{!! asset('storage/${imageUrl}') !!}`; // Tampilkan URL imageUrl
+                                } else {
+                                    imageUrl = `{!! asset('assets/media/img/empty-image.jpg') !!}`; // Atur URL imageUrl default
+                                }
                                 // console.log(inageUrl);
 
                                 $('.popup-link-berita').magnificPopup({
@@ -275,9 +286,9 @@
                                 });
 
                                 return `<div class="rounded-2" style="border: 2px dashed #dfe3ea; overflow:hidden;">
-                                    <a href="${imageUrl ?? '#'}" class="popup-link-berita" id="pop-up-${row.idBerita}" title="View Image">
+                                    <a href="${imageUrl}" class="popup-link-berita" id="pop-up-${row.idBerita}" title="View Image">
                                             <div class="ratio ratio-16x9">
-                                                    <img src="${imageUrl ?? null}" style="width: 100%; height: 100%; object-fit: cover;" class="flex-shrink-0 rounded-2">
+                                                    <img src="${imageUrl}" style="width: 100%; height: 100%; object-fit: cover;" class="flex-shrink-0 rounded-2">
                                                     </div>
                                                     </a>
                                         </div>`;

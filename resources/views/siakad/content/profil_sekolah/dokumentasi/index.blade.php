@@ -227,7 +227,12 @@
                                 videoLink.disabled = true;
                                 gambarDokumentasi.disabled = false;
                                 imgPrev.style.display = 'block';
-                                var image = `{{ asset('storage/${response.dock.media}') }}`;
+                                var image = response.dock.media;
+                                if (image && fileExists(`{!! asset('storage/${image}') !!}`)) {
+                                    image = `{!! asset('storage/${image}') !!}`; // Tampilkan URL image
+                                } else {
+                                    image = `{!! asset('assets/media/img/empty-image.jpg') !!}`; // Atur URL imageUrl default
+                                }
                                 imgPrev.src = image;
                             }
                             var formatedWaktu = formatWaktu(response.dock.waktu);
@@ -314,7 +319,12 @@
                         {
                             data: 'media',
                             render: function(data, type, row) {
-                                var imageUrl = `{{ asset('storage/${row.media}') }}`;
+                                var image = row.media;
+                                if (image && fileExists(`{!! asset('storage/${image}') !!}`)) {
+                                    image = `{!! asset('storage/${image}') !!}`; // Tampilkan URL image
+                                } else {
+                                    image = `{!! asset('assets/media/img/empty-image.jpg') !!}`; // Atur URL imageUrl default
+                                }
 
                                 $('.popup-link-foto').magnificPopup({
                                     type: 'image',
@@ -329,9 +339,9 @@
                                 });
 
                                 return `<div class="rounded-2" style="border: 2px dashed #dfe3ea; overflow:hidden;">
-                                    <a href="${imageUrl ?? '#'}" class="popup-link-foto" id="pop-up-${row.idDokumentasi}" title="View Image">
+                                    <a href="${image ?? '#'}" class="popup-link-foto" id="pop-up-${row.idDokumentasi}" title="View Image">
                                             <div class="ratio ratio-16x9">
-                                                    <img src="${imageUrl ?? null}" class="object-fit-cover flex-shrink-0 rounded">
+                                                    <img src="${image}" class="object-fit-cover flex-shrink-0 rounded">
                                                     </div>
                                                     </a>
                                         </div>`;
@@ -381,7 +391,6 @@
                         {
                             data: 'media',
                             render: function(data, type, row) {
-
 
                                 $('.popup-link-video').magnificPopup({
                                     type: 'iframe',

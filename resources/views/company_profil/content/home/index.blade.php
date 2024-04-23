@@ -100,13 +100,8 @@
                     <div class="block-content p-2">
                         {{-- Foto Kepala Sekolah --}}
                         <div class="portrait-content">
-                            @if ($gambarKepsek == null)
-                                <img src="{{ asset('assets/media/avatars/avatar1.jpg') }}" class="rounded-top"
-                                    style="width: 100%; height: 100%; object-fit: cover;">
-                            @else
-                                <img src="{{ $gambarKepsek }}" class="rounded-top"
-                                    style="width: 100%; height: 100%; object-fit: cover;">
-                            @endif
+                            <img src="{{ $gambarKepsek }}" class="rounded-top"
+                                style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                         <div class="card-body p-2">
                             {{-- Nama Kepala Sekolah --}}

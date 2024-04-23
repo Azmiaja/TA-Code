@@ -211,12 +211,18 @@
                                     method="POST" id="form_editFotoProfil" enctype="multipart/form-data">
                                     @csrf
                                     @method('put')
+                                    @php
+                                        $gambar = $auths->pegawai->gambar
+                                            ? (file_exists(public_path('storage/' . $auths->pegawai->gambar))
+                                                ? asset('storage/' . $auths->pegawai->gambar)
+                                                : asset('assets/media/avatars/avatar1.jpg'))
+                                            : asset('assets/media/avatars/avatar1.jpg');
+                                    @endphp
                                     <div class="row">
                                         <div class="mb-2 text-center">
                                             <div class="ratio mx-auto mb-2 rounded-circle border border-5"
                                                 style="width: 200px; height: 200px;">
-                                                <img src="{{ $auths->pegawai->gambar ? asset('storage/' . $auths->pegawai->gambar) : asset('assets/media/avatars/avatar1.jpg') }}"
-                                                    class="img-preview rounded-circle"
+                                                <img src="{{ $gambar }}" class="img-preview rounded-circle"
                                                     style="width: 100%; height: 100%; object-fit: cover;" alt="">
                                             </div>
                                             <span class="text-danger error-text gambar_error"></span>

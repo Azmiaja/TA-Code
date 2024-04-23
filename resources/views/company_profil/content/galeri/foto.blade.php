@@ -18,12 +18,19 @@
             <div class="col-12 p-0">
                 <div class="row g-3">
                     @foreach ($dock as $b)
+                        @php
+                            $gambar = $b->media
+                                ? (file_exists(public_path('storage/' . $b->media))
+                                    ? asset('storage/' . $b->media)
+                                    : asset('assets/media/img/empty-image.jpg'))
+                                : asset('assets/media/img/empty-image.jpg');
+                        @endphp
                         <div class="col-lg-4 col-md-6">
                             {{-- <div class="block block-rounded"> --}}
                             <a class=" block block-rounded block-link-pop overflow-hidden popup-link m-0 h-100"
-                                href="{{ asset('storage/' . $b->media) }}">
+                                href="{{ $gambar }}">
                                 <div class="ratio ratio-16x9">
-                                    <img class="object-fit-cover" src="{{ asset('storage/' . $b->media) }}"
+                                    <img class="object-fit-cover" src="{{ $gambar }}"
                                         alt="Foto-{{ $b->idDokumentasi }}">
                                 </div>
                                 <div class="block-content p-3">

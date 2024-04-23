@@ -41,7 +41,10 @@ class Sekolah extends Controller
             'web' => $sekolah->website,
             'email' => $sekolah->email,
             'slogan' => $sekolah->slogan,
-            'logo' => asset('storage/' . $sekolah->logo),
+            'logo' => $sekolah->logo ? (file_exists(public_path('storage/' . $sekolah->logo))
+                ? asset('storage/' . $sekolah->logo)
+                : asset('assets/media/img/tut-wuri.png'))
+                : asset('assets/media/img/tut-wuri.png'),
             'mapsLink' => $sekolah->mapsLink,
             'mapsEmbed' => $sekolah->mapsEmbed,
             'idSekolah' => $sekolah->idSekolah,

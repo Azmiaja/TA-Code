@@ -29,13 +29,29 @@ class ProfilController extends Controller
         $profil = Profil::find(1); // Ganti dengan logic untuk mendapatkan profil yang sesuai
 
         return response()->json([
-            'image' => asset('storage/' . $profil->gambar),
+            'image' => $profil->gambar
+                ? (file_exists(public_path('storage/' . $profil->gambar))
+                    ? asset('storage/' . $profil->gambar)
+                    : asset('assets/media/img/empty-image.jpg'))
+                : asset('assets/media/img/empty-image.jpg'),
             'deskripsi' => $profil->deskripsi,
-            'imageSejarah' => asset('storage/' . $profil->sejarahImg),
+            'imageSejarah' => $profil->sejarahImg
+                ? (file_exists(public_path('storage/' . $profil->sejarahImg))
+                    ? asset('storage/' . $profil->sejarahImg)
+                    : asset('assets/media/img/empty-image.jpg'))
+                : asset('assets/media/img/empty-image.jpg'),
             'deskripsiSejarah' => $profil->sejarahText,
-            'imageOrganisasi' => asset('storage/' . $profil->strukturOrgImg),
+            'imageOrganisasi' => $profil->strukturOrgImg
+                ? (file_exists(public_path('storage/' . $profil->strukturOrgImg))
+                    ? asset('storage/' . $profil->strukturOrgImg)
+                    : asset('assets/media/img/empty-image.jpg'))
+                : asset('assets/media/img/empty-image.jpg'),
             'deskripsiOrganisasi' => $profil->strukturOrgText,
-            'imageKeuangan' => asset('storage/' . $profil->keuanganImg),
+            'imageKeuangan' => $profil->keuanganImg
+                ? (file_exists(public_path('storage/' . $profil->keuanganImg))
+                    ? asset('storage/' . $profil->keuanganImg)
+                    : asset('assets/media/img/empty-image.jpg'))
+                : asset('assets/media/img/empty-image.jpg'),
             'deskripsiKeuangan' => $profil->keuanganText,
             'visi' => $profil->visi,
             'misi' => $profil->misi,
@@ -101,7 +117,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'title'=> 'Gagal',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -139,7 +155,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'title'=> 'Gagal',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -177,7 +193,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'title'=> 'Gagal',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -215,7 +231,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'title'=> 'Gagal',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -245,7 +261,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'title'=> 'Gagal',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -273,7 +289,7 @@ class ProfilController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'title'=> 'Gagal',
+                'title' => 'Gagal',
                 'message' => 'Error storing data.',
             ], 422);
         }
@@ -301,35 +317,34 @@ class ProfilController extends Controller
     public function destroy($id)
     {
         $profil = Profil::find($id);
-    
+
         return $this->deleteProfil($profil, 'deskripsi', 'gambar');
     }
 
     public function destroySejarah($id)
     {
         $profil = Profil::find($id);
-    
+
         return $this->deleteProfil($profil, 'sejarahText', 'sejarahImg');
     }
 
     public function destroyOrg($id)
     {
         $profil = Profil::find($id);
-    
+
         return $this->deleteProfil($profil, 'strukturOrgText', 'strukturOrgImg');
     }
-    
+
     public function destroyKeuangan($id)
     {
         $profil = Profil::find($id);
-    
+
         return $this->deleteProfil($profil, 'keuanganText', 'keuanganImg');
     }
     public function destroySam($id)
     {
         $profil = Profil::find($id);
-    
+
         return $this->deleteProfil($profil, 'sambutanKepsek', '');
     }
-    
 }

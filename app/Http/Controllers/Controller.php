@@ -29,7 +29,10 @@ class Controller extends BaseController
             ->take(6)
             ->get()
             ->map(function ($berita) {
-                $gambar = $berita->gambar ? asset('storage/' . $berita->gambar) : asset('assets/media/img/404.svg');
+                $gambar = $berita->gambar ? (file_exists(public_path('storage/' . $berita->gambar))
+                    ? asset('storage/' . $berita->gambar)
+                    : asset('assets/media/img/empty-image.jpg'))
+                    : asset('assets/media/img/empty-image.jpg');
                 $judul = $berita->judulBerita ?: null;
                 $isi = $berita->isiBerita ?: null;
                 $id = $berita->idBerita ?: null;
@@ -45,7 +48,10 @@ class Controller extends BaseController
             ->take(4)
             ->get()
             ->map(function ($foto) {
-                $gambar = asset('storage/' . $foto->media);
+                $gambar = $foto->media ? (file_exists(public_path('storage/' . $foto->media))
+                    ? asset('storage/' . $foto->media)
+                    : asset('assets/media/img/empty-image.jpg'))
+                    : asset('assets/media/img/empty-image.jpg');
                 return compact('gambar');
             });
 
@@ -54,7 +60,12 @@ class Controller extends BaseController
         })->first();
 
         $kepsek = $pegawai ? $pegawai->namaPegawai : '-';
-        $gambarKepsek = $pegawai ? asset('storage/' . $pegawai->gambar) : null;
+        $gambarKepsek = $pegawai ? ($pegawai->gambar
+            ? (file_exists(public_path('storage/' . $pegawai->gambar))
+                ? asset('storage/' . $pegawai->gambar)
+                : asset('assets/media/avatars/avatar1.jpg'))
+            : asset('assets/media/avatars/avatar1.jpg')) : asset('assets/media/avatars/avatar1.jpg');
+
         $jabatan = $pegawai ? optional($pegawai->jabatanPegawai)->jabatan : 'Kepala Sekolah';
 
 
@@ -95,7 +106,10 @@ class Controller extends BaseController
                 ->take(5)
                 ->get()
                 ->map(function ($berita) {
-                    $gambar = $berita->gambar ? asset('storage/' . $berita->gambar) : asset('assets/media/img/404.svg');
+                    $gambar = $berita->gambar ? (file_exists(public_path('storage/' . $berita->gambar))
+                        ? asset('storage/' . $berita->gambar)
+                        : asset('assets/media/img/empty-image.jpg'))
+                        : asset('assets/media/img/empty-image.jpg');
                     $judul = $berita->judulBerita ?: null;
                     $isi = $berita->isiBerita ?: null;
                     $id = $berita->idBerita ?: null;
@@ -115,7 +129,10 @@ class Controller extends BaseController
                 ->take(PHP_INT_MAX)
                 ->get()
                 ->map(function ($berita) {
-                    $gambar = $berita->gambar ? asset('storage/' . $berita->gambar) : asset('assets/media/img/404.svg');
+                    $gambar = $berita->gambar ? (file_exists(public_path('storage/' . $berita->gambar))
+                        ? asset('storage/' . $berita->gambar)
+                        : asset('assets/media/img/empty-image.jpg'))
+                        : asset('assets/media/img/empty-image.jpg');
                     $judul = $berita->judulBerita ?: null;
                     $isi = $berita->isiBerita ?: null;
                     $id = $berita->idBerita ?: null;
@@ -132,7 +149,10 @@ class Controller extends BaseController
                 ->take(5)
                 ->get()
                 ->map(function ($berita) {
-                    $gambar = $berita->gambar ? asset('storage/' . $berita->gambar) : asset('assets/media/img/404.svg');
+                    $gambar = $berita->gambar ? (file_exists(public_path('storage/' . $berita->gambar))
+                        ? asset('storage/' . $berita->gambar)
+                        : asset('assets/media/img/empty-image.jpg'))
+                        : asset('assets/media/img/empty-image.jpg');
                     $judul = $berita->judulBerita ?: null;
                     $isi = $berita->isiBerita ?: null;
                     $id = $berita->idBerita ?: null;
@@ -151,7 +171,10 @@ class Controller extends BaseController
                 ->take(PHP_INT_MAX)
                 ->get()
                 ->map(function ($berita) {
-                    $gambar = $berita->gambar ? asset('storage/' . $berita->gambar) : asset('assets/media/img/404.svg');
+                    $gambar = $berita->gambar ? (file_exists(public_path('storage/' . $berita->gambar))
+                        ? asset('storage/' . $berita->gambar)
+                        : asset('assets/media/img/empty-image.jpg'))
+                        : asset('assets/media/img/empty-image.jpg');
                     $judul = $berita->judulBerita ?: null;
                     $id = $berita->idBerita ?: null;
                     $slug = $berita->slug ?: null;
@@ -175,7 +198,10 @@ class Controller extends BaseController
             ->first();
 
 
-        $beritaImg = $berita->gambar ? asset('storage/' . $berita->gambar) : asset('assets/media/img/404.svg');
+        $beritaImg = $berita->gambar ? (file_exists(public_path('storage/' . $berita->gambar))
+            ? asset('storage/' . $berita->gambar)
+            : asset('assets/media/img/empty-image.jpg'))
+            : asset('assets/media/img/empty-image.jpg');
         $contenBerita = $berita->isiBerita ?: null;
         $judul = $berita->judulBerita ?: null;
         $penulis = $berita->penulis ?: null;
@@ -221,7 +247,10 @@ class Controller extends BaseController
 
         $sekolah = Sekolah::find(1)->first();
         $namaSD = $sekolah->namaSekolah ?: 'SD Negeri Lemahbang';
-        $logoSD = $sekolah->logo ? asset('storage/' . $sekolah->logo) : asset('assets/media/img/tut-wuri.png');
+        $logoSD = $sekolah->logo ? (file_exists(public_path('storage/' . $sekolah->logo))
+            ? asset('storage/' . $sekolah->logo)
+            : asset('assets/media/img/tut-wuri.png'))
+            : asset('assets/media/img/tut-wuri.png');
         $sloganSD = $sekolah->slogan ?: '-';
         $emailSD = $sekolah->email ?: '-';
         $mapsLink = $sekolah->mapsLink ?: '#';
@@ -246,13 +275,25 @@ class Controller extends BaseController
         $profil = Profil::orderBy('idProfil')->first();
 
         $profilDeskripsi = $profil->deskripsi ?: null;
-        $profilGambar = $profil->gambar ? asset('storage/' . $profil->gambar) : asset('assets/media/img/404.svg');
+        $profilGambar =  $profil->gambar ? (file_exists(public_path('storage/' .  $profil->gambar))
+            ? asset('storage/' .  $profil->gambar)
+            : asset('assets/media/img/empty-image.jpg'))
+            : asset('assets/media/img/empty-image.jpg');
         $sejarahDeskripsi = $profil->sejarahText ?: null;
-        $sejarahGambar = $profil->sejarahImg ? asset('storage/' . $profil->sejarahImg) : asset('assets/media/img/404.svg');
+        $sejarahGambar = $profil->sejarahImg ? (file_exists(public_path('storage/' . $profil->sejarahImg))
+            ? asset('storage/' . $profil->sejarahImg)
+            : asset('assets/media/img/empty-image.jpg'))
+            : asset('assets/media/img/empty-image.jpg');
         $orgDeskripsi = $profil->strukturOrgText ?: null;
-        $orgGambar = $profil->strukturOrgImg ? asset('storage/' . $profil->strukturOrgImg) : asset('assets/media/img/404.svg');
+        $orgGambar = $profil->strukturOrgImg ? (file_exists(public_path('storage/' . $profil->strukturOrgImg))
+            ? asset('storage/' . $profil->strukturOrgImg)
+            : asset('assets/media/img/empty-image.jpg'))
+            : asset('assets/media/img/empty-image.jpg');
         $keuanganDeskripsi = $profil->keuanganText ?: null;
-        $keuanganGambar = $profil->keuanganImg ? asset('storage/' . $profil->keuanganImg) : asset('assets/media/img/404.svg');
+        $keuanganGambar = $profil->keuanganImg ? (file_exists(public_path('storage/' . $profil->keuanganImg))
+            ? asset('storage/' . $profil->keuanganImg)
+            : asset('assets/media/img/empty-image.jpg'))
+            : asset('assets/media/img/empty-image.jpg');
         $visiDeskripsi = $profil->visi ?: null;
         $misiDeskripsi = $profil->misi ?: null;
 
@@ -278,7 +319,10 @@ class Controller extends BaseController
             ->take(4)
             ->get()
             ->map(function ($berita) {
-                $gambar = $berita->gambar ? asset('storage/' . $berita->gambar) : asset('assets/media/img/404.svg');
+                $gambar = $berita->gambar ? (file_exists(public_path('storage/' . $berita->gambar))
+                    ? asset('storage/' . $berita->gambar)
+                    : asset('assets/media/img/empty-image.jpg'))
+                    : asset('assets/media/img/empty-image.jpg');
                 $judul = $berita->judulBerita ?: null;
                 $isi = $berita->isiBerita ?: null;
                 $id = $berita->idBerita ?: null;
@@ -389,7 +433,11 @@ class Controller extends BaseController
 
         return $guru->map(function ($pegawai) {
             $namaPegawai = $pegawai->namaPegawai;
-            $gambar = $pegawai->gambar ? asset('storage/' . $pegawai->gambar) : asset('assets/media/avatars/avatar1.jpg');
+            $gambar = $pegawai->gambar
+                ? (file_exists(public_path('storage/' . $pegawai->gambar))
+                    ? asset('storage/' . $pegawai->gambar)
+                    : asset('assets/media/avatars/avatar1.jpg'))
+                : asset('assets/media/avatars/avatar1.jpg');
             $namaJabatan = $pegawai->jabatanPegawai ? $pegawai->jabatanPegawai->jabatan : '-';
 
             return compact('namaPegawai', 'gambar', 'namaJabatan');

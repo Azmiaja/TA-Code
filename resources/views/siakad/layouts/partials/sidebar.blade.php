@@ -8,11 +8,16 @@
                 use App\Models\Periode;
                 use App\Models\Kelas;
                 $data = Sekolah::first();
+
+                $gambar = $data->logo
+                    ? (file_exists(public_path('storage/' . $data->logo))
+                        ? asset('storage/' . $data->logo)
+                        : asset('assets/media/img/tut-wuri.png'))
+                    : asset('assets/media/img/tut-wuri.png');
             @endphp
             {{-- {{ $data->logo }} --}}
             <div class="smini-visible d-inline-block">
-                <img height="45" style="margin-left: .35rem;"
-                    src="{{ $data->logo ? asset('storage/' . $data->logo) : asset('assets/media/img/tut-wuri.png') }}">
+                <img height="45" style="margin-left: .35rem;" src="{{ $gambar }}">
             </div>
             <div class="row m-0 px-2 smini-hide tracking-wider fw-normal">
                 <p class="p-0 m-0 fw-bold" style="padding: 0;">SIAKAD</p>

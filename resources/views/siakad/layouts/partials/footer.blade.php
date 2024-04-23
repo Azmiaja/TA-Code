@@ -162,6 +162,13 @@
             allowClear: true,
         });
     }
+
+    function fileExists(url) {
+        let http = new XMLHttpRequest();
+        http.open('HEAD', url, false);
+        http.send();
+        return http.status !== 404;
+    }
 </script>
 </body>
 

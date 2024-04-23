@@ -421,8 +421,12 @@
                             // Set the form fields with the fetched data
                             id.val(response.profil.idProfil);
                             myEditor.setData(response.profil.deskripsi);
-                            var image =
-                                `{{ asset('storage/${response.profil.gambar}') }}`;
+                            var image = response.profil.gambar;
+                            if (image && fileExists(`{!! asset('storage/${image}') !!}`)) {
+                                image = `{!! asset('storage/${image}') !!}`; // Tampilkan URL image
+                            } else {
+                                image = `{!! asset('assets/media/img/empty-image.jpg') !!}`; // Atur URL imageUrl default
+                            }
                             imgPrev.style.display = 'block';
                             imgPrev.src = image;
                         }
@@ -455,8 +459,12 @@
                             // Set the form fields with the fetched data
                             id.val(response.profil.idProfil);
                             myEditor.setData(response.profil.sejarahText);
-                            var image =
-                                `{{ asset('storage/${response.profil.sejarahImg}') }}`;
+                            var image = response.profil.sejarahImg;
+                            if (image && fileExists(`{!! asset('storage/${image}') !!}`)) {
+                                image = `{!! asset('storage/${image}') !!}`; // Tampilkan URL image
+                            } else {
+                                image = `{!! asset('assets/media/img/empty-image.jpg') !!}`; // Atur URL imageUrl default
+                            }
                             imgPrev.style.display = 'block';
                             imgPrev.src = image;
                         }
@@ -489,8 +497,12 @@
                             // Set the form fields with the fetched data
                             id.val(response.profil.idProfil);
                             myEditor.setData(response.profil.strukturOrgText);
-                            var image =
-                                `{{ asset('storage/${response.profil.strukturOrgImg}') }}`;
+                            var image = response.profil.strukturOrgImg;
+                            if (image && fileExists(`{!! asset('storage/${image}') !!}`)) {
+                                image = `{!! asset('storage/${image}') !!}`; // Tampilkan URL image
+                            } else {
+                                image = `{!! asset('assets/media/img/empty-image.jpg') !!}`; // Atur URL imageUrl default
+                            }
                             imgPrev.style.display = 'block';
                             imgPrev.src = image;
                         }
@@ -523,8 +535,12 @@
                             // Set the form fields with the fetched data
                             id.val(response.profil.idProfil);
                             myEditor.setData(response.profil.keuanganText);
-                            var image =
-                                `{{ asset('storage/${response.profil.keuanganImg}') }}`;
+                            var image = response.profil.keuanganImg;
+                            if (image && fileExists(`{!! asset('storage/${image}') !!}`)) {
+                                image = `{!! asset('storage/${image}') !!}`; // Tampilkan URL image
+                            } else {
+                                image = `{!! asset('assets/media/img/empty-image.jpg') !!}`; // Atur URL imageUrl default
+                            }
                             imgPrev.style.display = 'block';
                             imgPrev.src = image;
                         }
