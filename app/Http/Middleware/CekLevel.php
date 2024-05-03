@@ -22,11 +22,11 @@ class CekLevel
     //     return abort(404);
     // }
     // Cek level middleware
-    public function handle($request, Closure $next, $hakAkses)
+    public function handle($request, Closure $next, $allowedRoles)
     {
         $user = $request->user();
 
-        if ($user && $user->hakAkses == $hakAkses) {
+        if ($user && in_array($user->hakAkses, explode('|', $allowedRoles))) {
             return $next($request);
         }
 

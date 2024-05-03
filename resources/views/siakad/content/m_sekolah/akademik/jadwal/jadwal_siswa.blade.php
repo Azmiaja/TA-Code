@@ -13,22 +13,12 @@
             <div class="block-header block-header-default">
                 <h3 class="block-title">Jadwal Pelajaran</h3>
                 <div class="block-options">
-                    <select name="periode" id="periode" class="form-select form-select-sm">
-                        <option value="{{ $periode->idPeriode }}">
-                            Semester
-                            {{ $periode->semester }} {{ $periode->tahun }}
-                        </option>
-                    </select>
+                    <button class="btn btn-primary btn-sm" id="btn_print_jadwal">
+                        <i class="fa fa-print me-2"></i>Cetak</button>
                 </div>
             </div>
             <div class="block-content block-content-full">
                 <div class="table-responsive">
-                    <div class="row p-0 m-0">
-                        <div class="col text-end p-1">
-                            <button class="btn btn-primary" id="btn_print_jadwal">
-                                <i class="fa fa-print me-2"></i>Cetak</button>
-                        </div>
-                    </div>
                     <table id="tabel-JPSiswa" class="table table-bordered w-100 caption-top border-dark">
                         <caption class="h3 text-uppercase text-center pt-0 text-dark">
                             Jadwal Pelajaran Kelas {{ $kelas->namaKelas }}<br>
@@ -56,7 +46,7 @@
                                             url: `{!! route('get-jadwal.siswa') !!}`,
                                             type: 'GET',
                                             data: function(d) {
-                                                d.idPeriode = $('#periode').val();
+                                                d.idPeriode = {!! json_encode($periode->idPeriode) !!};
                                                 d.kelas = {!! json_encode($kelas->namaKelas) !!};
                                             }
                                         },

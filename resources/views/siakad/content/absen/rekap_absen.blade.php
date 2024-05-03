@@ -110,8 +110,8 @@
                 <div class="row m-0 mt-4 text-center">
                     <div class="col-6 align-middle">
                         <span>Mengetahui <br>Kepala Sekolah</span><br><br><br><br><br>
-                        <strong class="text-uppercase"><u>{{ $kepsek->namaPegawai }}</u></strong><br>
-                        <span class="text-uppercase">NIP.{{ $kepsek->nip }}</span>
+                        <strong class="text-uppercase"><u>{{ $kepsek->namaPegawai ?: '' }}</u></strong><br>
+                        <span class="text-uppercase">NIP.{{ $kepsek->nip ?: '' }}</span>
                     </div>
                     <div class="col-6">
                         <span>Magetan, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }} <br>Wali

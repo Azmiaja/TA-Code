@@ -122,7 +122,7 @@
                             </div> --}}
                             <div class="col-lg-12 col-3">
                                 <label for="" class="form-label">Setting</label>
-                                <div class="form-check form-switch">
+                                <div class="form-check form-switch" id="bt-swc">
                                     <input class="form-check-input" type="checkbox" id="btn_ttd_switch">
                                     <label class="form-check-label fs-sm" for="btn_ttd_switch">Tampilkan Baris TTD</label>
                                 </div>
@@ -498,19 +498,19 @@
             $('#btn_ttd_switch').on('change', function() {
                 if ($('#ttd_presensi').is(':hidden')) {
                     $('#ttd_presensi').prop('hidden', false);
-                    $('.form-check-label').text('Sembunyikan Baris TTD');
+                    $('#bt-swc .form-check-label').text('Sembunyikan Baris TTD');
                 } else {
                     $('#ttd_presensi').prop('hidden', true);
-                    $('.form-check-label').text('Tampilkan Baris TTD');
+                    $('#bt-swc .form-check-label').text('Tampilkan Baris TTD');
                 }
             });
             $('#btn_ttd_switch_2').on('change', function() {
                 if ($('#ttd_presensi_2').is(':hidden')) {
                     $('#ttd_presensi_2').prop('hidden', false);
-                    $('.form-check-label').text('Sembunyikan Baris TTD');
+                    $('#modal_presebsi_bulan .form-check-label').text('Sembunyikan Baris TTD');
                 } else {
                     $('#ttd_presensi_2').prop('hidden', true);
-                    $('.form-check-label').text('Tampilkan Baris TTD');
+                    $('#modal_presebsi_bulan .form-check-label').text('Tampilkan Baris TTD');
                 }
             });
 

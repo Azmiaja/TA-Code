@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Nilai extends Model
+class NA_TP extends Model
 {
     use HasFactory;
 
-    protected $table = 'nilai';
-    protected $guarded = ['idNilai'];
-    protected $primaryKey = 'idNilai';
+    protected $table = 'na_tp';
+    protected $guarded = ['idNa_tp'];
+    protected $primaryKey = 'idNa_tp';
     public $timestamps = false;
 
     // protected $fillable = ['idSiswa', 'idPeriode', 'idPengajaran', 'idKategoriNilai', 'nilai'];
@@ -29,13 +29,5 @@ class Nilai extends Model
     public function siswa()
     {
         return $this->hasMany(Siswa::class, 'idSiswa');
-    }
-    public function sumatif_lm()
-    {
-        return $this->hasMany(LM_sumatif::class, 'idLM');
-    }
-    public function sumatif_tp()
-    {
-        return $this->hasMany(TP_sumatif::class, 'idTP');
     }
 }

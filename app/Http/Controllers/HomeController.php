@@ -32,7 +32,7 @@ class HomeController extends Controller
     {
         $pegawai = Pegawai::where('status', 'Aktif')->count();
         $siswa = Siswa::where('status', 'Aktif')->count();
-        $periode = Periode::orderBy('idPeriode', 'desc')->get();
+        $periode = Periode::orderBy('tanggalMulai', 'desc')->get();
         $jumlahPegawaiAktif = Pegawai::where('status', 'Aktif')->count();
         $jumlahSiswaAktif = Siswa::where('status', 'Aktif')->count();
 
@@ -45,10 +45,6 @@ class HomeController extends Controller
         })->count();
 
         $jumlahUser = $jumlahUserPegawai + $jumlahUserSiswa;
-
-
-
-
 
         return view('siakad.content.dashboard.index', compact('pegawai', 'siswa', 'periode', 'jumlahPegawaiAktif', 'jumlahSiswaAktif', 'jumlahUser'), [
             'judul' => 'Dashboard',
@@ -71,33 +67,57 @@ class HomeController extends Controller
 
     public function getDataKalenderJadwal(Request $request)
     {
-        $jadwal = Jadwal::query()
-            ->join('pengajaran', 'jadwal.idPengajaran', '=', 'pengajaran.idPengajaran')
-            ->join('mapel', 'pengajaran.idMapel', '=', 'mapel.idMapel')
-            ->join('pegawai', 'pengajaran.idPegawai', '=', 'pegawai.idPegawai')
-            ->join('kelas', 'pengajaran.idKelas', '=', 'kelas.idKelas')
-            ->where('jadwal.hari', $request->hari)
-            ->where('kelas.namaKelas', $request->kelas)
-            ->where('pengajaran.idPeriode', $request->periode)
-            ->orderBy('jadwal.jamMulai', 'asc')
-            ->get();
+        $hari = $request->hari;
+        $periode = Periode::where('status', 'Aktif')->first();
+        $siswa = Auth::user()->siswa;
+        $kelas = Kelas::where('idPeriode', $periode->idPeriode)->whereHas('siswa', function ($Q) use ($siswa) {
+            $Q->where('siswa.idSiswa', $siswa->idSiswa);
+        })
+            ->first();
+        $jadwal = Jadwal::where('hari', $hari)
+            ->where('idPeriode', $periode->idPeriode)
+            ->whereHas('kelas', function ($query) use ($kelas) {
+                $query->where('namaKelas', $kelas->namaKelas);
+            })
+            ->get()
+            ->groupBy('pengajaran.idMapel')
+            ->map(function ($items) {
+                $combinedSchedules = [];
+                foreach ($items as $item) {
+                    $key = $item->pengajaran->mapel_id;
+                    if (!isset($combinedSchedules[$key])) {
+                        $combinedSchedules[$key] = [
+                            'hari' => $item->hari,
+                            'mapel' => $item->pengajaran->mapel ? $item->pengajaran->mapel->namaMapel : '',
+                            'guru' => $item->pengajaran->guru ? $item->pengajaran->guru->namaPegawai : '',
+                            'mulai' => $item->jamke ? date('H:i', strtotime($item->jamke->jamMulai)) : '',
+                            'selesai' => $item->jamke ? date('H:i', strtotime($item->jamke->jamSelesai)) : '',
+                        ];
+                    } else {
+                        $combinedSchedules[$key]['selesai'] = $item->jamke ? date('H:i', strtotime($item->jamke->jamSelesai)) : '';
+                    }
+                }
+                return array_values($combinedSchedules);
+            })
+            ->values();
 
-        return response()->json(['data' => $jadwal]);
+        return response()->json(['jadwal' => $jadwal]);
     }
 
     // chart donat user function
-    public function getChartDuser()
+    public function getChartUser()
     {
-        $usersData = User::select('hakAkses', DB::raw('COUNT(*) as jumlah'))
-            ->groupBy('hakAkses');
-
-        $siswaData = Siswa::select('hakAkses', DB::raw('COUNT(*) as jumlah'))
+        $usersData = User::select('hakAkses', DB::raw('count(*) as total'))
             ->groupBy('hakAkses')
-            ->union($usersData)
             ->get();
 
-        return response()->json(['data' => $siswaData]);
+        $siswaData = UserSiswa::select('hakAkses', DB::raw('count(*) as total'))
+            ->groupBy('hakAkses')
+            ->get();
+
+        return response()->json(['siswa' => $siswaData, 'guru' => $usersData]);
     }
+
 
     public function jumlahPengajarPerKelas(Int $periode)
     {
@@ -125,20 +145,26 @@ class HomeController extends Controller
         return response()->json(['pegawai' => $pegawai, 'siswa' => $siswa]);
     }
 
-    public function jumlahSiswa(Int $periode)
+    public function jumlahSiswa(Request $request)
     {
-        $data = Kelas::select('kelas.namaKelas', DB::raw('COALESCE(COUNT(tr_kelas.idSiswa), 0) AS jumlah'))
-            ->leftJoin('tr_kelas', 'kelas.idKelas', '=', 'tr_kelas.idKelas')
-            ->join('periode', 'kelas.idPeriode', '=', 'periode.idPeriode')
-            ->where('periode.idPeriode', $periode)
-            ->groupBy('kelas.namaKelas')
+        $periode = $request->periode;
+        $data = Kelas::where('idPeriode', $periode)
+            ->with('siswa')
             ->get();
 
-
-
-        // $data = array_merge($pegawai->toArray(), $siswa->toArray());
-
         return response()->json($data);
+    }
+
+    public function jumlahSiswaAktif()
+    {
+        $data = Siswa::select('jenisKelamin')
+            ->where('status', 'Aktif')
+            ->get();
+
+        $jkL = $data->where('jenisKelamin', 'Laki-Laki')->count();
+        $jkP = $data->where('jenisKelamin', 'Perempuan')->count();
+
+        return response()->json(['L' => $jkL, 'P' => $jkP]);
     }
 
     // siswa

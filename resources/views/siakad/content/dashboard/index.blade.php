@@ -4,8 +4,8 @@
     <div class="content">
         @can('super.admin')
             <div class="row g-4">
-                <div class="col-lg-9 col-12">
-                    <div class="row items-push">
+                <div class="col-lg-9 col-12 ">
+                    <div class="row g-4">
                         <div class="col-sm-12 col-xxl-4">
                             <div class="block block-rounded d-flex flex-column h-100 mb-0">
                                 <div
@@ -69,9 +69,28 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row items-push">
-                        
+                        <div class="col-12">
+                            <div class="block block-rounded">
+                                <div class="block-header block-header-default">
+                                    <h3 class="block-title">Grafik Siswa</h3>
+                                    <div class="block-options">
+                                        <select name="pilih_periode" id="pilih_periode" class="form-select form-select-sm">
+                                            {{-- <option value="" disabled selected>Pilih Periode</option> --}}
+                                            @foreach ($periode as $item)
+                                                <option value="{{ $item->idPeriode }}"
+                                                    {{ $item->status === 'Aktif' ? 'selected' : '' }}>
+                                                    Semester
+                                                    {{ $item->semester }} {{ $item->tahun }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="block-content block-content-full">
+                                    <div id="grafik_siswa"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-12">
@@ -136,73 +155,26 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row items-push">
                         <div class="col-12">
-                            <div class="block block-rounded">
-                                <div class="block-header block-header-default">
-                                    <h3 class="block-title">Jadwal Pelajaran</h3>
-                                    <div class="block-options">
-                                        <select name="pilih_periode" id="pilih_periode" class="form-select form-select-sm"
-                                            disabled>
-                                            {{-- <option value="" disabled selected>Pilih Periode</option> --}}
-                                            @foreach ($periode as $item)
-                                                <option value="{{ $item->idPeriode }}">
-                                                    Semester
-                                                    {{ $item->semester }} {{ $item->tahun }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="block-content p-0">
-                                    <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
-                                        <div class="row g-3 mb-0 pt-1">
-                                            <div class="col-md-7 text-md-start text-center">
-                                                <div class="btn-group" role="group" aria-label="Horizontal Alternate Info">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-outline-danger btn_kelas active"
-                                                        value="1">Kelas
-                                                        1</button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
-                                                        value="2">Kelas
-                                                        2</button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
-                                                        value="3">Kelas
-                                                        3</button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
-                                                        value="4">Kelas
-                                                        4</button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
-                                                        value="5">Kelas
-                                                        5</button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger btn_kelas"
-                                                        value="6">Kelas
-                                                        6</button>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-5 text-md-end text-center">
-                                                <button class="btn btn-sm btn-alt-primary" id="btn_print_jadwal"><i
-                                                        class="fa fa-print me-2"></i>Print</button>
-                                            </div>
-
+                            <div class="col-12">
+                                <div class="block block-rounded">
+                                    <div class="block-header block-header-default">
+                                        <h3 class="block-title">Grafik Siswa</h3>
+                                        <div class="block-options">
+                                            <select name="pilih_periode" id="pilih_periode" class="form-select form-select-sm">
+                                                {{-- <option value="" disabled selected>Pilih Periode</option> --}}
+                                                @foreach ($periode as $item)
+                                                    <option value="{{ $item->idPeriode }}"
+                                                        {{ $item->status === 'Aktif' ? 'selected' : '' }}>
+                                                        Semester
+                                                        {{ $item->semester }} {{ $item->tahun }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        <table id="tabel-JPSiswa" class="table table-bordered table-vcenter w-100">
-                                            <thead class="bg-body-light align-middle">
-                                                <tr>
-                                                    <th style="width: 13%;">Waktu</th>
-                                                    <th style="width: 15%;">Senin</th>
-                                                    <th style="width: 15%;">Selasa</th>
-                                                    <th style="width: 15%;">Rabu</th>
-                                                    <th style="width: 15%;">Kamis</th>
-                                                    <th style="width: 15%;">Jumat</th>
-                                                    <th style="width: 15%;">Sabtu</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {{-- conten --}}
-                                            </tbody>
-                                        </table>
+                                    </div>
+                                    <div class="block-content block-content-full">
+                                        <div id="grafik_siswa"></div>
                                     </div>
                                 </div>
                             </div>
@@ -211,12 +183,12 @@
                 </div>
                 <div class="col-lg-3 col-12">
                     <div class="block block-rounded">
-                        <div class="block-content block-content-full ratio ratio-1x1">
-
+                        <div class="block-content block-content-full">
+                            <div id="grafik_jumlah_siswa"></div>
                         </div>
                         <div class="bg-body-light rounded-bottom">
                             <span class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex">
-                                <span>Grafik Siswa</span>
+                                <span>Grafik Jumlah Siswa</span>
                             </span>
                         </div>
                     </div>
@@ -550,96 +522,7 @@
 
 
         @push('scripts')
-            <script>
-                $(document).ready(function() {
-                    const chartUser = $('#chart_pengguna');
-                    function renderChart(chartElement, chartOptions) {
-                        var chart = new ApexCharts(document.querySelector(chartElement), chartOptions);
-                        chart.render();
-                    }
-
-                    var options = {
-                        dataLabels: {
-                            enabled: false,
-                        },
-                        plotOptions: {
-                            pie: {
-                                donut: {
-                                    labels: {
-                                        show: true,
-                                        name: {
-                                            show: true,
-                                        },
-                                        value: {
-                                            show: true,
-                                            text: '100',
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        chart: {
-                            width: '100%',
-                            height: '290px',
-                            type: 'donut',
-                            offsetY: 0,
-                            redrawOnParentResize: true,
-                            redrawOnWindowResize: true
-                        },
-                        series: [],
-                        labels: [],
-                        legend: {
-                            show: true,
-                            position: 'bottom',
-                        },
-                        plotOptions: {
-                            pie: {
-                                donut: {
-                                    labels: {
-                                        show: true,
-                                        total: {
-                                            show: true,
-                                            showAlways: true,
-                                            formatter: function(w) {
-                                                return w.globals.seriesTotals.reduce((a, b) => {
-                                                    return a + b
-                                                }, 0)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                    };
-
-                    // renderChart('#chart_pengguna', options);
-
-                    // Fetch data from server
-                    var url = `{{ route('chart.pengguna') }}`;
-                    $.getJSON(url, function(response) {
-                        console.log(response);
-                        chart.updateSeries([{
-                            name: 'Sales',
-                            data: response
-                        }])
-                    });
-
-                    // getPengjar();
-
-                    function getPengjar() {
-                        $.ajax({
-                            type: 'GET',
-                            url: "{{ route('chart.pengguna') }}",
-                            success: function(data) {
-                                console.log(data);
-                            }
-                        });
-                    }
-
-
-                });
-            </script>
-            @cannot('guru')
+            @cannot(['super.admin', 'admin'])
                 <script>
                     $(document).ready(function() {
                         $('#calendar').datepicker({
@@ -722,360 +605,186 @@
                 <script>
                     $(document).ready(function() {
                         getChart();
-
-                        getChartBarJK();
-                        getChartBarJKsiswa();
-                        // getChartBar($('#periode').val());
-                        getChartBar($('#periode').val());
-
-                        getSiswa($('#periode').val())
-
-                        // Tambahkan event listener untuk perubahan nilai pada elemen select
-                        $('#periode').change(function() {
-                            getSiswa($(this).val());
-                            getChartBar($(this).val());
-                        });
-
-
-
+                        getSiswa();
+                        getSiswaAktif()
                     });
+
+                    $('#pilih_periode').change(getSiswa);
 
                     function getChart() {
                         $.ajax({
                             url: "{{ url('chart/donat/user') }}",
                             method: 'GET',
                             success: function(data) {
-                                // console.log(data);
+                                let Admin = data.guru.find(item => item.hakAkses === 'Admin');
+                                let Guru = data.guru.find(item => item.hakAkses === 'Guru');
+                                let Siswa = data.siswa.find(item => item.hakAkses === 'Siswa');
 
-                                var ctx = document.getElementById('chart_donut_jumlah_user').getContext('2d');
-                                var chart = new Chart(ctx, {
-                                    type: 'doughnut',
-                                    data: {
-                                        labels: data.data.map(function(item) {
-                                            return item.hakAkses;
-                                        }),
-                                        datasets: [{
-                                            label: 'Jumlah User',
-                                            data: data.data.map(function(item) {
-                                                return item.jumlah;
-                                            }),
-                                            backgroundColor: [
-                                                '#81c2ff',
-                                                '#abe37d',
-                                                '#fff18a',
-                                                '#ffbe8a',
-                                                '#f8d4d4',
-                                                '#c1e7ee'
-                                            ],
-                                            borderColor: [
-                                                '#81c2ff',
-                                                '#abe37d',
-                                                '#fff18a',
-                                                '#ffbe8a',
-                                                '#f8d4d4',
-                                                '#c1e7ee'
-                                            ],
-                                            borderWidth: 1,
-                                        }],
+                                var options = {
+                                    dataLabels: {
+                                        enabled: false,
                                     },
-                                    options: {
-                                        plugins: {
-                                            legend: {
-                                                display: true,
-                                                position: 'bottom',
+                                    chart: {
+                                        width: '100%',
+                                        height: '290px',
+                                        type: 'donut',
+                                        offsetY: 0,
+                                        redrawOnParentResize: true,
+                                        redrawOnWindowResize: true
+                                    },
+                                    theme: {
+                                        palette: 'palette4' // upto palette10
+                                    },
+                                    series: [Admin.total, Guru.total, Siswa.total],
+                                    labels: ['Admin', 'Guru', 'Siswa'],
+                                    legend: {
+                                        show: true,
+                                        position: 'bottom',
+                                    },
+                                    plotOptions: {
+                                        pie: {
+                                            donut: {
                                                 labels: {
-                                                    fontSize: 16,
-                                                },
-                                            },
-                                        },
-                                        responsive: true,
-                                    },
-                                });
-                            },
-                        });
-                    }
-
-                    function getChartBar(periodeId) {
-                        $.ajax({
-                            url: `{{ url('/jumlah-pengajar-per-kelas') }}/${periodeId}`,
-                            method: 'GET',
-                            success: function(data) {
-                                console.log(data);
-
-                                const ctx = document.getElementById('chart_jumlah_pengajar').getContext('2d');
-                                if (window.myBarChart) {
-                                    // Hancurkan chart lama jika sudah ada
-                                    window.myBarChart.destroy();
-                                }
-                                window.myBarChart = new Chart(ctx, {
-                                    type: 'bar',
-                                    data: {
-                                        labels: data.map((item) => `Kelas ${item.namaKelas}`),
-                                        datasets: [{
-                                            label: 'Jumlah Pengajar',
-                                            data: data.map((item) => item.jumlah),
-                                            backgroundColor: [
-                                                '#81c2ff',
-                                                '#abe37d',
-                                                '#fff18a',
-                                                '#ffbe8a',
-                                                '#f8d4d4',
-                                                '#c1e7ee'
-                                            ],
-                                            borderColor: [
-                                                '#81c2ff',
-                                                '#abe37d',
-                                                '#fff18a',
-                                                '#ffbe8a',
-                                                '#f8d4d4',
-                                                '#c1e7ee'
-                                            ],
-                                            borderWidth: 1,
-                                            borderRadius: 10,
-                                        }],
-                                    },
-                                    options: {
-                                        bezierCurve: false,
-                                        plugins: {
-                                            legend: {
-                                                display: false,
-                                            },
-                                            tooltip: {
-                                                radius: '3',
-                                                enabled: true,
+                                                    show: true,
+                                                    total: {
+                                                        show: true,
+                                                    }
+                                                }
                                             }
-                                        },
-                                        responsive: true,
-                                        scales: {
-                                            x: {
-                                                grid: {
-                                                    display: false
-                                                },
-                                            },
-                                            y: {
-                                                grid: {
-                                                    display: false
-                                                },
-                                            },
-                                            // beginAtZero = !0,
-                                        },
-                                        elements: {
-                                            line: {
-                                                tension: 0.4, // Set the tension for a smoother line
-                                            },
-                                        },
+                                        }
                                     },
-                                });
+                                };
+
+                                var chart = new ApexCharts(document.querySelector("#chart_pengguna"), options);
+
+                                chart.render();
                             },
                         });
                     }
 
-                    function getSiswa(periodeId) {
+                    function getSiswa() {
                         $.ajax({
-                            url: `{{ url('/jumlah-siswa') }}/${periodeId}`,
-                            method: 'GET',
-                            success: function(data) {
-                                console.log(data);
+                            url: `{{ url('chart/jumlah-siswa') }}`,
+                            type: 'GET',
+                            data: {
+                                periode: $('#pilih_periode option:selected').val(),
 
-                                const ctx = document.getElementById('chart_jumlah_siswa').getContext('2d');
-                                if (window.siswaChart) {
-                                    // Hancurkan chart lama jika sudah ada
-                                    window.siswaChart.destroy();
-                                }
-                                window.siswaChart = new Chart(ctx, {
-                                    type: 'bar',
-                                    data: {
-                                        labels: data.map((item) => `Kelas ${item.namaKelas}`),
-                                        datasets: [{
-                                            label: 'Jumlah Siswa',
-                                            data: data.map((item) => item.jumlah),
-                                            backgroundColor: [
-                                                '#81c2ff',
-                                                '#abe37d',
-                                                '#fff18a',
-                                                '#ffbe8a',
-                                                '#f8d4d4',
-                                                '#c1e7ee'
-                                            ],
-                                            borderColor: [
-                                                '#81c2ff',
-                                                '#abe37d',
-                                                '#fff18a',
-                                                '#ffbe8a',
-                                                '#f8d4d4',
-                                                '#c1e7ee'
-                                            ],
-                                            borderWidth: 1,
-                                            borderRadius: 10,
-                                        }],
+                            },
+                            success: function(data) {
+                                $('#grafik_siswa').empty();
+                                let kelas = [];
+                                let siswaL = [];
+                                let siswaP = [];
+                                $.each(data, function(key, item) {
+                                    kelas.push('Kelas ' + item.namaKelas);
+                                    let L = item.siswa.filter(i => i.jenisKelamin === 'Laki-Laki').length;
+                                    let P = item.siswa.filter(i => i.jenisKelamin === 'Perempuan').length;
+                                    siswaL.push(L);
+                                    siswaP.push(P);
+                                });
+                                // Mengurutkan kelas bersamaan dengan siswaL dan siswaP
+                                let combined = kelas.map(function(value, index) {
+                                    return {
+                                        kelas: value,
+                                        siswaL: siswaL[index],
+                                        siswaP: siswaP[index]
+                                    };
+                                });
+                                combined.sort((a, b) => a.kelas.localeCompare(b.kelas));
+                                kelas = combined.map(item => item.kelas);
+                                siswaL = combined.map(item => item.siswaL);
+                                siswaP = combined.map(item => item.siswaP);
+                                var options = {
+                                    dataLabels: {
+                                        enabled: false,
                                     },
-                                    options: {
-                                        bezierCurve: false,
-                                        plugins: {
-                                            legend: {
-                                                display: false,
-                                            },
-                                            tooltip: {
-                                                radius: '3',
-                                                enabled: true,
+                                    chart: {
+                                        width: '100%',
+                                        height: '290px',
+                                        type: 'bar',
+                                        offsetY: 0,
+                                        redrawOnParentResize: true,
+                                        redrawOnWindowResize: true
+                                    },
+                                    theme: {
+                                        palette: 'palette1' // upto palette10
+                                    },
+                                    series: [{
+                                        name: 'Laki-Laki',
+                                        data: siswaL
+                                    }, {
+                                        name: 'Perempuan',
+                                        data: siswaP
+                                    }],
+                                    xaxis: {
+                                        categories: kelas,
+                                    },
+                                    legend: {
+                                        show: true,
+                                        position: 'bottom',
+                                    },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false,
+                                            columnWidth: '55%',
+                                        },
+                                    },
+                                };
+
+                                var chart = new ApexCharts(document.querySelector("#grafik_siswa"), options);
+
+                                chart.render();
+                            },
+                        });
+                    }
+
+                    function getSiswaAktif() {
+                        $.ajax({
+                            url: `{{ url('chart/jumlah-siswa-aktif') }}`,
+                            type: "GET",
+                            success: function(data) {
+                                let laki = data.L;
+                                let perm = data.P;
+
+                                var options = {
+                                    dataLabels: {
+                                        enabled: false,
+                                    },
+                                    chart: {
+                                        width: '100%',
+                                        height: '290px',
+                                        type: 'donut',
+                                        offsetY: 0,
+                                        redrawOnParentResize: true,
+                                        redrawOnWindowResize: true
+                                    },
+                                    theme: {
+                                        palette: 'palette4' // upto palette10
+                                    },
+                                    series: [laki, perm],
+                                    labels: ['Laki-Laki', 'Perempuan'],
+                                    legend: {
+                                        show: true,
+                                        position: 'bottom',
+                                    },
+                                    plotOptions: {
+                                        pie: {
+                                            donut: {
+                                                labels: {
+                                                    show: true,
+                                                    total: {
+                                                        show: true,
+                                                    }
+                                                }
                                             }
-                                        },
-                                        responsive: true,
-                                        scales: {
-                                            x: {
-                                                grid: {
-                                                    display: false
-                                                },
-                                            },
-                                            y: {
-                                                grid: {
-                                                    display: false
-                                                },
-                                            },
-                                            // beginAtZero = !0,
-                                        },
-                                        elements: {
-                                            line: {
-                                                tension: 0.4, // Set the tension for a smoother line
-                                            },
-                                        },
+                                        }
                                     },
-                                });
-                            },
-                        });
-                    }
+                                };
 
-                    function getChartBarJK() {
-                        $.ajax({
-                            url: `{{ url('chart/jenis-kelamin') }}`,
-                            method: 'GET',
-                            success: function(data) {
-                                console.log(data);
+                                var chart = new ApexCharts(document.querySelector("#grafik_jumlah_siswa"), options);
 
-                                const ctx = document.getElementById('chrat_bar_jK').getContext('2d');
-                                const chart = new Chart(ctx, {
-                                    type: 'bar',
-                                    data: {
-                                        labels: ['L', 'P'],
-                                        datasets: [{
-                                            label: 'Jumlah',
-                                            data: data.pegawai.map(function(item) {
-                                                return item.Jumlah
-                                            }),
-                                            backgroundColor: [
-                                                '#81c2ff',
-                                                '#abe37d',
-                                            ],
-                                            borderColor: [
-                                                '#81c2ff',
-                                                '#abe37d',
-                                            ],
-                                            borderWidth: 1,
-                                            borderRadius: 10,
-                                        }],
-                                    },
-                                    options: {
-                                        indexAxis: 'y',
-                                        responsive: true,
-                                        plugins: {
-                                            legend: {
-                                                display: false,
-                                                position: 'bottom',
-                                                labels: {
-                                                    fontSize: 16,
-                                                },
-                                            },
-                                            title: {
-                                                display: true,
-                                                text: 'Pegawai',
-                                                fontSize: 50,
-                                                align: 'start'
-                                            },
-                                        },
-                                        scales: {
-                                            x: {
-                                                grid: {
-                                                    display: false
-                                                }, // Sembunyikan grid untuk sumbu x
-                                            },
-                                            y: {
-                                                grid: {
-                                                    display: false
-                                                }, // Sembunyikan grid untuk sumbu y
-                                            },
-                                        },
-
-                                    },
-                                });
-                            },
-                        });
-                    }
-
-                    function getChartBarJKsiswa() {
-                        $.ajax({
-                            url: `{{ url('chart/jenis-kelamin') }}`,
-                            method: 'GET',
-                            success: function(data) {
-                                console.log(data);
-
-                                const ctx = document.getElementById('chrat_bar_jK_siswa').getContext('2d');
-                                const chart = new Chart(ctx, {
-                                    type: 'bar',
-                                    data: {
-                                        labels: ['L', 'P'],
-                                        datasets: [{
-                                            label: 'Jumlah',
-                                            data: data.siswa.map(function(item) {
-                                                return item.Jumlah
-                                            }),
-                                            backgroundColor: [
-                                                '#ffbe8a',
-                                                '#f8d4d4',
-                                                '#c1e7ee'
-                                            ],
-                                            borderColor: [
-                                                '#ffbe8a',
-                                                '#f8d4d4',
-                                                '#c1e7ee'
-                                            ],
-                                            borderWidth: 1,
-                                            borderRadius: 10,
-                                        }],
-                                    },
-                                    options: {
-                                        indexAxis: 'y',
-                                        responsive: true,
-                                        plugins: {
-                                            legend: {
-                                                display: false,
-                                                position: 'bottom',
-                                                labels: {
-                                                    fontSize: 16,
-                                                },
-                                            },
-                                            title: {
-                                                display: true,
-                                                text: 'Siswa',
-                                                fontSize: 50,
-                                                align: 'start'
-                                            },
-                                        },
-                                        scales: {
-                                            x: {
-                                                grid: {
-                                                    display: false
-                                                }, // Sembunyikan grid untuk sumbu x
-                                            },
-                                            y: {
-                                                grid: {
-                                                    display: false
-                                                }, // Sembunyikan grid untuk sumbu y
-                                            },
-                                        },
-
-                                    },
-                                });
-                            },
+                                chart.render();
+                            }
                         });
                     }
                 </script>
@@ -1323,4 +1032,3 @@
             @endcan
         @endpush
     @endsection
-    {{-- kelas: '{{ ucwords(Auth::user()->pegawai->kelas->first()->namaKelas) }}' --}}

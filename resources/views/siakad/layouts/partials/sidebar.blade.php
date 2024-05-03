@@ -1,6 +1,6 @@
-<nav id="sidebar" aria-label="Main Navigation" class="" style="background-color: #004E8B;">
+<nav id="sidebar" aria-label="Main Navigation" class="" style="background-color: #005c87;">
     {{-- Sidebar header --}}
-    <div class="content-header p-0 shadow-sm" style="background-color: #004E8B;">
+    <div class="content-header p-0 shadow-sm" style="background-color: #005c87;">
         <a class="fw-bold text-dual d-flex" href="#">
             @php
                 use App\Models\Sekolah;
@@ -106,19 +106,12 @@
                                 ->first();
                         @endphp
                         <ul class="nav-main-submenu">
-                            @if ($kelas)
-                                <li class="nav-main-item p-0">
-                                    @foreach ($kelas as $item)
-                                        <a id="btn_side_kelas_{{ $item->idKelas }}"
-                                            data-periode="{{ $item->kelas->idPeriode }}"
-                                            data-kelas="{{ $item->kelas->namaKelas }}"
-                                            class="nav-main-link {{ $item->idKelas === $s_idKelas ? 'active' : '' }}"
-                                            href="{{ route('presensi.index', ['name' => $item->kelas->namaKelas]) }}">
-                                            <span class="nav-main-link-name">Kelas {{ $item->kelas->namaKelas }}</span>
-                                        </a>
-                                    @endforeach
-                                </li>
-                            @endif
+                            <li class="nav-main-item">
+                                <a class="nav-main-link {{ Request::routeIs('presensi.index') ? 'active' : '' }}"
+                                    href="{{ route('presensi.index') }}">
+                                    <span class="nav-main-link-name">Presensi</span>
+                                </a>
+                            </li>
                             @if ($pegawai)
                                 <li class="nav-main-item">
                                     <a class="nav-main-link {{ Request::routeIs('rekap.index') ? 'active' : '' }}"
@@ -130,18 +123,39 @@
                         </ul>
                     </li>
                     <li class="nav-main-item">
-                        <a class="nav-main-link {{ Request::routeIs('ss.beranda.index') ? 'active' : '' }}"
-                            href="{{ route('ss.beranda.index') }}">
+                        <a class="nav-main-link {{ Request::routeIs('kategori-nilai.index') ? 'active' : '' }}"
+                            href="{{ route('kategori-nilai.index') }}">
                             <i class="nav-main-link-icon si si-grid"></i>
-                            <span class="nav-main-link-name">Kategori Nilai</span>
+                            <span class="nav-main-link-name">Atur Penilaian</span>
                         </a>
                     </li>
-                    <li class="nav-main-item">
-                        <a class="nav-main-link {{ Request::routeIs('ss.beranda.index') ? 'active' : '' }}"
-                            href="{{ route('ss.beranda.index') }}">
+                    <li class="nav-main-item {{ Request::routeIs('penilaian.index') ? 'open' : '' }}">
+                        <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('penilaian.index') ? 'active' : '' }}"
+                            data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="javascript:void(0)">
                             <i class="nav-main-link-icon si si-list"></i>
-                            <span class="nav-main-link-name">Penilaian</span>
+                            <span class="nav-main-link-name">Penilaian Siswa</span>
                         </a>
+                        <ul class="nav-main-submenu">
+                            {{-- @if ($kelas)
+                                <li class="nav-main-item p-0">
+                                    @foreach ($kelas as $item)
+                                        <a id="btn_kelas_peniaian_{{ $item->idKelas }}"
+                                            data-periode="{{ $item->kelas->idPeriode }}"
+                                            data-kelas="{{ $item->kelas->namaKelas }}"
+                                            class="nav-main-link {{ $item->idKelas === $s_idKelas ? 'active' : '' }}"
+                                            href="{{ route('penilaian.index', ['name' => $item->kelas->namaKelas]) }}">
+                                            <span class="nav-main-link-name">Kelas {{ $item->kelas->namaKelas }}</span>
+                                        </a>
+                                    @endforeach
+                                </li>
+                            @endif --}}
+                            <li class="nav-main-item">
+                                <a class="nav-main-link {{ Request::routeIs('penilaian.index') ? 'active' : '' }}"
+                                    href="{{ route('penilaian.index') }}">
+                                    <span class="nav-main-link-name">Penilaian</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-main-item">
                         <a class="nav-main-link {{ Request::routeIs('ss.beranda.index') ? 'active' : '' }}"

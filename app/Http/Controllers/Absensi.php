@@ -23,78 +23,46 @@ class Absensi extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($name)
+    public function index()
     {
         $periode = Periode::where('status', 'Aktif')->orderBy('tanggalMulai', 'desc')->first();
-        $kelasNama = $name;
+        $kelasNama = 1;
         $periodeSiswa = $periode->idPeriode;
 
-        // Ambil siswa dengan kelas dan periode yang sesuai
-        $siswaWithKelas = Siswa::whereHas('kelas', function ($query) use ($kelasNama, $periodeSiswa) {
-            $query->where('namaKelas', $kelasNama)
-                ->where('idPeriode', $periodeSiswa);
-        })
-            ->orderBy('namaSiswa', 'asc')
-            ->get();
-
-
         $pegawai = Auth::user()->pegawai->idPegawai;
-        $kelas = Kelas::where('idPegawai', $pegawai)->where('idPeriode', $periode->idPeriode)->get();
 
+        // $data = Pengajaran::where('idPegawai', $pegawai)
+        //     ->where('idPeriode', $periode->idPeriode)
+        //     ->whereHas('kelas', function ($query) use ($kelasNama) {
+        //         $query->where('namaKelas', $kelasNama);
+        //     })
+        //     // ->select('idKelas')
+        //     ->distinct()
+        //     ->get();
 
-        $data = Pengajaran::where('idPegawai', $pegawai)
-            ->where('idPeriode', $periode->idPeriode)
-            ->whereHas('kelas', function ($query) use ($name) {
-                $query->where('namaKelas', $name);
+        $klsPengajaran = Pengajaran::where('idPegawai', $pegawai)
+            ->where('idPeriode', $periodeSiswa)
+            ->whereHas('kelas', function ($query) {
+                $query->orderBy('namaKelas', 'asc');
             })
-            // ->select('idKelas')
+            // ->with('guru')
+            ->select('idKelas', 'idPegawai')
             ->distinct()
             ->get();
-        $idP = $data[0]->idPengajaran;
 
-        $kehadiran = ModelsAbsensi::select('idSiswa')
-            ->selectRaw('DAY(tanggal) as tanggal')
-            ->selectRaw('tanggal as bulan')
-            ->selectRaw('MONTH(tanggal) as noBulan')
-            ->selectRaw("MAX(CASE WHEN presensi = 'hadir' THEN 'H' WHEN presensi = 'izin' THEN 'I' WHEN presensi = 'sakit' THEN 'S' ELSE 'A' END) as presensi")
-            ->whereMonth('tanggal', now()->month)
-            ->where('idKelas', $data[0]->idKelas)
-            ->where('idPeriode', $periode->idPeriode)
-            ->groupBy('idSiswa', 'tanggal')
-            ->get()->map(function ($item) {
-                $item->bulan = Carbon::parse($item->bulan)->translatedFormat('F');
-                return $item;
-            });
-
-        $kehadiran_2 = ModelsAbsensi::select('idSiswa')
-            ->selectRaw('DAY(tanggal) as tanggal')
-            ->selectRaw('tanggal as bulan')
-            ->selectRaw('MONTH(tanggal) as noBulan')
-            ->where('idKelas', $data[0]->idKelas)
-            ->where('idPeriode', $periode->idPeriode)
-            ->groupBy('idSiswa', 'tanggal')
-            ->get()->map(function ($item) {
-                $item->bulan = Carbon::parse($item->bulan)->translatedFormat('F');
-                return $item;
-            });
-
-        $wakel = Pegawai::select('idPegawai')->whereHas('kelas', function ($query) use ($data) {
-            $query->where('idKelas', $data[0]->idKelas);
-        })->first();
-
-        return view('siakad/content/absen/index', compact('periode', 'kelas', 'data', 'kehadiran', 'siswaWithKelas', 'kehadiran_2', 'wakel'), [
+        return view('siakad/content/absen/index', compact('periode', 'klsPengajaran'), [
             'judul' => 'Presensi Siswa',
-            'sub_judul' => 'Kelas ' . $data[0]->kelas->namaKelas,
+            'sub_judul' => 'Daftar Hadir Siswa',
             'text_singkat' => 'Mengelola kehadiran siswa dalam kelas!',
-            's_idKelas' => $data[0]->idKelas,
-            'kelasName' => $name,
+            's_idKelas' => '',
+            'kelasName' => '',
         ]);
     }
 
-    public function getData($name)
+    public function getData(Request $request,)
     {
         $periode = Periode::where('status', 'Aktif')->orderBy('tanggalMulai', 'desc')->first();
-        $kelasNama = $name;
+        $kelasNama = $request->kelas_nama;
         $periodeSiswa = $periode->idPeriode;
 
         // Ambil siswa dengan kelas dan periode yang sesuai
@@ -112,8 +80,8 @@ class Absensi extends Controller
 
         $data = Pengajaran::where('idPegawai', $pegawai)
             ->where('idPeriode', $periode->idPeriode)
-            ->whereHas('kelas', function ($query) use ($name) {
-                $query->where('namaKelas', $name);
+            ->whereHas('kelas', function ($query) use ($kelasNama) {
+                $query->where('namaKelas', $kelasNama);
             })
             // ->select('idKelas')
             ->distinct()
@@ -256,18 +224,18 @@ class Absensi extends Controller
                 $idSiswa = $request->input('idSiswa');
                 $idKelas = $request->input('idKelas');
                 $idPeriode = $request->input('idPeriode');
-                $idPengajar = $request->input('idPengajaran');
+                $idPegawai = $request->input('idPegawai');
 
                 // Simpan data absensi ke dalam basis data
                 foreach ($idSiswa as $data) {
                     $presensi = $request->input('presensi_' . $data);
-                    $tanggal = Carbon::parse($request->tanggal);
+                    $tanggal = $request->tanggal;
                     ModelsAbsensi::create([
                         'idSiswa' => $data,
                         'idKelas' => $idKelas,
                         'idPeriode' => $idPeriode,
-                        'idPengajaran' => $idPengajar,
-                        'tanggal' => $tanggal->translatedFormat('Y-m-d'),
+                        'idPegawai' => $idPegawai,
+                        'tanggal' => $tanggal,
                         'presensi' => $presensi,
                         // 'keterangan' => $request->keterangan[$key] ?? null,
                         // Tambahkan kolom lain yang diperlukan
@@ -354,8 +322,7 @@ class Absensi extends Controller
                 $idSiswa = $request->input('idSiswa');
                 $idKelas = $request->input('idKelas');
                 $idPeriode = $request->input('idPeriode');
-                $idPengajar = $request->input('idPengajaran');
-                $tanggal = Carbon::parse($request->tanggal);
+                $tanggal = $request->tanggal;
 
                 // Perbarui data absensi untuk tanggal yang diberikan
                 foreach ($idSiswa as $data) {
@@ -363,7 +330,7 @@ class Absensi extends Controller
                     $absensi = ModelsAbsensi::where('idSiswa', $data)
                         ->where('idKelas', $idKelas)
                         ->where('idPeriode', $idPeriode)
-                        ->where('tanggal', $tanggal->translatedFormat('Y-m-d'))
+                        ->where('tanggal', $tanggal)
                         ->first();
 
                     if ($absensi) {

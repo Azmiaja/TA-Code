@@ -33,8 +33,8 @@ class DataSiswaController extends Controller
                 $query->where('namaKelas', $kelasNama)
                     ->where('idPeriode', $periodeSiswa);
             })
-            ->orderBy('namaSiswa', 'asc')
-            ->get();
+                ->orderBy('namaSiswa', 'asc')
+                ->get();
 
             // Map data siswa
             $data = $siswaWithKelas->map(function ($siswa, $key) use ($kelasNama) {
