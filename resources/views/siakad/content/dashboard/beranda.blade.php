@@ -5,41 +5,67 @@
         <div class="row item-push">
             <div class="col-xl-9 col-md-8 col-12 order-sm-1 order-2">
                 @can('siswa')
-                    <div class="block block-rounded">
-                        {{-- <div class="block-header block-header-default">
-                        <h3 class="block-title">Grafik Kehadiran Siswa</h3>
-                    </div>
-                    <div class="block-content">
-                        <div id="chart_kehadiran"></div>
+                    {{-- <div class="block block-rounded">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">Grafik Kehadiran Siswa</h3>
+                        </div>
+                        <div class="block-content">
+                            <div id="chart_kehadiran"></div>
+                        </div>
                     </div> --}}
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">Grafik Nilai Siswa
+                        </div>
+                        <div class="block-content">
+                            <div id="chart_nilai"></div>
+                        </div>
                     </div>
                 @endcan
                 @can('guru')
-                    {{-- <div class="row">
-                        <div class="col-md-6">
-                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
-                                <div class="block-header block-header-default">
-                                    <h3 class="block-title">Wali Kelas</h3>
-                                </div>
-                                <div
-                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
-                                    <dl class="mb-0">
-                                        <dt class="fs-3 fw-bold"></dt>
-                                        <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Jumlah Pegawai Aktif</dd>
-                                    </dl>
-                                    <div class="item item-rounded-lg bg-body-light">
-                                        <i class="fa-solid fa-user-tie fs-3 text-primary"></i>
-                                    </div>
-                                </div>
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">Grafik Jumlah Siswa</h3>
+                            <div class="block-options">
+                                <input type="text" readonly data-id="{{ $periode->idPeriode }}"
+                                    value="Semester {{ $periode->semester }} {{ $periode->tahun }}"
+                                    data-smt="{{ $periode->semester }}" data-tahun="{{ $periode->tahun }}"
+                                    class="form-control form-control-sm fw-semibold" id="periode_id">
                             </div>
                         </div>
-                    </div> --}}
+                        <div class="block-content block-content-full">
+                            <div id="grafik_siswa"></div>
+                        </div>
+                    </div>
+                    @if ($kelas)
+                        <div class="block block-rounded">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title">Grafik Daya Serap</h3>
+                                <div class="block-options">
+                                    <input type="text" readonly data-id="{{ $periode->idPeriode }}"
+                                        value="Semester {{ $periode->semester }} {{ $periode->tahun }}"
+                                        data-smt="{{ $periode->semester }}" data-tahun="{{ $periode->tahun }}"
+                                        class="form-control form-control-sm fw-semibold" id="periode_id2">
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full">
+                                <div id="grafik_dayaSerap"></div>
+                            </div>
+                        </div>
+                    @endif
                 @endcan
             </div>
             <div class="col-xl-3 col-md-4 col-12 order-sm-2 order-1">
                 <div class="block block-rounded">
                     <div class="block-header block-header-default">
-                        <h3 class="block-title text-nowrap">Jadwal Mengajar</h3>
+                        <h3 class="block-title text-nowrap">Jadwal
+                            @can('siswa')
+                                Pelajaran
+                            @endcan
+                            @can('guru')
+                                Mengajar
+                            @endcan
+                        </h3>
                     </div>
                     <div class="block-content block-content-full px-3 py-1">
                         <!-- Jadwal -->
@@ -200,9 +226,21 @@
                                     data: alfa
                                 }],
                                 chart: {
-                                    type: 'bar',
-                                    height: 400,
+                                    type: 'area',
+                                    height: 300,
                                     stacked: true,
+                                    toolbar: {
+                                        show: true,
+                                        tools: {
+                                            download: true,
+                                            selection: false,
+                                            zoom: false,
+                                            zoomin: false,
+                                            zoomout: false,
+                                            pan: false,
+                                            reset: false
+                                        },
+                                    }
                                 },
                                 plotOptions: {
                                     bar: {
@@ -217,7 +255,7 @@
                                 stroke: {
                                     show: true,
                                     width: 2,
-                                    colors: ['transparent']
+                                    colors: ['transparent'],
                                 },
                                 xaxis: {
                                     categories: bulan,
@@ -225,7 +263,7 @@
                                 yaxis: {
                                     min: 0,
                                     max: 31,
-                                    tickAmount: 31,
+                                    tickAmount: 10,
                                     labels: {
                                         show: true,
                                         formatter: function(val) {
@@ -242,7 +280,7 @@
                                             return val + ' Hari'
                                         }
                                     }
-                                }
+                                },
                             };
 
                             var chart = new ApexCharts(document.querySelector("#chart_kehadiran"), options);
@@ -251,10 +289,94 @@
                     });
                 }
 
+                function getGrafikNilai() {
+                    $('#chart_nilai').empty();
+                    $.ajax({
+                        url: `{{ route('get-nilai-siswa') }}`,
+                        type: 'GET',
+                        data: {
+                            periode: {!! json_encode($periode->idPeriode) !!},
+
+                        },
+                        success: function(data) {
+                            var N_map = [];
+                            var N_sis = [];
+                            var idSiswa = data.siswa.idSiswa;
+                            $.each(data.pengajar, function(key, value) {
+                                var mapel = value.mapel.singkatan ?? value.mapel.namaMapel;
+                                if (mapel) {
+                                    N_map.push(mapel);
+                                }
+                                var nilai = data.nilai.find(function(nilai) {
+                                    return nilai.idSiswa === idSiswa &&
+                                        nilai.idPengajaran === value.idPengajaran;
+                                });
+                                if (nilai !== undefined && nilai.raport !== null && nilai.raport !== 0) {
+                                    N_sis.push(nilai.raport);
+                                }
+
+                            });
+                            var options = {
+                                series: [{
+                                    name: 'Nilai Siswa',
+                                    data: N_sis
+                                }],
+                                chart: {
+                                    height: 400,
+                                    type: 'bar',
+                                },
+                                plotOptions: {
+                                    bar: {
+                                        borderRadius: 5,
+                                        columnWidth: '45%',
+                                    }
+                                },
+                                dataLabels: {
+                                    enabled: false
+                                },
+                                stroke: {
+                                    width: 0
+                                },
+                                grid: {
+                                    row: {
+                                        colors: ['#fff', '#f2f2f2']
+                                    }
+                                },
+                                xaxis: {
+                                    labels: {
+                                        rotate: -45
+                                    },
+                                    categories: N_map,
+                                    // tickPlacement: 'on'
+                                },
+                                yaxis: {
+                                    title: {
+                                        text: 'Nilai Siswa',
+                                    },
+                                    min: 0,
+                                    max: 100,
+                                    tickAmount: 10,
+                                    labels: {
+                                        show: true,
+                                        formatter: function(val) {
+                                            return Math.floor(val); // Menghilangkan desimal atau koma
+                                        }
+                                    },
+                                },
+                            };
+
+
+                            var chart = new ApexCharts(document.querySelector("#chart_nilai"), options);
+
+                            chart.render();
+                        },
+                    });
+                }
 
                 $(document).ready(function() {
                     jadwalPeajaran();
                     // showDataPresensi();
+                    getGrafikNilai();
                 });
             </script>
         @endcan
@@ -362,8 +484,226 @@
                     }).selectDate(selectedDate);
 
                 }
+
+                function getSiswa() {
+                    $.ajax({
+                        url: `{{ url('chart/jumlah-siswa') }}`,
+                        type: 'GET',
+                        data: {
+                            periode: $('#periode_id').data('id'),
+
+                        },
+                        success: function(data) {
+                            $('#grafik_siswa').empty();
+                            let kelas = [];
+                            let siswaL = [];
+                            let siswaP = [];
+                            $.each(data, function(key, item) {
+                                kelas.push('Kelas ' + item.namaKelas);
+                                let L = item.siswa.filter(i => i.jenisKelamin === 'Laki-Laki').length;
+                                let P = item.siswa.filter(i => i.jenisKelamin === 'Perempuan').length;
+                                siswaL.push(L);
+                                siswaP.push(P);
+                            });
+                            // Mengurutkan kelas bersamaan dengan siswaL dan siswaP
+                            let combined = kelas.map(function(value, index) {
+                                return {
+                                    kelas: value,
+                                    siswaL: siswaL[index],
+                                    siswaP: siswaP[index]
+                                };
+                            });
+                            combined.sort((a, b) => a.kelas.localeCompare(b.kelas));
+                            kelas = combined.map(item => item.kelas);
+                            siswaL = combined.map(item => item.siswaL);
+                            siswaP = combined.map(item => item.siswaP);
+                            var options = {
+                                dataLabels: {
+                                    enabled: false,
+                                },
+                                chart: {
+                                    width: '100%',
+                                    height: '290px',
+                                    type: 'bar',
+                                    offsetY: 0,
+                                    redrawOnParentResize: true,
+                                    redrawOnWindowResize: true
+                                },
+                                theme: {
+                                    palette: 'palette1' // upto palette10
+                                },
+                                series: [{
+                                    name: 'Laki-Laki',
+                                    data: siswaL
+                                }, {
+                                    name: 'Perempuan',
+                                    data: siswaP
+                                }],
+                                xaxis: {
+                                    categories: kelas,
+                                },
+                                legend: {
+                                    show: true,
+                                    position: 'bottom',
+                                },
+                                plotOptions: {
+                                    bar: {
+                                        horizontal: false,
+                                        columnWidth: '55%',
+                                    },
+                                },
+                            };
+
+                            var chart = new ApexCharts(document.querySelector("#grafik_siswa"), options);
+
+                            chart.render();
+                        },
+                    });
+                }
+
+                var chart;
+                function getTb_rekap_nilai() {
+                    $('#grafik_dayaSerap').empty();
+                    $.ajax({
+                        url: `{{ route('get.rekap.nilai') }}`,
+                        type: 'GET',
+                        data: {
+                            periode: $('#periode_id2').data('id'),
+                        },
+                        success: function(data) {
+                            // console.log(data);
+                            var kelas = data.kelas.namaKelas;
+                            var kls_name = ['SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM'];
+                            var per_smt = $('#periode_id').data('smt');
+                            var per_tahun = $('#periode_id').data('tahun');
+                            var totalNilaiMapel = {};
+                            var jumlahSiswaPerMapel = {};
+                            var nilaiTertinggi = {};
+                            var nilaiTerendah = {};
+
+                            var chr_mapel = [];
+
+                            $.each(data.pengajar, function(key, value) {
+                                var mapel = value.mapel.singkatan ?? value.mapel.namaMapel;
+                                chr_mapel.push(mapel);
+                                totalNilaiMapel[value.idPengajaran] = 0;
+                                jumlahSiswaPerMapel[value.idPengajaran] = 0;
+                                nilaiTertinggi[value.idPengajaran] = null;
+                                nilaiTerendah[value.idPengajaran] = null;
+                            });
+
+                            $.each(data.siswa, function(i, siswa) {
+                                // Inisialisasi variabel raport untuk menyimpan total nilai raport per siswa
+                                var raport = 0;
+                                var jumPengajaran = 0;
+                                $.each(data.pengajar, function(key, tpe) {
+                                    var nilai = data.nilai.find(function(nilai) {
+                                        return nilai.idSiswa === siswa.idSiswa &&
+                                            nilai.idPengajaran === tpe.idPengajaran;
+                                    });
+
+                                    // Periksa apakah nilai ditemukan
+                                    if (nilai !== undefined && nilai.raport !== null && nilai.raport !==
+                                        0) {
+                                        raport += nilai.raport;
+                                        jumPengajaran++;
+                                        totalNilaiMapel[tpe.idPengajaran] += nilai.raport;
+                                        jumlahSiswaPerMapel[tpe.idPengajaran]++;
+                                    } 
+                                });
+                            });
+
+                            var chr_data_dyserap = [];
+                            $.each(data.pengajar, function(key, tpe) {
+                                var dayaSerap = jumlahSiswaPerMapel[tpe.idPengajaran] === 0 ? '' : Math.round((
+                                    totalNilaiMapel[tpe.idPengajaran] / jumlahSiswaPerMapel[tpe
+                                        .idPengajaran])) + '%';
+                                chr_data_dyserap.push(jumlahSiswaPerMapel[tpe.idPengajaran] === 0 ? 0 : Math
+                                    .round((
+                                        totalNilaiMapel[tpe.idPengajaran] / jumlahSiswaPerMapel[tpe
+                                            .idPengajaran])));
+                            });
+
+                            // GRAFIK DAYA SERAP
+
+                            var options = {
+                                series: [{
+                                    name: 'Daya Serap',
+                                    data: chr_data_dyserap
+                                }],
+                                chart: {
+                                    height: 300,
+                                    type: 'bar',
+                                },
+                                plotOptions: {
+                                    bar: {
+                                        borderRadius: 5,
+                                        columnWidth: '40%',
+                                    }
+                                },
+                                dataLabels: {
+                                    enabled: true,
+                                    formatter: function(val) {
+                                        return val + "%";
+                                    },
+                                    style: {
+                                        colors: ['#1e1e1e']
+                                    }
+
+                                },
+                                stroke: {
+                                    width: 0
+                                },
+                                grid: {
+                                    row: {
+                                        colors: ['#fff', '#f2f2f2']
+                                    }
+                                },
+                                xaxis: {
+                                    labels: {
+                                        rotate: -45
+                                    },
+                                    categories: chr_mapel,
+                                    // tickPlacement: 'on'
+                                },
+                                yaxis: {
+                                    title: {
+                                        text: 'Daya Serap %',
+                                    },
+                                    min: 0,
+                                    max: 100,
+                                    tickAmount: 10,
+                                    labels: {
+                                        show: true,
+                                        formatter: function(val) {
+                                            return Math.floor(val); // Menghilangkan desimal atau koma
+                                        }
+                                    },
+                                },
+                                tooltip: {
+                                    enabled: true,
+                                    y: {
+                                        formatter: function(val) {
+                                            return val + "%"; // Convert value to percentage
+                                        }
+                                    }
+                                },
+                            };
+
+
+                            chart = new ApexCharts(document.querySelector("#grafik_dayaSerap"), options);
+
+                        },
+                        complete: function() {
+                            chart.render();
+                        }
+                    });
+                }
+
                 $(document).ready(function() {
                     jadwalPeajaran();
+                    getSiswa();
+                    getTb_rekap_nilai();
                 });
             </script>
         @endcan

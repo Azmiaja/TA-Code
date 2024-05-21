@@ -86,7 +86,7 @@
             </div>
         </div>
     </div>
-
+@push('scripts')
     <script>
         $(document).ready(function() {
             const tabelMapel = $('#tabelMapel');
@@ -216,4 +216,6 @@
             });
         });
     </script>
+    
+@endpush
 @endsection

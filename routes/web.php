@@ -20,6 +20,9 @@ use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\PesanController;
 use App\Http\Controllers\ProfilUserController;
 use App\Http\Controllers\RekapitulasiAbsen;
+use App\Http\Controllers\RekapNilaiMapel;
+use App\Http\Controllers\Rapor;
+use App\Http\Controllers\RekapNilaiSiswa;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -66,19 +69,21 @@ Route::middleware('guest')->group(function () {
     Route::post('pesan/store', [PesanController::class, 'store'])->name('pesan.store');
 });
 
-
+// ROUTE SISWA
 Route::middleware(['auth:siswa', 'ceklevel:Siswa'])->group(function () {
     Route::prefix('siswa')->group(function () {
         Route::get('/beranda', [BerandaController::class, 'index'])->name('ss.beranda.index');
         Route::get('/catatan-kehadiran', [AbsenSiswa::class, 'index'])->name('absen-siswa.index');
         Route::get('/penjadwalan-siswa', [Mkelas\PenjadwalanController::class, 'index_siswa'])->name('jadwal.siswa');
         Route::get('/get/kehadiran/siswa', [AbsenSiswa::class, 'getKehadiranSiswa'])->name('get-kehadiran-siswa');
+        Route::get('/nilai', [RekapNilaiSiswa::class, 'index'])->name('nilai_siswa.index');
+        Route::get('/get/nilai/siswa', [RekapNilaiSiswa::class, 'getTabelrekap'])->name('get-nilai-siswa');
     });
-     // get kalender siswa
-     Route::get('get-kalender-jadwal', [BerandaController::class, 'getDataKalenderJadwal']);
+    // get kalender siswa
+    Route::get('get-kalender-jadwal', [BerandaController::class, 'getDataKalenderJadwal']);
 });
 
-
+// ROUTE GURU
 Route::middleware(['auth:user', 'ceklevel:Guru'])->group(function () {
     Route::prefix('guru')->group(function () {
         Route::get('/beranda', [BerandaController::class, 'index'])->name('gg.beranda.index');
@@ -86,8 +91,9 @@ Route::middleware(['auth:user', 'ceklevel:Guru'])->group(function () {
         Route::get('/presensi/get-data', [Absensi::class, 'getData']);
         Route::get('/presensi/rekapitulasi', [RekapitulasiAbsen::class, 'index'])->name('rekap.index');
         Route::get('presensi/rekap/kelas', [RekapitulasiAbsen::class, 'getRekapKelas']);
+        Route::get('presensi/rekap/bulanan/{periode}/{kelas}', [RekapitulasiAbsen::class, 'getRekap']);
 
-        Route::prefix('kategori-penilaian')->group(function(){
+        Route::prefix('kategori-penilaian')->group(function () {
             Route::get('/kelas', [KategoriNilaiController::class, 'index'])->name('kategori-nilai.index');
             Route::get('/get-tujuan-pembelajaran', [KategoriNilaiController::class, 'getTP'])->name('get.tp-data');
             Route::post('/store-tujuan-pembelajaran', [KategoriNilaiController::class, 'storeTP'])->name('store.data-tp');
@@ -95,21 +101,53 @@ Route::middleware(['auth:user', 'ceklevel:Guru'])->group(function () {
             Route::get('/get-lingkup-materi', [KategoriNilaiController::class, 'getLM'])->name('get.lm-data');
             Route::post('/store-lingkup-materi', [KategoriNilaiController::class, 'storeLM'])->name('store.data-lm');
             Route::delete('/delete-lingkup-materi/{id}', [KategoriNilaiController::class, 'deleteLM']);
-
+            
             Route::get('/get-mapel/guru', [KategoriNilaiController::class, 'getMapelGuru'])->name('get.mapel.gurupengajar');
+            
+            Route::get('/get-tp/{id}', [KategoriNilaiController::class, 'getTPById']);
+            Route::get('/get-lm/{id}', [KategoriNilaiController::class, 'getLMById']);
+            Route::put('/update-tujuan-pembelajaran/{id}', [KategoriNilaiController::class, 'updateTP']);
+            Route::put('/update-lingkup-materi/{id}', [KategoriNilaiController::class, 'updateLM']);
         });
-        
-        Route::prefix('penilaian-siswa')->group(function(){
+
+        Route::prefix('penilaian-siswa')->group(function () {
             Route::get('/kelas', [PenilaianController::class, 'index'])->name('penilaian.index');
             Route::get('/get-kelas/guru', [PenilaianController::class, 'getKelasGuru'])->name('get.kelas.gurupengajar');
             Route::get('/get-mapel/guru', [PenilaianController::class, 'getMapelGuru'])->name('get.mapel.gurupengajar.nilai');
+            Route::delete('/delete-nilaiTP/{id}', [PenilaianController::class, 'deleteTP']);
+            Route::delete('/delete-nilaiLM/{id}', [PenilaianController::class, 'deleteLM']);
+            Route::delete('/delete-Ntes/{id}', [PenilaianController::class, 'deleteNtes']);
+            Route::delete('/delete-Tes/{id}', [PenilaianController::class, 'deleteTes']);
+
+            Route::get('/rekapitulasi-nilai', [RekapNilaiMapel::class, 'index'])->name('rekap_nilai_mapel.index');
+            Route::get('/get-tabel-rekap', [RekapNilaiMapel::class, 'getTabelrekap'])->name('get.rekap.nilai');
+        });
+
+        Route::prefix('rapor-siswa')->group(function () {
+            Route::get('catatan-guru', [Rapor\CatatanGuru::class, 'index'])->name('catatan.guru.index');
+            Route::get('get-catatan', [Rapor\CatatanGuru::class, 'getCatatanGuru'])->name('get.catatan-guru');
+            Route::post('store/catatan-guru', [Rapor\CatatanGuru::class, 'store'])->name('store.catatan-guru');
+            Route::delete('destroy/catatan-guru/{id}', [Rapor\CatatanGuru::class, 'destroy']);
+
+            Route::get('ekstrakulikuler', [Rapor\KegiatanEkstra::class, 'index'])->name('ekstrakulikuler.index');
+            Route::get('get-ekstrakulikuler', [Rapor\KegiatanEkstra::class, 'getEkstraSiswa'])->name('get.ekstra-siswa');
+            Route::post('store/ekstrakulikuler', [Rapor\KegiatanEkstra::class, 'storeData'])->name('store.ekstra');
+            Route::delete('delete/ekstrakulikuler/{id}', [Rapor\KegiatanEkstra::class, 'destroy']);
+
+            Route::get('keterangan-naik-tidak', [Rapor\KetNaikTidak::class, 'index'])->name('ket.naik-tidak.index');
+            Route::get('get/keterangan-naik-tidak', [Rapor\KetNaikTidak::class, 'getKetNaikTidak'])->name('get-data.ket.naik-tidak');
+            Route::post('store/keterangan-naik-tidak', [Rapor\KetNaikTidak::class, 'store'])->name('store-data.ket.naik-tidak');
+            
+            Route::get('cetak-rapor', [Rapor\RaporSiswa::class, 'index'])->name('cetak_rapor.index');
+            Route::get('siswa-rapor', [Rapor\RaporSiswa::class, 'getSiswa'])->name('get-siswa.rapor');
+            Route::get('rapor-data', [Rapor\RaporSiswa::class, 'getRapor'])->name('get-data.rapor');
         });
     });
-     // get kalender guru
-     Route::get('get-guru-jadwal', [BerandaController::class, 'getDataKalenderJadwalGuru']);
+    // get kalender guru
+    Route::get('get-guru-jadwal', [BerandaController::class, 'getDataKalenderJadwalGuru']);
 });
 
-
+// ROUTE ALL
 Route::middleware(['auth:user,siswa'])->group(function () {
     //dashboard
     Route::get('/get-jadwal/siswa', [Mkelas\PenjadwalanController::class, 'getJadwalSiswa'])->name('get-jadwal.siswa');
@@ -121,6 +159,7 @@ Route::middleware(['auth:user,siswa'])->group(function () {
     Route::get('get/tanggal/absen/{kelas}/{periode}', [Absensi::class, 'getTanggalBulan']);
     Route::post('siswa/absen/store', [Absensi::class, 'store'])->name('absen.siswa.store');
     Route::put('siswa/absen/update', [Absensi::class, 'update'])->name('absen.siswa.update');
+    Route::delete('siswa/absen/delete/{id}', [Absensi::class, 'destroy'])->name('absen.siswa.delete');
 
 
     // PESAN
@@ -145,7 +184,7 @@ Route::middleware(['auth:user,siswa'])->group(function () {
     Route::get('nilai_siswa/edit/{id}/{idPengajaran}/{idPeriode}', [NilaiSiswaController::class, 'edit'])->name('nilai_siswa.edit');
     Route::post('nilai_siswa/up', [NilaiSiswaController::class, 'up']);
 
-   
+
 
     // CHART
     Route::get('chart/donat/user', [HomeController::class, 'getChartUser']);
@@ -225,6 +264,7 @@ Route::middleware(['auth:user,siswa'])->group(function () {
     Route::post('store/penilaian-siswa/tes', [PenilaianController::class, 'storeNATes'])->name('store.nilai.akhir.tes');
 });
 
+// ROUTE ADMIN && SUPER ADMIN
 Route::middleware(['auth:user', 'ceklevel:Super Admin|Admin'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'indexBeranda'])->name('dashboard.index');
     Route::get('/chart/pengguna', [HomeController::class, 'chart'])->name('chart.pengguna');
@@ -238,6 +278,7 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin|Admin'])->group(function (
             Route::resource('periode', Mkelas\PeriodeController::class);
             Route::get('kelas', [KelasController::class, 'index'])->name('kelas.index');
             Route::resource('mapel', Mkelas\MapelController::class);
+            Route::get('ekstrakuliuler', [Mkelas\MapelController::class, 'indexEkstra'])->name('ekstrakuliuler.index');
             Route::resource('pengajaran', Mkelas\PengajarController::class);
             Route::resource('penjadwalan', Mkelas\PenjadwalanController::class);
             Route::get('data_siswa', [Mkelas\DataSiswaController::class, 'index'])->name('data_siswa.index');
@@ -256,6 +297,8 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin|Admin'])->group(function (
     Route::prefix('akademik')->group(function () {
         Route::get('presensi', [Absensi::class, 'rekapPresensiAdmin'])->name('re-presensi.index');
         Route::get('presensi/rekap/{periode}/{kelas}', [RekapitulasiAbsen::class, 'getRekap']);
+        Route::get('nilai-siswa', [RekapNilaiMapel::class, 'getTabelrekapSiswa'])->name('re-nilai.index');
+        Route::get('niali-siswa/rekap/{periode}/{kelas}', [RekapNilaiMapel::class, 'getTabelrekapAdmin']);
     });
 
     // PENGAJARAN.BLADE
@@ -275,6 +318,13 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin|Admin'])->group(function (
     Route::get('mapel/edit/{id}', [Mkelas\MapelController::class, 'edit']);
     Route::put('mapel/update/{id}', [Mkelas\MapelController::class, 'update']);
     Route::delete('mapel/destroy/{id}', [Mkelas\MapelController::class, 'destroy']);
+    
+    // EKSTRAKULIKULER
+    Route::get('ekstra/get-data', [Mkelas\MapelController::class, 'getEkstra']);
+    Route::post('ekstra/store', [Mkelas\MapelController::class, 'storeEkstra'])->name('storeEkstra');
+    Route::get('ekstra/edit/{id}', [Mkelas\MapelController::class, 'editEkstra']);
+    Route::put('ekstra/update/{id}', [Mkelas\MapelController::class, 'updateEkstra']);
+    Route::delete('ekstra/destroy/{id}', [Mkelas\MapelController::class, 'destroyEkstra']);
 
     // PROFIL SEKOLAH HANDLE
     Route::get('profil/get-data', [Mcompany\ProfilController::class, 'getProfil'])->name('profil.get-data');
@@ -364,55 +414,4 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
     Route::put('user/update/pegawai/{id}', [Muser\UserController::class, 'update']);
     Route::delete('user/destroy/pegawai/{id}', [Muser\UserController::class, 'destroy']);
 
-
-
-
-
-
-    Route::prefix('manajemen-kelas')->group(function () {
-        Route::resource('data-kelas', KelasController::class)->except(['index']);
-        // Route::resource('penilaian', Mkelas\PenilaianController::class);
-    });
-});
-
-// ------------------------------------------------ ADMIN -----------------------------------------------------------------
-Route::middleware(['auth:user', 'ceklevel:Admin'])->group(function () {
-    //manajemen guru kelas siswa
-    Route::prefix('manajemen-kelas')->group(function () {
-        Route::resource('data-kelas-admin', KelasController::class)->except(['index']);
-        Route::get('data-kelas-admin', [KelasController::class, 'indexMasterDataKelas'])->name('data-kelas-admin.index');
-
-        Route::resource('penjadwalan-admin', Mkelas\PenjadwalanController::class);
-        Route::resource('periode-admin', Mkelas\PeriodeController::class);
-        Route::resource('mapel-admin', Mkelas\MapelController::class);
-        Route::resource('pengajaran-admin', Mkelas\PengajarController::class);
-        // Route::resource('penilaian-admin', Mkelas\PenilaianController::class);
-    });
-});
-
-// ------------------------------------------------ GURU -----------------------------------------------------------------
-Route::middleware('auth:user', 'ceklevel:Guru')->group(function () {
-    Route::get('/jadwal-guru', [HomeController::class, 'getJadwalGuru'])->name('get-jadwal.guru');
-    Route::get('/kelas-guru', [HomeController::class, 'getJumlahKL'])->name('get-jml.kelas');
-    //kelas
-    Route::prefix('manajemen-kelas')->group(function () {
-        Route::get('/penilaian-guru', [Mkelas\PenilaianController::class, 'index_guru'])->name('penilaian.guru');
-        Route::get('/penjadwalan-guru', [Mkelas\PenjadwalanController::class, 'index'])->name('jadwal.guru');
-        // Route::get('/get-jadwal-guru', [Mkelas\PenjadwalanController::class, 'getJadwalPGuru'])->name('get-jadwalP.guru');
-        Route::get('get-mapel-guru', [Mkelas\PenilaianController::class, 'getMapelGuru'])->name('get-mapel.guru');
-        Route::get('/nilai_siswa_guru/{slug}/{id}/{kelas_id}/{periode_id}', [NilaiSiswaController::class, 'index'])->name('nilai-siswa.guru');
-    });
-});
-
-// ------------------------------------------------ SISWA -----------------------------------------------------------------
-Route::middleware('auth:siswa', 'ceklevel:Siswa')->group(function () {
-
-    Route::get('/count-mapel', [HomeController::class, 'countMapel'])->name('count-mapel.siswa');
-    Route::get('/get-nilai-siswa', [HomeController::class, 'getNilaiSiswa'])->name('get-nilai.siswa');
-    //kelas
-    Route::prefix('kelas')->group(function () {
-        // Route::get('/penilaian-siswa', [Mkelas\PenilaianController::class, 'index_siswa'])->name('penilaian.siswa');
-        // Route::get('/penjadwalan-siswa', [Mkelas\PenjadwalanController::class, 'index_siswa'])->name('jadwal.siswa');
-        // Route::get('/penilaian-siswa/get-nilai', [Mkelas\PenilaianController::class, 'getNilaiSiswaKelas'])->name('siswa_nilai.get');
-    });
 });

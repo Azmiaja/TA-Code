@@ -5,20 +5,29 @@
         @php
             $kelas = ['Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam'];
         @endphp
-        <div class="row item-push mb-4 justify-content-end align-items-end">
-            <div class="col-md-3 mb-md-0 mb-3">
-                <label for="kelas_name" class="form-label fw-bold">Kelas</label>
-                <select class="form-select form-select-lg fw-semibold" name="" id="kelas_name">
-                    @foreach ($klsPengajaran as $item)
-                        <option value="{{ $item->kelas->namaKelas }}" data-pegawai="{{ $item->idPegawai }}"
-                            data-periode="{{ $item->kelas->periode->idPeriode }}" data-kls_id="{{ $item->kelas->idKelas }}">
-                            Kelas {{ $item->kelas->namaKelas }}
-                            ({{ $kelas[$item->kelas->namaKelas - 1] ?? '' }})
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-3 text-end">
+        <div class="row mb-4 justify-content-end align-items-end">
+            @if ($periode)
+                <div class="col-md-3 mb-md-0 mb-3">
+                    <label for="periode_aktif" class="form-label fw-bold">Periode Aktif</label>
+                    <input type="text" readonly data-id="{{ $periode->idPeriode }}"
+                        value="{{ $periode->semester }} {{ $periode->tahun }}"
+                        class="form-control form-control-alt fw-semibold border-secondary" id="periode_aktif">
+                </div>
+                <div class="col-md-3 mb-md-0 mb-3">
+                    <label for="kelas_name" class="form-label fw-bold">Kelas</label>
+                    <select class="form-select form-select-lg fw-semibold" name="" id="kelas_name">
+                        @foreach ($klsPengajaran as $item)
+                            <option value="{{ $item->kelas->namaKelas }}" data-pegawai="{{ $item->idPegawai }}"
+                                data-periode="{{ $item->kelas->periode->idPeriode }}"
+                                data-kls_id="{{ $item->kelas->idKelas }}">
+                                Kelas {{ $item->kelas->namaKelas }}
+                                ({{ $kelas[$item->kelas->namaKelas - 1] ?? '' }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
+            <div class="col-md-auto text-end">
                 <button class="btn btn-lg btn-primary" id="aksi_absen_siswa"><i
                         class="fa-solid fa-list-check me-2"></i>Mulai
                     Presensi</button>
@@ -92,15 +101,19 @@
                                 <div class="table-responsive mb-3">
                                     <table class="table align-middle table-borderless caption-top table-hover w-100">
                                         <caption class="fs-6 fw-medium mb-1 text-dark"></caption>
-                                        <thead class="table-light d-none">
+                                        <thead class="table-transparent">
                                             <tr>
-                                                <th class="text-center" style="width: 5%;">No</th>
+                                                <th class="text-center" style="width: 5%;"></th>
                                                 {{-- <th style="width: 10%;">NIS</th> --}}
-                                                <th>Nama</th>
-                                                <th style="width: 8%;" class="text-center">Hadir</th>
+                                                <th></th>
+                                                <th style="width: 8%;" class="text-center">
+                                                    <input type="checkbox" class="form-check-input border-dark"
+                                                        title="Hadir Semua" id="pilih_semua"
+                                                        style="width: 1.4rem; height: 1.4rem;">
+                                                </th>
                                                 <th style="width: 8%;" class="text-center">Izin</th>
                                                 <th style="width: 8%;" class="text-center">Sakit</th>
-                                                <th style="width: 8%;" class="text-center">Alfa</th>
+                                                <th style="width: 8%;" class="text-center">Alpha</th>
                                             </tr>
                                         </thead>
                                         <tbody id="daftar_siswa">
@@ -110,15 +123,8 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="col text-end">
-                                    {{-- <div class="d-flex justify-content-end form-check ms-auto me-auto mb-3 pb-1">
-                                        <input class="form-check-input" required type="checkbox" value=""
-                                            id="reverseCheck1" style="width: 18px; height: 18px;">
-                                        <label class="form-check-label fw-medium mt-auto ms-1" style="padding-top: 2px;" for="reverseCheck1">
-                                            Semua presensi siswa telah terisi dengan benar.
-                                        </label>
-                                    </div> --}}
-                                    <button type="submit" id="btn_absen" class="btn btn-alt-success mb-4">Simpan
+                                <div class="col text-end btn-form mb-4">
+                                    <button type="submit" id="btn_absen" class="btn btn-alt-success">Simpan
                                         Presensi</button>
                                 </div>
                             </div>
@@ -213,11 +219,11 @@
                         if (daftarTanggal.length !== 0) {
                             $.each(daftarTanggal, function(i, tanggal) {
                                 let tgl = kehadiran.find(absen => absen.tanggal == tanggal);
-                                let bln = {!! json_encode(now()->month) !!};
+                                let bln = moment().format('M');
                                 if (tgl !== null) {
                                     table +=
-                                        `<th style="width: 35px;">
-                                                    <a href="javascrupt:void(0)" id="ubah_absen" 
+                                        `<th style="min-width: 30px;">
+                                                    <a href="javascript:void(0)" id="ubah_absen" 
                                                     data-tgl="${tanggal}"
                                                     data-bln="${bln}" 
                                                     class="nav-link" data-bs-toggle="tooltip"
@@ -298,6 +304,14 @@
 
                         $('#tabel_absenSiswa').append(table);
                     },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Data tidak dapat dimuat!.',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    },
                     complete: function() {
                         // Menyembunyikan spinner setelah permintaan selesai, baik berhasil atau tidak
                         $('#loading_spinner_2').hide();
@@ -352,9 +366,17 @@
                     getDataAbsen();
                 });
 
+                $('#pilih_semua').change(function() {
+                    if ($(this).is(':checked')) {
+                        $(document).find('.hadir').prop('checked', true);
+                    } else {
+                        $(document).find('.hadir').prop('checked', false);
+                    }
+                });
+
                 function fetchSiswa() {
                     var kelas = $('#kelas_name option:selected').val();
-                    var periode = $('#kelas_name option:selected').data('periode');
+                    var periode = $('#periode_aktif').data('id');
                     var idKelas = $('#kelas_name option:selected').data('kls_id');
                     var idPegawai = $('#kelas_name option:selected').data('pegawai');
                     $('#loading_spinner').show();
@@ -376,14 +398,13 @@
                             $('caption').text(`Jumlah Siswa : ${tot_sis}`);
                             var absen = '';
 
-
                             $.each(data.siswa, function(key, item) {
                                 // console.log(item);
                                 absen += `<tr>
                                             <td class="text-center fw-medium">${key + 1}</td>
                                             <td><span class="fs-6 fw-medium">${item.namaSiswa}</span></br><span class="text-muted">${item.nis}</span><input type="hidden" value="${item.idSiswa}" name="idSiswa[]"></td>
                                             <td class="text-center px-md-0 px-2">
-                                                <input type="radio" class="btn-check" name="presensi_${item.idSiswa}" id="hadir_${item.idSiswa}"
+                                                <input type="radio" class="btn-check hadir" name="presensi_${item.idSiswa}" id="hadir_${item.idSiswa}"
                                                     autocomplete="off" value="hadir" required>
                                                 <label class="btn btn-outline-success rounded-circle"
                                                     style="width: 38px; height: 38px;" for="hadir_${item.idSiswa}">H</label>
@@ -416,6 +437,7 @@
                 btnAbsen.click(function(e) {
                     e.preventDefault();
                     modalAbsen.modal('show');
+                    // $('#pilih_semua').attr('checked', false);
                     fetchSiswa();
                     // datePicker();
                     method.val('POST');
@@ -429,7 +451,9 @@
                     $('#btn_absen').prop('disabled', false);
                     $('#tanggal_absen').val(null);
                     $('#btn_switch input[type="checkbox"]').prop('checked', false);
-                    // formAbsen.trigger('reset');
+                    $(this).find('#rm_presensi').remove();
+                    $('#pilih_semua').attr('checked', false);
+                    document.getElementById("pilih_semua").checked = false;
                 });
 
                 $(document).on('click', '#ubah_absen', function(e) {
@@ -440,7 +464,7 @@
                     formAbsen.attr('action', `{{ route('absen.siswa.update') }}`);
 
                     var kelas = $('#kelas_name option:selected').val();
-                    var periode = $('#kelas_name option:selected').data('periode');
+                    var periode = $('#periode_aktif').data('id');
                     var idKelas = $('#kelas_name option:selected').data('kls_id');
                     var idPegawai = $('#kelas_name option:selected').data('pegawai');
 
@@ -448,6 +472,9 @@
                     $('#tanggal_absen').prop('disabled', true);
                     $('#btn_switch').prop('hidden', false);
                     $('#btn_absen').prop('disabled', true);
+
+                    $('#pilih_semua').prop('disabled', true);
+
 
                     $.ajax({
                         type: "GET",
@@ -459,7 +486,8 @@
                         success: function(data) {
                             moment.locale('id');
                             var tanggal_absen_update = moment(data.absen[0].tgl);
-                            $('#tanggal_absen').val(tanggal_absen_update.format('DD MMMM YYYY'));
+                            $('#tanggal_absen').val(tanggal_absen_update.format(
+                                'DD MMMM YYYY'));
 
                             $('#modal_absen_siswa .block-title').text('Presensi Siswa Kelas ' +
                                 kelas);
@@ -467,10 +495,10 @@
                             $('#form_absensi [name="idKelas"]').val(idKelas);
                             $('#form_absensi [name="idPegawai"]').val(idPegawai);
 
-                            $('#loading_spinner').hide();
                             $('#daftar_siswa').empty();
                             var tot_sis = data.siswa.length;
                             $('caption').text(`Jumlah Siswa : ${tot_sis}`);
+                            var presensi = [];
                             $.each(data.siswa, function(key, item) {
                                 // console.log(data.absen.find(abs => abs.idSiswa === item.idSiswa && abs.presensi === 'H'));
                                 $('#daftar_siswa').append(`
@@ -504,7 +532,19 @@
                             </tr>
                             `);
 
+                                presensi.push(data.pres.find(i => i.idSiswa === item
+                                    .idSiswa).idAbsen);
+
                             });
+
+                            $('.btn-form').prepend(
+                                `<button type="button" class="btn btn-alt-danger" id="rm_presensi" 
+                                data-tanggal="${$('#tanggal_absen').val()}"
+                                data-presensi="${presensi}">Batalkan Presensi</button>`
+                            );
+                        },
+                        complete: function() {
+                            $('#loading_spinner').hide();
                         }
                     });
                 });
@@ -548,6 +588,45 @@
                                 });
                             }
                         },
+                    });
+                });
+
+                modalAbsen.on('click', '#rm_presensi', function(e) {
+                    e.preventDefault();
+
+                    var id = $(this).data('presensi');
+                    var tgl = $(this).data('tanggal');
+
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        html: `Membatalkan/menghapus presensi pada <b>${tgl} ?</b>`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Hapus!',
+                        reverseButtons: true,
+
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'DELETE',
+                                url: `{{ url('siswa/absen/delete/${id}') }}`,
+                                dataType: 'json',
+                                success: function(response) {
+                                    Swal.fire({
+                                        icon: response.status,
+                                        title: response.title,
+                                        text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                    modalAbsen.modal('hide');
+                                    getDataAbsen();
+                                },
+                            });
+                        }
                     });
                 });
 

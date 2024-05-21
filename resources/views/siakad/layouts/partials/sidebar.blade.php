@@ -68,8 +68,8 @@
                         </a>
                     </li>
                     <li class="nav-main-item">
-                        <a class="nav-main-link {{ Request::routeIs('ss.beranda.index') ? 'active' : '' }}"
-                            href="{{ route('ss.beranda.index') }}">
+                        <a class="nav-main-link {{ Request::routeIs('nilai_siswa.index') ? 'active' : '' }}"
+                            href="{{ route('nilai_siswa.index') }}">
                             <i class="nav-main-link-icon si si-list"></i>
                             <span class="nav-main-link-name">Nilai</span>
                         </a>
@@ -102,7 +102,7 @@
                                 ->distinct()
                                 ->get();
                             $pegawai = Kelas::where('idPegawai', Auth::user()->pegawai->idPegawai)
-                                ->where('idPeriode', $periode->idPeriode)
+                                ->where('idPeriode', $periode->idPeriode ?? '')
                                 ->first();
                         @endphp
                         <ul class="nav-main-submenu">
@@ -129,8 +129,9 @@
                             <span class="nav-main-link-name">Atur Penilaian</span>
                         </a>
                     </li>
-                    <li class="nav-main-item {{ Request::routeIs('penilaian.index') ? 'open' : '' }}">
-                        <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('penilaian.index') ? 'active' : '' }}"
+                    <li
+                        class="nav-main-item {{ Request::routeIs('penilaian.index', 'rekap_nilai_mapel.index') ? 'open' : '' }}">
+                        <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('penilaian.index', 'rekap_nilai_mapel.index') ? 'active' : '' }}"
                             data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="javascript:void(0)">
                             <i class="nav-main-link-icon si si-list"></i>
                             <span class="nav-main-link-name">Penilaian Siswa</span>
@@ -155,15 +156,57 @@
                                     <span class="nav-main-link-name">Penilaian</span>
                                 </a>
                             </li>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link {{ Request::routeIs('rekap_nilai_mapel.index') ? 'active' : '' }}"
+                                    href="{{ route('rekap_nilai_mapel.index') }}">
+                                    <span class="nav-main-link-name">Rekapitulasi</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
-                    <li class="nav-main-item">
-                        <a class="nav-main-link {{ Request::routeIs('ss.beranda.index') ? 'active' : '' }}"
-                            href="{{ route('ss.beranda.index') }}">
+                    @if ($pegawai)
+                        <li
+                            class="nav-main-item {{ Request::routeIs('catatan.guru.index', 'ket.naik-tidak.index', 'ekstrakulikuler.index', 'cetak_rapor.index') ? 'open' : '' }}">
+                            <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('catatan.guru.index', 'ket.naik-tidak.index', 'ekstrakulikuler.index', 'cetak_rapor.index') ? 'active' : '' }}"
+                                data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="javascript:void(0)">
+                                <i class="nav-main-link-icon si si-docs"></i>
+                                <span class="nav-main-link-name">Rapor Siswa</span>
+                            </a>
+                            <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link {{ Request::routeIs('catatan.guru.index') ? 'active' : '' }}"
+                                        href="{{ route('catatan.guru.index') }}">
+                                        <span class="nav-main-link-name">Catatan Guru</span>
+                                    </a>
+                                </li>
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link {{ Request::routeIs('ekstrakulikuler.index') ? 'active' : '' }}"
+                                        href="{{ route('ekstrakulikuler.index') }}">
+                                        <span class="nav-main-link-name">Ekstrakulikuler</span>
+                                    </a>
+                                </li>
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link {{ Request::routeIs('ket.naik-tidak.index') ? 'active' : '' }}"
+                                        href="{{ route('ket.naik-tidak.index') }}">
+                                        <span class="nav-main-link-name">Ket. Naik/Tidak</span>
+                                    </a>
+                                </li>
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link {{ Request::routeIs('cetak_rapor.index') ? 'active' : '' }}"
+                                        href="{{ route('cetak_rapor.index') }}">
+                                        <span class="nav-main-link-name">Cetak Rapor</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+                    {{-- <li class="nav-main-item">
+                        <a class="nav-main-link {{ Request::routeIs('jadwal-guru.index') ? 'active' : '' }}"
+                            href="{{ route('jadwal-guru.index') }}">
                             <i class="nav-main-link-icon si si-event"></i>
                             <span class="nav-main-link-name">Jadwal</span>
                         </a>
-                    </li>
+                    </li> --}}
                 @endcan
                 @canany(['super.admin'])
                     <li class="nav-main-item">
@@ -176,8 +219,8 @@
                 @endcanany
                 @canany(['super.admin', 'admin'])
                     <li
-                        class="nav-main-item {{ Request::routeIs('sekolah.index', 'pegawai.index', 'siswa.index', 'periode.index', 'kelas.index', 'mapel.index', 'pengajaran.index', 'penjadwalan.index', 'data_siswa.index') ? 'open' : '' }}">
-                        <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('sekolah.index', 'pegawai.index', 'siswa.index', 'periode.index', 'kelas.index', 'mapel.index', 'pengajaran.index', 'penjadwalan.index', 'data_siswa.index') ? 'active' : '' }}"
+                        class="nav-main-item {{ Request::routeIs('sekolah.index', 'pegawai.index', 'siswa.index', 'periode.index', 'kelas.index', 'mapel.index', 'pengajaran.index', 'penjadwalan.index', 'data_siswa.index', 'ekstrakuliuler.index') ? 'open' : '' }}">
+                        <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('sekolah.index', 'pegawai.index', 'siswa.index', 'periode.index', 'kelas.index', 'mapel.index', 'pengajaran.index', 'penjadwalan.index', 'data_siswa.index', 'ekstrakuliuler.index') ? 'active' : '' }}"
                             data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="?#">
                             <i class="nav-main-link-icon si si-bulb"></i>
                             <span class="nav-main-link-name">Master Data</span>
@@ -202,7 +245,7 @@
                                 </a>
                             </li>
                             <li
-                                class="nav-main-item {{ Request::routeIs('periode.index', 'kelas.index', 'data_siswa.index', 'mapel.index', 'pengajaran.index', 'penjadwalan.index') ? 'open' : '' }}">
+                                class="nav-main-item {{ Request::routeIs('periode.index', 'kelas.index', 'data_siswa.index', 'mapel.index', 'pengajaran.index', 'penjadwalan.index', 'ekstrakuliuler.index') ? 'open' : '' }}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
                                     aria-expanded="false" href="#">
                                     <span class="nav-main-link-name">Akademik</span>
@@ -218,6 +261,12 @@
                                         <a class="nav-main-link {{ Request::routeIs('mapel.index') ? 'active' : '' }}"
                                             href="{{ route('mapel.index') }}">
                                             <span class="nav-main-link-name">Mata Pelajaran</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link {{ Request::routeIs('ekstrakuliuler.index') ? 'active' : '' }}"
+                                            href="{{ route('ekstrakuliuler.index') }}">
+                                            <span class="nav-main-link-name">Ekstrakulikuler</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
@@ -249,6 +298,23 @@
                         </ul>
                     </li>
 
+                    <li class="nav-main-heading">Akademik</li>
+                    <li class="nav-main-item">
+                        <a class="nav-main-link {{ Request::routeIs('re-presensi.index') ? 'active' : '' }}"
+                            href="{{ route('re-presensi.index') }}">
+                            <i class="nav-main-link-icon si si-note"></i>
+                            <span class="nav-main-link-name">Presensi</span>
+                        </a>
+                    </li>
+                    <li class="nav-main-item">
+                        <a class="nav-main-link {{ Request::routeIs('re-nilai.index') ? 'active' : '' }}"
+                            href="{{ route('re-nilai.index') }}">
+                            <i class="nav-main-link-icon si si-notebook"></i>
+                            <span class="nav-main-link-name">Penilaian</span>
+                        </a>
+                    </li>
+
+                    
                     <li class="nav-main-heading">Profil Sekolah</li>
                     <li
                         class="nav-main-item {{ Request::routeIs('berita.index', 'tentang.index', 'profil.index', 'galeri.index', 'profil-guru.index', 'kontak.index', 'dokumentasi.index', 'pesan.index') ? 'open' : '' }}">
@@ -284,151 +350,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-main-heading">Akademik</li>
-                    <li class="nav-main-item">
-                        <a class="nav-main-link {{ Request::routeIs('re-presensi.index') ? 'active' : '' }}"
-                            href="{{ route('re-presensi.index') }}">
-                            <i class="nav-main-link-icon si si-note"></i>
-                            <span class="nav-main-link-name">Presensi</span>
-                        </a>
-                    </li>
                 @endcanany
-                {{-- <li class="nav-main-item {{ $judul === 'Manajemen Kelas' ? 'open' : '' }}">
-                    <a class="nav-main-link nav-main-link-submenu {{ $judul === 'Manajemen Kelas' ? 'active' : '' }}"
-                        data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-                        <i class="nav-main-link-icon si si-briefcase"></i>
-                        <span class="nav-main-link-name">
-                            @php
-                                $allowedRoles = ['Guru', 'Admin', 'Super Admin'];
-                            @endphp
-
-                            @if (in_array(Auth::user()->hakAkses, $allowedRoles))
-                                Manajemen Kelas
-                            @elseif (Auth::user()->hakAkses == 'Siswa')
-                                Kelas
-                            @endif
-                        </span>
-                    </a>
-                    <ul class="nav-main-submenu">
-                        @canany(['super.admin', 'admin'])
-                            <li class="nav-main-item">
-                                @php
-                                    $routePeriode =
-                                        Auth::user()->hakAkses == 'Super Admin'
-                                            ? route('periode.index')
-                                            : route('periode-admin.index');
-                                @endphp
-
-                                <a class="nav-main-link {{ $sub_judul === 'periode' ? 'active' : '' }}"
-                                    href="{{ $routePeriode }}">
-                                    <span class="nav-main-link-name">Periode</span>
-                                </a>
-
-                            </li>
-                            <li class="nav-main-item">
-                                @php
-                                    $routeKelas =
-                                        Auth::user()->hakAkses == 'Super Admin'
-                                            ? route('kelas.index')
-                                            : route('data-kelas-admin.index');
-                                @endphp
-                                <a class="nav-main-link {{ $sub_judul === 'data-kelas' ? 'active' : '' }}"
-                                    href="{{ $routeKelas }}">
-                                    <span class="nav-main-link-name">Data Kelas</span>
-                                </a>
-                            </li>
-                            <li class="nav-main-item">
-                                @php
-                                    $routeMapel =
-                                        Auth::user()->hakAkses == 'Super Admin'
-                                            ? route('mapel.index')
-                                            : route('mapel-admin.index');
-                                @endphp
-                                <a class="nav-main-link {{ $sub_judul === 'Mata Pelajaran' ? 'active' : '' }}"
-                                    href="{{ $routeMapel }}">
-                                    <span class="nav-main-link-name">Mata Pelajaran</span>
-                                </a>
-                            </li>
-                            <li class="nav-main-item">
-                                @php
-                                    $routePengajar =
-                                        Auth::user()->hakAkses == 'Super Admin'
-                                            ? route('pengajaran.index')
-                                            : route('pengajaran-admin.index');
-                                @endphp
-                                <a class="nav-main-link {{ $sub_judul === 'Pengajar' ? 'active' : '' }}"
-                                    href="{{ $routePengajar }}">
-                                    <span class="nav-main-link-name">Pengajar</span>
-                                </a>
-                            </li>
-                            <li class="nav-main-item">
-                                @php
-                                    $routeJadwal =
-                                        Auth::user()->hakAkses == 'Super Admin'
-                                            ? route('penjadwalan.index')
-                                            : route('penjadwalan-admin.index');
-                                @endphp
-                                <a class="nav-main-link {{ $sub_judul === 'penjadwalan' ? 'active' : '' }}"
-                                    href="{{ $routeJadwal }}">
-                                    <span class="nav-main-link-name">Jadwal Pelajaran</span>
-                                </a>
-                            </li>
-                            @can('guru')
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link {{ $sub_judul === 'Penilaian' ? 'active' : '' }}"
-                                        href="{{ route('penilaian.index') }}">
-                                        <span class="nav-main-link-name">Penilaian Siswa
-                                        </span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            <li class="nav-main-item">
-                                @php
-                                    $routeNilai =
-                                        Auth::user()->hakAkses == 'Super Admin'
-                                            ? route('penilaian.index')
-                                            : route('penilaian-admin.index');
-                                @endphp
-                                <a class="nav-main-link {{ $sub_judul === 'Penilaian' ? 'active' : '' }}"
-                                    href="{{ $routeNilai }}">
-                                    <span class="nav-main-link-name">Penilaian Siswa
-                                    </span>
-                                </a>
-                            </li>
-                        @endcanany
-                        @can('siswa')
-                            <li class="nav-main-item">
-                                <a class="nav-main-link {{ $sub_judul === 'Jadwal' ? 'active' : '' }}"
-                                    href="{{ route('jadwal.siswa') }}">
-                                    <span class="nav-main-link-name">Jadwal</span>
-                                </a>
-                            </li>
-                            <li class="nav-main-item">
-                                <a class="nav-main-link {{ $sub_judul === 'Penilaian' ? 'active' : '' }}"
-                                    href="{{ route('penilaian.siswa') }}">
-                                    <span class="nav-main-link-name">Nilai
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('guru')
-                            <li class="nav-main-item">
-                                <a class="nav-main-link {{ $sub_judul === 'Jadwal' ? 'active' : '' }}"
-                                    href="{{ route('jadwal.guru') }}">
-                                    <span class="nav-main-link-name">Jadwal</span>
-                                </a>
-                            </li>
-                            <li class="nav-main-item">
-                                <a class="nav-main-link {{ $sub_judul === 'Penilaian' ? 'active' : '' }}"
-                                    href="{{ route('penilaian.guru') }}">
-                                    <span class="nav-main-link-name">Penilaian Siswa
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li> --}}
             </ul>
         </div>
     </div>

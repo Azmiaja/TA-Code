@@ -148,15 +148,22 @@ class DataSiswaController extends Controller
 
     public function destroySiswa($id)
     {
-        $siswa = Siswa::findOrFail($id);
+        try {
+            $siswa = Siswa::findOrFail($id);
+            // Hapus kelas siswa dengan detach
+            $siswa->kelas()->detach();
 
-        // Hapus kelas siswa dengan detach
-        $siswa->kelas()->detach();
-
-        return response()->json([
-            'status' => 'success',
-            'title' => 'Dihapus!',
-            'message' => 'Berhasil menghapus data.'
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Berhasil menghapus data.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal!',
+                'message' => 'Tidak dapat menghapus data karena memiliki relasi dengan data lain!.'
+            ]);
+        }
     }
 }

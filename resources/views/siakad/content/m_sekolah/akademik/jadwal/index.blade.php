@@ -1,6 +1,31 @@
 @extends('siakad.layouts.app')
 @section('siakad')
     @include('siakad/layouts/partials/hero')
+    <style>
+        @media print {
+            table {
+                page-break-inside: avoid;
+                width: 100%;
+                color: #000;
+                font-size: 12pt;
+
+            }
+
+            table thead,
+            table tbody,
+            table tfoot {
+                color: #000;
+            }
+
+            body {
+                background-color: #fff;
+                font-family: 'Times New Roman', Times, serif;
+                font-size: 12pt;
+                width: 100%;
+                color: #000;
+            }
+        }
+    </style>
     <div class="content">
         @canany(['super.admin', 'admin'])
             <div class="row g-3">
@@ -55,8 +80,8 @@
                                             <i class="fa fa-print me-2"></i>Cetak</button>
                                     </div>
                                 </div>
-                                <table id="tabel-JPSiswa"  class="table table-bordered w-100">
-                                    <thead class="table-light align-middle">
+                                <table id="tabel-JPSiswa" class="table table-bordered border-dark w-100">
+                                    <thead class="table-light border-dark align-middle">
                                         <tr>
                                             <th width="14%">Waktu</th>
                                             <th width="14%">Senin</th>
@@ -232,116 +257,116 @@
 
 
     @push('scripts')
-            <script>
-                $(document).ready(function() {
-                    const tabelJadwal = $('#tabel-JPkelas1');
-                    const btnInsert = $('#tambah_jadwal');
-                    const modalJadwal = $('#modal_Jadwal');
-                    const modalJadwal_title = $('#title-modal');
-                    const modalJadwal_btn = $('#cn-btn');
-                    const formJadwal = $('#form_jadwal');
-                    const method = $('#method');
+        <script>
+            $(document).ready(function() {
+                const tabelJadwal = $('#tabel-JPkelas1');
+                const btnInsert = $('#tambah_jadwal');
+                const modalJadwal = $('#modal_Jadwal');
+                const modalJadwal_title = $('#title-modal');
+                const modalJadwal_btn = $('#cn-btn');
+                const formJadwal = $('#form_jadwal');
+                const method = $('#method');
 
-                    const tabelViewJadwal = $('#tabel-JPSiswa');
-                    tabelViewJadwal.DataTable({
-                        processing: true,
-                        ajax: {
-                            url: '{!! route('get-jadwal.siswa') !!}',
-                            data: function(d) {
-                                d.idPeriode = $('#periode').val();
-                                d.kelas = $(".btn_kelas.active").val();
-                                //     // console.log(d.kelas_id);
-                            }
+                const tabelViewJadwal = $('#tabel-JPSiswa');
+                tabelViewJadwal.DataTable({
+                    processing: true,
+                    ajax: {
+                        url: '{!! route('get-jadwal.siswa') !!}',
+                        data: function(d) {
+                            d.idPeriode = $('#periode').val();
+                            d.kelas = $(".btn_kelas.active").val();
+                            //     // console.log(d.kelas_id);
+                        }
+                    },
+                    columns: [{
+                            data: 'waktu',
+                            name: 'waktu',
+                            className: 'text-center fs-sm px-0 text-nowrap'
                         },
-                        columns: [{
-                                data: 'waktu',
-                                name: 'waktu',
-                                className: 'text-center fs-sm px-0 text-nowrap'
-                            },
-                            {
-                                data: 'Senin',
-                                name: 'Senin',
-                                className: 'text-center fs-sm px-0'
-                            },
-                            {
-                                data: 'Selasa',
-                                name: 'Selasa',
-                                className: 'text-center fs-sm px-0'
-                            },
-                            {
-                                data: 'Rabu',
-                                name: 'Rabu',
-                                className: 'text-center fs-sm px-0'
-                            },
-                            {
-                                data: 'Kamis',
-                                name: 'Kamis',
-                                className: 'text-center fs-sm px-0'
-                            },
-                            {
-                                data: 'Jumat',
-                                name: 'Jumat',
-                                className: 'text-center fs-sm px-0'
-                            },
-                            {
-                                data: 'Sabtu',
-                                name: 'Sabtu',
-                                className: 'text-center fs-sm px-0'
-                            },
-                        ],
-                        dom: "<'row my-0 '<'col-12 col-sm-12 col-md-7'><'col-12 col-sm-12 col-md-5 text-md-end'B>>" +
-                            "<'row my-0 '<'col-12 col-sm-12'tr>>" +
-                            "<'row mb-0'<'col-12 col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
-                        buttons: [{
-                            extend: 'print',
-                            title: function() {
-                                let periode = $('#periode option:selected').data('tahun');
-                                let kelas = $(".btn_kelas.active").val();
-                                return '<h3 style="margin-bottom: 3rem; font-family: Times New Roman, Times, serif;">JADWAL PELAJARAN KELAS ' +
-                                    kelas + '<br>' + 'SD NEGERI LEMAHBANG' +
-                                    '<br>' +
-                                    'TAHUN PELAJARAN ' + periode + '</h3>';
-                            },
-                            className: 'd-none',
-                            exportOptions: {
-                                columns: ':visible'
-                            },
-                            messageTop: null,
-                            messageBottom: null,
-                            customize: function(win) {
-                                $(win.document.body).css('text-align', 'center');
-                                $(win.document.body).find('table').css({
-                                    'text-transform': 'uppercase',
-                                    'font-size': '12pt',
-                                    'border-color': '#000'
-                                });
-                                $(win.document.body).find('th').css('font-size', '1.25rem').width(
-                                    '14%');
-                            }
+                        {
+                            data: 'Senin',
+                            name: 'Senin',
+                            className: 'text-center fs-sm px-0'
+                        },
+                        {
+                            data: 'Selasa',
+                            name: 'Selasa',
+                            className: 'text-center fs-sm px-0'
+                        },
+                        {
+                            data: 'Rabu',
+                            name: 'Rabu',
+                            className: 'text-center fs-sm px-0'
+                        },
+                        {
+                            data: 'Kamis',
+                            name: 'Kamis',
+                            className: 'text-center fs-sm px-0'
+                        },
+                        {
+                            data: 'Jumat',
+                            name: 'Jumat',
+                            className: 'text-center fs-sm px-0'
+                        },
+                        {
+                            data: 'Sabtu',
+                            name: 'Sabtu',
+                            className: 'text-center fs-sm px-0'
+                        },
+                    ],
+                    dom: "<'row my-0 '<'col-12 col-sm-12 col-md-7'><'col-12 col-sm-12 col-md-5 text-md-end'B>>" +
+                        "<'row my-0 '<'col-12 col-sm-12'tr>>" +
+                        "<'row mb-0'<'col-12 col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
+                    buttons: [{
+                        extend: 'print',
+                        title: function() {
+                            let periode = $('#periode option:selected').data('tahun');
+                            let kelas = $(".btn_kelas.active").val();
+                            return '<h3 style="margin-bottom: 3rem; font-family: Times New Roman, Times, serif;">JADWAL PELAJARAN KELAS ' +
+                                kelas + '<br>' + 'SD NEGERI LEMAHBANG' +
+                                '<br>' +
+                                'TAHUN PELAJARAN ' + periode + '</h3>';
+                        },
+                        className: 'd-none',
+                        exportOptions: {
+                            columns: ':visible'
+                        },
+                        messageTop: null,
+                        messageBottom: null,
+                        customize: function(win) {
+                            $(win.document.body).css('text-align', 'center');
+                            $(win.document.body).find('table').css({
+                                'text-transform': 'uppercase',
+                                'font-size': '12pt',
+                                'border-color': '#000'
+                            });
+                            $(win.document.body).find('th').css('font-size', '1.25rem').width(
+                                '14%');
+                        }
 
-                        }],
-                        paging: false,
-                        ordering: true,
-                        searching: false,
-                        info: false,
-                    });
+                    }],
+                    paging: false,
+                    ordering: true,
+                    searching: false,
+                    info: false,
+                });
 
-                    $('#btn_print_jadwal').on('click', function() {
-                        $('.buttons-print').click();
-                    })
-                    $('.buttons-print').prop('hidden', true);
+                $('#btn_print_jadwal').on('click', function() {
+                    $('.buttons-print').click();
+                })
+                $('.buttons-print').prop('hidden', true);
 
-                    fatchDataJam();
+                fatchDataJam();
 
-                    function fatchDataJam() {
-                        $.ajax({
-                            type: "GET",
-                            url: `{{ url('penjadwalan/get-jam') }}`,
-                            success: function(data) {
-                                $('#container_jam div').empty();
-                                let data_jam = '';
-                                $.each(data, function(i, item) {
-                                    data_jam += `
+                function fatchDataJam() {
+                    $.ajax({
+                        type: "GET",
+                        url: `{{ url('penjadwalan/get-jam') }}`,
+                        success: function(data) {
+                            $('#container_jam div').empty();
+                            let data_jam = '';
+                            $.each(data, function(i, item) {
+                                data_jam += `
                                     <div class="col-lg-12 col-md-4">
                                         <a href="javascript:void(0)" id="action_jamKe" class="block block-rounded block-link-pop shadow-sm mb-2" 
                                         data-id="${item.idjamKe}" data-name="${item.jamKe}" id="jabatanView">
@@ -352,197 +377,197 @@
                                         </a>
                                     </div>
                                     `;
-                                });
-                                $('#container_jam div').append(data_jam);
-                            },
-                        });
-                    }
-
-                    showModalInsert(btnInsert, modalJadwal, formJadwal, `{{ route('penjadwalan.store') }}`, method,
-                        modalJadwal_title, modalJadwal_btn,
-                        'Kelola Jadwal', `<button type="submit" class="btn btn-primary">Simpan</button>`);
-
-                    // Kelola JAm
-                    showModalInsert($('#atur_jam'), $('#modal_jam_Jadwal'), $('#form_jam_jadwal'),
-                        `{{ route('penjadawalan.store.jam') }}`, $('#method_jam'),
-                        $('#title-modal_jam'), $('#cn-btn_jam'),
-                        'Kelola Jam Pelajaran', `<button type="submit" class="btn btn-primary">Simpan</button>`);
-
-                    insertOrUpdateData($('#form_jam_jadwal'), function() {
-                        $('#modal_jam_Jadwal').modal('hide');
-                        fatchDataJam();
+                            });
+                            $('#container_jam div').append(data_jam);
+                        },
                     });
+                }
 
-                    $('#container_jam').on('click', '#action_jamKe', function(e) {
-                        e.preventDefault();
-                        var id = $(this).data('id');
-                        var jam = $(this).data('nama');
+                showModalInsert(btnInsert, modalJadwal, formJadwal, `{{ route('penjadwalan.store') }}`, method,
+                    modalJadwal_title, modalJadwal_btn,
+                    'Kelola Jadwal', `<button type="submit" class="btn btn-primary">Simpan</button>`);
 
+                // Kelola JAm
+                showModalInsert($('#atur_jam'), $('#modal_jam_Jadwal'), $('#form_jam_jadwal'),
+                    `{{ route('penjadawalan.store.jam') }}`, $('#method_jam'),
+                    $('#title-modal_jam'), $('#cn-btn_jam'),
+                    'Kelola Jam Pelajaran', `<button type="submit" class="btn btn-primary">Simpan</button>`);
 
-                        $('#modal_jam_Jadwal').modal('show');
-                        $('#form_jam_jadwal').attr('action', `{{ url('penjadwalan/update/jam/${id}') }}`);
-                        $('#method_jam').val('PUT');
-                        updateModals($('#title-modal_jam'), $('#cn-btn_jam'),
-                            'Kelola Jam Pelajaran',
-                            `<button type="button" id="delete_jam" class="btn btn-danger me-2">Hapus</button><button type="submit" class="btn btn-primary">Simpan</button>`
-                        );
+                insertOrUpdateData($('#form_jam_jadwal'), function() {
+                    $('#modal_jam_Jadwal').modal('hide');
+                    fatchDataJam();
+                });
 
-                        $.ajax({
-                            type: "GET",
-                            url: `{{ url('penjadwalan/jam/${id}') }}`,
-                            success: function(item) {
-                                $('#jamKe').val(item.jamKe);
-                                $('#jamMulai').val(item.jamMulai);
-                                $('#jamSelesai').val(item.jamSelesai);
-                                $('#delete_jam').val(item.idjamKe);
-                            },
-                        });
-                    });
-
-                    $('#modal_jam_Jadwal').on('click', '#delete_jam', function(e) {
-                        e.preventDefault();
-                        var id = $(this).val();
-                        var jam = $('#jamKe').val();
-
-                        Swal.fire({
-                            title: 'Apakah Anda yakin?',
-                            html: `Menghapus jam pelajaran ke <b>${jam}</b>`,
-                            icon: 'warning',
-                            showCancelButton: true,
-                            cancelButtonText: 'Batal',
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Ya, Hapus!',
-                            reverseButtons: true
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                $.ajax({
-                                    type: "DELETE",
-                                    url: "{{ url('penjadwalan/destroy/jam') }}/" + id,
-                                    dataType: 'json',
-                                    success: function(response) {
-                                        Swal.fire({
-                                            icon: response.status,
-                                            title: response.title,
-                                            text: response.message,
-                                            showConfirmButton: false,
-                                            timer: 2000
-                                        });
-                                        $('#modal_jam_Jadwal').modal('hide');
-                                        fatchDataJam();
-                                    },
-                                });
-                            }
-                        });
-                    });
-
-                    $('#modal_jam_Jadwal').on('hidden.bs.modal', function() {
-                        resetForm($('#form_jam_jadwal'), function() {});
-                    });
-
-                    function getJamKe() {
-                        $.ajax({
-                            type: "GET",
-                            url: `{{ url('penjadwalan/get-jam') }}`,
-                            success: function(data) {
-                                $('#idjamKe').find('option').not(':first').remove();
-                                $.each(data, function(i, item) {
-                                    $('#idjamKe').append(`
-                                        <option value="${item.idjamKe}">Jam ke -${item.jamKe}</option>
-                                    `);
-                                });
-                            },
-                        });
-                    }
-
-                    modalJadwal.on('show.bs.modal', function() {
-                        getJamKe();
-                        $('#idPeriode').on('change', function() {
-                            getSelectKelas();
-                            $('#idKelas').find('option:first').prop('selected', true);
-                            $('#idKelas').find('option').not(':first').remove();
-                        });
-                        $('#idKelas').change(function() {
-                            getPengjar();
-                        });
-                    });
-
-                    modalJadwal.on('hidden.bs.modal', function() {
-                        resetForm(formJadwal, function() {
-                            $('#idPengajaran').val(null).change();
-                            $('#idKelas').find('option').not(':first').remove();
-                        });
-                    });
-
-                    insertOrUpdateData(formJadwal, function() {
-                        modalJadwal.modal('hide');
-                        tabelViewJadwal.DataTable().ajax.reload();
-                    });
+                $('#container_jam').on('click', '#action_jamKe', function(e) {
+                    e.preventDefault();
+                    var id = $(this).data('id');
+                    var jam = $(this).data('nama');
 
 
-                    function getSelectKelas() {
-                        $.ajax({
-                            type: "GET",
-                            url: `{{ route('form.kelas') }}`,
-                            data: {
-                                periode: $('#idPeriode').val()
-                            },
-                            success: function(data) {
-                                $('#idKelas').find('option').not(':first').remove();
-                                $.each(data.kelas, function(i, item) {
-                                    $('#idKelas').append(
-                                        `<option value="${item.idKelas}">Kelas ${item.namaKelas}</option>`
-                                    );
-                                });
-                            },
-                        });
-                    }
+                    $('#modal_jam_Jadwal').modal('show');
+                    $('#form_jam_jadwal').attr('action', `{{ url('penjadwalan/update/jam/${id}') }}`);
+                    $('#method_jam').val('PUT');
+                    updateModals($('#title-modal_jam'), $('#cn-btn_jam'),
+                        'Kelola Jam Pelajaran',
+                        `<button type="button" id="delete_jam" class="btn btn-danger me-2">Hapus</button><button type="submit" class="btn btn-primary">Simpan</button>`
+                    );
 
-                    function getPengjar() {
-                        $.ajax({
-                            type: 'GET',
-                            url: "{{ url('penjadwalan/get-form') }}", // You need to define a route for this
-                            data: {
-                                kelas_id: $('#idKelas').val()
-                            },
-                            success: function(data) {
-                                $('#idPengajaran').find('option').not(':first').remove();
-                                $.each(data.pengajaran, function(key, value) {
-                                    $('#idPengajaran').append(
-                                        `<option value="${value.idPengajaran}">${value.mapel.namaMapel}</option>`
-                                    );
-                                });
-                            }
-                        });
-                    }
-
-                    function timePicker(input, modal) {
-                        new AirDatepicker(input, {
-                            container: modal,
-                            autoClose: true,
-                            timepicker: true,
-                            onlyTimepicker: true,
-                            timeFormat: 'HH:mm',
-                            minuteStep: 15,
-                        });
-                    }
-                    // timePicker('#jamMulai', '#modal_Jadwal');
-                    // timePicker('#jamSelesai', '#modal_Jadwal');
-
-                    select2('#idPengajaran', modalJadwal);
-
-                    $('.btn_kelas').on('click', function() {
-                        $('.btn_kelas').removeClass('active');
-                        $(this).addClass('active');
-                        // Muat ulang data tabel
-                        tabelViewJadwal.DataTable().ajax.reload();
-                    });
-
-                    $('#periode').on('change', function() {
-                        tabelViewJadwal.DataTable().ajax.reload();
+                    $.ajax({
+                        type: "GET",
+                        url: `{{ url('penjadwalan/jam/${id}') }}`,
+                        success: function(item) {
+                            $('#jamKe').val(item.jamKe);
+                            $('#jamMulai').val(item.jamMulai);
+                            $('#jamSelesai').val(item.jamSelesai);
+                            $('#delete_jam').val(item.idjamKe);
+                        },
                     });
                 });
-            </script>
+
+                $('#modal_jam_Jadwal').on('click', '#delete_jam', function(e) {
+                    e.preventDefault();
+                    var id = $(this).val();
+                    var jam = $('#jamKe').val();
+
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        html: `Menghapus jam pelajaran ke <b>${jam}</b>`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Hapus!',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "DELETE",
+                                url: "{{ url('penjadwalan/destroy/jam') }}/" + id,
+                                dataType: 'json',
+                                success: function(response) {
+                                    Swal.fire({
+                                        icon: response.status,
+                                        title: response.title,
+                                        text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                    $('#modal_jam_Jadwal').modal('hide');
+                                    fatchDataJam();
+                                },
+                            });
+                        }
+                    });
+                });
+
+                $('#modal_jam_Jadwal').on('hidden.bs.modal', function() {
+                    resetForm($('#form_jam_jadwal'), function() {});
+                });
+
+                function getJamKe() {
+                    $.ajax({
+                        type: "GET",
+                        url: `{{ url('penjadwalan/get-jam') }}`,
+                        success: function(data) {
+                            $('#idjamKe').find('option').not(':first').remove();
+                            $.each(data, function(i, item) {
+                                $('#idjamKe').append(`
+                                        <option value="${item.idjamKe}">Jam ke -${item.jamKe}</option>
+                                    `);
+                            });
+                        },
+                    });
+                }
+
+                modalJadwal.on('show.bs.modal', function() {
+                    getJamKe();
+                    $('#idPeriode').on('change', function() {
+                        getSelectKelas();
+                        $('#idKelas').find('option:first').prop('selected', true);
+                        $('#idKelas').find('option').not(':first').remove();
+                    });
+                    $('#idKelas').change(function() {
+                        getPengjar();
+                    });
+                });
+
+                modalJadwal.on('hidden.bs.modal', function() {
+                    resetForm(formJadwal, function() {
+                        $('#idPengajaran').val(null).change();
+                        $('#idKelas').find('option').not(':first').remove();
+                    });
+                });
+
+                insertOrUpdateData(formJadwal, function() {
+                    modalJadwal.modal('hide');
+                    tabelViewJadwal.DataTable().ajax.reload();
+                });
+
+
+                function getSelectKelas() {
+                    $.ajax({
+                        type: "GET",
+                        url: `{{ route('form.kelas') }}`,
+                        data: {
+                            periode: $('#idPeriode').val()
+                        },
+                        success: function(data) {
+                            $('#idKelas').find('option').not(':first').remove();
+                            $.each(data.kelas, function(i, item) {
+                                $('#idKelas').append(
+                                    `<option value="${item.idKelas}">Kelas ${item.namaKelas}</option>`
+                                );
+                            });
+                        },
+                    });
+                }
+
+                function getPengjar() {
+                    $.ajax({
+                        type: 'GET',
+                        url: "{{ url('penjadwalan/get-form') }}", // You need to define a route for this
+                        data: {
+                            kelas_id: $('#idKelas').val()
+                        },
+                        success: function(data) {
+                            $('#idPengajaran').find('option').not(':first').remove();
+                            $.each(data.pengajaran, function(key, value) {
+                                $('#idPengajaran').append(
+                                    `<option value="${value.idPengajaran}">${value.mapel.namaMapel}</option>`
+                                );
+                            });
+                        }
+                    });
+                }
+
+                function timePicker(input, modal) {
+                    new AirDatepicker(input, {
+                        container: modal,
+                        autoClose: true,
+                        timepicker: true,
+                        onlyTimepicker: true,
+                        timeFormat: 'HH:mm',
+                        minuteStep: 15,
+                    });
+                }
+                // timePicker('#jamMulai', '#modal_Jadwal');
+                // timePicker('#jamSelesai', '#modal_Jadwal');
+
+                select2('#idPengajaran', modalJadwal);
+
+                $('.btn_kelas').on('click', function() {
+                    $('.btn_kelas').removeClass('active');
+                    $(this).addClass('active');
+                    // Muat ulang data tabel
+                    tabelViewJadwal.DataTable().ajax.reload();
+                });
+
+                $('#periode').on('change', function() {
+                    tabelViewJadwal.DataTable().ajax.reload();
+                });
+            });
+        </script>
         @can('guru')
             <script>
                 $(document).ready(function() {

@@ -14,8 +14,8 @@
                 <div class="table-responsive m-md-0 m-4 p-md-4 p-0">
                     <div class="row m-0">
                         <div class="col-12 py-3 px-0 text-lg-end text-center">
-                            <button class="btn btn-sm btn-alt-danger mb-lg-0 mb-2 mx-1" id="hapus-semua-siswa"
-                                title="Tambah Siswa"><i class="fa fa-trash mx-2"></i>Hapus Semua Data Siswa</button>
+                            {{-- <button class="btn btn-sm btn-alt-danger mb-lg-0 mb-2 mx-1" id="hapus-semua-siswa"
+                                title="Tambah Siswa"><i class="fa fa-trash mx-2"></i>Hapus Semua Data Siswa</button> --}}
                             <button class="btn btn-sm btn-alt-success mb-lg-0 mb-2 mx-1" id="tambah-siswa"
                                 title="Tambah Siswa"><i class="fa fa-plus mx-2"></i>Tambah Data Siswa</button>
                             <div class="btn-group ms-1" role="group" aria-label="Basic mixed styles example">
@@ -31,7 +31,7 @@
                         <thead class="bg-body-light align-middle">
                             <tr>
                                 <th style="width: 5%;">No</th>
-                                <th style="width: 14%;">NIS</th>
+                                <th style="width: 7%;">NIS</th>
                                 <th>Nama</th>
                                 <th style="width: 13%;">Tempat, Tgl Lahir</th>
                                 <th style="width: 14%;">Jenis Kelamin</th>
@@ -258,14 +258,26 @@
                                 url: `{{ url('siswa/destroy/${idSiswa}') }}`,
                                 dataType: 'json',
                                 success: function(response) {
-                                    Swal.fire({
-                                        icon: response.status,
-                                        title: response.title,
-                                        text: response.message,
-                                        showConfirmButton: false,
-                                        timer: 2000
-                                    });
-                                    tabel.DataTable().ajax.reload();
+                                    if (response.status == 'success') {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+                                        tabel.DataTable().ajax.reload();
+
+                                    } else {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+
+                                    }
                                 }
                             });
                         }

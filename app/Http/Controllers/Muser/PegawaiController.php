@@ -198,15 +198,23 @@ class PegawaiController extends Controller
 
     public function destroy($id)
     {
-        $pegawai = Pegawai::find($id);
-
-        Storage::delete('public/' . $pegawai->gambar);
-        $pegawai->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'title' => 'Dihapus!',
-            'message' => 'Berhasil menghapus data.'
-        ]);
+        try {
+            $pegawai = Pegawai::find($id);
+    
+            Storage::delete('public/' . $pegawai->gambar);
+            $pegawai->delete();
+    
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Berhasil menghapus data.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal!',
+                'message' => 'Tidak dapat menghapus data karena memiliki relasi dengan data lain!.'
+            ]);
+        }
     }
 }

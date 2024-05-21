@@ -26,8 +26,8 @@ class Absensi extends Controller
     public function index()
     {
         $periode = Periode::where('status', 'Aktif')->orderBy('tanggalMulai', 'desc')->first();
-        $kelasNama = 1;
-        $periodeSiswa = $periode->idPeriode;
+        // $kelasNama = 1;
+        $periodeSiswa = $periode->idPeriode ?? null;
 
         $pegawai = Auth::user()->pegawai->idPegawai;
 
@@ -272,19 +272,30 @@ class Absensi extends Controller
             ->orderBy('namaSiswa', 'asc')
             ->get();
 
-        $kehadiran = ModelsAbsensi::select('idSiswa')->whereDay('tanggal', $request->input('tanggal'))
+        $kls = Kelas::select('idKelas')
+            ->where('namaKelas', $kelasNama)
+            ->where('idPeriode', $periodeSiswa)
+            ->first();
+
+        $kehadiran = ModelsAbsensi::select('idSiswa')
+            ->whereDay('tanggal', $request->input('tanggal'))
+            ->whereMonth('tanggal', $request->input('bulan'))
+            ->where('idPeriode', $periodeSiswa)
+            ->where('idKelas', $kls->idKelas)
             ->selectRaw('DAY(tanggal) as tanggal')
             ->selectRaw('tanggal as tgl')
             ->selectRaw("MAX(CASE WHEN presensi = 'hadir' THEN 'H' WHEN presensi = 'izin' THEN 'I' WHEN presensi = 'sakit' THEN 'S' ELSE 'A' END) as presensi")
             // Filter berdasarkan tanggal yang diberikan
-            ->whereMonth('tanggal', $request->input('bulan'))
             ->groupBy('idSiswa', 'tanggal')
-            ->get()
-            ->map(function ($item) {
-                return $item;
-            });
+            ->get();
 
-        return response()->json(['siswa' => $siswaWithKelas, 'absen' => $kehadiran]);
+        $absen = ModelsAbsensi::whereDay('tanggal', $request->input('tanggal'))
+            ->whereMonth('tanggal', $request->input('bulan'))
+            ->where('idPeriode', $periodeSiswa)
+            ->where('idKelas', $kls->idKelas)
+            ->get();
+
+        return response()->json(['siswa' => $siswaWithKelas, 'absen' => $kehadiran, 'pres' => $absen]);
     }
 
     /**
@@ -361,7 +372,21 @@ class Absensi extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $idSiswaArray = array_map(function ($value) {
+                return (int) trim($value);
+            }, explode(',', $id));
+
+            ModelsAbsensi::whereIn('idAbsen', $idSiswaArray)->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Berhasil membatalkan presensi.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error updating data: ' . $e->getMessage());
+        }
     }
 
     public function rekapitulasi($name, $bulan)

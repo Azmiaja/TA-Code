@@ -18,12 +18,19 @@ class BerandaController extends Controller
     {
         $auth = auth()->user()->pegawai->namaPegawai ?? auth()->user()->siswa->namaSiswa;
         $periode = Periode::where('status', 'Aktif')->first();
+        if (Auth::user()->pegawai) {
+            $kelas = Kelas::where('idPeriode', $periode->idPeriode)
+                ->where('idPegawai', Auth::user()->pegawai->idPegawai)
+                ->first();
+            # code...
+        }
         return view('siakad/content/dashboard/beranda', [
             'judul' => 'Beranda',
             'sub_judul' => 'Beranda',
             'text_singkat' => 'Selamat datang <a href="' . route('profil_pengguna.index') . '" class="fw-semibold">' . $auth . '</a>, di SIAKAD SD Negeri Lemahbang',
             's_idKelas' => '',
-            'periode' => $periode
+            'periode' => $periode,
+            'kelas' => $kelas ?? ''
         ]);
     }
 

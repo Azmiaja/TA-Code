@@ -40,6 +40,14 @@ class Kelas extends Model
     {
         return $this->belongsToMany(Siswa::class, 'tr_kelas', 'idKelas', 'idSiswa');
     }
+    public function kegiatan()
+    {
+        return $this->hasMany(KegEkstra::class, 'idKelas');
+    }
+    public function naik_kelas()
+    {
+        return $this->hasMany(KetNaikTidak::class, 'idNK');
+    }
     // public function tr_kelas()
     // {
     //     return $this->hasMany(Tr_kelas::class, 'idKelas', 'idKelas');

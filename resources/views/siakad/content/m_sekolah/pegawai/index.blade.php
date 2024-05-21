@@ -260,7 +260,7 @@
                     let gambar = $(this).data('foto');
                     // Tampilkan modal
                     modalFoto.modal('show');
-                    
+
                     // Set action form
                     formFoto.attr('action', `{{ url('pegawai/ubah-image/${id}') }}`);
 
@@ -274,7 +274,7 @@
                     imgPrev.src = gambar;
                 });
 
-                
+
 
 
 
@@ -522,14 +522,26 @@
                                 url: url,
                                 dataType: 'json',
                                 success: function(response) {
-                                    Swal.fire({
-                                        icon: response.status,
-                                        title: response.title,
-                                        text: response.message,
-                                        showConfirmButton: false,
-                                        timer: 2000
-                                    });
-                                    tabel.DataTable().ajax.reload();
+                                    if (response.status == 'success') {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+                                        tabel.DataTable().ajax.reload();
+
+                                    } else {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+
+                                    }
                                 },
                             });
                         }
@@ -561,16 +573,29 @@
                                 url: url,
                                 dataType: 'json',
                                 success: function(response) {
-                                    Swal.fire({
-                                        icon: response.status,
-                                        title: response.title,
-                                        text: response.message,
-                                        showConfirmButton: false,
-                                        timer: 2000
-                                    });
+                                    if (response.status == 'success') {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
 
-                                    modalJabatan.modal('hide');
-                                    getJabatanPegawai();
+                                        modalJabatan.modal('hide');
+                                        getJabatanPegawai();
+
+                                    } else {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+
+
+                                    }
                                 },
                             });
                         }

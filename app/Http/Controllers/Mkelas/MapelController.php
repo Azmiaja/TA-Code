@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Mkelas;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ekstrakulikuler;
 use App\Models\Mapel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class MapelController extends Controller
 {
@@ -27,7 +30,7 @@ class MapelController extends Controller
 
     public function getMapel()
     {
-        $mapel = Mapel::orderBy('idMapel', 'desc')->get()
+        $mapel = Mapel::orderBy('idMapel', 'asc')->get()
             ->map(function ($item, $key) {
                 $item['nomor'] = $key + 1;
                 $item['mapel'] = $item->namaMapel ?: '-';
@@ -116,23 +119,146 @@ class MapelController extends Controller
 
     public function destroy($id)
     {
-        $mapel = Mapel::find($id);
+        try {
+            $mapel = Mapel::find($id);
+            $mapel->delete();
+    
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Berhasil menghapus data.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal!',
+                'message' => 'Tidak dapat menghapus data karena memiliki relasi dengan data lain!.'
+            ]);
+        }
+    }
 
-        // Pengecekan apakah mapel digunakan dalam tabel kelas
-        if ($mapel->pengajar()->exists()) {
+    public function indexEkstra()
+    {
+        return view('siakad.content.m_sekolah.akademik.ekstra.index', [
+            'judul' => 'Data Master',
+            'sub_judul' => 'Akademik',
+            'sub_sub_judul' => 'Ekstrakulikuler',
+            'text_singkat' => 'Mengelola data ekstrakulikuler akademik sekolah!',
+        ]);
+    }
+
+    public function getEkstra()
+    {
+        $ekstra = Ekstrakulikuler::orderBy('idEks', 'asc')->get()
+            ->map(function ($item, $key) {
+                $item['nomor'] = $key + 1;
+                $item['ekstra'] = $item->ekstra ?: '-';
+                $item['status'] = $item->status ?: '-';
+
+                return $item;
+            });
+
+        return response()->json(['data' => $ekstra]);
+    }
+
+    public function storeEkstra(Request $request)
+    {
+        try {
+
+            $validator = Validator::make($request->all(), [
+                'ekstra' => 'required|max:65',
+                'status' => 'required'
+            ], [
+                'ekstra.required' => 'Nama ekstrakulikuler tidak boleh kosong!',
+                'status.required' => 'Presikat tidak boleh kosong!',
+                'ekstra.max' => 'Nama ekstrakulikuler tidak boleh lebih dari 60 karakter'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+
+                Ekstrakulikuler::create([
+                    'ekstra' => $request->ekstra,
+                    'status' => $request->status
+                ]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Data presensi berhasil diperbarui.'
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error updating data: ' . $e->getMessage());
+        }
+    }
+    public function updateEkstra($id, Request $request)
+    {
+        try {
+            $ekstra = Ekstrakulikuler::find($id);
+
+            if ($ekstra) {
+                $validator = Validator::make($request->all(), [
+                    'ekstra' => 'required|max:65',
+                    'status' => 'required'
+                ], [
+                    'ekstra.required' => 'Nama ekstrakulikuler tidak boleh kosong!',
+                    'status.required' => 'Presikat tidak boleh kosong!',
+                    'ekstra.max' => 'Nama ekstrakulikuler tidak boleh lebih dari 60 karakter'
+                ]);
+
+                if ($validator->fails()) {
+                    return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+                } else {
+
+                    $ekstra->update([
+                        'ekstra' => $request->ekstra,
+                        'status' => $request->status
+                    ]);
+
+                    return response()->json([
+                        'status' => 'success',
+                        'title' => 'Sukses',
+                        'message' => 'Data presensi berhasil diperbarui.'
+                    ]);
+                }
+            } else {
+                return response()->json(['status' => 'error', 'title' => 'Gagal', 'message' => 'Data ekstrakulikuler tidak ditemukan.']);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error updating data: ' . $e->getMessage());
+        }
+    }
+
+    public function editEkstra($id)
+    {
+        $ekstra = Ekstrakulikuler::find($id);
+        if (!$ekstra) {
+            return response()->json(['status' => 'error', 'title' => 'Gagal', 'message' => 'Data ekstrakulikuler tidak ditemukan.']);
+        }
+
+        return response()->json(['data' => $ekstra]);
+    }
+
+    public function destroyEkstra($id)
+    {
+        $ekstra = Ekstrakulikuler::find($id);
+
+        // Pengecekan apakah ekstra digunakan dalam tabel kelas
+        if ($ekstra->kegiatan()->exists()) {
             return response()->json([
                 'status' => 'error',
                 'title' => 'Gagal',
-                'message' => 'Mapel tidak dapat dihapus karena sudah digunakan ditetapkan pada pengajar.'
+                'message' => 'Ekstrakulikuler digunakan dalam raport. Gagal dihapus.'
+            ]);
+        } else {
+            $ekstra->delete();
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Berhasil menghapus data.'
             ]);
         }
-
-        $mapel->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'title' => 'Dihapus!',
-            'message' => 'Berhasil menghapus data.'
-        ]);
     }
 }

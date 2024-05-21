@@ -33,6 +33,7 @@
 <script src="{{ asset('assets/js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/air-datepicker/dist/air-datepicker.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/print-this/printThis.js') }}"></script>
 
 @if (session('status') === 'success')
     <script>

@@ -264,13 +264,21 @@ class PengajarController extends Controller
 
     public function destroy($id, $idP)
     {
-        $pengajar = Pengajaran::where('idPegawai', $id)->where('idPeriode', $idP);
-        $pengajar->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'title' => 'Dihapus!',
-            'message' => 'Berhasil mengapus data.'
-        ]);
+        try {
+            $pengajar = Pengajaran::where('idPegawai', $id)->where('idPeriode', $idP);
+            $pengajar->delete();
+    
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Berhasil mengapus data.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal!',
+                'message' => 'Tidak dapat menghapus data karena memiliki relasi dengan data lain!.'
+            ]);
+        }
     }
 }

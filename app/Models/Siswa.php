@@ -35,4 +35,12 @@ class Siswa extends Model
     {
         return $this->belongsToMany(Kelas::class, 'tr_kelas', 'idSiswa', 'idKelas');
     }
+    public function kegiatan()
+    {
+        return $this->hasMany(KegEkstra::class, 'idSiswa');
+    }
+    public function naik_kelas()
+    {
+        return $this->hasMany(KetNaikTidak::class, 'idNK');
+    }
 }

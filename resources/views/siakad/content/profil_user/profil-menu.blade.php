@@ -5,15 +5,16 @@
                 <div class="col-lg-8 col-6 mb-3">
                     <div class="ratio ratio-1x1">
                         @cannot('siswa')
-                            @if (Auth::user()->pegawai->gambar)
-                                <img src="{{ asset('storage/' . Auth::user()->pegawai->gambar) }}"
-                                    class="rounded-circle border border-5"
-                                    style="width: 100%; height: 100%; object-fit: cover" alt="" srcset="">
-                            @else
-                                <img src="{{ asset('assets/media/avatars/avatar1.jpg') }}"
-                                    class="rounded-circle border border-5"
-                                    style="width: 100%; height: 100%; object-fit: cover" alt="" srcset="">
-                            @endif
+                            @php
+                                $gambar = $auths->pegawai->gambar
+                                    ? (file_exists(public_path('storage/' . $auths->pegawai->gambar))
+                                        ? asset('storage/' . $auths->pegawai->gambar)
+                                        : asset('assets/media/avatars/avatar1.jpg'))
+                                    : asset('assets/media/avatars/avatar1.jpg');
+                            @endphp
+                            <img src="{{ $gambar }}"
+                                class="rounded-circle border border-5"
+                                style="width: 100%; height: 100%; object-fit: cover" alt="" srcset="">
                             <div class="position-relative">
                                 <div class="position-absolute bottom-0 end-0 translate-middle-x">
                                     <button type="button" id="edit_fotoProfil"

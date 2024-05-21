@@ -51,6 +51,29 @@ class PenjadwalanController extends Controller
     }
 
 
+    public function getJadwalGuru()
+    {
+        $periode = Periode::where('status', 'Aktif')
+            ->orderBy('tanggalMulai', 'desc')
+            ->first();
+        $jadwal = Jadwal::where('idPeriode', $periode->idPeriode)
+            ->with('pengajaran', 'jamke')
+            ->get()
+            ->groupBy('hari');
+        $jamKe = JamKe::all();
+
+        $kelas = Kelas::where('idPeriode', $periode->idPeriode)
+        ->orderBy('namaKelas', 'asc')
+        ->get();
+
+        return response()->json([
+            'jadwal' => $jadwal,
+            'jam' => $jamKe,
+            'kelas' => $kelas
+        ]);
+    }
+
+
 
     public function getJPkelas1(Request $request)
     {
@@ -303,16 +326,16 @@ class PenjadwalanController extends Controller
 
             $data = $data->groupBy('hari')->map(function ($groupedData, $hari) {
                 $groupedData = $groupedData->groupBy('pengajaran.guru.namaPegawai');
-            
+
                 $formattedData = [];
-            
+
                 foreach ($groupedData as $guru => $jadwals) {
                     $jadwalsData = [];
-            
+
                     foreach ($jadwals as $item) {
                         $jamMulai = date('H:i', strtotime($item->jamke->jamMulai));
                         $jamSelesai = date('H:i', strtotime($item->jamke->jamSelesai));
-            
+
                         $jadwalsData[] = [
                             'Mapel' => $item->pengajaran->mapel->singkatan ?? ($item->pengajaran->mapel->namaMapel ?? '-'),
                             'Pengajar' => $item->pengajaran->guru->namaPegawai,
@@ -320,20 +343,19 @@ class PenjadwalanController extends Controller
                             'JamKe' => $item->jamke->jamKe
                         ];
                     }
-            
+
                     $formattedData[] = [
                         'Guru' => $guru,
                         'Jadwals' => $jadwalsData
                     ];
                 }
-            
+
                 return [
                     $hari => $formattedData
                 ];
             });
-            
+
             return response()->json($data);
-            
         } catch (\Exception $e) {
             Log::error('Error get data: ' . $e->getMessage());
             // Handle the exception here
@@ -427,13 +449,21 @@ class PenjadwalanController extends Controller
 
     public function deleteJam($id)
     {
-        $jam = JamKe::find($id);
-        $jam->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'title' => 'Dihapus!',
-            'message' => 'Berhasil mengapus data.'
-        ]);
+        try {
+            $jam = JamKe::find($id);
+            $jam->delete();
+    
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Berhasil mengapus data.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal!',
+                'message' => 'Tidak dapat menghapus data karena memiliki relasi dengan data lain!.'
+            ]);
+        }
     }
 }

@@ -11,6 +11,7 @@ use App\Models\Nilai_TP;
 use App\Models\Pengajaran;
 use App\Models\Periode;
 use App\Models\Siswa;
+use App\Models\Mapel;
 use App\Models\TP_sumatif;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Validator;
 
 class PenilaianController extends Controller
 {
+    // Index Penilaian
     public function index()
     {
         $pegawai = Auth::user()->pegawai->idPegawai;
@@ -37,7 +39,7 @@ class PenilaianController extends Controller
         $periodeLewat = Periode::where('tanggalSelesai', '<', $today)
             ->first();
 
-        return view('siakad/content/penilaian/index', compact('periodeAktif', 'periodeLewat'), [
+        return view('siakad/content/penilaian/index', compact('periodeAktif', 'periodeLewat', 'periode'), [
             'judul' => 'Penilaian Siswa',
             'sub_judul' => 'Nilai Siswa',
             'text_singkat' => 'Mengelola nilai siswa untuk setiap mata pelajaran!',
@@ -101,15 +103,18 @@ class PenilaianController extends Controller
             ->orderBy('namaSiswa', 'asc')
             ->get();
 
-        $sm_TP = TP_sumatif::where('idMapel', $mapel)->where('kelas', $kelasNama)->get();
-        $sm_LM = LM_sumatif::where('idMapel', $mapel)->where('kelas', $kelasNama)->get();
+        $sm_TP = TP_sumatif::where('idMapel', $mapel)->where('kelas', $kelasNama)->orderBy('kodeTP', 'asc')->get();
+        $sm_LM = LM_sumatif::where('idMapel', $mapel)->where('kelas', $kelasNama)->orderBy('kodeLM', 'asc')->get();
 
         $nilai = Nilai::where('idPeriode', $periodeSiswa)
             ->where('idPengajaran', $pengajaran)
             ->get();
 
+        $mapelNilai = Mapel::where('idMapel', $mapel)->value('namaMapel');
+
         $nilai_tp = Nilai_TP::where('idPeriode', $periodeSiswa)
             ->where('idPengajaran', $pengajaran)
+            ->where('mapel', $mapelNilai)
             ->get();
         // $nilai_akhir_tp = NA_TP::where('idPeriode', $periodeSiswa)
         //     ->where('idPengajaran', $pengajaran)
@@ -117,6 +122,7 @@ class PenilaianController extends Controller
 
         $nilai_lm = Nilai_LM::where('idPeriode', $periodeSiswa)
             ->where('idPengajaran', $pengajaran)
+            ->where('mapel', $mapelNilai)
             ->get();
 
         // $nilai_akhir_lm = NA_LM::where('idPeriode', $periodeSiswa)
@@ -144,11 +150,12 @@ class PenilaianController extends Controller
             $idSiswa = $request->input('idSiswa');
 
             foreach ($idSiswa as $siswa) {
-                $rules['nilai_tp_' . $siswa] = 'nullable|numeric|max:100'; // Sesuaikan dengan aturan validasi yang Anda perlukan
+                $rules['nilai_tp_' . $siswa] = 'nullable|numeric|max:100|min:0'; // Sesuaikan dengan aturan validasi yang Anda perlukan
             }
             $validator = Validator::make($request->all(), $rules, [
                 'nilai_tp_*.numeric' => 'Nilai harus berupa angka',
                 'nilai_tp_*.max' => 'Nilai tidak boleh melebihi 100',
+                'nilai_tp_*.min' => 'Nilai minimum adalah 0',
             ]);
 
             if ($validator->fails()) {
@@ -157,47 +164,45 @@ class PenilaianController extends Controller
                 $idSiswa = $request->input('idSiswa');
                 $idPeriode = $request->input('idPeriode');
                 $idPengajar = $request->input('idPengajaran');
-                $idTP = $request->input('idTP');
+                $kode = $request->input('kodeTP');
+                $mapel = $request->input('mapel');
+                $deskrip = $request->input('deskripsiTP');
 
                 foreach ($idSiswa as $data) {
                     $nilai_tp = $request->input('nilai_tp_' . $data);
-                    $nilai = Nilai_TP::firstOrNew([
-                        'idSiswa' => $data,
-                        'idPeriode' => $idPeriode,
-                        'idPengajaran' => $idPengajar,
-                        'idTP' => $idTP,
-                    ]);
+                    if ($nilai_tp !== null) {
+                        $nilai = Nilai_TP::firstOrNew([
+                            'idSiswa' => $data,
+                            'idPeriode' => $idPeriode,
+                            'idPengajaran' => $idPengajar,
+                            'kodeTP' => $kode,
+                            'mapel' => $mapel,
+                            // 'deskripsiTP' => $deskrip,
+                        ]);
 
-                    $nilai->nilaiTP = $nilai_tp;
-                    $nilai->save();
+                        $nilai->nilaiTP = $nilai_tp;
+                        $nilai->deskripsiTP = $deskrip;
+                        $nilai->save();
 
-                    $jumlahTP = Nilai_TP::where('idSiswa', $data)
-                        ->where('idPeriode', $idPeriode)
-                        ->where('idPengajaran', $idPengajar)
-                        // ->where('idTP', $idTP)
-                        ->avg('nilaiTP');
+                        $jumlahTP = Nilai_TP::where('idSiswa', $data)
+                            ->where('idPeriode', $idPeriode)
+                            ->where('idPengajaran', $idPengajar)
+                            // ->where('idTP', $idTP)
+                            ->avg('nilaiTP');
 
-                    $raport = Nilai::where('idSiswa', $data)
-                        ->where('idPeriode', $idPeriode)
-                        ->where('idPengajaran', $idPengajar)
-                        ->select(DB::raw('ROUND(SUM(CASE
-                            WHEN nilaiAkhirTP IS NULL THEN COALESCE(nilaiAkhirLM + (COALESCE(jumSAkhir, 0) * 2))/2
-                            WHEN nilaiAkhirLM IS NULL THEN COALESCE(nilaiAkhirTP + (COALESCE(jumSAkhir, 0) * 2))/2
-                            WHEN jumSAkhir IS NULL THEN COALESCE(nilaiAkhirTP + nilaiAkhirLM)/2
-                            ELSE ((COALESCE(jumSAkhir, 0) * 2) + COALESCE(nilaiAkhirTP, 0) + COALESCE(nilaiAkhirLM, 0)) / 4
-                            END)) AS jumlah_a'))
-                        ->get()->first()->jumlah_a;
-
-                    // Update atau buat instance jumlahTP
-                    Nilai::updateOrCreate([
-                        'idSiswa' => $data,
-                        'idPeriode' => $idPeriode,
-                        'idPengajaran' => $idPengajar,
-                        // 'idTP' => $idTP,
-                    ], [
-                        'nilaiAkhirTP' => $jumlahTP,
-                        'raport' => $raport
-                    ]);
+                        // Update atau buat instance jumlahTP
+                        Nilai::updateOrCreate([
+                            'idSiswa' => $data,
+                            'idPeriode' => $idPeriode,
+                            'idPengajaran' => $idPengajar,
+                            // 'idTP' => $idTP,
+                        ], [
+                            'nilaiAkhirTP' => round($jumlahTP, 2),
+                        ]);
+                        $this->hitungRaport($data, $idPeriode, $idPengajar);
+                        $this->capaianSiswaMin($data, $idPeriode, $idPengajar, $mapel);
+                        $this->capaianSiswaMax($data, $idPeriode, $idPengajar, $mapel);
+                    }
                 }
 
                 return response()->json([
@@ -211,6 +216,156 @@ class PenilaianController extends Controller
         }
     }
 
+    // hitung raport
+    protected function hitungRaport($data, $idPeriode, $idPengajar)
+    {
+
+        $raport = Nilai::where('idSiswa', $data)
+            ->where('idPeriode', $idPeriode)
+            ->where('idPengajaran', $idPengajar)
+            ->select(DB::raw('ROUND(
+            CASE
+                WHEN nilaiAkhirTP IS NOT NULL AND nilaiAkhirLM IS NULL AND jumSAkhir IS NULL THEN nilaiAkhirTP
+                WHEN nilaiAkhirLM IS NOT NULL AND nilaiAkhirTP IS NULL AND jumSAkhir IS NULL THEN nilaiAkhirLM
+                WHEN nilaiAkhirTP IS NOT NULL AND nilaiAkhirLM IS NOT NULL AND jumSAkhir IS NULL THEN (nilaiAkhirTP + nilaiAkhirLM)/2
+                WHEN jumSAkhir IS NOT NULL AND nilaiAkhirTP IS NULL AND nilaiAkhirLM IS NULL THEN jumSAkhir
+                WHEN nilaiAkhirTP IS NOT NULL AND nilaiAkhirLM IS NULL AND jumSAkhir IS NOT NULL THEN
+                    (nilaiAkhirTP + COALESCE(jumSAkhir, 0)) / 2
+                WHEN nilaiAkhirLM IS NOT NULL AND nilaiAkhirTP IS NULL AND jumSAkhir IS NOT NULL THEN
+                    (nilaiAkhirLM + COALESCE(jumSAkhir, 0)) / 2
+                ELSE ((COALESCE(jumSAkhir, 0) * 2) + COALESCE(nilaiAkhirTP, 0) + COALESCE(nilaiAkhirLM, 0)) / 4
+            END) AS raport'))
+            ->first()->raport;
+
+        // Update nilai rapor
+        Nilai::updateOrCreate([
+            'idSiswa' => $data,
+            'idPeriode' => $idPeriode,
+            'idPengajaran' => $idPengajar,
+            // 'idTP' => $idTP,
+        ], [
+            'raport' => $raport
+        ]);
+    }
+
+    // ambil deskripsi capaian
+    protected function capaianSiswaMin($data, $idPeriode, $idPengajar, $mapel)
+    {
+        $nilai_tp = Nilai_TP::where('idSiswa', $data)
+            ->where('idPeriode', $idPeriode)
+            ->where('idPengajaran', $idPengajar)
+            ->where('mapel', $mapel);
+
+        $minTP = $nilai_tp->min('nilaiTP');
+        $desMin = $nilai_tp->where('nilaiTP', 'LIKE', $minTP)->first();
+
+        $minTPBlt = round($minTP);
+
+        switch (true) {
+            case ($minTPBlt >= 88 && $minTPBlt <= 100):
+                $deskripsi_predikat_R = "Menunjukkan penguasaan yang sangat baik dalam ";
+                break;
+            case ($minTPBlt >= 74 && $minTPBlt <= 87):
+                $deskripsi_predikat_R = "Menunjukkan penguasaan yang cukup dalam ";
+                break;
+            case ($minTPBlt >= 60 && $minTPBlt <= 73):
+                $deskripsi_predikat_R = "Menunjukkan penguasaan yang cukup dalam ";
+                break;
+            case ($minTPBlt >= 0 && $minTPBlt <= 59):
+                $deskripsi_predikat_R = "Perlu bimbingan dalam ";
+                break;
+            default:
+                $deskripsi_predikat_R = "";
+                break;
+        }
+
+        $nTP = Nilai::where('idSiswa', $data)
+            ->where('idPeriode', $idPeriode)
+            ->where('idPengajaran', $idPengajar)
+            ->value('nilaiAkhirTP');
+
+        if ($nTP !== null) {
+            Nilai::updateOrCreate([
+                'idSiswa' => $data,
+                'idPeriode' => $idPeriode,
+                'idPengajaran' => $idPengajar,
+                // 'idTP' => $idTP,
+            ], [
+                // 'deskripsiCPtinggi' => $deskripsi_predikat . $desMax->deskripsiTP,
+                'deskripsiCPrendah' => $deskripsi_predikat_R . $desMin->deskripsiTP,
+            ]);
+        } else {
+            Nilai::updateOrCreate([
+                'idSiswa' => $data,
+                'idPeriode' => $idPeriode,
+                'idPengajaran' => $idPengajar,
+                // 'idTP' => $idTP,
+            ], [
+                // 'deskripsiCPtinggi' => null,
+                'deskripsiCPrendah' => null,
+            ]);
+        }
+    }
+
+    // capaian maksimum
+    protected function capaianSiswaMax($data, $idPeriode, $idPengajar, $mapel)
+    {
+        $nilai_tp = Nilai_TP::where('idSiswa', $data)
+            ->where('idPeriode', $idPeriode)
+            ->where('idPengajaran', $idPengajar)
+            ->where('mapel', $mapel);
+
+        // $maxTP = (float) $nilai_tp->max('nilaiTP');
+        $maxTP = $nilai_tp->max('nilaiTP');
+        $maxTPBlt = round($maxTP);
+        $desMax = $nilai_tp->where('nilaiTP', 'LIKE', $maxTP)->first();
+
+        switch (true) {
+            case ($maxTPBlt >= 88 && $maxTPBlt <= 100):
+                $deskripsi_predikat = "Menunjukkan penguasaan yang sangat baik dalam ";
+                break;
+            case ($maxTPBlt >= 74 && $maxTPBlt <= 87):
+                $deskripsi_predikat = "Menunjukkan penguasaan yang cukup dalam ";
+                break;
+            case ($maxTPBlt >= 60 && $maxTPBlt <= 73):
+                $deskripsi_predikat = "Menunjukkan penguasaan yang cukup dalam ";
+                break;
+            case ($maxTPBlt >= 0 && $maxTPBlt <= 59):
+                $deskripsi_predikat = "Perlu bimbingan ";
+                break;
+            default:
+                $deskripsi_predikat = "";
+                break;
+        }
+
+        $nTP = Nilai::where('idSiswa', $data)
+            ->where('idPeriode', $idPeriode)
+            ->where('idPengajaran', $idPengajar)
+            ->value('nilaiAkhirTP');
+
+        if ($nTP !== null) {
+            Nilai::updateOrCreate([
+                'idSiswa' => $data,
+                'idPeriode' => $idPeriode,
+                'idPengajaran' => $idPengajar,
+                // 'idTP' => $idTP,
+            ], [
+                'deskripsiCPtinggi' => $deskripsi_predikat . $desMax->deskripsiTP,
+                // 'deskripsiCPrendah' => $deskripsi_predikat_R . $desMin->deskripsiTP, 
+            ]);
+        } else {
+            Nilai::updateOrCreate([
+                'idSiswa' => $data,
+                'idPeriode' => $idPeriode,
+                'idPengajaran' => $idPengajar,
+                // 'idTP' => $idTP,
+            ], [
+                'deskripsiCPtinggi' => null,
+                // 'deskripsiCPrendah' => null,
+            ]);
+        }
+    }
+
     public function storeNilaiLM(Request $request)
     {
         try {
@@ -218,11 +373,12 @@ class PenilaianController extends Controller
             $idSiswa = $request->input('idSiswa');
 
             foreach ($idSiswa as $siswa) {
-                $rules['nilai_lm_' . $siswa] = 'nullable|numeric|max:100'; // Sesuaikan dengan aturan validasi yang Anda perlukan
+                $rules['nilai_lm_' . $siswa] = 'nullable|numeric|max:100|min:0'; // Sesuaikan dengan aturan validasi yang Anda perlukan
             }
             $validator = Validator::make($request->all(), $rules, [
                 'nilai_lm_*.numeric' => 'Nilai harus berupa angka',
                 'nilai_lm_*.max' => 'Nilai tidak boleh melebihi 100',
+                'nilai_lm_*.min' => 'Nilai minimum adalah 0',
             ]);
 
             if ($validator->fails()) {
@@ -231,46 +387,44 @@ class PenilaianController extends Controller
                 $idSiswa = $request->input('idSiswa');
                 $idPeriode = $request->input('idPeriode');
                 $idPengajar = $request->input('idPengajaran');
-                $idLM = $request->input('idLM');
+                $kode = $request->input('kodeLM');
+                $mapel = $request->input('mapel');
+                $deskrip = $request->input('deskripsiLM');
 
                 foreach ($idSiswa as $data) {
                     $nilai_lm = $request->input('nilai_lm_' . $data);
-                    $nilai = Nilai_LM::firstOrNew([
-                        'idSiswa' => $data,
-                        'idPeriode' => $idPeriode,
-                        'idPengajaran' => $idPengajar,
-                        'idLM' => $idLM,
-                    ]);
-
-                    $nilai->nilaiLM = $nilai_lm;
-                    $nilai->save();
-
-                    $jumlahLM = Nilai_LM::where('idSiswa', $data)
-                        ->where('idPeriode', $idPeriode)
-                        ->where('idPengajaran', $idPengajar)
-                        // ->where('idLM', $idLM)
-                        ->avg('nilaiLM');
-
-                    $raport = Nilai::where('idSiswa', $data)
-                        ->where('idPeriode', $idPeriode)
-                        ->where('idPengajaran', $idPengajar)
-                        ->select(DB::raw('ROUND(SUM(CASE
-                            WHEN nilaiAkhirTP IS NULL THEN COALESCE(nilaiAkhirLM + (COALESCE(jumSAkhir, 0) * 2))/2
-                            WHEN nilaiAkhirLM IS NULL THEN COALESCE(nilaiAkhirTP + (COALESCE(jumSAkhir, 0) * 2))/2
-                            WHEN jumSAkhir IS NULL THEN COALESCE(nilaiAkhirTP + nilaiAkhirLM)/2
-                            ELSE ((COALESCE(jumSAkhir, 0) * 2) + COALESCE(nilaiAkhirTP, 0) + COALESCE(nilaiAkhirLM, 0)) / 4
-                            END)) AS jumlah_a'))
-                        ->get()->first()->jumlah_a;
-                    // Update atau buat instance jumlahLM
-                    Nilai::updateOrCreate([
-                        'idSiswa' => $data,
-                        'idPeriode' => $idPeriode,
-                        'idPengajaran' => $idPengajar,
-                        // 'idLM' => $idLM,
-                    ], [
-                        'nilaiAkhirLM' => $jumlahLM,
-                        'raport' => $raport
-                    ]);
+                    if ($nilai_lm !== null) {
+                        $nilai = Nilai_LM::firstOrNew([
+                            'idSiswa' => $data,
+                            'idPeriode' => $idPeriode,
+                            'idPengajaran' => $idPengajar,
+                            'kodeLM' => $kode,
+                            'mapel' => $mapel,
+                            // 'deskripsiLM' => $deskrip,
+                        ]);
+    
+                        $nilai->nilaiLM = $nilai_lm;
+                        $nilai->deskripsiLM = $deskrip;
+                        $nilai->save();
+    
+                        $jumlahLM = Nilai_LM::where('idSiswa', $data)
+                            ->where('idPeriode', $idPeriode)
+                            ->where('idPengajaran', $idPengajar)
+                            // ->where('idLM', $idLM)
+                            ->avg('nilaiLM');
+    
+                        // Update atau buat instance jumlahLM
+                        Nilai::updateOrCreate([
+                            'idSiswa' => $data,
+                            'idPeriode' => $idPeriode,
+                            'idPengajaran' => $idPengajar,
+                            // 'idLM' => $idLM,
+                        ], [
+                            'nilaiAkhirLM' => $jumlahLM,
+                        ]);
+    
+                        $this->hitungRaport($data, $idPeriode, $idPengajar);
+                    }
                 }
 
                 return response()->json([
@@ -291,11 +445,12 @@ class PenilaianController extends Controller
             $idSiswa = $request->input('idSiswa');
 
             foreach ($idSiswa as $siswa) {
-                $rules['nilai_akhir_nontes_' . $siswa] = 'nullable|numeric|max:100'; // Sesuaikan dengan aturan validasi yang Anda perlukan
+                $rules['nilai_akhir_nontes_' . $siswa] = 'nullable|numeric|max:100|min:0'; // Sesuaikan dengan aturan validasi yang Anda perlukan
             }
             $validator = Validator::make($request->all(), $rules, [
                 'nilai_akhir_nontes_*.numeric' => 'Nilai harus berupa angka',
                 'nilai_akhir_nontes_*.max' => 'Nilai tidak boleh melebihi 100',
+                'nilai_akhir_nontes_*.min' => 'Nilai minimum adalah 0',
             ]);
 
             if ($validator->fails()) {
@@ -307,49 +462,40 @@ class PenilaianController extends Controller
 
                 foreach ($idSiswa as $data) {
                     $nilaiNontes = $request->input('nilai_akhir_nontes_' . $data);
-                    $nilai = Nilai::firstOrNew([
-                        'idSiswa' => $data,
-                        'idPeriode' => $idPeriode,
-                        'idPengajaran' => $idPengajar,
-                    ]);
-
-                    $nilai->nilaiNtes = $nilaiNontes;
-                    $nilai->save();
-
-                    // Hitung nilai rata-rata
-                    $nilaiRata = Nilai::where('idSiswa', $data)
-                        ->where('idPeriode', $idPeriode)
-                        ->where('idPengajaran', $idPengajar)
-                        ->select(DB::raw('SUM(CASE
-                        WHEN nilaiNtes IS NULL THEN nilaiTes
-                        WHEN nilaiTes IS NULL THEN nilaiNtes
-                        ELSE (nilaiNtes + nilaiTes) / 2
-                    END) AS jumlah_a'))
-                        ->get()->first()->jumlah_a;
-
-                    $raport = Nilai::where('idSiswa', $data)
-                        ->where('idPeriode', $idPeriode)
-                        ->where('idPengajaran', $idPengajar)
-                        ->select(DB::raw('ROUND(SUM(CASE
-                            WHEN nilaiAkhirTP IS NULL THEN COALESCE(nilaiAkhirLM + (COALESCE(jumSAkhir, 0) * 2))/2
-                            WHEN nilaiAkhirLM IS NULL THEN COALESCE(nilaiAkhirTP + (COALESCE(jumSAkhir, 0) * 2))/2
-                            WHEN jumSAkhir IS NULL THEN COALESCE(nilaiAkhirTP + nilaiAkhirLM)/2
-                            ELSE ((COALESCE(jumSAkhir, 0) * 2) + COALESCE(nilaiAkhirTP, 0) + COALESCE(nilaiAkhirLM, 0)) / 4
-                            END)) AS jumlah_a'))
-                        ->get()->first()->jumlah_a;
-
-                    // Update atau buat instance jumSAkhir
-                    $jumlah = Nilai::updateOrCreate(
-                        [
+                    if ($nilaiNontes !== null) {
+                        $nilai = Nilai::firstOrNew([
                             'idSiswa' => $data,
                             'idPeriode' => $idPeriode,
                             'idPengajaran' => $idPengajar,
-                        ],
-                        [
-                            'jumSAkhir' => $nilaiRata,
-                            'raport' => $raport
-                        ]
-                    );
+                        ]);
+    
+                        $nilai->nilaiNtes = $nilaiNontes;
+                        $nilai->save();
+    
+                        // Hitung nilai rata-rata
+                        $nilaiRata = Nilai::where('idSiswa', $data)
+                            ->where('idPeriode', $idPeriode)
+                            ->where('idPengajaran', $idPengajar)
+                            ->select(DB::raw('SUM(CASE
+                            WHEN nilaiNtes IS NULL THEN nilaiTes
+                            WHEN nilaiTes IS NULL THEN nilaiNtes
+                            ELSE (nilaiNtes + nilaiTes) / 2
+                        END) AS jumlah_a'))
+                            ->get()->first()->jumlah_a;
+                        // Update atau buat instance jumSAkhir
+                        Nilai::updateOrCreate(
+                            [
+                                'idSiswa' => $data,
+                                'idPeriode' => $idPeriode,
+                                'idPengajaran' => $idPengajar,
+                            ],
+                            [
+                                'jumSAkhir' => $nilaiRata,
+                            ]
+                        );
+    
+                        $this->hitungRaport($data, $idPeriode, $idPengajar);
+                    }
                 }
 
                 return response()->json([
@@ -370,11 +516,12 @@ class PenilaianController extends Controller
             $idSiswa = $request->input('idSiswa');
 
             foreach ($idSiswa as $siswa) {
-                $rules['nilai_akhir_tes_' . $siswa] = 'nullable|numeric|max:100'; // Sesuaikan dengan aturan validasi yang Anda perlukan
+                $rules['nilai_akhir_tes_' . $siswa] = 'nullable|numeric|max:100|min:0'; // Sesuaikan dengan aturan validasi yang Anda perlukan
             }
             $validator = Validator::make($request->all(), $rules, [
                 'nilai_akhir_tes_*.numeric' => 'Nilai harus berupa angka',
                 'nilai_akhir_tes_*.max' => 'Nilai tidak boleh melebihi 100',
+                'nilai_akhir_tes_*.min' => 'Nilai minimum adalah 0',
             ]);
 
             if ($validator->fails()) {
@@ -386,48 +533,40 @@ class PenilaianController extends Controller
 
                 foreach ($idSiswa as $data) {
                     $nilaiTes = $request->input('nilai_akhir_tes_' . $data);
-                    $nilai = Nilai::firstOrNew([
-                        'idSiswa' => $data,
-                        'idPeriode' => $idPeriode,
-                        'idPengajaran' => $idPengajar,
-                    ]);
-
-                    $nilai->nilaiTes = $nilaiTes;
-                    $nilai->save();
-                    // Hitung nilai rata-rata
-                    $nilaiRata = Nilai::where('idSiswa', $data)
-                        ->where('idPeriode', $idPeriode)
-                        ->where('idPengajaran', $idPengajar)
-                        ->select(DB::raw('SUM(CASE
-                        WHEN nilaiNtes IS NULL THEN nilaiTes
-                        WHEN nilaiTes IS NULL THEN nilaiNtes
-                        ELSE (nilaiNtes + nilaiTes) / 2
-                        END) AS jumlah_a'))
-                        ->get()->first()->jumlah_a;
-
-                    $raport = Nilai::where('idSiswa', $data)
-                        ->where('idPeriode', $idPeriode)
-                        ->where('idPengajaran', $idPengajar)
-                        ->select(DB::raw('ROUND(SUM(CASE
-                            WHEN nilaiAkhirTP IS NULL THEN COALESCE(nilaiAkhirLM + (COALESCE(jumSAkhir, 0) * 2))/2
-                            WHEN nilaiAkhirLM IS NULL THEN COALESCE(nilaiAkhirTP + (COALESCE(jumSAkhir, 0) * 2))/2
-                            WHEN jumSAkhir IS NULL THEN COALESCE(nilaiAkhirTP + nilaiAkhirLM)/2
-                            ELSE ((COALESCE(jumSAkhir, 0) * 2) + COALESCE(nilaiAkhirTP, 0) + COALESCE(nilaiAkhirLM, 0)) / 4
-                            END)) AS jumlah_a'))
-                        ->get()->first()->jumlah_a;
-
-                    // Update atau buat instance jumSAkhir
-                    $jumlah = Nilai::updateOrCreate(
-                        [
+                    if ($nilaiTes !== null) {
+                        
+                        $nilai = Nilai::firstOrNew([
                             'idSiswa' => $data,
                             'idPeriode' => $idPeriode,
                             'idPengajaran' => $idPengajar,
-                        ],
-                        [
-                            'jumSAkhir' => $nilaiRata,
-                            'raport' => $raport
-                        ]
-                    );
+                        ]);
+    
+                        $nilai->nilaiTes = $nilaiTes;
+                        $nilai->save();
+                        // Hitung nilai rata-rata
+                        $nilaiRata = Nilai::where('idSiswa', $data)
+                            ->where('idPeriode', $idPeriode)
+                            ->where('idPengajaran', $idPengajar)
+                            ->select(DB::raw('SUM(CASE
+                            WHEN nilaiNtes IS NULL THEN nilaiTes
+                            WHEN nilaiTes IS NULL THEN nilaiNtes
+                            ELSE (nilaiNtes + nilaiTes) / 2
+                            END) AS jumlah_a'))
+                            ->get()->first()->jumlah_a;
+                        // Update atau buat instance jumSAkhir
+                        Nilai::updateOrCreate(
+                            [
+                                'idSiswa' => $data,
+                                'idPeriode' => $idPeriode,
+                                'idPengajaran' => $idPengajar,
+                            ],
+                            [
+                                'jumSAkhir' => $nilaiRata,
+                            ]
+                        );
+    
+                        $this->hitungRaport($data, $idPeriode, $idPengajar);
+                    }
                 }
 
                 return response()->json([
@@ -436,6 +575,192 @@ class PenilaianController extends Controller
                     'message' => 'Data nilai siswa berhasil disimpan.'
                 ]);
             }
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteTP($id)
+    {
+        try {
+            $idNilaiTP = array_map(function ($value) {
+                return (int) trim($value);
+            }, explode(',', $id));
+
+            foreach ($idNilaiTP as $key) {
+                $tp = Nilai_TP::where('idNilaiTP', $key)->first();
+                if ($tp) {
+                    $tp->delete();
+                    $jumlahTP = Nilai_TP::where('idSiswa', $tp->idSiswa)
+                        ->where('idPeriode', $tp->idPeriode)
+                        ->where('idPengajaran', $tp->idPengajaran)
+                        // ->where('idTP', $idTP)
+                        ->avg('nilaiTP');
+
+                    // Update atau buat instance jumlahTP
+                    Nilai::updateOrCreate([
+                        'idSiswa' => $tp->idSiswa,
+                        'idPeriode' => $tp->idPeriode,
+                        'idPengajaran' => $tp->idPengajaran,
+                        // 'idTP' => $idTP,
+                    ], [
+                        'nilaiAkhirTP' => $jumlahTP,
+                    ]);
+
+                    $this->hitungRaport($tp->idSiswa, $tp->idPeriode, $tp->idPengajaran);
+                    $this->capaianSiswaMin($tp->idSiswa, $tp->idPeriode, $tp->idPengajaran, $tp->mapel);
+                    $this->capaianSiswaMax($tp->idSiswa, $tp->idPeriode, $tp->idPengajaran, $tp->mapel);
+
+
+                }
+            }
+
+            // $tp->delete();
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Data penilaian TP berhasil dihapus.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteLM($id)
+    {
+        try {
+            $idNilaiLM = array_map(function ($value) {
+                return (int) trim($value);
+            }, explode(',', $id));
+
+            foreach ($idNilaiLM as $key) {
+                $tp = Nilai_LM::where('idNilaiLM', $key)->first();
+                if ($tp) {
+                    $tp->delete();
+                    $jumlahTP = Nilai_LM::where('idSiswa', $tp->idSiswa)
+                        ->where('idPeriode', $tp->idPeriode)
+                        ->where('idPengajaran', $tp->idPengajaran)
+                        // ->where('idTP', $idTP)
+                        ->avg('nilaiLM');
+    
+                    // Update atau buat instance jumlahTP
+                    Nilai::updateOrCreate([
+                        'idSiswa' => $tp->idSiswa,
+                        'idPeriode' => $tp->idPeriode,
+                        'idPengajaran' => $tp->idPengajaran,
+                        // 'idTP' => $idTP,
+                    ], [
+                        'nilaiAkhirLM' => $jumlahTP,
+                    ]);
+    
+                    $this->hitungRaport($tp->idSiswa, $tp->idPeriode, $tp->idPengajaran);
+                }
+
+            }
+
+            // $tp->delete();
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Data penilaian LM berhasil dihapus.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+        }
+    }
+    public function deleteNTes($id)
+    {
+        try {
+            $idNilai = array_map(function ($value) {
+                return (int) trim($value);
+            }, explode(',', $id));
+
+            foreach ($idNilai as $key) {
+                $tp = Nilai::where('idNilai', $key)->first();
+                if ($tp) {
+                    $tp->update([
+                        'nilaiNtes' => null,
+                    ]);
+                    $nilaiRata = Nilai::where('idSiswa', $tp->idSiswa)
+                        ->where('idPeriode', $tp->idPeriode)
+                        ->where('idPengajaran', $tp->idPengajaran)
+                        ->select(DB::raw('SUM(CASE
+                            WHEN nilaiNtes IS NULL THEN nilaiTes
+                            WHEN nilaiTes IS NULL THEN nilaiNtes
+                            ELSE (nilaiNtes + nilaiTes) / 2
+                            END) AS jumlah_a'))
+                        ->get()->first()->jumlah_a;
+                    // Update atau buat instance jumSAkhir
+                    Nilai::updateOrCreate(
+                        [
+                            'idSiswa' => $tp->idSiswa,
+                            'idPeriode' => $tp->idPeriode,
+                            'idPengajaran' => $tp->idPengajaran,
+                        ],
+                        [
+                            'jumSAkhir' => $nilaiRata,
+                        ]
+                    );
+    
+                    $this->hitungRaport($tp->idSiswa, $tp->idPeriode, $tp->idPengajaran);
+                }
+
+            }
+            // $tp->delete();
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Data penilaian Non Tes berhasil dihapus.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteTes($id)
+    {
+        try {
+            $idNilai = array_map(function ($value) {
+                return (int) trim($value);
+            }, explode(',', $id));
+
+            foreach ($idNilai as $key) {
+                $tp = Nilai::where('idNilai', $key)->first();
+                if ($tp) {
+                    $tp->update([
+                        'nilaiTes' => null,
+                    ]);
+                    $nilaiRata = Nilai::where('idSiswa', $tp->idSiswa)
+                        ->where('idPeriode', $tp->idPeriode)
+                        ->where('idPengajaran', $tp->idPengajaran)
+                        ->select(DB::raw('SUM(CASE
+                            WHEN nilaiNtes IS NULL THEN nilaiTes
+                            WHEN nilaiTes IS NULL THEN nilaiNtes
+                            ELSE (nilaiNtes + nilaiTes) / 2
+                            END) AS jumlah_a'))
+                        ->get()->first()->jumlah_a;
+                    // Update atau buat instance jumSAkhir
+                    Nilai::updateOrCreate(
+                        [
+                            'idSiswa' => $tp->idSiswa,
+                            'idPeriode' => $tp->idPeriode,
+                            'idPengajaran' => $tp->idPengajaran,
+                        ],
+                        [
+                            'jumSAkhir' => $nilaiRata,
+                        ]
+                    );
+    
+                    $this->hitungRaport($tp->idSiswa, $tp->idPeriode, $tp->idPengajaran);
+                }
+
+            }
+            // $tp->delete();
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Data penilaian Tes berhasil dihapus.'
+            ]);
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
         }

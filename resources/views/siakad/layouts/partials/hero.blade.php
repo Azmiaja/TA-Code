@@ -3,7 +3,7 @@
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-2">
             <div class="flex-grow-1">
                 <h1 class="h3 fw-bold mb-2">
-                    {{ Request::routeIs('profil_pengguna.edit', 'profil_pengguna.chpassword', 'periode.index', 'kelas.index', 'mapel.index', 'pengajaran.index', 'penjadwalan.index', 'data_siswa.index', 'rekapitulasi.index') ? $sub_sub_judul : $sub_judul }}
+                    {{ Request::routeIs('profil_pengguna.edit', 'profil_pengguna.chpassword', 'periode.index', 'kelas.index', 'mapel.index', 'pengajaran.index', 'penjadwalan.index', 'data_siswa.index', 'rekapitulasi.index', 'ekstrakuliuler.index', ) ? $sub_sub_judul : $sub_judul }}
                 </h1>
                 <h2 class="fs-base lh-base fw-medium text-muted mb-0">
                     {!! $text_singkat !!}
@@ -17,7 +17,7 @@
                     <li class="breadcrumb-item" aria-current="page">
                         {{ $sub_judul }}
                     </li>
-                    {!! Request::routeIs('profil_pengguna.edit', 'profil_pengguna.chpassword', 'periode.index', 'kelas.index', 'mapel.index', 'pengajaran.index', 'penjadwalan.index', 'data_siswa.index', 'rekapitulasi.index') ? '<li class="breadcrumb-item" aria-current="page">' . $sub_sub_judul . '</li>' : '' !!}
+                    {!! Request::routeIs('profil_pengguna.edit', 'profil_pengguna.chpassword', 'periode.index', 'kelas.index', 'mapel.index', 'pengajaran.index', 'penjadwalan.index', 'data_siswa.index', 'rekapitulasi.index', 'ekstrakuliuler.index', ) ? '<li class="breadcrumb-item" aria-current="page">' . $sub_sub_judul . '</li>' : '' !!}
                 </ol>
             </nav>
         </div>

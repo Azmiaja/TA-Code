@@ -235,13 +235,21 @@ class KelasController extends Controller
 
     public function destroy($id)
     {
-        $kelas = Kelas::find($id);
-        $kelas->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'title' => 'Dihapus!',
-            'message' => 'Berhasil menghapus data.'
-        ]);
+        try {
+            $kelas = Kelas::find($id);
+            $kelas->delete();
+    
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Berhasil menghapus data.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal!',
+                'message' => 'Tidak dapat menghapus data karena memiliki relasi dengan data lain!.'
+            ]);
+        }
     }
 }

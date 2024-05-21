@@ -17,8 +17,10 @@ class KategoriNilaiController extends Controller
         $pegawai = Auth::user()->pegawai->idPegawai;
         $periode = Periode::where('status', 'Aktif')->orderBy('tanggalMulai', 'desc')->first();
 
+        $idPer = $periode->idPeriode ?? null;
+
         $klsPengajaran = Pengajaran::where('idPegawai', $pegawai)
-            ->where('idPeriode', $periode->idPeriode)
+            ->where('idPeriode', $idPer)
             ->whereHas('kelas', function ($query) {
                 $query->orderBy('namaKelas', 'asc');
             })
@@ -28,7 +30,7 @@ class KategoriNilaiController extends Controller
             ->get();
 
 
-        return view('siakad/content/penilaian/kategori/index', compact('klsPengajaran'), [
+        return view('siakad/content/penilaian/kategori/index', compact('klsPengajaran', 'periode'), [
             'judul' => 'Kategori Penilaian',
             'sub_judul' => 'Atur Penilaian Mapel',
             'text_singkat' => 'Mengelola lingkup materi dan tujuan pembelajaran!',
@@ -84,6 +86,7 @@ class KategoriNilaiController extends Controller
 
         $lm = LM_sumatif::where('idMapel', $idMapel)
             ->where('kelas', $kelas)
+            ->orderBy('kodeLM', 'asc')
             ->get();
         $lm = $lm->map(function ($item, $key) {
             $item['nomor'] = $key + 1;
@@ -184,5 +187,99 @@ class KategoriNilaiController extends Controller
             'title' => 'Dihapus!',
             'message' => 'Berhasil menghapus data.'
         ]);
+    }
+
+    public function getTPById($id)
+    {
+        $TP = TP_sumatif::find($id);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $TP
+        ]);
+    }
+
+    public function updateTP(Request $request, $id)
+    {
+        $TP = TP_sumatif::find($id);
+        if ($TP) {
+            # code...
+            $validator = Validator::make($request->all(), [
+                'kodeTP' => 'required',
+                'deskripsi' => 'required'
+            ], [
+                'deskripsi.required' => 'Tujuan pembelajaran tidak boleh kosong!',
+                'kodeTP.required' => 'Kode TP tidak boleh kosong!',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+                // $idMapel = $request->input('idMapel');
+                $deskripsi = $request->input('deskripsi');
+                $kode = $request->input('kodeTP');
+                // $kelas = $request->input('kelas');
+
+                $TP->update([
+                    // 'idMapel' => $idMapel,
+                    'deskripsi' => $deskripsi,
+                    'kodeTP' => $kode,
+                    // 'kelas' => $kelas
+                ]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil menyimpan data.',
+                ]);
+            }
+        }
+    }
+
+    public function getLMById($id)
+    {
+        $LM = LM_sumatif::find($id);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $LM
+        ]);
+    }
+
+    public function updateLM(Request $request, $id)
+    {
+        $LM = LM_sumatif::find($id);
+        if ($LM) {
+            # code...
+            $validator = Validator::make($request->all(), [
+                'kode' => 'required',
+                'deskripsi' => 'required'
+            ], [
+                'deskripsi.required' => 'Lingkup materi tidak boleh kosong!',
+                'kode.required' => 'Kode LM tidak boleh kosong!',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+                // $idMapel = $request->input('idMapel');
+                $deskripsi = $request->input('deskripsi');
+                $kode = $request->input('kode');
+                // $kelas = $request->input('kelas');
+
+                $LM->update([
+                    // 'idMapel' => $idMapel,
+                    'deskripsi' => $deskripsi,
+                    'kodeLM' => $kode,
+                    // 'kelas' => $kelas
+                ]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil menyimpan data.',
+                ]);
+            }
+        }
     }
 }

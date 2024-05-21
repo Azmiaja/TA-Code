@@ -101,13 +101,21 @@ class PeriodeController extends Controller
 
     public function destroy($id)
     {
-        $periode = Periode::find($id);
-        $periode->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'title' => 'Dihapus!',
-            'message' => 'Berhasil mengapus data.'
-        ]);
+        try {
+            $periode = Periode::find($id);
+            $periode->delete();
+            
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Berhasil mengapus data.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal!',
+                'message' => 'Tidak dapat menghapus data karena memiliki relasi dengan data lain!.'
+            ]);
+        }
     }
 }

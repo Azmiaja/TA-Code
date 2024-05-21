@@ -36,4 +36,12 @@ class Periode extends Model
     {
         return $this->hasMany(Jadwal::class, 'idJadwal');
     }
+    public function kegiatan()
+    {
+        return $this->hasMany(KegEkstra::class, 'idPeriode');
+    }
+    public function naik_kelas()
+    {
+        return $this->hasMany(KetNaikTidak::class, 'idNK');
+    }
 }

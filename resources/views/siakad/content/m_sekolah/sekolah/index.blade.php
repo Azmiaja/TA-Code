@@ -24,7 +24,10 @@
                 </div>
             </div>
             <div class="block-content block-content-full">
-                <div class="row g-3">
+                <div id="loading_spinner" class="text-center" style="display: none">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+                <div class="row g-3 d-none" id="koonten_sekolah">
                     <div class="col-lg-4 col-md-6 col-12">
                         <div class="d-flex flex-row mb-3 py-2">
                             <div class="col-4 fw-semibold">Nama Sekolah</div>
@@ -113,7 +116,8 @@
                                 <div>
                                     <figure class="figure w-100">
                                         <figcaption class="fw-semibold mb-2">Maps Embed</figcaption>
-                                        <div id="maps_embed" style="border: 2px dashed #dfe3ea;" class="rounded p-1"></div>
+                                        <div id="maps_embed" style="border: 2px dashed #dfe3ea;" class="rounded p-1">
+                                        </div>
                                     </figure>
                                 </div>
                             </div>
@@ -189,11 +193,16 @@
                 fetchDataSekolah();
 
                 function fetchDataSekolah() {
+                    $('#loading_spinner').show();
                     // Lakukan AJAX request ke endpoint yang telah dibuat
                     var url = '{!! url('sekolah/get-data') !!}';
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {
+                            $('#loading_spinner').hide();
+
+                            $('#koonten_sekolah').removeClass('d-none')
+
                             tbl_namsklh.innerHTML = data.namaSekolah ?? '-';
                             tbl_npsn.innerHTML = data.npsn ?? '-';
                             tbl_alamat.innerHTML = data.alamat ?? '-';

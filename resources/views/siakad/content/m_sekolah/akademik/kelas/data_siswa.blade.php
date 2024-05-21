@@ -379,14 +379,26 @@
                                 url: `{{ url('data-kelas/destroy/siswa/${id}') }}`,
                                 dataType: 'json',
                                 success: function(response) {
-                                    Swal.fire({
-                                        icon: response.status,
-                                        title: response.title,
-                                        text: response.message,
-                                        showConfirmButton: false,
-                                        timer: 2000
-                                    });
-                                    tabelSiswaKelas.DataTable().ajax.reload();
+                                    if (response.status == 'success') {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+                                        tabelSiswaKelas.DataTable().ajax.reload();
+
+                                    } else {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+
+                                    }
                                 },
                             });
                         }

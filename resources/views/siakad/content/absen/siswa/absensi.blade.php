@@ -56,7 +56,8 @@
                 <div class="block-options">
                     <select class="form-select form-select-sm" name="" id="periode_siswa">
                         @foreach ($siswaKelas as $item)
-                            <option {{ $item->periode->idPeriode === $periode->idPeriode ? 'selected' : '' }}
+                            <option data-smt="{{ $item->periode->semester }}"
+                                {{ $item->periode->idPeriode === $periode->idPeriode ? 'selected' : '' }}
                                 value="{{ $item->periode->idPeriode }}">Kelas {{ $item->namaKelas }}
                                 {{ $item->periode->semester }} {{ $item->periode->tahun }}</option>
                         @endforeach
@@ -65,147 +66,122 @@
             </div>
             <div class="block-content block-content-full">
                 <div class="table-responsive">
-                    <table class="table w-100 table-sm table-striped table-bordered border-dark align-middle">
-                        <thead class="table-light align-middle text-center border-dark">
-                            <tr>
-                                <th rowspan="3">No</th>
-                                <th rowspan="3">Kelas</th>
-                                <th rowspan="3">Semester</th>
-                                <th rowspan="3">Tahun Pelajaran</th>
-                                <th colspan="24">Bulan</th>
-                                <th rowspan="2" colspan="4">Total</th>
-                            </tr>
-                            <tr id="namaBulan">
-                                {{-- daftar bulan --}}
-                            </tr>
-                            <tr id="ketPresensi">
-                                {{-- keterangan presensi siswa --}}
-                                <th class="total" style="min-width: 30px;">H</th>
-                                <th class="total" style="min-width: 30px;">S</th>
-                                <th class="total" style="min-width: 30px;">I</th>
-                                <th class="total" style="min-width: 30px;">A</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr id="dataKehadiran">
-                                {{-- data kehadira siswa --}}
-                                <td class="total text-center" id="jml_hadir"></td>
-                                <td class="total text-center" id="jml_sakit"></td>
-                                <td class="total text-center" id="jml_izin"></td>
-                                <td class="total text-center" id="jml_alfa"></td>
-                            </tr>
-                        </tbody>
+                    <div id="loading_spinner" class="text-center" style="display: none">
+                        <div class="spinner-border text-primary" role="status"></div>
+                    </div>
+                    <table id="tabel_absen" class="table table-sm w-100 table-bordered border-dark align-middle caption-top">
+
                     </table>
                 </div>
 
                 <script>
-                    function getCatatan() {
+                    function getDataCatatan() {
+                        $("#loading_spinner").show();
+                        $('#tabel_absen').empty();
                         $.ajax({
+                            url: `{{ route('get-kehadiran-siswa') }}`,
                             type: 'GET',
-                            url: "{{ route('get-kehadiran-siswa') }}",
                             data: {
-                                periode: $('#periode_siswa').val(),
+                                periode: $('#periode_siswa option:selected').val(),
                             },
                             success: function(data) {
+                                var kelas = data.kelas.namaKelas;
+                                var kls_name = ['SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM'];
+                                var per_smt = $('#periode_siswa option:selected').data('smt');
+                                var per_tahun = $('#periode_siswa option:selected').data('tahun');
+                                var tabel = `<caption class="text-dark mb-0">
+                                        <strong class="text-start mb-0">
+                                                    KELAS : ${kelas} (${kls_name[kelas - 1] ?? ''})
+                                                </strong>
+                                        <strong class="float-end mb-0 text-uppercase">
+                                            SEMESTER : ${per_smt}</strong>
+                                    </caption>
+                                <thead class="table-light align-middle text-center border-dark">
+                                    <tr>
+                                        <th rowspan="2" width="5%">No</th>
+                                        <th rowspan="2">Bulan</th>
+                                        <th colspan="4">Keterangan</th>
+                                    </tr>
+                                    <tr>
+                                        <th width="5%">H</th>
+                                        <th width="5%">S</th>
+                                        <th width="5%">I</th>
+                                        <th width="5%">A</th>
+                                    </tr>
+                                    </thead><tbody>`;
 
-                                $('#namaBulan').empty();
-                                $('#dataKehadiran').empty();
-                                $('#ketPresensi').find('th').not('.total').remove();
-
+                                var siswa = data.siswa.idSiswa;
+                                let kehadiran = data.presensi;
                                 $.each(data.bulan, function(key, value) {
-                                    // perulangan nama bulan
-                                    $('#namaBulan').append(`<th colspan="4">${value}</th>`);
-                                    // perilangan keterangan presensi
-                                    $('#ketPresensi').append(`
-                                        <th style="min-width: 30px;">H</th>
-                                        <th style="min-width: 30px;">S</th>
-                                        <th style="min-width: 30px;">I</th>
-                                        <th style="min-width: 30px;">A</th>
-                                    `);
+                                    let jmlHadir = kehadiran.filter(function(presensi) {
+                                        return presensi.idSiswa === siswa && presensi
+                                            .bulan === value && presensi.presensi === 'H';
+                                    }).length;
+
+                                    // Pastikan setiap nilai presensi ditampilkan dalam tabel
+                                    let jmlSakit = kehadiran.filter(function(presensi) {
+                                        return presensi.idSiswa === siswa && presensi
+                                            .bulan === value && presensi.presensi === 'S';
+                                    }).length;
+
+                                    let jmlIzin = kehadiran.filter(function(presensi) {
+                                        return presensi.idSiswa === siswa && presensi
+                                            .bulan === value && presensi.presensi === 'I';
+                                    }).length;
+
+                                    let jmlAlpa = kehadiran.filter(function(presensi) {
+                                        return presensi.idSiswa === siswa && presensi
+                                            .bulan === value && presensi.presensi === 'A';
+                                    }).length;
+                                    tabel += `<tr>
+                                        <td class="text-center fw-semibold">${key+1}</td>
+                                        <td class="text-uppercase fw-semibold">${value}</td>
+                                        <td class="text-center fw-medium">${jmlHadir == 0 ? '' : jmlHadir}</td>
+                                        <td class="text-center fw-medium">${jmlSakit == 0 ? '' : jmlSakit}</td>
+                                        <td class="text-center fw-medium">${jmlIzin == 0 ? '' : jmlIzin}</td>
+                                        <td class="text-center fw-medium">${jmlAlpa == 0 ? '' : jmlAlpa}</td>
+                                        </tr>`;
                                 });
 
-                                $.each(data.siswa, function(key, value) {
-                                    let periode = data.periode;
-                                    let kelas = data.kelas;
-                                    let barisPresensi = `
-                                        <td class="text-center fs-sm fw-semibold">1</td>
-                                        <td class="fs-sm fw-semibold text-center">Kelas ${kelas.namaKelas}</td>
-                                        <td class="fs-sm fw-semibold text-center">${periode.semester}</td>
-                                        <td class="fs-sm fw-semibold text-center">${periode.tahun}</td>
-                                    `;
+                                let totHadir = kehadiran.filter(function(presensi) {
+                                    return presensi.idSiswa === siswa &&
+                                        presensi.presensi === 'H';
+                                }).length;
+                                let totSakit = kehadiran.filter(function(presensi) {
+                                    return presensi.idSiswa === siswa &&
+                                        presensi.presensi === 'S';
+                                }).length;
+                                let totIzin = kehadiran.filter(function(presensi) {
+                                    return presensi.idSiswa === siswa &&
+                                        presensi.presensi === 'I';
+                                }).length;
+                                let totAlfa = kehadiran.filter(function(presensi) {
+                                    return presensi.idSiswa === siswa &&
+                                        presensi.presensi === 'A';
+                                }).length;
 
-                                    let dfBulan = data.bulan.length;
-                                    let absen = data.presensi;
-                                    $.each(data.bulan, function(key, bulan) {
-                                        let kehadiran = data.presensi;
-                                        let jmlHadir = kehadiran.filter(function(presensi) {
-                                            return presensi.idSiswa === value.idSiswa && presensi
-                                                .bulan === bulan && presensi.presensi === 'H';
-                                        }).length;
+                                tabel += `<tr>
+                                    <td colspan="2" class="text-uppercase border-top border-2 border-dark fw-bold">Jumlah</td>
+                                    <td class="text-center border-top border-2 border-dark fw-bold">${totHadir}</td>
+                                    <td class="text-center border-top border-2 border-dark fw-bold">${totSakit}</td>
+                                    <td class="text-center border-top border-2 border-dark fw-bold">${totIzin}</td>
+                                    <td class="text-center border-top border-2 border-dark fw-bold">${totAlfa}</td>
+                                    </tr><>/tbody`;
 
-                                        // Pastikan setiap nilai presensi ditampilkan dalam tabel
-                                        let jmlSakit = kehadiran.filter(function(presensi) {
-                                            return presensi.idSiswa === value.idSiswa && presensi
-                                                .bulan === bulan && presensi.presensi === 'S';
-                                        }).length;
-
-                                        let jmlIzin = kehadiran.filter(function(presensi) {
-                                            return presensi.idSiswa === value.idSiswa && presensi
-                                                .bulan === bulan && presensi.presensi === 'I';
-                                        }).length;
-
-                                        let jmlAlpa = kehadiran.filter(function(presensi) {
-                                            return presensi.idSiswa === value.idSiswa && presensi
-                                                .bulan === bulan && presensi.presensi === 'A';
-                                        }).length;
-
-                                        // Mengisi baris tabel dengan nilai yang sesuai
-                                        barisPresensi += `
-                                            <td class="text-center">${jmlHadir == 0 ? '-' : jmlHadir}</td>
-                                            <td class="text-center">${jmlSakit == 0 ? '-' : jmlSakit}</td>
-                                            <td class="text-center">${jmlIzin == 0 ? '-' : jmlIzin}</td>
-                                            <td class="text-center">${jmlAlpa == 0 ? '-' : jmlAlpa}</td>
-                                        `;
-                                    });
-                                    let totHadir = absen.filter(function(presensi) {
-                                        return presensi.idSiswa === value.idSiswa &&
-                                            presensi.noBulan >= 1 &&
-                                            presensi.noBulan <= dfBulan &&
-                                            presensi.presensi === 'H';
-                                    }).length;
-                                    let totSakit = absen.filter(function(presensi) {
-                                        return presensi.idSiswa === value.idSiswa &&
-                                            presensi.noBulan >= 1 &&
-                                            presensi.noBulan <= dfBulan &&
-                                            presensi.presensi === 'S';
-                                    }).length;
-                                    let totIzin = absen.filter(function(presensi) {
-                                        return presensi.idSiswa === value.idSiswa &&
-                                            presensi.noBulan >= 1 &&
-                                            presensi.noBulan <= dfBulan &&
-                                            presensi.presensi === 'I';
-                                    }).length;
-                                    let totAlfa = absen.filter(function(presensi) {
-                                        return presensi.idSiswa === value.idSiswa &&
-                                            presensi.noBulan >= 1 &&
-                                            presensi.noBulan <= dfBulan &&
-                                            presensi.presensi === 'A';
-                                    }).length;
-                                    let total = `
-                                    <td class="text-center">${totHadir}</td>
-                                    <td class="text-center">${totSakit}</td>
-                                    <td class="text-center">${totIzin}</td>
-                                    <td class="text-center">${totAlfa}</td>
-                                    `;
-                                    $('#dataKehadiran').append(barisPresensi + total);
-                                });
+                                $('#tabel_absen').html(tabel);
+                            },
+                            complete: function() {
+                                $('#loading_spinner').hide();
                             }
                         });
                     }
+
                     $(document).ready(function() {
-                        getCatatan();
+                        // getCatatan();
+                        getDataCatatan();
                         $('#periode_siswa').change(function() {
-                            getCatatan();
+                            // getCatatan();
+                            getDataCatatan();
                         });
                     });
                 </script>

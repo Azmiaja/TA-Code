@@ -21,12 +21,6 @@
             <div class="col-md-3">
                 <label for="mapel_id" class="form-label text-uppercase fw-bold fs-sm">Mata Pelajaran</label>
                 <select class="form-select form-select-lg fw-medium" name="" id="mapel_id">
-                    {{-- <option selected>Pilih Mapel</option> --}}
-                    {{-- @foreach ($data as $key => $item)
-                        <option value="{{ $item->mapel->idMapel }}"
-                            data-name="{{ $item->mapel->singkatan ?: $item->mapel->namaMapel }}">
-                            {{ $item->mapel->singkatan ?: $item->mapel->namaMapel }}</option>
-                    @endforeach --}}
                 </select>
             </div>
         </div>
@@ -40,7 +34,7 @@
                             <button id="btn_klTP" class="btn btn-sm btn-alt-success">Kelola TP</button>
                         </div>
                     </div>
-                    <div class="block-content">
+                    <div class="block-content block-content-full">
                         <div class="table-responsive pb-2">
                             <table id="tp_nilai"
                                 class="table w-100 align-middle table-stripped table-bordered caption-top">
@@ -66,7 +60,7 @@
                             <button id="btn_klLM" class="btn btn-sm btn-alt-success">Kelola LM</button>
                         </div>
                     </div>
-                    <div class="block-content">
+                    <div class="block-content block-content-full">
                         <div class="table-responsive pb-2">
                             <table id="lm_nilai"
                                 class="table w-100 align-middle table-stripped table-bordered caption-top">
@@ -78,7 +72,9 @@
                                         <th width="5%" class="text-center ">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody></tbody>
+                                <tbody>
+
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -105,7 +101,8 @@
                         {{-- FORM --}}
                         <form action="" id="form_LM" method="post">
                             @csrf
-                            @method('post')
+                            {{-- @method('post') --}}
+                            <input type="hidden" name="_method" id="method_lm" value="POST">
                             <div class="mb-3">
                                 <label for="mapel" class="form-label">Mapel</label>
                                 <input type="text" class="form-control" readonly name="" id="mapel_name">
@@ -123,8 +120,8 @@
                                     </span>Contoh: LM1, LM2, LM3, ...</small>
                             </div>
                             <div class="mb-3">
-                                <label for="LM" class="form-label">Lingkup Materi</label>
-                                <textarea class="form-control" name="deskripsi" id="LM" rows="2" style="resize: none"></textarea>
+                                <label for="deskripsiLM" class="form-label">Lingkup Materi</label>
+                                <textarea class="form-control" name="deskripsi" id="deskripsiLM" rows="2" style="resize: none"></textarea>
                                 <small id="catatan_lm" class="form-text text-muted"><span
                                         class="fw-bold    ">Catatan:</span> Tuliskan lingkup materi
                                     pelajaran yang Anda ajarkan. Contoh: Penjumlahan Bersusun</small>
@@ -159,7 +156,9 @@
                         {{-- FORM --}}
                         <form action="" id="form_TP" method="post">
                             @csrf
-                            @method('post')
+                            {{-- @method('post') --}}
+                            <input type="hidden" name="_method" id="method" value="POST">
+                            <input type="hidden" name="idTP" id="idTP">
                             <div class="mb-3">
                                 <label for="mapel" class="form-label">Mapel</label>
                                 <input type="text" class="form-control" readonly name="" id="mapel_name_tp">
@@ -167,8 +166,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="kelas" class="form-label">Kelas</label>
-                                <input type="text" class="form-control" readonly
-                                    name="kelas" id="kelas_tp" />
+                                <input type="text" class="form-control" readonly name="kelas" id="kelas_tp" />
                             </div>
                             <div class="mb-3">
                                 <label for="kode" class="form-label">Kode TP</label>
@@ -178,8 +176,8 @@
                                     </span>Contoh: TP1, TP2, TP3, ...</small>
                             </div>
                             <div class="mb-3">
-                                <label for="LM" class="form-label">Tujuan Pembelajaran</label>
-                                <textarea class="form-control" name="deskripsi" id="LM" rows="2" style="resize: none"></textarea>
+                                <label for="deskripsi_TP" class="form-label">Tujuan Pembelajaran</label>
+                                <textarea class="form-control" name="deskripsi" id="deskripsi_TP" rows="2" style="resize: none"></textarea>
                                 <small id="catatan_lm" class="form-text text-muted"><span class="fw-bold">Catatan:</span>
                                     Tuliskan tujuan pembelajaran
                                     pelajaran yang Anda ajarkan. Untuk panduan penulisan klik <a href="javascript:void(0)"
@@ -243,8 +241,18 @@
                     data: null,
                     className: 'text-center',
                     render: function(data, type, row) {
-                        return `<button type="button" class="btn btn-sm btn-alt-danger" title="Hapus" id="delete_TP"
-                            data-kode="${data.kode}" value="${data.idTP}"><i class="fa fa-fw fa-times"></i></button>`;
+                        return `<div class="btn-group z-3">
+                                    <button class="btn btn-alt-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        #
+                                    </button>
+                                    <ul class="dropdown-menu fs-sm">
+                                        <li><span class="dropdown-header fw-semibold">Aksi ${data.kode}</span></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><button class="dropdown-item" value="${data.idTP}" id="ubah_TP" type="button">Ubah</button></li>
+                                        <li><button class="dropdown-item" type="button" id="delete_TP"
+                                        data-kode="${data.kode}" value="${data.idTP}">Hapus</button></li>
+                                    </ul>
+                                </div>`;
                     }
                 }],
                 // lengthMenu: [10, 25],
@@ -276,8 +284,18 @@
                     data: null,
                     className: 'text-center',
                     render: function(data, type, row) {
-                        return `<button type="button" class="btn btn-sm btn-alt-danger" title="Hapus" id="delete_LM"
-                            data-lm="${data.lm}" value="${data.idLM}"><i class="fa fa-fw fa-times"></i></button>`;
+                        return `<div class="btn-group">
+                                    <button class="btn btn-alt-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        #
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end fs-sm">
+                                        <li><span class="dropdown-header fw-semibold">Aksi ${data.kode}</span></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><button class="dropdown-item" type="button" value="${data.idLM}" id="ubah_LM">Ubah</button></li>
+                                        <li><button class="dropdown-item" type="button" id="delete_LM"
+                                        data-lm="${data.lm}" value="${data.idLM}">Hapus</button></li>
+                                    </ul>
+                                </div>`;
                     }
                 }],
                 // lengthMenu: [10, 25],
@@ -315,7 +333,7 @@
                 $('#modal_LM').find('#mapel').val(id);
                 $('#form_LM').attr('action', "{{ route('store.data-lm') }}");
             });
-            
+
             $('#modal_LM').on('hidden.bs.modal', function() {
                 $('#form_LM').trigger('reset');
             });
@@ -481,6 +499,77 @@
                                 </div>
                             </div>`,
                     showConfirmButton: false,
+                });
+            });
+
+            $(document).on('click', '#ubah_TP', function(e) {
+                e.preventDefault();
+
+                $('#modal_TP').modal('show');
+                $('#method').val('PUT');
+                var id = $(this).val();
+                $('#form_TP').attr('action',
+                    `{{ url('guru/kategori-penilaian/update-tujuan-pembelajaran/${id}') }}`);
+
+                $.ajax({
+                    url: `{{ url('guru/kategori-penilaian/get-tp/${id}') }}`,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.status == 'success') {
+                            var mapel = $('#mapel_id option:selected').text();
+                            var id = $('#mapel_id option:selected').val();
+                            // console.log(response);
+                            $('#mapel_name_tp').val(mapel);
+                            $('#mapel_tp').val(id);
+                            $('#kelas_tp').val(response.data.kelas);
+                            $('#kode').val(response.data.kodeTP);
+                            $('#idTP').val(response.data.idTP);
+                            $('#deskripsi_TP').val(response.data.deskripsi);
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                text: 'Data TP tidak ditemukan!',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        }
+                    },
+                });
+            });
+
+            $(document).on('click', '#ubah_LM', function(e) {
+                e.preventDefault();
+
+                $('#modal_LM').modal('show');
+                $('#method_lm').val('PUT');
+                var id = $(this).val();
+                $('#form_LM').attr('action',
+                    `{{ url('guru/kategori-penilaian/update-lingkup-materi/${id}') }}`);
+
+                $.ajax({
+                    url: `{{ url('guru/kategori-penilaian/get-lm/${id}') }}`,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.status == 'success') {
+                            var mapel = $('#mapel_id option:selected').text();
+                            var id = $('#mapel_id option:selected').val();
+                            // console.log(response);
+                            $('#mapel_name').val(mapel);
+                            $('#mapel').val(id);
+                            $('#kelas').val(response.data.kelas);
+                            $('#kodeLM').val(response.data.kodeLM);
+                            $('#deskripsiLM').val(response.data.deskripsi);
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                text: 'Data LM tidak ditemukan!',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        }
+                    },
                 });
             });
         });

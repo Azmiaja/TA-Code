@@ -195,423 +195,12 @@
                 </div>
             </div>
         @endcan
-        {{-- <div class="row d-flex nowrap">
-            <div
-                class="col-xxl-9 col-xl-9 col-lg-8 col-md-7 pe-md-3 mb-sm-3 mb-3 pe-0 col-sm-12 col-12 order-md-first order-last"> --}}
-        {{-- @canany(['super.admin', 'admin'])
-                    <div class="row item-push mb-md-3 mb-0">
-                        <div class=" mb-lg-0 mb-sm-3 mb-3 col-6 col-xl-4 col-sm-4 col-md-6 col-lg-6">
-                            <!-- Pending Orders -->
-                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
-                                <div
-                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
-                                    <dl class="mb-0">
-                                        <dt class="fs-2 fw-bold">{{ $pegawai }}</dt>
-                                        <dt class="fs-5 fw-medium lh-2">Aktif: <strong
-                                                class="text-success">{{ $jumlahPegawaiAktif }}</strong></dt>
-                                    </dl>
-                                    <div class="item item-rounded-lg bg-body-light">
-                                        <i class="fa-solid fa-user-tie fs-2 text-primary"></i>
-                                    </div>
-                                </div>
-                                <div class="bg-body-light rounded-bottom">
-                                    <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
-                                        href="javascript:void(0)">
-                                        <span>Total Pegawai</span>
-                                        <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- END Pending Orders -->
-                        </div>
-                        <div class="mb-lg-0 mb-sm-3 mb-3 col-xl-4 col-6 col-sm-4 col-md-6 col-lg-6">
-                            <!-- Pending Orders -->
-                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
-                                <div
-                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
-                                    <dl class="mb-0">
-                                        <dt class="fs-2 fw-bold">{{ $siswa }}</dt>
-                                        <dt class="fs-5 fw-medium lh-2">Aktif: <strong
-                                                class="text-success">{{ $jumlahSiswaAktif }}</strong></dt>
-                                    </dl>
-                                    <div class="item item-rounded-lg bg-body-light">
-                                        <i class="fa-solid fa-graduation-cap fs-2 text-primary"></i>
-                                    </div>
-                                </div>
-                                <div class="bg-body-light rounded-bottom">
-                                    <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
-                                        href="javascript:void(0)">
-                                        <span>Total Siswa</span>
-                                        <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- END Pending Orders -->
-                        </div>
-                        <div class="mt-lg-3 mb-lg-0 mt-xl-0 mb-sm-3 mb-3 col-xl-4 col-sm-4 col-md-12 col-lg-12">
-                            <!-- Pending Orders -->
-                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
-                                <div
-                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
-                                    <dl class="mb-0">
-                                        <dt class="fs-1 fw-bold">{{ $jumlahUser }}</dt>
-                                    </dl>
-                                    <div class="item item-rounded-lg bg-body-light">
-                                        <i class="fa-solid fa-users fs-2 text-primary"></i>
-                                    </div>
-                                </div>
-                                <div class="bg-body-light rounded-bottom">
-                                    <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
-                                        href="javascript:void(0)">
-                                        <span>Total User</span>
-                                        <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- END Pending Orders -->
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-12 col-12">
-                            <div class="block block-rounded">
-                                <div class="block-header block-header-default">
-                                    <h3 class="block-title">Jumlah Pengajar Per Kelas</h3>
-                                </div>
-                                <div class="block-content block-content-full text-center">
-                                    <div class="py-1">
-                                        <!-- Bars Chart Container -->
-                                        <canvas style="max-height: 350px" id="chart_jumlah_pengajar"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12 col-12">
-                            <div class="block block-rounded">
-                                <div class="block-header block-header-default">
-                                    <h3 class="block-title">Jumlah Siswa Per Kelas</h3>
-                                </div>
-                                <div class="block-content block-content-full text-center">
-                                    <div class="py-1">
-                                        <!-- Bars Chart Container -->
-                                        <canvas style="max-height: 350px" id="chart_jumlah_siswa"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="block block-rounded">
-                                <div class="block-header block-header-default">
-                                    <h3 class="block-title">Jenis Kelamin</h3>
-                                </div>
-                                <div class="block-content block-content-full text-center">
-                                    <div class="py-1">
-                                        <!-- Donut Chart Container -->
-                                        <canvas style="width: 100%; max-height: 170px;" id="chrat_bar_jK"></canvas>
-                                    </div>
-                                    <div class="py-1">
-                                        <!-- Donut Chart Container -->
-                                        <canvas style="width: 100%; max-height: 170px;" id="chrat_bar_jK_siswa"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endcanany --}}
-        {{-- @can('siswa')
-                    <div class="row item-push mb-md-3 mb-0">
-                        <div class=" mb-lg-0 mb-sm-3 mb-3 col-12 col-lg-6">
-                            <!-- Pending Orders -->
-                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
-                                <div
-                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
-                                    <dl class="mb-0">
-                                        <dt class="fs-1 fw-bold" id="jumlah_mapel"></dt>
-                                    </dl>
-                                    <div class="item item-rounded-lg bg-body-light">
-                                        <i class="fa-solid fa-book fs-2 text-primary"></i>
-                                    </div>
-                                </div>
-                                <div class="bg-body-light rounded-bottom">
-                                    <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
-                                        href="javascript:void(0)">
-                                        <span>Total Mapel</span>
-                                        <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- END Pending Orders -->
-                        </div>
-                        <div class="mb-lg-0 mb-sm-3 mb-3 col-12 col-lg-6">
-                            <!-- Pending Orders -->
-                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
-                                <div
-                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
-                                    <dl class="mb-0">
-                                        <dt class="fs-4 fw-bold lh-2" id="wali_kelas"></dt>
-                                        <dt class="fw-medium lh-1"><small>NIP : <span id="nip_wakel"></span></small></dt>
-                                        <dt class="fw-medium lh-1"><small>Hp : <span id="nohp_wakel"></span></small></dt>
-                                    </dl>
-                                    <div class="item item-rounded-lg bg-body-light">
-                                        <i class="fa-solid fa-graduation-cap fs-2 text-primary"></i>
-                                    </div>
-                                </div>
-                                <div class="bg-body-light rounded-bottom">
-                                    <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
-                                        href="javascript:void(0)">
-                                        <span>Wali Kelas</span>
-                                        <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- END Pending Orders -->
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-12">
-                            <div class="block block-rounded">
-                                <div class="block-header block-header-default">
-                                    <h3 class="block-title">Nilai Mapel Siswa</h3>
-                                    <div class="block-options">
-                                        <div class="row pt-1 m-0 float-end">
-                                            <label class="col-auto col-form-label" for="semester">Nilai</label>
-                                            <div class="col-md col-auto p-0 align-self-center">
-                                                <!--ATUR PERIODE-->
-                                                <select class="form-select form-select-sm" id="an_nilai">
-                                                    <option selected value="nilaiUH">Nilai UH</option>
-                                                    <option value="nilaiUTS">Nilai UTS</option>
-                                                    <option value="nilaiUAS">Nilai UAS</option>
-                                                </select>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="block-content block-content-full">
-                                    <div class="py-1">
-                                        <!-- Bars Chart Container -->
-                                        <canvas style="max-height: 350px" id="chart_nilai_siswa"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endcan --}}
-        {{-- @can('guru')
-                    <div class="row item-push mb-md-3 mb-0">
-                        <div class=" mb-lg-0 mb-sm-3 mb-3 col-6 col-xl-4 col-sm-4 col-md-6 col-lg-6">
-                            <!-- Pending Orders -->
-                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
-                                <div
-                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
-                                    <dl class="mb-0">
-                                        <dt class="fs-3 fw-bold" id="jumlah_kelas"></dt>
-                                    </dl>
-                                    <div class="item item-rounded-lg bg-body-light">
-                                        <i class="fa-solid fa-book fs-2 text-primary"></i>
-                                    </div>
-                                </div>
-                                <div class="bg-body-light rounded-bottom">
-                                    <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
-                                        href="javascript:void(0)">
-                                        <span>Jumlah Kelas Diajar</span>
-                                        <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- END Pending Orders -->
-                        </div>
-                        <div class="mb-lg-0 mb-sm-3 mb-3 col-6 col-xl-4 col-sm-4 col-md-6 col-lg-6">
-                            <!-- Pending Orders -->
-                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
-                                <div
-                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
-                                    <dl class="mb-0">
-                                        <dt class="fs-3 fw-bold lh-2" id="wali_kelas">Kelas
-                                    </dl>
-                                    <div class="item item-rounded-lg bg-body-light">
-                                        <i class="fa-solid fa-graduation-cap fs-2 text-primary"></i>
-                                    </div>
-                                </div>
-                                <div class="bg-body-light rounded-bottom">
-                                    <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
-                                        href="javascript:void(0)">
-                                        <span>Wali Kelas</span>
-                                        <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- END Pending Orders -->
-                        </div>
-                        <div class="mt-lg-3 mb-lg-0 mt-xl-0 mb-sm-3 mb-3 col-xl-4 col-sm-4 col-md-12 col-lg-12">
-                            <!-- Pending Orders -->
-                            <div class="block block-rounded d-flex flex-column h-100 mb-0">
-                                <div
-                                    class="block-content block-content-full flex-grow-1 d-flex justify-content-between align-items-center">
-                                    <dl class="mb-0">
-                                        <dt class="fs-3 fw-bold lh-2" id="jml_siswa"></dt>
-                                    </dl>
-                                    <div class="item item-rounded-lg bg-body-light">
-                                        <i class="fa-solid fa-graduation-cap fs-2 text-primary"></i>
-                                    </div>
-                                </div>
-                                <div class="bg-body-light rounded-bottom">
-                                    <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
-                                        href="javascript:void(0)">
-                                        <span>Jumlah Siswa Kelas
-                                            <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- END Pending Orders -->
-                        </div>
-                    </div>
-                @endcan --}}
-        {{-- </div> --}}
-
-        {{-- <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-5 ps-md-3 ps-2 p-0 col-sm-12 col-12 order-md-last order-first">
-                <div class="row">
-                    <div class="col-md-12 col-sm-6">
-                        <div class="block block-rounded">
-                            <div class="block-header block-header-default">
-                                <h3 class="block-title data-kelas">Kalender Jadwal</h3>
-                                @canany(['super.admin', 'admin'])
-                                    <div class="block-options">
-                                        <select id="kelas-nama" class="form-select form-select-sm">
-                                            <option selected value="1">Kelas 1</option>
-                                            <option value="2">Kelas 2</option>
-                                            <option value="3">Kelas 3</option>
-                                            <option value="4">Kelas 4</option>
-                                            <option value="5">Kelas 5</option>
-                                            <option value="6">Kelas 6</option>
-                                        </select>
-                                    </div>
-                                @endcanany
-                            </div>
-                            <div class="block-content p-0 datepicker-container">
-                                <div class="row m-0 justify-content-center">
-                                    <div class="col-11">
-                                        <div class="" style="width: 70px;" id="calendar"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-                                <div class="px-3 py-2" id="dateDetails"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-sm-6">
-                        @canany(['super.admin', 'admin'])
-                            <div class="block block-rounded">
-                                <div class="block-header block-header-default">
-                                    <h3 class="block-title">Jumlah User</h3>
-                                </div>
-                                <div class="block-content block-content-full text-center">
-                                    <div class="py-1">
-                                        <!-- Donut Chart Container -->
-                                        <canvas style="width: 100%" id="chart_donut_jumlah_user"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        @endcanany
-                    </div>
-                </div>
-
-            </div> --}}
-        {{-- </div> --}}
-        {{-- </div> --}}
-
 
         @push('scripts')
-            @cannot(['super.admin', 'admin'])
+            @can('super.admin')
                 <script>
-                    $(document).ready(function() {
-                        $('#calendar').datepicker({
-                            format: 'yyyy-mm-dd',
-                            todayHighlight: true,
-                            autoclose: true,
-                            orientation: 'bottom auto'
-                        });
-
-                        $('#calendar').on('changeDate', function(e) {
-
-                            var selectedDate = e.format('yyyy-mm-dd');
-
-                            var hari = moment(selectedDate).format('dddd');
-
-                            var hariIndonesia = {
-                                'Sunday': 'Minggu',
-                                'Monday': 'Senin',
-                                'Tuesday': 'Selasa',
-                                'Wednesday': 'Rabu',
-                                'Thursday': 'Kamis',
-                                'Friday': 'Jumat',
-                                'Saturday': 'Sabtu',
-                            };
-
-                            // console.log(hariIndonesia[hari]);
-
-                            $.ajax({
-                                url: "{{ url('get-kalender-jadwal') }}",
-                                type: 'GET',
-                                data: {
-                                    hari: hariIndonesia[hari],
-                                    kelas: $("#kelas-nama").val(),
-                                    periode: $('#periode').val(),
-                                },
-                                success: function(data) {
-                                    if (data && data.data.length > 0) {
-                                        // Jika data berhasil diterima
-
-                                        // Tampilkan daftar jadwal pelajaran
-                                        var detailsHTML = '<ul class="list-group">';
-
-                                        for (let i = 0; i < data.data.length; i++) {
-                                            // Tambahkan detail jadwal pelajaran
-                                            detailsHTML += '<li class="list-group-item lh-1">' +
-                                                '<strong>' + data.data[i].hari + '</strong> - <strong>' +
-                                                data.data[i].namaMapel +
-                                                '</strong>' +
-                                                '<p>Jam: ' + data.data[i].jamMulai + ' - ' + data.data[i]
-                                                .jamSelesai + '</p>' +
-                                                '<p class="lh-0">Pengajar: ' + data.data[i].namaPegawai +
-                                                '</p></li>';
-                                        }
-
-                                        detailsHTML += '</ul>';
-
-                                        // Tampilkan hasil di #dateDetails
-                                        $('#dateDetails').html(detailsHTML);
-                                    } else {
-                                        // Jika data tidak berhasil diterima atau tidak ada jadwal pelajaran
-
-                                        // Tampilkan pesan yang sesuai
-                                        var messageHTML = data && data.data.length === 0 ?
-                                            '<p>Jadwal pelajaran untuk tanggal ini belum diset.</p>' :
-                                            '<p>Gagal mendapatkan jadwal pelajaran.</p>';
-
-                                        $('#dateDetails').html(messageHTML);
-                                    }
-                                },
-
-                                error: function(error) {
-                                    console.error('Error fetching data:', error);
-                                }
-                            });
-                        });
-                    });
-                </script>
-            @endcannot
-            @canany(['super.admin', 'admin'])
-                <script>
-                    $(document).ready(function() {
-                        getChart();
-                        getSiswa();
-                        getSiswaAktif()
-                    });
-
-                    $('#pilih_periode').change(getSiswa);
-
                     function getChart() {
+                        var chart;
                         $.ajax({
                             url: "{{ url('chart/donat/user') }}",
                             method: 'GET',
@@ -655,14 +244,18 @@
                                     },
                                 };
 
-                                var chart = new ApexCharts(document.querySelector("#chart_pengguna"), options);
+                                chart = new ApexCharts(document.querySelector("#chart_pengguna"), options);
 
-                                chart.render();
                             },
+                            complete: function() {
+                                chart.render();
+
+                            }
                         });
                     }
 
                     function getSiswa() {
+                        var chart;
                         $.ajax({
                             url: `{{ url('chart/jumlah-siswa') }}`,
                             type: 'GET',
@@ -694,6 +287,7 @@
                                 kelas = combined.map(item => item.kelas);
                                 siswaL = combined.map(item => item.siswaL);
                                 siswaP = combined.map(item => item.siswaP);
+
                                 var options = {
                                     dataLabels: {
                                         enabled: false,
@@ -731,14 +325,109 @@
                                     },
                                 };
 
-                                var chart = new ApexCharts(document.querySelector("#grafik_siswa"), options);
+                                chart = new ApexCharts(document.querySelector("#grafik_siswa"), options);
 
-                                chart.render();
                             },
+                            complete: function() {
+                                chart.render();
+
+                            }
+                        });
+                    }
+
+                    $(document).ready(function() {
+                        getChart();
+                        getSiswa();
+                        // getSiswaAktif();
+                    });
+                    $('#pilih_periode').change(getSiswa);
+                </script>
+            @endcan
+            @can('admin')
+                <script>
+                    function getSiswa() {
+                        var chart;
+                        $.ajax({
+                            url: `{{ url('chart/jumlah-siswa') }}`,
+                            type: 'GET',
+                            data: {
+                                periode: $('#pilih_periode option:selected').val(),
+
+                            },
+                            success: function(data) {
+                                $('#grafik_siswa').empty();
+                                let kelas = [];
+                                let siswaL = [];
+                                let siswaP = [];
+                                $.each(data, function(key, item) {
+                                    kelas.push('Kelas ' + item.namaKelas);
+                                    let L = item.siswa.filter(i => i.jenisKelamin === 'Laki-Laki').length;
+                                    let P = item.siswa.filter(i => i.jenisKelamin === 'Perempuan').length;
+                                    siswaL.push(L);
+                                    siswaP.push(P);
+                                });
+                                // Mengurutkan kelas bersamaan dengan siswaL dan siswaP
+                                let combined = kelas.map(function(value, index) {
+                                    return {
+                                        kelas: value,
+                                        siswaL: siswaL[index],
+                                        siswaP: siswaP[index]
+                                    };
+                                });
+                                combined.sort((a, b) => a.kelas.localeCompare(b.kelas));
+                                kelas = combined.map(item => item.kelas);
+                                siswaL = combined.map(item => item.siswaL);
+                                siswaP = combined.map(item => item.siswaP);
+
+                                var options = {
+                                    dataLabels: {
+                                        enabled: false,
+                                    },
+                                    chart: {
+                                        width: '100%',
+                                        height: '290px',
+                                        type: 'bar',
+                                        offsetY: 0,
+                                        redrawOnParentResize: true,
+                                        redrawOnWindowResize: true
+                                    },
+                                    theme: {
+                                        palette: 'palette1' // upto palette10
+                                    },
+                                    series: [{
+                                        name: 'Laki-Laki',
+                                        data: siswaL
+                                    }, {
+                                        name: 'Perempuan',
+                                        data: siswaP
+                                    }],
+                                    xaxis: {
+                                        categories: kelas,
+                                    },
+                                    legend: {
+                                        show: true,
+                                        position: 'bottom',
+                                    },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false,
+                                            columnWidth: '55%',
+                                        },
+                                    },
+                                };
+
+                                chart = new ApexCharts(document.querySelector("#grafik_siswa"), options);
+
+                            },
+                            complete: function() {
+                                chart.render();
+
+                            }
                         });
                     }
 
                     function getSiswaAktif() {
+                        var chart;
                         $.ajax({
                             url: `{{ url('chart/jumlah-siswa-aktif') }}`,
                             type: "GET",
@@ -752,7 +441,7 @@
                                     },
                                     chart: {
                                         width: '100%',
-                                        height: '290px',
+                                        height: '300px',
                                         type: 'donut',
                                         offsetY: 0,
                                         redrawOnParentResize: true,
@@ -781,253 +470,20 @@
                                     },
                                 };
 
-                                var chart = new ApexCharts(document.querySelector("#grafik_jumlah_siswa"), options);
+                                chart = new ApexCharts(document.querySelector("#grafik_jumlah_siswa"), options);
 
+                            },
+                            complete: function() {
                                 chart.render();
+
                             }
                         });
                     }
-                </script>
-            @endcanany
-            @can('siswa')
-                <script>
                     $(document).ready(function() {
-
-
-                        $.ajax({
-                            url: '{{ route('count-mapel.siswa') }}',
-                            type: 'GET',
-                            data: {
-                                kelas: $("#kelas-nama").val(),
-                                periode: $('#periode').val(),
-                            },
-                            success: function(response) {
-                                var wakel = response.wakel;
-                                if (wakel && wakel.length > 0) {
-                                    var pegawaiPertama = wakel[0];
-                                    $('#wali_kelas').text(pegawaiPertama.namaPegawai);
-                                    $('#nip_wakel').text(pegawaiPertama.nip);
-                                    $('#nohp_wakel').text(pegawaiPertama.noHp);
-                                } else {
-                                    console.log('Data Wakel Tidak Ditemukan');
-                                }
-                                // Tampilkan jumlah mata pelajaran di elemen HTML dengan id #jumlah_mapel
-                                $('#jumlah_mapel').text(response.jumlah_mapel);
-
-                            },
-                            error: function(xhr, status, error) {
-                                console.error(error); // Tampilkan pesan kesalahan di konsol
-                            }
-                        });
-
-                        $('#periode').change(function() {
-                            getChartNilai();
-                        });
-
-                        getChartNilai();
-
-                        $('#an_nilai').val('nilaiUH');
-
-                        $('#an_nilai').change(function() {
-                            getChartNilai();
-                        });
-
-
-
+                        getSiswaAktif();
+                        getSiswa();
                     });
-
-                    function getChartNilai() {
-                        $.ajax({
-                            url: '{{ route('get-nilai.siswa') }}',
-                            type: 'GET',
-                            data: {
-                                kelas: $("#kelas-nama").val(),
-                                periode: $('#periode').val(),
-                                idSiswa: $('#HD_idSiswa').data('id-siswa'),
-                                nilai: $('#an_nilai').val(),
-                            },
-                            success: function(data) {
-                                console.log(data);
-
-                                const ctx = document.getElementById('chart_nilai_siswa').getContext('2d');
-                                if (window.nilaiChart) {
-                                    window.nilaiChart.destroy();
-                                }
-
-                                // Mengambil label dan warna dari dropdown nilai
-                                const selectedNilai = $('#an_nilai').val();
-                                const label = selectedNilai === 'nilaiUH' ? 'Nilai UH' :
-                                    selectedNilai === 'nilaiUTS' ? 'Nilai UTS' : 'Nilai UAS';
-
-
-                                window.nilaiChart = new Chart(ctx, {
-                                    type: 'bar',
-                                    data: {
-                                        labels: data.map(function(item) {
-                                            return item.namaMapel;
-                                        }),
-                                        datasets: [{
-                                            label: label,
-                                            data: data.map(function(item) {
-                                                return item[selectedNilai];
-                                            }),
-                                            backgroundColor: [
-                                                '#81c2ff',
-                                                '#abe37d',
-                                                '#fff18a',
-                                                '#ffbe8a',
-                                                '#f8d4d4',
-                                                '#c1e7ee'
-                                            ],
-                                            borderColor: [
-                                                '#81c2ff',
-                                                '#abe37d',
-                                                '#fff18a',
-                                                '#ffbe8a',
-                                                '#f8d4d4',
-                                                '#c1e7ee'
-                                            ],
-                                            borderWidth: 1,
-                                            borderRadius: 10,
-                                        }],
-                                    },
-                                    options: {
-
-                                        responsive: true,
-                                        plugins: {
-                                            title: {
-                                                display: true,
-                                                text: label,
-                                            },
-                                            legend: {
-                                                display: false
-                                            }
-                                        },
-                                        scales: {
-                                            y: {
-                                                grid: {
-                                                    display: false
-                                                },
-                                                max: 100,
-                                                callback: function(value) {
-                                                    // Batasi nilai sumbu x antara 0 dan 100
-                                                    return Math.max(0, Math.min(100, value));
-                                                }
-                                            },
-                                            x: {
-                                                grid: {
-                                                    display: false
-                                                }
-                                            }
-                                        },
-                                    }
-
-                                });
-                            }
-                        });
-                    }
-                </script>
-            @endcan
-            @can('guru')
-                <script>
-                    $(document).ready(function() {
-                        $('#calendar').datepicker({
-                            format: 'yyyy-mm-dd',
-                            todayHighlight: true,
-                            autoclose: true,
-                            orientation: 'bottom auto'
-                        });
-
-                        $('#calendar').on('changeDate', function(e) {
-
-                            var selectedDate = e.format('yyyy-mm-dd');
-
-                            var hari = moment(selectedDate).format('dddd');
-
-                            var hariIndonesia = {
-                                'Sunday': 'Minggu',
-                                'Monday': 'Senin',
-                                'Tuesday': 'Selasa',
-                                'Wednesday': 'Rabu',
-                                'Thursday': 'Kamis',
-                                'Friday': 'Jumat',
-                                'Saturday': 'Sabtu',
-                            };
-
-                            // console.log(hariIndonesia[hari]);
-
-                            $.ajax({
-                                url: "{{ route('get-jadwal.guru') }}",
-                                type: 'GET',
-                                data: {
-                                    hari: hariIndonesia[hari],
-                                    periode: $('#periode').val(),
-                                    nama: ' {{ Auth::user()->pegawai->namaPegawai }}',
-                                },
-                                success: function(data) {
-                                    // console.log(data);
-                                    if (data && data.length > 0) {
-                                        // Jika data berhasil diterima
-
-                                        // Tampilkan daftar jadwal pelajaran
-                                        var detailsHTML = '<ul class="list-group">';
-
-                                        for (let i = 0; i < data.length; i++) {
-                                            // Tambahkan detail jadwal pelajaran
-                                            detailsHTML += '<li class="list-group-item lh-1">' +
-                                                '<strong>' + data[i].hari + '</strong> - <strong>' +
-                                                data[i].namaMapel +
-                                                '</strong>' +
-                                                '<p>Jam: ' + data[i].jamMulai + ' - ' + data[i].jamSelesai +
-                                                '</p>' +
-                                                '<p class="lh-0">Kelas: ' + data[i].namaKelas + '</p></li>';
-                                        }
-
-                                        detailsHTML += '</ul>';
-
-                                        // Tampilkan hasil di #dateDetails
-                                        $('#dateDetails').html(detailsHTML);
-                                    } else {
-                                        // Jika data tidak berhasil diterima atau tidak ada jadwal pelajaran
-
-                                        // Tampilkan pesan yang sesuai
-                                        var messageHTML = data && data.length === 0 ?
-                                            '<p>Jadwal pelajaran untuk tanggal ini belum diset.</p>' :
-                                            '<p>Gagal mendapatkan jadwal pelajaran.</p>';
-
-                                        $('#dateDetails').html(messageHTML);
-                                    }
-                                },
-
-                                error: function(error) {
-                                    console.error('Error fetching data:', error);
-                                }
-                            });
-
-
-
-                        });
-
-                        $.ajax({
-                            url: '{{ route('get-jml.kelas') }}',
-                            type: 'GET',
-                            data: {
-                                periode: $('#periode').val(),
-                                nama: '{{ Auth::user()->pegawai->namaPegawai }}',
-                                kelas: '1'
-                            },
-                            success: function(response) {
-                                console.log(response);
-
-                                $('#jumlah_kelas').text(response.jumlah_kelas + ' Kelas');
-                                $('#jml_siswa').text(response.jumlahSiswa + ' Siswa');
-
-                            },
-                            error: function(xhr, status, error) {
-                                console.error(error); // Tampilkan pesan kesalahan di konsol
-                            }
-                        });
-                    });
+                    $('#pilih_periode').change(getSiswa);
                 </script>
             @endcan
         @endpush

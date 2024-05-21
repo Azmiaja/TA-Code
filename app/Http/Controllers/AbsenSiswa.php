@@ -85,7 +85,7 @@ class AbsenSiswa extends Controller
             return response()
                 ->json(
                     [
-                        'siswa' => [$siswa],
+                        'siswa' => $siswa,
                         'presensi' => $kehadiran,
                         'bulan' => $daftarBulan,
                         'no_bulan' => $noBulanString,

@@ -18,6 +18,10 @@ class Pengajaran extends Model
     {
         return $this->hasOne(Periode::class, 'idPeriode', 'idPeriode');
     }
+    public function nilai()
+    {
+        return $this->hasOne(Nilai::class, 'idNilai', 'idNilai');
+    }
     public function guru()
     {
         return $this->hasOne(Pegawai::class, 'idPegawai', 'idPegawai');

@@ -1,6 +1,6 @@
 @include('siakad/layouts/partials/header')
 
-<main id="main-container">
+<main id="main-container" class="bg-amethyst-lighter">
     
     @yield('siakad')
 
