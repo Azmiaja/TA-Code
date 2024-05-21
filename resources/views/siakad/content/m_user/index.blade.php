@@ -299,15 +299,27 @@
                                 url: `{{ url('user/destroy/siswa/${idSiswa}') }}`,
                                 dataType: 'json',
                                 success: function(response) {
-                                    Swal.fire({
-                                        icon: response.status,
-                                        title: response.title,
-                                        text: response.message,
-                                        showConfirmButton: false,
-                                        timer: 2000
-                                    });
-
-                                    tabelSiswa.DataTable().ajax.reload();
+                                    if (response.status == 'success') {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+                                        
+                                        tabelSiswa.DataTable().ajax.reload();
+                                        
+                                    } else {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+                                        
+                                    }
                                 },
                             });
                         }
@@ -483,7 +495,7 @@
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'Ya, Hapus!',
-                        reverseButtons:  true
+                        reverseButtons: true
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
@@ -491,15 +503,26 @@
                                 url: `{{ url('user/destroy/pegawai/${idUser}') }}`,
                                 dataType: 'json',
                                 success: function(response) {
-                                    Swal.fire({
-                                        icon: response.status,
-                                        title: response.title,
-                                        text: response.message,
-                                        showConfirmButton: false,
-                                        timer: 2000
-                                    });
+                                    if (response.status == 'success') {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
 
-                                    tabelPegawai.DataTable().ajax.reload();
+                                        tabelPegawai.DataTable().ajax.reload();
+                                    } else {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+
+                                    }
                                 },
                             });
                         }
