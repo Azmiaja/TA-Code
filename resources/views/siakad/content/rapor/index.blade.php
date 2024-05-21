@@ -411,7 +411,7 @@
                                 tb += `<tr>
                                             <td style="width:20px; min-width: 20px;" class="text-center">${key +1}</td>
                                             <td style="width:240px; min-width: 240px;">${value.ekstra.ekstra}</td>
-                                            <td>${value.deskripsi}</td>
+                                            <td>${value.deskripsi ?? ''}</td>
                                         </tr>`;
                             });
                         } else {
@@ -433,7 +433,7 @@
                         if (catatan.length > 0) {
                             $.each(catatan, function(key, value) {
                                 tb += `<tr>
-                                            <td>${value.catatan_guru}</td>
+                                            <td>${value.catatan_guru ?? ''}</td>
                                         </tr>`;
                             });
                         } else {
@@ -452,7 +452,7 @@
                             if ([keterangan].length > 0) {
                                 tb += `
                                 <tr>
-                                    <td>${keterangan.deskripsi}</td>
+                                    <td>${keterangan.deskripsi ?? ''}</td>
                                 </tr>`;
                             } else {
                                 tb += `<tr>
