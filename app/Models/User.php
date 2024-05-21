@@ -16,12 +16,12 @@ class User extends Authenticatable
     protected $table = 'user';
     protected $guarded = ['idUser']; 
     protected $primaryKey = 'idUser';
-    protected $fillable = ['username', 'password', 'hakAkses', 'idPegawai'];
-    protected $hidden = ['password', 'remember_token'];
+    // protected $fillable = ['username', 'password', 'hakAkses', 'idPegawai'];
+    // protected $hidden = ['password', 'remember_token'];
     public $timestamps = false;
 
     public function pegawai()
     {
-        return $this->hasOne(Pegawai::class, 'idPegawai', 'idPegawai');
+        return $this->belongsTo(Pegawai::class, 'idPegawai', 'idPegawai');
     }
 }

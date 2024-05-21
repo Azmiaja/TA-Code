@@ -16,9 +16,9 @@ class Dokumentasi extends Model
     public $timestamps = false;
 
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'idUser', 'idUser');
-    }
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class, 'idUser', 'idUser');
+    // }
 
 }

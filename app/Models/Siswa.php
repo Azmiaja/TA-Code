@@ -23,13 +23,9 @@ class Siswa extends Model
     {
         return $this->hasMany(Nilai::class, 'idSiswa');
     }
-    public function userSiswa()
-    {
-        return $this->hasOne(userSiswa::class, 'idSiswa');
-    }
     public function absen()
     {
-        return $this->hasOne(Absensi::class, 'idSiswa');
+        return $this->hasOne(Absensi::class, 'idAbsen', 'idAbsen');
     }
     public function kelas()
     {
@@ -41,6 +37,10 @@ class Siswa extends Model
     }
     public function naik_kelas()
     {
-        return $this->hasMany(KetNaikTidak::class, 'idNK');
+        return $this->hasMany(KetNaikTidak::class, 'idSiswa');
+    }
+    public function user_siswa()
+    {
+        return $this->hasOne(userSiswa::class, 'idUserSiswa', 'idUserSiswa');
     }
 }

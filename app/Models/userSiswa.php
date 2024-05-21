@@ -15,8 +15,8 @@ class userSiswa extends Authenticatable
     protected $table = 'usersiswa';
     protected $guarded = ['idUserSiswa']; 
     protected $primaryKey = 'idUserSiswa';
-    protected $fillable = ['username', 'password', 'hakAkses', 'idSiswa'];
-    protected $hidden = ['password', 'remember_token'];
+    // protected $fillable = ['username', 'password', 'hakAkses', 'idSiswa'];
+    // protected $hidden = ['password', 'remember_token'];
     public $timestamps = false;
 
     public function siswa()
