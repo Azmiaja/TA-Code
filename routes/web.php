@@ -174,7 +174,7 @@ Route::middleware(['auth:user,siswa'])->group(function () {
 
     // PERIODE
     Route::get('get-data/periode', [Mkelas\PeriodeController::class, 'getPeriode'])->name('get.periode');
-    Route::post('periode/store', [Mkelas\PeriodeController::class, 'store'])->name('periode.store');
+    // Route::post('periode/store', [Mkelas\PeriodeController::class, 'store'])->name('periode.store');
     Route::get('periode/edit/{id}', [Mkelas\PeriodeController::class, 'edit']);
     Route::put('periode/update/{id}', [Mkelas\PeriodeController::class, 'update']);
     Route::delete('periode/destroy/{id}', [Mkelas\PeriodeController::class, 'destroy']);
