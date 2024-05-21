@@ -449,7 +449,7 @@
                                         <th>Keterangan Kenaikan Kelas</th>
                                     </tr>`;
                             var keterangan = data.keterangan;
-                            if ([keterangan].length > 0) {
+                            if ([keterangan].length > 0 && keterangan !== null) {
                                 tb += `
                                 <tr>
                                     <td>${keterangan.deskripsi ?? ''}</td>
