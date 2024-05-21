@@ -32,9 +32,10 @@ class PegawaiController extends Controller
             $query->select('idPegawai')
                 ->from('user')
                 ->where('hakAkses', 'Super Admin');
-        })->orderBy("idPegawai", "DESC")->get();
+        })->orderBy("idPegawai", "desc")->get();
         $data = $data->map(function ($item, $key) {
             $item['nomor'] = $key + 1;
+            $item['jenisKelamin'] = $item->jenisKelamin == 'Laki-Laki' ? 'L' : 'P';
             return $item;
         });
         return DataTables::of($data)->toJson();

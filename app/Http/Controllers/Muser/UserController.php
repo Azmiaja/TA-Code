@@ -39,15 +39,14 @@ class UserController extends Controller
     public function getUsrSiswa()
     {
         try {
-            $now = Carbon::now();
+            // $now = Carbon::now();
             $data = userSiswa::orderBy('idUserSiswa', 'desc')->get();
-            $data = $data->map(function ($item, $key) use ($now) {
+            $data = $data->map(function ($item, $key) {
                 $item['nomor'] = $key + 1;
                 $item['namaSiswa'] = $item->siswa->namaSiswa;
                 $item['kelas'] = $item->siswa->kelas()
-                    ->whereHas('periode', function ($query) use ($now) {
-                        $query->where('tanggalMulai', '<=', $now)
-                            ->where('tanggalSelesai', '>=', $now);
+                    ->whereHas('periode', function ($query) {
+                        $query->where('status', 'Aktif');
                     })
                     ->pluck('namaKelas')
                     ->transform(function ($kelas) {

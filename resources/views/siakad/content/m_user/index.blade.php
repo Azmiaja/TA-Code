@@ -198,7 +198,7 @@
 
                     });
                     // Reset form
-                    resetForm()
+                    resetForm();
                 });
 
                 btnInsertUsSiswa.click(function(e) {

@@ -22,7 +22,7 @@
                                         <th style="width: 5%;">No</th>
                                         <th>NIP</th>
                                         <th>Nama</th>
-                                        <th>Jenis Kelamin</th>
+                                        <th>L/P</th>
                                         <th>Kategori</th>
                                         <th style="width: 10%">Aksi</th>
                                     </tr>
