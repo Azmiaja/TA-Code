@@ -205,9 +205,13 @@
                             url: "{{ url('chart/donat/user') }}",
                             method: 'GET',
                             success: function(data) {
-                                let Admin = data.guru.find(item => item.hakAkses === 'Admin');
-                                let Guru = data.guru.find(item => item.hakAkses === 'Guru');
-                                let Siswa = data.siswa.find(item => item.hakAkses === 'Siswa');
+                                let Admin = data.guru.find(item => item.hakAkses === 'Admin') ?? '';
+                                let Guru = data.guru.find(item => item.hakAkses === 'Guru') ?? '';
+                                let Siswa = data.siswa.find(item => item.hakAkses === 'Siswa') ?? '';
+                                
+                                var admin = Admin.total ?? 0;
+                                var guru = Guru.total ?? 0;
+                                var siswa = Siswa.total ?? 0;
 
                                 var options = {
                                     dataLabels: {
@@ -224,7 +228,7 @@
                                     theme: {
                                         palette: 'palette4' // upto palette10
                                     },
-                                    series: [Admin.total, Guru.total, Siswa.total],
+                                    series: [admin, guru, siswa],
                                     labels: ['Admin', 'Guru', 'Siswa'],
                                     legend: {
                                         show: true,
