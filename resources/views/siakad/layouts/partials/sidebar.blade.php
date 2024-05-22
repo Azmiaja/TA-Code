@@ -156,12 +156,14 @@
                                     <span class="nav-main-link-name">Penilaian</span>
                                 </a>
                             </li>
-                            <li class="nav-main-item">
-                                <a class="nav-main-link {{ Request::routeIs('rekap_nilai_mapel.index') ? 'active' : '' }}"
-                                    href="{{ route('rekap_nilai_mapel.index') }}">
-                                    <span class="nav-main-link-name">Rekapitulasi</span>
-                                </a>
-                            </li>
+                            @if ($pegawai)
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link {{ Request::routeIs('rekap_nilai_mapel.index') ? 'active' : '' }}"
+                                        href="{{ route('rekap_nilai_mapel.index') }}">
+                                        <span class="nav-main-link-name">Rekapitulasi</span>
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </li>
                     @if ($pegawai)
@@ -314,7 +316,7 @@
                         </a>
                     </li>
 
-                    
+
                     <li class="nav-main-heading">Profil Sekolah</li>
                     <li
                         class="nav-main-item {{ Request::routeIs('berita.index', 'tentang.index', 'profil.index', 'galeri.index', 'profil-guru.index', 'kontak.index', 'dokumentasi.index', 'pesan.index') ? 'open' : '' }}">
