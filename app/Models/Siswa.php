@@ -39,8 +39,8 @@ class Siswa extends Model
     {
         return $this->hasMany(KetNaikTidak::class, 'idSiswa');
     }
-    public function user_siswa()
+    public function userSiswa()
     {
-        return $this->hasOne(userSiswa::class, 'idUserSiswa', 'idUserSiswa');
+        return $this->hasOne(userSiswa::class, 'idSiswa');
     }
 }

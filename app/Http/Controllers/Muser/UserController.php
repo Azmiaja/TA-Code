@@ -68,7 +68,7 @@ class UserController extends Controller
     {
         // $query = $request->input('query');
 
-        $data = Siswa::whereDoesntHave('usersiswa')->get();
+        $data = Siswa::where('status', 'Aktif')->whereDoesntHave('userSiswa')->get();
 
         // dd($data);
 
