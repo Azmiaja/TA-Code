@@ -61,11 +61,11 @@
                                         <img src="{{ $bTree['gambar'] }}" alt="Berita" class="rounded"
                                             style="width: 100%; height: 100%; object-fit: cover">
                                     </div>
-                                    <div class="block-content w-100 align-items-center px-0 ms-2">
-                                        <h6 class="my-0 fst-normal text-dark mb-1">
-                                            {{ $bTree['judul'] }}
+                                    <div class="w-100 p-1 ms-2 align-items-start">
+                                        <h6 class="my-0 fst-normal text-dark mb-2" style="text-align: justify;">
+                                            {{ $bTree['judul'] }} 
                                         </h6>
-                                        <div class="fw-semibold text-dark fs-sm text-wrap">
+                                        <div class="fw-medium text-dark fs-sm text-wrap">
                                             <span class="">
                                                 {{ $bTree['tanggal'] }} &bull;</span>
                                             <span class="text-muted">
@@ -136,12 +136,13 @@
                 {{-- Kesan Pesan --}}
                 <div class="card bg-with mt-md-0 p-2 shadow-sm border-0 mb-3">
                     @if (session('success'))
-                        <div class="alert alert-success d-flex align-items-center" role="alert">
-                            <i class="fa-solid fa-circle-check fs-3 me-3"></i>
-                            <div>
-                                {{ session('success') }}
+                            <div class="alert alert-success d-flex align-items-center" role="alert">
+                                <i class="fa-solid fa-circle-check fs-3 me-3"></i>
+                                <div>
+                                    {{ session('success') }}
+                                </div>
                             </div>
-                        </div>
+                        @endif
                         @push('scripts')
                             <script>
                                 $(document).ready(function() {
@@ -151,32 +152,43 @@
                                 });
                             </script>
                         @endpush
-                    @endif
-
-                    <div class="card-body p-2">
+                        <div class="card-body p-2">
                         <form action="{{ route('pesan.store') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label for="nama" class="form-label">Nama<span class="text-danger">*</span></label>
+                                <label for="nama" class="form-label">Nama</label>
                                 <input type="text" class="form-control form-control-alt"
-                                    placeholder="Masukkan nama lengkap Anda" id="nama" name="nama" required>
+                                    placeholder="Masukkan nama lengkap Anda" id="nama" name="nama"
+                                    value="{{ old('nama') }}">
+                                @error('nama')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email<span class="text-danger">*</span></label>
+                                <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control form-control-alt"
-                                    placeholder="Masukkan alamat email Anda" id="email" name="email" required>
+                                    placeholder="Masukkan alamat email Anda" id="email" name="email"
+                                    value="{{ old('email') }}">
+                                @error('email')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="noHp" class="form-label">No Telepon<span
-                                        class="text-danger">*</span></label>
+                                <label for="noHp" class="form-label">No Telepon</label>
                                 <input type="number" class="form-control form-control-alt"
-                                    placeholder="Masukkan nomor telepon Anda" id="noHp" name="noHp" required>
-                                <small id="noHpError" class="text-danger"></small>
+                                    placeholder="Masukkan nomor Hp Anda (62..)" id="noHp"
+                                    value="{{ old('noHp') }}" name="noHp">
+                                @error('noHp')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label for="pesan" class="form-label">Pesan</label>
                                 <textarea id="pesan" class="form-control form-control-alt" name="pesan"
-                                    placeholder="Tulis pesan atau pertanyaan Anda di sini" cols="30" rows="5"></textarea>
+                                    placeholder="Tulis pesan atau pertanyaan Anda di sini" style="resize: none;" cols="30" rows="5">{{ old('pesan') }}</textarea>
+                                @error('pesan')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <button type="submit" class="btn btn-alt-primary float-end"><i
                                     class="fa-solid fa-paper-plane me-1"></i>Kirim</button>

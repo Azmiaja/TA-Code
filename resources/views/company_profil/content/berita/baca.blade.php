@@ -1,6 +1,5 @@
 @extends('company_profil/layouts/app')
 @section('app')
-    
     <div class="row my-2 g-3">
         <div class="col-xxl-9 col-lg-8 col-12">
             <div class="row m-0 mb-3">
@@ -20,26 +19,6 @@
                     <article class="ck-content">
                         {!! $contenBerita !!}
                     </article>
-                    <br>
-                    {{-- <br>
-                    <br>
-                    <div class="ck-content">
-                        <figure class="image image_resized image-style-align-left"
-                            style="width:14.58%; margin-right: var(--ck-image-style-spacing);">
-                            <img style="aspect-ratio:563/806;"
-                                src="http://127.0.0.1:8000/storage/gambar-berita/665b6968422f9.jpg" width="563"
-                                height="806">
-                        </figure>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis consectetur veritatis ut
-                            dicta autem temporibus necessitatibus adipisci iusto aperiam qui molestiae error perferendis
-                            quibusdam, commodi dolores officiis porro sed illum enim assumenda iure facere tenetur.
-                            Similique perspiciatis omnis modi deleniti ipsam iste vel soluta! Odit asperiores magnam nemo
-                            dolores perspiciatis numquam nostrum, distinctio unde dicta optio incidunt accusantium iste non
-                            odio id voluptas architecto modi eaque ullam aspernatur totam deserunt minus temporibus
-                            obcaecati! Quam nemo in voluptas iste ut delectus sit inventore repellat, officiis, ad quaerat?
-                            Assumenda suscipit eveniet ducimus reiciendis sed vitae, sit voluptate provident ipsum ullam nam
-                            ab.</p>
-                    </div> --}}
                 </div>
             </div>
         </div>
@@ -65,11 +44,11 @@
                                         <img src="{{ $bTree['gambar'] }}" alt="Berita" class="rounded"
                                             style="width: 100%; height: 100%; object-fit: cover">
                                     </div>
-                                    <div class="block-content w-100 align-items-center px-0 ms-2">
-                                        <h6 class="my-0 fst-normal text-dark mb-1">
+                                    <div class="w-100 align-items-start p-1 ms-2">
+                                        <h6 class="my-0 fst-normal text-dark mb-2" style="text-align: justify;">
                                             {{ $bTree['judul'] }}
                                         </h6>
-                                        <div class="fw-semibold text-dark fs-sm text-wrap">
+                                        <div class="fw-medium text-dark fs-sm text-wrap">
                                             <span class="">
                                                 {{ $bTree['tanggal'] }} &bull;</span>
                                             <span class="text-muted">
@@ -96,7 +75,6 @@
             </div>
             <div class="row m-0 mb-3">
                 {{-- Kesan Pesan --}}
-                {{-- Kesan Pesan --}}
                 <div class="card bg-with mt-md-0 p-2 shadow-sm border-0 mb-3">
                     @if (session('success'))
                         <div class="alert alert-success d-flex align-items-center" role="alert">
@@ -105,41 +83,53 @@
                                 {{ session('success') }}
                             </div>
                         </div>
-                        @push('scripts')
-                            <script>
-                                $(document).ready(function() {
-                                    setTimeout(function() {
-                                        $(".alert").alert('close');
-                                    }, 5000);
-                                });
-                            </script>
-                        @endpush
                     @endif
-
+                    @push('scripts')
+                        <script>
+                            $(document).ready(function() {
+                                setTimeout(function() {
+                                    $(".alert").alert('close');
+                                }, 5000);
+                            });
+                        </script>
+                    @endpush
                     <div class="card-body p-2">
                         <form action="{{ route('pesan.store') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label for="nama" class="form-label">Nama<span class="text-danger">*</span></label>
+                                <label for="nama" class="form-label">Nama</label>
                                 <input type="text" class="form-control form-control-alt"
-                                    placeholder="Masukkan nama lengkap Anda" id="nama" name="nama" required>
+                                    placeholder="Masukkan nama lengkap Anda" id="nama" name="nama"
+                                    value="{{ old('nama') }}">
+                                @error('nama')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email<span class="text-danger">*</span></label>
+                                <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control form-control-alt"
-                                    placeholder="Masukkan alamat email Anda" id="email" name="email" required>
+                                    placeholder="Masukkan alamat email Anda" id="email" name="email"
+                                    value="{{ old('email') }}">
+                                @error('email')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="noHp" class="form-label">No Telepon<span
-                                        class="text-danger">*</span></label>
+                                <label for="noHp" class="form-label">No Telepon</label>
                                 <input type="number" class="form-control form-control-alt"
-                                    placeholder="Masukkan nomor telepon Anda" id="noHp" name="noHp" required>
-                                <small id="noHpError" class="text-danger"></small>
+                                    placeholder="Masukkan nomor Hp Anda (62..)" id="noHp" value="{{ old('noHp') }}"
+                                    name="noHp">
+                                @error('noHp')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label for="pesan" class="form-label">Pesan</label>
                                 <textarea id="pesan" class="form-control form-control-alt" name="pesan"
-                                    placeholder="Tulis pesan atau pertanyaan Anda di sini" cols="30" rows="5"></textarea>
+                                    placeholder="Tulis pesan atau pertanyaan Anda di sini" style="resize: none;" cols="30" rows="5">{{ old('pesan') }}</textarea>
+                                @error('pesan')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <button type="submit" class="btn btn-alt-primary float-end"><i
                                     class="fa-solid fa-paper-plane me-1"></i>Kirim</button>

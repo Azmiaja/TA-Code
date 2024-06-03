@@ -14,7 +14,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-12">
-                    <article class="text-justify story text-dark">
+                    <article class="ck-content">
                         {!! $sambutan !!}
                     </article>
                 </div>

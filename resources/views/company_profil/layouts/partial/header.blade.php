@@ -193,6 +193,12 @@
         }
     </style>
 
+    <script src="{{ asset('assets/js/lib/jquery.min.js') }}"></script>
+
+    <script>
+        const toastElList = document.querySelectorAll('.toast')
+        const toastList = [...toastElList].map(toastEl => new bootstrap.Toast(toastEl, option))
+    </script>
 </head>
 
 <body class="m-0 p-0">

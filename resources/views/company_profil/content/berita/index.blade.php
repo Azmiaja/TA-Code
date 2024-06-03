@@ -191,7 +191,7 @@
                         <form action="{{ route('berita') }}" method="GET">
                             <div class="row m-0 mb-3 g-md-1 g-0 bg-white rounded shadow-sm p-2 justify-content-between">
                                 <div class="col-4">
-                                    <select name="tahunBerita" class="form-select" required>
+                                    <select name="tahunBerita" class="form-select form-select-sm" required>
                                         <option value="" selected>Tahun</option>
                                         @foreach ($ambilTahun as $tahun)
                                             @php
@@ -210,7 +210,7 @@
                                     </select>
                                 </div>
                                 <div class="col-6">
-                                    <select name="bulanBerita" class="form-select" required>
+                                    <select name="bulanBerita" class="form-select form-select-sm" required>
                                         <option value="" selected>Bulan</option>
                                         @foreach ($ambilBulan as $bulan)
                                             @php
@@ -229,7 +229,7 @@
                                     </select>
                                 </div>
                                 <div class="col-auto">
-                                    <button type="submit" class="btn btn-alt-danger px-md-4 px-3" title="Enter"><i
+                                    <button type="submit" class="btn btn-sm btn-alt-danger px-md-4 px-3" title="Enter"><i
                                             class="fa-solid fa-paper-plane"></i></button>
                                 </div>
                             </div>
@@ -242,11 +242,11 @@
                                         <img src="{{ $bTree['gambar'] }}" alt="Berita" class="rounded"
                                             style="width: 100%; height: 100%; object-fit: cover">
                                     </div>
-                                    <div class="block-content w-100 align-items-center px-0 ms-2">
-                                        <h6 class="my-0 fst-normal text-dark mb-1">
+                                    <div class="w-100 align-items-start p-1 ms-2">
+                                        <h6 class="my-0 fst-normal text-dark mb-2" style="text-align: justify;">
                                             {{ $bTree['judul'] }}
                                         </h6>
-                                        <div class="fw-semibold text-dark fs-sm text-wrap">
+                                        <div class="fw-medium text-dark fs-sm text-wrap">
                                             <span class="">
                                                 {{ $bTree['tanggal'] }} &bull;</span>
                                             <span class="text-muted">
@@ -269,11 +269,11 @@
                                         <img src="{{ $bTree['gambar'] }}" alt="Berita" class="rounded"
                                             style="width: 100%; height: 100%; object-fit: cover">
                                     </div>
-                                    <div class="block-content w-100 align-items-center px-0 ms-2">
-                                        <h6 class="my-0 fst-normal text-dark mb-1">
+                                    <div class="w-100 align-items-start p-1 ms-2">
+                                        <h6 class="my-0 fst-normal text-dark mb-2" style="text-align: justify;">
                                             {{ $bTree['judul'] }}
                                         </h6>
-                                        <div class="fw-semibold text-dark fs-sm text-wrap">
+                                        <div class="fw-medium text-dark fs-sm text-wrap">
                                             <span class="">
                                                 {{ $bTree['tanggal'] }} &bull;</span>
                                             <span class="text-muted">
@@ -344,11 +344,11 @@
                                         <img src="{{ $bTree['gambar'] }}" alt="Berita" class="rounded"
                                             style="width: 100%; height: 100%; object-fit: cover">
                                     </div>
-                                    <div class="block-content w-100 align-items-center px-0 ms-2">
-                                        <h6 class="my-0 fst-normal text-dark mb-1">
+                                    <div class="w-100 align-items-start p-1 ms-2">
+                                        <h6 class="my-0 fst-normal text-dark mb-2" style="text-align: justify;">
                                             {{ $bTree['judul'] }}
                                         </h6>
-                                        <div class="fw-semibold text-dark fs-sm text-wrap">
+                                        <div class="fw-medium text-dark fs-sm text-wrap">
                                             <span class="">
                                                 {{ $bTree['tanggal'] }} &bull;</span>
                                             <span class="text-muted">

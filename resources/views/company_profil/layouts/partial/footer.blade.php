@@ -68,7 +68,6 @@
 </footer>
 
 
-<script src="{{ asset('assets/js/lib/jquery.min.js') }}"></script>
 
 <!-- Template Main JS File -->
 <script src="{{ asset('assets/js/oneui.app.min.js') }}"></script>
@@ -76,11 +75,12 @@
 <!-- Vendor JS Files -->
 <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/js/plugins/bootstrap-notify/bootstrap-notify.js') }}"></script> --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.js"></script>
 <script src="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
 
 @stack('scripts')
-
-
 
 </body>
 

@@ -55,13 +55,14 @@
                             <div class="col-md-12">
                                 <div class="d-flex block block-rounded shadow-sm p-2 m-0 position-relative">
                                     <div class="ratio" style="max-width: 6rem; height: 6rem;">
-                                        <img src="{{ $bTree['gambar'] }}" alt="Berita" class="rounded" style="width: 100%; height: 100%; object-fit: cover">
+                                        <img src="{{ $bTree['gambar'] }}" alt="Berita" class="rounded"
+                                            style="width: 100%; height: 100%; object-fit: cover">
                                     </div>
-                                    <div class="block-content w-100 align-items-center px-0 ms-2">
-                                        <h6 class="my-0 fst-normal text-dark mb-1">
+                                    <div class="w-100 align-items-start p-1 ms-2">
+                                        <h6 class="my-0 fst-normal text-dark mb-2" style="text-align: justify;">
                                             {{ $bTree['judul'] }}
                                         </h6>
-                                        <div class="fw-semibold text-dark fs-sm text-wrap">
+                                        <div class="fw-medium text-dark fs-sm text-wrap">
                                             <span class="">
                                                 {{ $bTree['tanggal'] }} &bull;</span>
                                             <span class="text-muted">
