@@ -121,6 +121,15 @@
                 }
 
             }
+
+            #isiKonten figure,
+            #isiKonten h1,
+            #isiKonten h2,
+            #isiKonten h3,
+            #isiKonten h4,
+            #isiKonten h5 {
+                display: none;
+            }
         </style>
     @endpush
     @push('scripts')
@@ -187,7 +196,10 @@
                                         @foreach ($ambilTahun as $tahun)
                                             @php
                                                 // Parse tanggal menggunakan createFromFormat
-                                                $carbonDate = \Carbon\Carbon::createFromFormat('Y', $tahun->tahun)->startOfMonth();
+                                                $carbonDate = \Carbon\Carbon::createFromFormat(
+                                                    'Y',
+                                                    $tahun->tahun,
+                                                )->startOfMonth();
                                             @endphp
 
                                             <option value="{{ $carbonDate->format('Y') }}"
@@ -203,7 +215,10 @@
                                         @foreach ($ambilBulan as $bulan)
                                             @php
                                                 // Parse tanggal menggunakan createFromFormat
-                                                $carbonDate = \Carbon\Carbon::createFromFormat('m', $bulan->bulan)->startOfMonth();
+                                                $carbonDate = \Carbon\Carbon::createFromFormat(
+                                                    'm',
+                                                    $bulan->bulan,
+                                                )->startOfMonth();
                                             @endphp
 
                                             <option value="{{ $carbonDate->format('m') }}"

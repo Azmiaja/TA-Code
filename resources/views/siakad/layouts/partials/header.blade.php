@@ -24,6 +24,9 @@
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/air-datepicker/dist/air-datepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/magnific-popup/magnific-popup.css') }}">
 
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
+
+    @stack('style')
     <style>
         .ellipse {
             /* width: 300px; */
@@ -43,7 +46,6 @@
             float: left; // Mengatur tombol batal ke kiri
         }
     </style>
-    @stack('style')
 
     <script src="{{ asset('assets/js/lib/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>

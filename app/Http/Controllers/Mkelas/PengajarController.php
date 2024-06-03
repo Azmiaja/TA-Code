@@ -42,7 +42,12 @@ class PengajarController extends Controller
                 ->get();
 
             $groupedData = $data->groupBy('guru.namaPegawai')->map(function ($group, $key) {
-                $subjects = $group->pluck('mapel.namaMapel')->implode(',<br>');
+                // $subjects = $group->pluck('mapel.namaMapel')->implode(',<br>');
+                $subjects = $group->map(function ($item) {
+                    $mapel = $item->mapel;
+                    $namaMapel = $mapel->singkatan ? $mapel->singkatan : $mapel->namaMapel;
+                    return '<button type="button" id="mapel_btn" class="btn btn-sm btn-alt-info my-1" value="' . $mapel->idMapel . '">' . $namaMapel . '</button>';
+                })->implode(' ');
                 $kelas = $group->first()->kelas->namaKelas;
                 $teacherName = $group->first()->guru->namaPegawai;
                 $nip = $group->first()->guru->nip;
@@ -68,8 +73,8 @@ class PengajarController extends Controller
     {
         try {
             $data = Mapel::whereDoesntHave('pengajar', function ($query) use ($id) {
-                    $query->where('idKelas', '=', $id);
-                })
+                $query->where('idKelas', '=', $id);
+            })
                 ->get();
 
             return response()->json($data);
@@ -267,7 +272,44 @@ class PengajarController extends Controller
         try {
             $pengajar = Pengajaran::where('idPegawai', $id)->where('idPeriode', $idP);
             $pengajar->delete();
-    
+
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Dihapus!',
+                'message' => 'Berhasil mengapus data.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'title' => 'Gagal!',
+                'message' => 'Tidak dapat menghapus data karena memiliki relasi dengan data lain!.'
+            ]);
+        }
+    }
+
+    public function getMapelPengajar(Request $request)
+    {
+        $idMapel = $request->input('idMapel');
+        $namaKelas = $request->input('namaKelas');
+        $idPeriode = $request->input('idPeriode');
+
+        $mapelPengajar = Pengajaran::where('idPeriode', $idPeriode)
+            ->where('idMapel', $idMapel)
+            ->whereHas('kelas', function ($query) use ($namaKelas) {
+                $query->where('namaKelas', $namaKelas);
+            })
+            ->with('mapel', 'guru', 'periode', 'kelas')
+            ->first();
+
+        return response()->json($mapelPengajar);
+    }
+
+    public function destroyMapel($id)
+    {
+        try {
+            $pengajar = Pengajaran::find($id);
+            $pengajar->delete();
+
             return response()->json([
                 'status' => 'success',
                 'title' => 'Dihapus!',

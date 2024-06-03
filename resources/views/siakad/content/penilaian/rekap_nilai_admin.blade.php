@@ -28,6 +28,11 @@
                 font-size: 12pt;
                 width: 100%;
             }
+
+            @page {
+                margin: 0.4in;
+                /* Anda bisa menyesuaikan margin sesuai kebutuhan */
+            }
         }
     </style>
     <div class="content">

@@ -62,20 +62,35 @@ class MapelController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'namaMapel' => 'required',
-            'deskripsiMapel' => 'nullable',
-            'kkm' => 'required',
-            'singkatan' => 'nullable',
+        $validator = Validator::make($request->all(), [
+            'namaMapel' => 'required|max:45',
+            'deskripsiMapel' => 'nullable|max:255',
+            'singkatan' => 'nullable|max:10',
+            'kkm' => 'required|max:6',
+            'kategori' => 'required'
+        ], [
+            'namaMapel.required' => 'Nama mata pelajaran tidak boleh kosong!',
+            'namaMapel.max' => 'Nama mata pelajaran tidak boleh lebih dari 45 karakter!',
+            'deskripsiMapel.max' => 'Deskripsi mata pelajaran tidak boleh lebih dari 255 karakter!',
+            'singkatan.max' => 'Singkatan mata pelajaran tidak boleh lebih dari 10 karakter!',
+            'kkm.required' => 'KKM tidak boleh kosong!',
+            'kkm.numeric' => 'KKM harus berupa angka!',
+            'kkm.max' => 'KKM tidak boleh lebih dari 6 angka!',
+            'kategori.required' => 'Kategori tidak boleh kosong!'
         ]);
 
-        Mapel::create($validatedData);
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+        } else {
 
-        return response()->json([
-            'status' => 'success',
-            'title' => 'Sukses',
-            'message' => 'Berhasil menyimpan data.'
-        ]);
+            Mapel::create($request->all());
+
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Sukses',
+                'message' => 'Berhasil menyimpan data.'
+            ]);
+        }
     }
 
     public function show($id)
@@ -95,26 +110,36 @@ class MapelController extends Controller
 
     public function update(Request $request, $id)
     {
-        $mapel = Mapel::find($id);
-        if (!$mapel) {
-            return response()->json(['status' => 'error', 'title' => 'Gagal', 'message' => 'Data mapel tidak ditemukan.']);
+        $mapel = Mapel::findOrFail($id);
+        $validator = Validator::make($request->all(), [
+            'namaMapel' => 'required|max:45',
+            'deskripsiMapel' => 'nullable|max:255',
+            'singkatan' => 'nullable|max:10',
+            'kkm' => 'required|max:6',
+            'kategori' => 'required'
+        ], [
+            'namaMapel.required' => 'Nama mata pelajaran tidak boleh kosong!',
+            'namaMapel.max' => 'Nama mata pelajaran tidak boleh lebih dari 45 karakter!',
+            'deskripsiMapel.max' => 'Deskripsi mata pelajaran tidak boleh lebih dari 255 karakter!',
+            'singkatan.max' => 'Singkatan mata pelajaran tidak boleh lebih dari 10 karakter!',
+            'kkm.required' => 'KKM tidak boleh kosong!',
+            'kkm.numeric' => 'KKM harus berupa angka!',
+            'kkm.max' => 'KKM tidak boleh lebih dari 6 angka!',
+            'kategori.required' => 'Kategori tidak boleh kosong!'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+        } else {
+            // Perbarui data mapel
+            $mapel->update($request->all());
+
+            return response()->json([
+                'status' => 'success',
+                'title' => 'Sukses',
+                'message' => 'Berhasil mengubah data.'
+            ]);
         }
-        // Validasi input
-        $validatedData = $request->validate([
-            'namaMapel' => 'required',
-            'deskripsiMapel' => 'nullable',
-            'kkm' => 'required',
-            'singkatan' => 'nullable',
-        ]);
-
-        // Perbarui data mapel
-        $mapel->update($validatedData);
-
-        return response()->json([
-            'status' => 'success',
-            'title' => 'Sukses',
-            'message' => 'Berhasil mengubah data.'
-        ]);
     }
 
     public function destroy($id)
@@ -122,7 +147,7 @@ class MapelController extends Controller
         try {
             $mapel = Mapel::find($id);
             $mapel->delete();
-    
+
             return response()->json([
                 'status' => 'success',
                 'title' => 'Dihapus!',

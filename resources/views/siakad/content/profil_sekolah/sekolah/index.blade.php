@@ -1,6 +1,7 @@
 @extends('siakad.layouts.app')
 @section('siakad')
     @push('style')
+        <link rel="stylesheet" href="{{ asset('assets/js/plugins/ckeditor5-classic/build/ckeditor.css') }}">
         <style>
             .ellipse {
                 display: -webkit-box;
@@ -9,6 +10,24 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: normal;
+            }
+
+            body {
+                /* ckEditor5 */
+                --ck-z-default: 100;
+                --ck-z-panel: calc(var(--ck-z-default) + 999);
+            }
+
+            .ck-content .image-style-align-left {
+                margin-right: var(--ck-image-style-spacing);
+            }
+
+            .ck-content .image-style-align-right {
+                margin-left: var(--ck-image-style-spacing);
+            }
+
+            .ck-content .image-style-side {
+                margin-left: var(--ck-image-style-spacing);
             }
         </style>
     @endpush
@@ -34,8 +53,8 @@
                         </a>
                     </div>
                     <div class="col-md-8 col-12">
-                        <div id="deskripsi" class="ellipse m-0"></div>
                         {{-- <a class="fs-sm fw-bold p-0 m-0" href="#">Selengkapnya...</a> --}}
+                        <div id="deskripsi" class="ellipse m-0 ck-content"></div>
                     </div>
                 </div>
             </div>
@@ -218,6 +237,19 @@
                     sambutanKep.setData('');
                 }
 
+                $('#modalProfilSekolah').modal({
+                    focus: false
+                });
+
+                modalSambutan.modal({
+                    focus: false
+                });
+
+                modalVM.modal({
+                    focus: false
+                });
+
+
                 modalProfilSekolah.on('hidden.bs.modal', function() {
                     // Reset form
                     resetForm()
@@ -275,6 +307,9 @@
                 function simpanPerubahan() {
                     var data = new FormData(formProfilSekolah[0]);
                     var deskripsi = myEditor.getData();
+                    if (deskripsi === '<p>&nbsp;</p>') {
+                        deskripsi = '';
+                    }
                     data.append('isiProfilSekolah', deskripsi);
 
                     $.ajax({
@@ -285,17 +320,26 @@
                         processData: false,
                         dataType: 'json',
                         success: function(response) {
-                            Swal.fire({
-                                icon: response.status,
-                                title: response.title,
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-
-                            modalProfilSekolah.modal('hide');
-                            resetForm();
-                            fetchProfilData();
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                modalProfilSekolah.modal('hide');
+                                resetForm();
+                                fetchProfilData();
+                            } else {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
                         },
                         error: function(xhr, status, error) {
                             var errors = xhr.responseJSON.errors;
@@ -339,13 +383,167 @@
                     });
                 }
 
+                var option = {
+                    plugins: [
+                        'Alignment',
+                        'Essentials',
+                        'Autoformat',
+                        'BlockQuote',
+                        'FontFamily',
+                        'FontSize',
+                        'FontColor',
+                        'Highlight',
+                        'Bold',
+                        'Italic',
+                        'Heading',
+                        'Link',
+                        'List',
+                        'Paragraph',
+                        'Image',
+                        'ImageCaption',
+                        'ImageResize',
+                        'ImageStyle',
+                        'ImageToolbar',
+                        'ImageUpload',
+                        // 'CkFinder',
+                        // 'Base64UploadAdapter',
+                        'Underline',
+                        'Italic',
+                        'Link',
+                        'List',
+                        'MediaEmbed',
+                        'Paragraph',
+                        'Table',
+                        'TableColumnResize',
+                        'TableToolbar',
+                        'Indent',
+                        'GeneralHtmlSupport',
+                        // 'CKFinderUploadAdapter'
+                    ],
+                    htmlSupport: {
+                        allow: [{
+                            name: /.*/,
+                            attributes: true,
+                            classes: true,
+                            styles: true
+                        }]
+                    },
+                    removePlugins: [
+                        'Markdown', // Add any other plugins you might want to disable
+                    ],
+                    toolbar: {
+                        items: [
+                            'undo', 'redo', 'ckfinder',
+                            '|', 'heading',
+                            '|',
+                            {
+                                label: 'Fonts',
+                                withText: true,
+                                icon: 'text',
+                                items: ['fontfamily', 'fontsize', 'fontcolor']
+                            },
+                            '|',
+                            {
+                                label: 'Basic styles',
+                                withText: true,
+                                icon: 'bold',
+                                items: ['bold', 'italic', 'underline', 'alignment', 'highlight', 'indent',
+                                    'outdent'
+                                ]
+                            },
+                            '|',
+                            {
+                                label: 'Insert',
+                                withText: true,
+                                icon: 'plus',
+                                items: ['link', 'insertTable', ]
+                            },
+                            '|',
+                            {
+                                label: 'List',
+                                withText: true,
+                                icon: false,
+                                items: ['bulletedList', 'numberedList', ]
+                            },
+                        ],
+                        shouldNotGroupWhenFull: true
+                    },
+                    heading: {
+                        options: [{
+                                model: 'paragraph',
+                                title: 'Paragraph',
+                                class: 'ck-heading_paragraph',
+                            },
+                            {
+                                model: 'heading1',
+                                view: 'h1',
+                                title: 'Heading 1',
+                                class: 'ck-heading_heading1',
+                            },
+                            {
+                                model: 'heading2',
+                                view: 'h2',
+                                title: 'Heading 2',
+                                class: 'ck-heading_heading2',
+                            },
+                            {
+                                model: 'heading3',
+                                view: 'h3',
+                                title: 'Heading 3',
+                                class: 'ck-heading_heading3',
+                            },
+                            {
+                                model: 'heading4',
+                                view: 'h4',
+                                title: 'Heading 4',
+                                class: 'ck-heading_heading4',
+                            },
+                        ],
+                    },
+                    image: {
+                        styles: ['alignCenter', 'alignLeft', 'alignRight'],
+                        resizeOptions: [{
+                                name: 'resizeImage:original',
+                                label: 'Default image width',
+                                value: null,
+                            },
+                            {
+                                name: 'resizeImage:50',
+                                label: '50% page width',
+                                value: '50',
+                            },
+                            {
+                                name: 'resizeImage:75',
+                                label: '75% page width',
+                                value: '75',
+                            },
+                        ],
+                        toolbar: [
+                            'imageTextAlternative',
+                            'toggleImageCaption',
+                            '|',
+                            'imageStyle:inline',
+                            'imageStyle:wrapText',
+                            'imageStyle:breakText',
+                            'imageStyle:side',
+                            '|',
+                            'resizeImage',
+                        ],
+                    },
+                    table: {
+                        contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
+                    },
+                    // ckfinder: {
+                    //     // uploadUrl: "{{ route('ckberita.upload', ['_token' => csrf_token()]) }}",
+                    //     options: {
+                    //         resourceType: 'Images',
+                    //         fileTools_maxFileSize: 5242880 // 5 MB in bytes
+                    //     }
+                    // },
+                }
                 var myEditor;
                 ClassicEditor
-                    .create(document.querySelector('#isiProfilSekolah'), {
-                        // ckfinder: {
-                        //     uploadUrl: "{{ route('ckberita.upload', ['_token' => csrf_token()]) }}",
-                        // }
-                    })
+                    .create(document.querySelector('textarea#isiProfilSekolah'), option)
                     .then(editor => {
                         myEditor = editor;
                     })
@@ -355,37 +553,27 @@
 
                 var visiEditor;
                 ClassicEditor
-                    .create(document.querySelector('#isiVisi'), {
-                        // ckfinder: {
-                        //     uploadUrl: "{{ route('ckberita.upload', ['_token' => csrf_token()]) }}",
-                        // }
-                    })
+                    .create(document.querySelector('#isiVisi'), option)
                     .then(editor => {
                         visiEditor = editor;
                     })
                     .catch(error => {
                         console.error(error);
                     });
+
                 var sambutanKep;
                 ClassicEditor
-                    .create(document.querySelector('#sambutanKepsek'), {
-                        // ckfinder: {
-                        //     uploadUrl: "{{ route('ckberita.upload', ['_token' => csrf_token()]) }}",
-                        // }
-                    })
+                    .create(document.querySelector('#sambutanKepsek'), option)
                     .then(editor => {
                         sambutanKep = editor;
                     })
                     .catch(error => {
                         console.error(error);
                     });
+
                 var misiEditor;
                 ClassicEditor
-                    .create(document.querySelector('#isiMisi'), {
-                        // ckfinder: {
-                        //     uploadUrl: "{{ route('ckberita.upload', ['_token' => csrf_token()]) }}",
-                        // }
-                    })
+                    .create(document.querySelector('#isiMisi'), option)
                     .then(editor => {
                         misiEditor = editor;
                     })
@@ -639,6 +827,12 @@
                     var data = new FormData(formVisiMisi[0]);
                     var visi = visiEditor.getData();
                     var misi = misiEditor.getData();
+                    if (visi === '<p>&nbsp;</p>') {
+                        visi = '';
+                    }
+                    if (misi === '<p>&nbsp;</p>') {
+                        misi = '';
+                    }
                     data.append('isiVisi', visi);
                     data.append('isiMisi', misi);
 
@@ -650,17 +844,26 @@
                         processData: false,
                         dataType: 'json',
                         success: function(response) {
-                            Swal.fire({
-                                icon: response.status,
-                                title: response.title,
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-
-                            modalVM.modal('hide');
-                            resetForm();
-                            fetchProfilData();
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                modalVM.modal('hide');
+                                resetForm();
+                                fetchProfilData();
+                            } else {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
                         },
                     });
                 });
@@ -671,6 +874,9 @@
 
                     var data = new FormData(formSambutan[0]);
                     var dataSambutan = sambutanKep.getData();
+                    if (dataSambutan === '<p>&nbsp;</p>') {
+                        dataSambutan = '';
+                    }
                     data.append('sambutanKepsek', dataSambutan);
 
                     $.ajax({
@@ -681,16 +887,27 @@
                         processData: false,
                         dataType: 'json',
                         success: function(response) {
-                            Swal.fire({
-                                icon: response.status,
-                                title: response.title,
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                            modalSambutan.modal('hide');
-                            resetForm();
-                            fetchProfilData();
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                modalSambutan.modal('hide');
+                                resetForm();
+                                fetchProfilData();
+                            } else {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
+
                         },
                     });
                 });

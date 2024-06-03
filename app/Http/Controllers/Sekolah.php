@@ -48,6 +48,12 @@ class Sekolah extends Controller
             'mapsLink' => $sekolah->mapsLink,
             'mapsEmbed' => $sekolah->mapsEmbed,
             'idSekolah' => $sekolah->idSekolah,
+            'kepsek' => $sekolah->kepsek,
+            'nip_kepsek' => $sekolah->nip,
+            'foto' => $sekolah->fotoKepsek ? (file_exists(public_path('storage/' . $sekolah->fotoKepsek))
+                ? asset('storage/' . $sekolah->fotoKepsek)
+                : asset('assets/media/avatars/avatar0.jpg'))
+                : asset('assets/media/avatars/avatar0.jpg')
         ]);
     }
 
@@ -108,6 +114,7 @@ class Sekolah extends Controller
 
             if ($sekolah) {
                 $oldLogoPath = $sekolah->logo; // Simpan path logo lama
+                $oldKepsekPath = $sekolah->fotoKepsek; // Simpan path logo lama
 
                 $sekolah->fill($request->except(['some_field_to_exclude']));
 
@@ -121,6 +128,17 @@ class Sekolah extends Controller
                     }
 
                     $sekolah->logo = $logoPath;
+                }
+                if ($request->hasFile('fotoKepsek')) {
+                    $imgName = uniqid() . '.' . $request->file('fotoKepsek')->getClientOriginalExtension();
+                    $kepsekPath = $request->file('fotoKepsek')->storeAs('logo-sekolah', $imgName, 'public');
+
+                    // Pastikan file logo lama ada sebelum mencoba menghapus
+                    if ($oldKepsekPath && Storage::exists('public/' . $oldKepsekPath)) {
+                        Storage::delete('public/' . $oldKepsekPath);
+                    }
+
+                    $sekolah->fotoKepsek = $kepsekPath;
                 }
 
                 $sekolah->save();

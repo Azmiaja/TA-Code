@@ -23,6 +23,7 @@ use App\Http\Controllers\RekapitulasiAbsen;
 use App\Http\Controllers\RekapNilaiMapel;
 use App\Http\Controllers\Rapor;
 use App\Http\Controllers\RekapNilaiSiswa;
+use CKSource\CKFinderBridge\Controller\CKFinderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,6 +38,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest:user,siswa');
+
+Route::any('/ckfinder/connector', [CKFinderController::class, 'requestAction'])
+    ->name('ckfinder_connector');
+
+Route::any('/ckfinder/browser', [CKFinderController::class, 'browserAction'])
+    ->name('ckfinder_browser');
 
 Route::middleware('guest')->group(function () {
     Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate');
@@ -101,9 +108,9 @@ Route::middleware(['auth:user', 'ceklevel:Guru'])->group(function () {
             Route::get('/get-lingkup-materi', [KategoriNilaiController::class, 'getLM'])->name('get.lm-data');
             Route::post('/store-lingkup-materi', [KategoriNilaiController::class, 'storeLM'])->name('store.data-lm');
             Route::delete('/delete-lingkup-materi/{id}', [KategoriNilaiController::class, 'deleteLM']);
-            
+
             Route::get('/get-mapel/guru', [KategoriNilaiController::class, 'getMapelGuru'])->name('get.mapel.gurupengajar');
-            
+
             Route::get('/get-tp/{id}', [KategoriNilaiController::class, 'getTPById']);
             Route::get('/get-lm/{id}', [KategoriNilaiController::class, 'getLMById']);
             Route::put('/update-tujuan-pembelajaran/{id}', [KategoriNilaiController::class, 'updateTP']);
@@ -124,23 +131,26 @@ Route::middleware(['auth:user', 'ceklevel:Guru'])->group(function () {
         });
 
         Route::prefix('rapor-siswa')->group(function () {
-            Route::get('catatan-guru', [Rapor\CatatanGuru::class, 'index'])->name('catatan.guru.index');
-            Route::get('get-catatan', [Rapor\CatatanGuru::class, 'getCatatanGuru'])->name('get.catatan-guru');
-            Route::post('store/catatan-guru', [Rapor\CatatanGuru::class, 'store'])->name('store.catatan-guru');
+            // Route::get('catatan-guru', [Rapor\CatatanGuru::class, 'index'])->name('catatan.guru.index');
+            // Route::get('get-catatan', [Rapor\CatatanGuru::class, 'getCatatanGuru'])->name('get.catatan-guru');
+            // Route::post('store/catatan-guru', [Rapor\CatatanGuru::class, 'store'])->name('store.catatan-guru');
             Route::delete('destroy/catatan-guru/{id}', [Rapor\CatatanGuru::class, 'destroy']);
 
-            Route::get('ekstrakulikuler', [Rapor\KegiatanEkstra::class, 'index'])->name('ekstrakulikuler.index');
-            Route::get('get-ekstrakulikuler', [Rapor\KegiatanEkstra::class, 'getEkstraSiswa'])->name('get.ekstra-siswa');
-            Route::post('store/ekstrakulikuler', [Rapor\KegiatanEkstra::class, 'storeData'])->name('store.ekstra');
+            // Route::get('ekstrakulikuler', [Rapor\KegiatanEkstra::class, 'index'])->name('ekstrakulikuler.index');
+            // Route::get('get-ekstrakulikuler', [Rapor\KegiatanEkstra::class, 'getEkstraSiswa'])->name('get.ekstra-siswa');
+            // Route::post('store/ekstrakulikuler', [Rapor\KegiatanEkstra::class, 'storeData'])->name('store.ekstra');
             Route::delete('delete/ekstrakulikuler/{id}', [Rapor\KegiatanEkstra::class, 'destroy']);
 
-            Route::get('keterangan-naik-tidak', [Rapor\KetNaikTidak::class, 'index'])->name('ket.naik-tidak.index');
-            Route::get('get/keterangan-naik-tidak', [Rapor\KetNaikTidak::class, 'getKetNaikTidak'])->name('get-data.ket.naik-tidak');
-            Route::post('store/keterangan-naik-tidak', [Rapor\KetNaikTidak::class, 'store'])->name('store-data.ket.naik-tidak');
-            
+            // Route::get('keterangan-naik-tidak', [Rapor\KetNaikTidak::class, 'index'])->name('ket.naik-tidak.index');
+            // Route::get('get/keterangan-naik-tidak', [Rapor\KetNaikTidak::class, 'getKetNaikTidak'])->name('get-data.ket.naik-tidak');
+            // Route::post('store/keterangan-naik-tidak', [Rapor\KetNaikTidak::class, 'store'])->name('store-data.ket.naik-tidak');
+            Route::delete('delete/keterangan-naik-tidak/{id}', [Rapor\KetNaikTidak::class, 'destroy']);
+
             Route::get('cetak-rapor', [Rapor\RaporSiswa::class, 'index'])->name('cetak_rapor.index');
-            Route::get('siswa-rapor', [Rapor\RaporSiswa::class, 'getSiswa'])->name('get-siswa.rapor');
-            Route::get('rapor-data', [Rapor\RaporSiswa::class, 'getRapor'])->name('get-data.rapor');
+
+            Route::get('input-rapor', [Rapor\InputRapor::class, 'index'])->name('input.rapor.index');
+            Route::get('form/input-rapor', [Rapor\InputRapor::class, 'getForm'])->name('get-form.input.rapor');
+            Route::post('store/input-rapor', [Rapor\InputRapor::class, 'store'])->name('store.input.rapor');
         });
     });
     // get kalender guru
@@ -184,6 +194,10 @@ Route::middleware(['auth:user,siswa'])->group(function () {
     Route::get('nilai_siswa/edit/{id}/{idPengajaran}/{idPeriode}', [NilaiSiswaController::class, 'edit'])->name('nilai_siswa.edit');
     Route::post('nilai_siswa/up', [NilaiSiswaController::class, 'up']);
 
+    // RAPOR
+    Route::get('siswa-rapor', [Rapor\RaporSiswa::class, 'getSiswa'])->name('get-siswa.rapor');
+    Route::get('rapor-data/mapel', [Rapor\RaporSiswa::class, 'getMapelData'])->name('get-data.rapor.mapel');
+    Route::get('rapor-data', [Rapor\RaporSiswa::class, 'getRapor'])->name('get-data.rapor');
 
 
     // CHART
@@ -299,6 +313,7 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin|Admin'])->group(function (
         Route::get('presensi/rekap/{periode}/{kelas}', [RekapitulasiAbsen::class, 'getRekap']);
         Route::get('nilai-siswa', [RekapNilaiMapel::class, 'getTabelrekapSiswa'])->name('re-nilai.index');
         Route::get('niali-siswa/rekap/{periode}/{kelas}', [RekapNilaiMapel::class, 'getTabelrekapAdmin']);
+        Route::get('rapor-siswa', [Rapor\RaporSiswa::class, 'indexRPA'])->name('sa.rapor-siswa.index');
     });
 
     // PENGAJARAN.BLADE
@@ -311,6 +326,10 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin|Admin'])->group(function (
     Route::put('pengajar/update/{id}', [Mkelas\PengajarController::class, 'update'])->name('pengajar.update');
     Route::delete('pengajar/destroy/{id}/{idP}', [Mkelas\PengajarController::class, 'destroy']);
 
+    Route::get('pengajar/mapel/data', [Mkelas\PengajarController::class, 'getMapelPengajar'])->name('data.mapel.pengajar');
+    Route::delete('pengajar/destroy/mapel{id}', [Mkelas\PengajarController::class, 'destroyMapel']);
+
+
     Route::get('/get-jadwal-guru', [Mkelas\PenjadwalanController::class, 'getJadwalPGuru'])->name('get-jadwalP.guru');
 
     // MAPEL.BLADE
@@ -318,7 +337,7 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin|Admin'])->group(function (
     Route::get('mapel/edit/{id}', [Mkelas\MapelController::class, 'edit']);
     Route::put('mapel/update/{id}', [Mkelas\MapelController::class, 'update']);
     Route::delete('mapel/destroy/{id}', [Mkelas\MapelController::class, 'destroy']);
-    
+
     // EKSTRAKULIKULER
     Route::get('ekstra/get-data', [Mkelas\MapelController::class, 'getEkstra']);
     Route::post('ekstra/store', [Mkelas\MapelController::class, 'storeEkstra'])->name('storeEkstra');
@@ -398,6 +417,7 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
     // berita
     Route::post('/posts/upload', [MCompany\BeritaController::class, 'upload'])->name('posts.upload');
     Route::post('/ckberita/upload', [MCompany\BeritaController::class, 'ck_upload'])->name('ckberita.upload');
+    Route::delete('/ckberita/delete', [MCompany\BeritaController::class, 'deleteImage'])->name('ckberita.delete');
 
     //manajemen user
     Route::get('user/siswa/get-data', [Muser\UserController::class, 'getUsrSiswa'])->name('get-user.siswa');
@@ -413,5 +433,4 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin'])->group(function () {
     Route::get('user/edit/pegawai/{id}', [Muser\UserController::class, 'edit']);
     Route::put('user/update/pegawai/{id}', [Muser\UserController::class, 'update']);
     Route::delete('user/destroy/pegawai/{id}', [Muser\UserController::class, 'destroy']);
-
 });

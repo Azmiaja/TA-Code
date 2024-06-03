@@ -79,7 +79,7 @@
                                     <tr>
                                         <th rowspan="3">No</th>
                                         <th rowspan="3">NIS</th>
-                                        <th rowspan="3" style="min-width: 250px;">Nama</th>
+                                        <th rowspan="3">Nama Siswa</th>
                                         <th rowspan="3">L/P</th>
                                         <th colspan="24">Bulan</th>
                                         <th rowspan="2" colspan="4">Total</th>
@@ -89,10 +89,10 @@
                                     </tr>
                                     <tr id="ketPresensi">
                                         {{-- keterangan presensi siswa --}}
-                                        <th class="total" style="min-width: 30px;">H</th>
-                                        <th class="total" style="min-width: 30px;">S</th>
-                                        <th class="total" style="min-width: 30px;">I</th>
-                                        <th class="total" style="min-width: 30px;">A</th>
+                                        <th class="total" style="min-width: 30px; border-bottom: none;">H</th>
+                                        <th class="total" style="min-width: 30px; border-bottom: none;">S</th>
+                                        <th class="total" style="min-width: 30px; border-bottom: none;">I</th>
+                                        <th class="total" style="min-width: 30px; border-bottom: none;">A</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -104,7 +104,7 @@
                                             <div class="d-flex justify-content-around mt-4">
                                                 <div class="fw-normal">
                                                     <span>Mengetahui <br>Kepala Sekolah</span><br><br><br><br><br>
-                                                    <strong><u>{{ $kepsek->namaPegawai }}</u></strong><br>
+                                                    <strong><u>{{ $kepsek->kepsek }}</u></strong><br>
                                                     <span>NIP.{{ $kepsek->nip }}</span>
                                                 </div>
                                                 <div class="fw-normal">
@@ -369,6 +369,7 @@
                 });
             }
 
+            // fungsi rekap per bulan
             function getRekap() {
                 let periode = $('#periode').find('option:selected').val();
                 let kelas = $('#kelas').find('option:selected').val();
@@ -411,19 +412,19 @@
 
                             // perilangan keterangan presensi
                             $('#ketPresensi').append(`
-                                <th style="min-width: 30px;">H</th>
-                                <th style="min-width: 30px;">S</th>
-                                <th style="min-width: 30px;">I</th>
-                                <th style="min-width: 30px;">A</th>
+                                <th style="min-width: 30px; border-bottom: none;">H</th>
+                                <th style="min-width: 30px; border-bottom: none;">S</th>
+                                <th style="min-width: 30px; border-bottom: none;">I</th>
+                                <th style="min-width: 30px; border-bottom: none;">A</th>
                             `);
                         });
 
                         $.each(data.siswa, function(key, value) {
                             let barisPresensi = `<tr>
-                                <td class="text-center fs-sm ">${key + 1}</td>
-                                <td class="fs-sm text-center">${value.nis}</td>
-                                <td class="fs-sm text-nowrap">${value.namaSiswa}</td>
-                                <td class="fs-sm text-center">${value.jenisKelamin === 'Laki-Laki' ? 'L' : 'P'}</td>
+                                <td style="border-bottom: none;" class="text-center fs-sm ">${key + 1}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${value.nis}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-nowrap">${value.namaSiswa}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${value.jenisKelamin === 'Laki-Laki' ? 'L' : 'P'}</td>
                             `;
 
                             let absen = data.absensi;
@@ -453,10 +454,10 @@
 
                                 // Mengisi baris tabel dengan nilai yang sesuai
                                 barisPresensi += `
-                                    <td class="text-center">${jmlHadir === 0 ? '' : jmlHadir}</td>
-                                    <td class="text-center">${jmlSakit === 0 ? '' : jmlSakit}</td>
-                                    <td class="text-center">${jmlIzin === 0 ? '' : jmlIzin}</td>
-                                    <td class="text-center">${jmlAlpa === 0 ? '' : jmlAlpa}</td>
+                                    <td style="border-bottom: none;" class="text-center">${jmlHadir === 0 ? '' : jmlHadir}</td>
+                                    <td style="border-bottom: none;" class="text-center">${jmlSakit === 0 ? '' : jmlSakit}</td>
+                                    <td style="border-bottom: none;" class="text-center">${jmlIzin === 0 ? '' : jmlIzin}</td>
+                                    <td style="border-bottom: none;" class="text-center">${jmlAlpa === 0 ? '' : jmlAlpa}</td>
                                 `;
                             });
 
@@ -477,10 +478,10 @@
                                     presensi.presensi === 'A';
                             }).length;
                             let total = `
-                                    <td class="text-center">${totHadir}</td>
-                                    <td class="text-center">${totSakit}</td>
-                                    <td class="text-center">${totIzin}</td>
-                                    <td class="text-center">${totAlfa}</td>
+                                    <td style="border-bottom: none;" class="text-center">${totHadir}</td>
+                                    <td style="border-bottom: none;" class="text-center">${totSakit}</td>
+                                    <td style="border-bottom: none;" class="text-center">${totIzin}</td>
+                                    <td style="border-bottom: none;" class="text-center">${totAlfa}</td>
                                     </tr>
                                     `;
 
@@ -494,6 +495,7 @@
                 });
             }
 
+            // fungsi rekap mingguan dalam bulan
             function getRekapBulanan(bulan) {
                 let periode = $('#periode').find('option:selected').val();
                 let kelas = $('#kelas').find('option:selected').val();
@@ -538,7 +540,7 @@
                         // Tambahkan tanggal pada baris kedua
                         for (let i = 1; i <= 31; i++) {
                             tableHTML +=
-                                `<th style="min-width: 30px;">
+                                `<th style="min-width: 30px; border-bottom: none;">
                                     <a href="javascript:void(0)" id="ubah_absen" 
                                                     data-tgl="${i}"
                                                     data-bln="${bln}" 
@@ -547,21 +549,22 @@
                         }
 
                         // Tutup tag <tr> dan <thead>
-                        tableHTML += `<th style="min-width: 30px;">H</th>
-                                    <th style="min-width: 30px;">S</th>
-                                    <th style="min-width: 30px;">I</th>
-                                    <th style="min-width: 30px;">A</th>
+                        tableHTML += `<th style="min-width: 30px; border-bottom: none;">H</th>
+                                    <th style="min-width: 30px; border-bottom: none;">S</th>
+                                    <th style="min-width: 30px; border-bottom: none;">I</th>
+                                    <th style="min-width: 30px; border-bottom: none;">A</th>
                                 </tr>
                             </thead>
                             <tbody>`;
 
                         $.each(data.siswa, function(key, value) {
                             let kehadiran = data.absensi;
-                            tableHTML += `<tr>
-                                <td class="text-center fs-sm ">${key + 1}</td>
-                                <td class="fs-sm text-center">${value.nis}</td>
-                                <td class="fs-sm text-nowrap">${value.namaSiswa}</td>
-                                <td class="fs-sm text-center">${value.jenisKelamin === 'Laki-Laki' ? 'L' : 'P'}</td>`;
+                            tableHTML +=
+                                `<tr>
+                                <td style="border-bottom: none;" class="text-center fs-sm ">${key + 1}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${value.nis}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-nowrap">${value.namaSiswa}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${value.jenisKelamin === 'Laki-Laki' ? 'L' : 'P'}</td>`;
 
                             for (let i = 1; i <= 31; i++) {
                                 let presensi = kehadiran.find(function(item) {
@@ -569,9 +572,10 @@
                                         item.tanggal === i;
                                 });
                                 if (presensi) {
-                                    tableHTML += `<td class="fs-sm text-center">${presensi.presensi}</td>`;
+                                    tableHTML +=
+                                        `<td style="border-bottom: none;" class="fs-sm text-center">${presensi.presensi}</td>`;
                                 } else {
-                                    tableHTML += `<td></td>`;
+                                    tableHTML += `<td style="border-bottom: none;"></td>`;
                                 }
                             }
 
@@ -596,10 +600,10 @@
                                     item.presensi === 'A';
                             }).length;
 
-                            tableHTML += `<td class="fs-sm text-center">${jmlHadir}</td>
-                                <td class="fs-sm text-center">${jmlSakit}</td>
-                                <td class="fs-sm text-center">${jmlIzin}</td>
-                                <td class="fs-sm text-center">${jmlAlfa}</td>`;
+                            tableHTML += `<td style="border-bottom: none;" class="fs-sm text-center">${jmlHadir}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${jmlSakit}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${jmlIzin}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${jmlAlfa}</td>`;
 
                             tableHTML += '</tr>';
 
@@ -617,7 +621,7 @@
                                             <div class="d-flex justify-content-around text-center mt-4">
                                                 <div class="fw-normal">
                                                     <span>Mengetahui <br>Kepala Sekolah</span><br><br><br><br><br>
-                                                    <strong><u>${kepsek.namaPegawai}</u></strong><br>
+                                                    <strong><u>${kepsek.kepsek}</u></strong><br>
                                                     <span>NIP.${kepsek.nip}</span>
                                                 </div>
                                                 <div class="fw-normal">

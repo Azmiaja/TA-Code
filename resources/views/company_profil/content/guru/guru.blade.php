@@ -34,9 +34,9 @@
                                     <h6 class="fw-bold mb-1">
                                         {{ $item['namaPegawai'] }}
                                     </h6>
-                                    <p class="text-muted mb-0">
+                                    {{-- <p class="text-muted mb-0">
                                         {{ $item['namaJabatan'] }}
-                                    </p>
+                                    </p> --}}
                                 </div>
                             </a>
                         </div>

@@ -20,9 +20,9 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="text-justify story">
+                <article class="ck-content">
                     {!! $keuanganDeskripsi !!}
-                </div>
+                </article>
             </div>
         </div>
     @else

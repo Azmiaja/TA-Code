@@ -2,13 +2,14 @@
 @section('siakad')
     @include('siakad/layouts/partials/hero')
     <div class="content">
-        <div class="row g-3 mb-4 justify-content-end">
-            <div class="col-md-3 mb-md-0 mb-2">
-                <label for="periode_id" class="form-label text-uppercase fw-bold fs-sm">Periode Aktif</label>
-                @if ($periode)
-                    <input type="text" readonly data-id="{{ $periode->idPeriode }}" value="{{ $periode->semester }} {{ $periode->tahun }}" class="form-control-alt fw-medium form-control border-secondary" id="periode_id">
-                @endif
-                {{-- <select class="form-select fw-medium" name="" id="periode_id"> --}}
+        @if ($periode)
+            <div class="row g-3 mb-4 justify-content-end">
+                <div class="col-md-3 mb-md-0 mb-2">
+                    <label for="periode_id" class="form-label text-uppercase fw-bold fs-sm">Periode Aktif</label>
+                    <input type="text" readonly data-id="{{ $periode->idPeriode }}"
+                        value="{{ $periode->semester }} {{ $periode->tahun }}"
+                        class="form-control-alt fw-medium form-control border-secondary" id="periode_id">
+                    {{-- <select class="form-select fw-medium" name="" id="periode_id"> --}}
                     {{-- @if ($periodeAktif && $periodeLewat)
                         <option value="{{ $periodeAktif->idPeriode }}">{{ $periodeAktif->semester }}
                             {{ $periodeAktif->tahun }}
@@ -17,43 +18,44 @@
                             {{ $periodeLewat->tahun }}
                         </option>
                     @endif --}}
-                {{-- </select> --}}
+                    {{-- </select> --}}
+                </div>
+                <div class="col-md-3 mb-md-0 mb-2">
+                    <label for="kelas_name" class="form-label text-uppercase fw-bold fs-sm">Kelas</label>
+                    <select class="form-select fw-medium" name="" id="kelas_name">
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="mapel_id" class="form-label text-uppercase fw-bold fs-sm">Mata Pelajaran</label>
+                    <select class="form-select fw-medium" name="" id="mapel_id">
+                    </select>
+                </div>
             </div>
-            <div class="col-md-3 mb-md-0 mb-2">
-                <label for="kelas_name" class="form-label text-uppercase fw-bold fs-sm">Kelas</label>
-                <select class="form-select fw-medium" name="" id="kelas_name">
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="mapel_id" class="form-label text-uppercase fw-bold fs-sm">Mata Pelajaran</label>
-                <select class="form-select fw-medium" name="" id="mapel_id">
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="block block-rounded">
-                    <div class="block-header block-header-default">
-                        <h3 class="block-title">Penilaian Siswa</h3>
-                        <div class="block-options">
-                            <button type="button" class="btn-block-option me-1" data-toggle="block-option"
-                                data-action="fullscreen_toggle"></button>
-                        </div>
-                    </div>
-                    <div class="block-content block-content-full">
-                        <div class="table-responsive">
-                            <div id="loading_spinner_2" class="text-center" style="display: none">
-                                <div class="spinner-border text-primary" role="status"></div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">Penilaian Siswa</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option me-1" data-toggle="block-option"
+                                    data-action="fullscreen_toggle"></button>
                             </div>
-                            <table id="table_penilaian"
-                                class="table table-sm fs-sm table-bordered align-middle border-dark w-100">
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="table-responsive">
+                                <div id="loading_spinner_2" class="text-center" style="display: none">
+                                    <div class="spinner-border text-primary" role="status"></div>
+                                </div>
+                                <table id="table_penilaian"
+                                    class="table table-sm fs-sm table-bordered align-middle border-dark w-100">
 
-                            </table>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
     {{-- Modal insert TP --}}
     <div class="modal fade" id="modal_TP" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -252,8 +254,8 @@
                             if (nilaiRapor) {
                                 table +=
                                     `<td class="text-center ${nilaiRapor.raport === null || nilaiRapor.raport === 0 ? 'bg-city-lighter' : 'bg-success-light'}">${nilaiRapor.raport === null || nilaiRapor.raport === 0 ? '' : nilaiRapor.raport}</td>
-                                <td style="min-width:350px">${nilaiRapor.deskripsiCPtinggi === null ? '' : nilaiRapor.deskripsiCPtinggi}</td>
-                                <td style="min-width:350px">${nilaiRapor.deskripsiCPrendah === null ? '' : nilaiRapor.deskripsiCPrendah}</td></tr>`;
+                                <td style="min-width:350px; font-size: 10pt;">${nilaiRapor.deskripsiCPtinggi === null ? '' : nilaiRapor.deskripsiCPtinggi}</td>
+                                <td style="min-width:350px; font-size: 10pt;">${nilaiRapor.deskripsiCPrendah === null ? '' : nilaiRapor.deskripsiCPrendah}</td></tr>`;
                             } else {
                                 table += `<td class="bg-city-lighter"></td>
                             <td></td><td></td></tr>`;
@@ -317,9 +319,14 @@
                                             <td id="mapel_TP" class="align-top">${$('#mapel_id option:selected').data('nama')}</td>
                                         </tr>
                                         <tr>
+                                            <td width="35%" class="align-top fw-bold">KKM</td>
+                                            <td class="align-top pe-2">:</td>
+                                            <td class="align-top">${$('#mapel_id option:selected').data('kkm')}</td>
+                                        </tr>
+                                        <tr>
                                             <td width="35%" class="align-top fw-bold">Tujuan Pembelajaran</td>
                                             <td class="align-top pe-2">:</td>
-                                            <td id="deskrip_TP" class="align-top">${deskripsi}</td>
+                                            <td id="deskrip_TP" style="text-align:justify;" class="align-top">${deskripsi}</td>
                                         </tr>
                                         <tr>
                                             <td width="35%" class="align-top fw-bold">Kelas</td>
@@ -419,6 +426,11 @@
                                             <td width="35%" class="align-top fw-bold">Mata Pelajaran</td>
                                             <td class="align-top pe-2">:</td>
                                             <td id="mapel_LM" class="align-top">${$('#mapel_id option:selected').text().trim()}</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="35%" class="align-top fw-bold">KKM</td>
+                                            <td class="align-top pe-2">:</td>
+                                            <td class="align-top">${$('#mapel_id option:selected').data('kkm')}</td>
                                         </tr>
                                         <tr>
                                             <td width="35%" class="align-top fw-bold">Lingkup Materi</td>
@@ -522,6 +534,11 @@
                                             <td class="align-top">${$('#mapel_id option:selected').text().trim()}</td>
                                         </tr>
                                         <tr>
+                                            <td width="35%" class="align-top fw-bold">KKM</td>
+                                            <td class="align-top pe-2">:</td>
+                                            <td class="align-top">${$('#mapel_id option:selected').data('kkm')}</td>
+                                        </tr>
+                                        <tr>
                                             <td width="35%" class="align-top fw-bold">Kelas</td>
                                             <td class="align-top pe-2">:</td>
                                             <td class="align-top">${kelas} (${kls_name[kelas -1 ?? '']})</td>
@@ -616,6 +633,11 @@
                                             <td width="35%" class="align-top fw-bold">Mata Pelajaran</td>
                                             <td class="align-top pe-2">:</td>
                                             <td class="align-top">${$('#mapel_id option:selected').text().trim()}</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="35%" class="align-top fw-bold">KKM</td>
+                                            <td class="align-top pe-2">:</td>
+                                            <td class="align-top">${$('#mapel_id option:selected').data('kkm')}</td>
                                         </tr>
                                         <tr>
                                             <td width="35%" class="align-top fw-bold">Kelas</td>
@@ -720,7 +742,7 @@
                         $.each(data.mapel, function(i, item) {
                             let selectedAttr = (i === 0) ? 'selected' : '';
                             option +=
-                                `<option data-pengajaran="${item.idPengajaran}" data-nama="${item.mapel.namaMapel}" value="${item.mapel.idMapel}" ${selectedAttr}>${item.mapel.singkatan ?? item.mapel.namaMapel}</option>`;
+                                `<option data-pengajaran="${item.idPengajaran}" data-nama="${item.mapel.namaMapel}" value="${item.mapel.idMapel}" data-kkm="${item.mapel.kkm}" ${selectedAttr}>${item.mapel.singkatan ?? item.mapel.namaMapel}</option>`;
                         });
                         $('#mapel_id').html(option);
 

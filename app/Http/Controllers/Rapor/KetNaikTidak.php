@@ -120,4 +120,19 @@ class KetNaikTidak extends Controller
             Log::error('Error storing data: ' . $e->getMessage());
         }
     }
+
+    public function destroy($id)
+    {
+        $ket = ModelsKetNaikTidak::find($id);
+        if ($ket) {
+            $ket->delete();
+            # code...
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'title' => 'Dihapus!',
+            'message' => 'Data berhasil dihapus.'
+        ]);
+    }
 }

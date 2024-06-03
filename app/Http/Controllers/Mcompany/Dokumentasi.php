@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class Dokumentasi extends Controller
 {
@@ -45,39 +46,54 @@ class Dokumentasi extends Controller
     public function store(Request $request)
     {
         try {
-            $validatedData = $request->validate([
+            $validator = Validator::make($request->all(), [
                 'judulDokumentasi' => 'required|max:255',
-                'kategoriMedia' => 'required|string',
+                'kategoriMedia' => 'required',
+            ], [
+                'judulDokumentasi.required' => 'Judul dokumentasi tidak boleh kosong!',
+                'judulDokumentasi.max' => 'Judul dokumentasi tidak boleh melebihi 255 karakter!',
+                'kategoriMedia.required' => 'Media tidak boleh kosong!',
             ]);
 
-            $validatedData['judul'] = $request->judulDokumentasi;
-            // $validatedData['idUser'] = auth()->user()->idUser;
-            $validatedData['waktu'] = Carbon::createFromFormat('d/m/Y h:i A', $request->waktu)->format('Y-m-d H:i:s');
-
-            if ($request->file('gambarDokumentasi')) {
-                // $img = $request->file('gambarDokumentasi');
-                $imgName = uniqid() . '.' . $request->file('gambarDokumentasi')->getClientOriginalExtension();
-                $validatedData['media'] = $request->file('gambarDokumentasi')->storeAs('dokumentasi', $imgName, 'public');
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
             } else {
-                $link = $request->link_video;
 
-                $parsedUrl = parse_url($link);
-                $path = $parsedUrl['path'];
-                $query = $parsedUrl['query'];
-                $videoId = ltrim($path, '/');
-                $videoId .= '?' . $query;
+                $judul = $request->input('judulDokumentasi');
+                $ktmedia = $request->input('kategoriMedia');
+                $waktu = Carbon::createFromFormat('d/m/Y h:i A', $request->waktu)->format('Y-m-d H:i:s');
 
-                $validatedData['media'] = $videoId;
+                $media = '';
+                if ($request->file('gambarDokumentasi')) {
+                    // $img = $request->file('gambarDokumentasi');
+                    $imgName = uniqid() . '.' . $request->file('gambarDokumentasi')->getClientOriginalExtension();
+                    $media = $request->file('gambarDokumentasi')->storeAs('dokumentasi', $imgName, 'public');
+                } else {
+                    $link = $request->link_video;
+
+                    $parsedUrl = parse_url($link);
+                    $path = $parsedUrl['path'];
+                    $query = $parsedUrl['query'];
+                    $videoId = ltrim($path, '/');
+                    $videoId .= '?' . $query;
+
+                    $media = $videoId;
+                }
+
+
+                ModelsDokumentasi::create([
+                    'judul' => $judul,
+                    'kategoriMedia' => $ktmedia,
+                    'waktu' => $waktu,
+                    'media' => $media
+                ]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil menyimpan data.'
+                ]);
             }
-
-
-            ModelsDokumentasi::create($validatedData);
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil menyimpan data.'
-            ]);
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
 
@@ -108,40 +124,60 @@ class Dokumentasi extends Controller
     public function update(Request $request, $id)
     {
         try {
+
             $dock = ModelsDokumentasi::find($id);
-            $validatedData = $request->validate([
+
+            $validator = Validator::make($request->all(), [
                 'judulDokumentasi' => 'required|max:255',
+                // 'kategoriMedia' => 'required',
+            ], [
+                'judulDokumentasi.required' => 'Judul dokumentasi tidak boleh kosong!',
+                'judulDokumentasi.max' => 'Judul dokumentasi tidak boleh melebihi 255 karakter!',
+                // 'kategoriMedia.required' => 'Kategori media tidak boleh kosong!',
             ]);
 
-            $validatedData['judul'] = $request->judulDokumentasi;
-            $validatedData['waktu'] = Carbon::createFromFormat('d/m/Y h:i A', $request->waktu)->format('Y-m-d H:i:s');
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
 
-            if ($request->file('gambarDokumentasi')) {
-                // $img = $request->file('gambarDokumentasi');
-                $imgName = uniqid() . '.' . $request->file('gambarDokumentasi')->getClientOriginalExtension();
-                $validatedData['media'] = $request->file('gambarDokumentasi')->storeAs('dokumentasi', $imgName, 'public');
+                $judul = $request->input('judulDokumentasi');
+                // $ktmedia = $request->input('kategoriMedia');
+                $waktu = Carbon::createFromFormat('d/m/Y h:i A', $request->waktu)->format('Y-m-d H:i:s');
 
-                if ($dock->media) {
-                    Storage::delete('public/' . $dock->media);
+                $media_data = $dock->media;
+
+                if ($request->file('gambarDokumentasi')) {
+                    // $img = $request->file('gambarDokumentasi');
+                    $imgName = uniqid() . '.' . $request->file('gambarDokumentasi')->getClientOriginalExtension();
+                    $media_data = $request->file('gambarDokumentasi')->storeAs('dokumentasi', $imgName, 'public');
+
+                    if ($dock->media) {
+                        Storage::delete('public/' . $dock->media);
+                    }
+                } elseif ($link = $request->link_video) {
+
+                    $parsedUrl = parse_url($link);
+                    $path = $parsedUrl['path'];
+                    $query = $parsedUrl['query'];
+                    $videoId = ltrim($path, '/');
+                    $videoId .= '?' . $query;
+
+                    $media_data = $videoId;
                 }
-            } elseif ($link = $request->link_video) {
 
-                $parsedUrl = parse_url($link);
-                $path = $parsedUrl['path'];
-                $query = $parsedUrl['query'];
-                $videoId = ltrim($path, '/');
-                $videoId .= '?' . $query;
+                $dock->update([
+                    'judul' => $judul,
+                    // 'kategoriMedia' => $ktmedia,
+                    'waktu' => $waktu,
+                    'media' => $media_data
+                ]);
 
-                $validatedData['media'] = $videoId;
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil memperbarui data.'
+                ]);
             }
-
-            $dock->update($validatedData);
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil memperbarui data.'
-            ]);
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
 

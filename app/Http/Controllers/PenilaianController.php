@@ -103,8 +103,8 @@ class PenilaianController extends Controller
             ->orderBy('namaSiswa', 'asc')
             ->get();
 
-        $sm_TP = TP_sumatif::where('idMapel', $mapel)->where('kelas', $kelasNama)->orderBy('kodeTP', 'asc')->get();
-        $sm_LM = LM_sumatif::where('idMapel', $mapel)->where('kelas', $kelasNama)->orderBy('kodeLM', 'asc')->get();
+        $sm_TP = TP_sumatif::where('idMapel', $mapel)->where('kelas', $kelasNama)->where('periode', $periode->semester)->orderBy('kodeTP', 'asc')->get();
+        $sm_LM = LM_sumatif::where('idMapel', $mapel)->where('kelas', $kelasNama)->where('periode', $periode->semester)->orderBy('kodeLM', 'asc')->get();
 
         $nilai = Nilai::where('idPeriode', $periodeSiswa)
             ->where('idPengajaran', $pengajaran)
@@ -402,17 +402,17 @@ class PenilaianController extends Controller
                             'mapel' => $mapel,
                             // 'deskripsiLM' => $deskrip,
                         ]);
-    
+
                         $nilai->nilaiLM = $nilai_lm;
                         $nilai->deskripsiLM = $deskrip;
                         $nilai->save();
-    
+
                         $jumlahLM = Nilai_LM::where('idSiswa', $data)
                             ->where('idPeriode', $idPeriode)
                             ->where('idPengajaran', $idPengajar)
                             // ->where('idLM', $idLM)
                             ->avg('nilaiLM');
-    
+
                         // Update atau buat instance jumlahLM
                         Nilai::updateOrCreate([
                             'idSiswa' => $data,
@@ -422,7 +422,7 @@ class PenilaianController extends Controller
                         ], [
                             'nilaiAkhirLM' => $jumlahLM,
                         ]);
-    
+
                         $this->hitungRaport($data, $idPeriode, $idPengajar);
                     }
                 }
@@ -468,10 +468,10 @@ class PenilaianController extends Controller
                             'idPeriode' => $idPeriode,
                             'idPengajaran' => $idPengajar,
                         ]);
-    
+
                         $nilai->nilaiNtes = $nilaiNontes;
                         $nilai->save();
-    
+
                         // Hitung nilai rata-rata
                         $nilaiRata = Nilai::where('idSiswa', $data)
                             ->where('idPeriode', $idPeriode)
@@ -493,7 +493,7 @@ class PenilaianController extends Controller
                                 'jumSAkhir' => $nilaiRata,
                             ]
                         );
-    
+
                         $this->hitungRaport($data, $idPeriode, $idPengajar);
                     }
                 }
@@ -534,13 +534,13 @@ class PenilaianController extends Controller
                 foreach ($idSiswa as $data) {
                     $nilaiTes = $request->input('nilai_akhir_tes_' . $data);
                     if ($nilaiTes !== null) {
-                        
+
                         $nilai = Nilai::firstOrNew([
                             'idSiswa' => $data,
                             'idPeriode' => $idPeriode,
                             'idPengajaran' => $idPengajar,
                         ]);
-    
+
                         $nilai->nilaiTes = $nilaiTes;
                         $nilai->save();
                         // Hitung nilai rata-rata
@@ -564,7 +564,7 @@ class PenilaianController extends Controller
                                 'jumSAkhir' => $nilaiRata,
                             ]
                         );
-    
+
                         $this->hitungRaport($data, $idPeriode, $idPengajar);
                     }
                 }
@@ -610,8 +610,6 @@ class PenilaianController extends Controller
                     $this->hitungRaport($tp->idSiswa, $tp->idPeriode, $tp->idPengajaran);
                     $this->capaianSiswaMin($tp->idSiswa, $tp->idPeriode, $tp->idPengajaran, $tp->mapel);
                     $this->capaianSiswaMax($tp->idSiswa, $tp->idPeriode, $tp->idPengajaran, $tp->mapel);
-
-
                 }
             }
 
@@ -642,7 +640,7 @@ class PenilaianController extends Controller
                         ->where('idPengajaran', $tp->idPengajaran)
                         // ->where('idTP', $idTP)
                         ->avg('nilaiLM');
-    
+
                     // Update atau buat instance jumlahTP
                     Nilai::updateOrCreate([
                         'idSiswa' => $tp->idSiswa,
@@ -652,10 +650,9 @@ class PenilaianController extends Controller
                     ], [
                         'nilaiAkhirLM' => $jumlahTP,
                     ]);
-    
+
                     $this->hitungRaport($tp->idSiswa, $tp->idPeriode, $tp->idPengajaran);
                 }
-
             }
 
             // $tp->delete();
@@ -701,10 +698,9 @@ class PenilaianController extends Controller
                             'jumSAkhir' => $nilaiRata,
                         ]
                     );
-    
+
                     $this->hitungRaport($tp->idSiswa, $tp->idPeriode, $tp->idPengajaran);
                 }
-
             }
             // $tp->delete();
             return response()->json([
@@ -750,10 +746,9 @@ class PenilaianController extends Controller
                             'jumSAkhir' => $nilaiRata,
                         ]
                     );
-    
+
                     $this->hitungRaport($tp->idSiswa, $tp->idPeriode, $tp->idPengajaran);
                 }
-
             }
             // $tp->delete();
             return response()->json([

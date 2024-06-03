@@ -28,6 +28,11 @@
                     font-size: 12pt;
                     width: 100%;
                 }
+
+                @page {
+                    margin: 0.4in;
+                    /* Anda bisa menyesuaikan margin sesuai kebutuhan */
+                }
             }
         </style>
     @endpush
@@ -124,7 +129,7 @@
 
                         var tb_rekap = `
                         <thead class="text-center align-middle">
-                            <tr class="border-0">
+                            <tr class="border-0" style="color: #000;">
                                 <th colspan="${data.pengajar.length + 4}" class="text-center border-0 p-0 pb-2">
                                     <h4 class="text-center fw-normal mb-4" style="font-size: 14pt;">
                                         <span>REKAP NILAI SISWA</span><br>
@@ -142,13 +147,14 @@
                                 </th>
                             </tr>
                             <tr class="table-light border-dark">
-                                <th rowspan="2" width="4%">No</th>
-                                <th rowspan="2">Nama Siswa</th>
+                                <th rowspan="2" style="width: 20px; min-width:20px;">No</th>
+                                <th rowspan="2" style="width: 42px; min-width:42px;">NIS</th>
+                                <th rowspan="2" style="width: 230px; min-width:230px;">Nama Siswa</th>
                                 <th colspan="${data.pengajar.length}">Capaian Mata Pelajaran</th>
                                 <th rowspan="2" width="70px">Jumlah</th>
                                 <th rowspan="2" width="70px">Rata-Rata</th>
-                                </tr>
-                                <tr class="table-light border-dark">`;
+                            </tr>
+                            <tr class="table-light border-dark">`;
 
                         var totalNilaiMapel = {};
                         var jumlahSiswaPerMapel = {};
@@ -179,7 +185,8 @@
 
                             tb_rekap += `<tr>
                                 <td class="text-center">${i + 1}</td>
-                                <td class="text-nowrap" style="min-width:250px;">${siswa.namaSiswa}</td>`;
+                                <td class="text-nowrap text-center">${siswa.nis}</td>
+                                <td class="text-nowrap">${siswa.namaSiswa}</td>`;
 
                             $.each(data.pengajar, function(key, tpe) {
                                 var nilai = data.nilai.find(function(nilai) {
@@ -227,7 +234,7 @@
                         var chr_data_dyserap = [];
 
                         tb_rekap += `<tr class="border-top border-2 border-dark">
-                            <td colspan="2" class="fw-bold">Jumlah</td>`;
+                            <td colspan="3" class="fw-bold">Jumlah</td>`;
                         $.each(data.pengajar, function(key, tpe) {
                             tb_rekap +=
                                 `<td class="text-center fw-bold ${totalNilaiMapel[tpe.idPengajaran] == 0 ? 'bg-city-lighter' : ''}">${totalNilaiMapel[tpe.idPengajaran] == 0 ? '' : totalNilaiMapel[tpe.idPengajaran]}</td>`;
@@ -235,7 +242,7 @@
                         tb_rekap += `<td colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" class="fw-bold">Rata-Rata Kelas</td>`;
+                                    <td colspan="3" class="fw-bold">Rata-Rata Kelas</td>`;
                         $.each(data.pengajar, function(key, tpe) {
                             var rt_kelas = jumlahSiswaPerMapel[tpe.idPengajaran] === 0 ? '' : (
                                     totalNilaiMapel[tpe.idPengajaran] / jumlahSiswaPerMapel[tpe
@@ -248,7 +255,7 @@
                         tb_rekap += `<td colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" class="fw-bold">Nilai Terbesar</td>`;
+                                    <td colspan="3" class="fw-bold">Nilai Terbesar</td>`;
                         $.each(data.pengajar, function(key, tpe) {
                             tb_rekap +=
                                 `<td class="text-center fw-bold ${nilaiTertinggi[tpe.idPengajaran] !== null ? '' : 'bg-city-lighter'}">${nilaiTertinggi[tpe.idPengajaran] !== null ? nilaiTertinggi[tpe.idPengajaran] : ''}</td>`;
@@ -256,7 +263,7 @@
                         tb_rekap += `<td colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" class="fw-bold">Nilai Terkecil</td>`;
+                                    <td colspan="3" class="fw-bold">Nilai Terkecil</td>`;
                         $.each(data.pengajar, function(key, tpe) {
                             tb_rekap +=
                                 `<td class="text-center fw-bold ${nilaiTerendah[tpe.idPengajaran] !== null ? '' : 'bg-city-lighter'}">${nilaiTerendah[tpe.idPengajaran] !== null ? nilaiTerendah[tpe.idPengajaran] : ''}</td>`;
@@ -264,7 +271,7 @@
                         tb_rekap += `<td colspan="3"></td>
                                 </tr>
                                 <tr class="border-bottom border-2 border-dark">
-                                    <td colspan="2" class="fw-bold">Daya Serap</td>`;
+                                    <td colspan="3" class="fw-bold">Daya Serap</td>`;
                         $.each(data.pengajar, function(key, tpe) {
                             var dayaSerap = jumlahSiswaPerMapel[tpe.idPengajaran] === 0 ? '' : Math.round((
                                 totalNilaiMapel[tpe.idPengajaran] / jumlahSiswaPerMapel[tpe

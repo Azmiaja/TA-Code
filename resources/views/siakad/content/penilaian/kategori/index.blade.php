@@ -6,7 +6,7 @@
             $kelas = ['Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam'];
         @endphp
         <div class="row g-3 mb-4 justify-content-end">
-            <div class="col-md-3 mb-md-0 mb-3">
+            <div class="col-md-3">
                 <label for="kelas_name" class="form-label text-uppercase fw-bold fs-sm">Kelas</label>
                 <select class="form-select form-select-lg fw-medium" name="" id="kelas_name">
                     @foreach ($klsPengajaran as $item)
@@ -21,6 +21,11 @@
             <div class="col-md-3">
                 <label for="mapel_id" class="form-label text-uppercase fw-bold fs-sm">Mata Pelajaran</label>
                 <select class="form-select form-select-lg fw-medium" name="" id="mapel_id">
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="periode_id" class="form-label text-uppercase fw-bold fs-sm">Semester</label>
+                <select class="form-select form-select-lg fw-medium" name="" id="periode_id">
                 </select>
             </div>
         </div>
@@ -86,7 +91,7 @@
     {{-- MODAL LM --}}
     <div class="modal fade" id="modal_LM" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="modalMapeltLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="block block-rounded block-transparent mb-0">
                     <div class="block-header block-header-default">
@@ -105,19 +110,27 @@
                             <input type="hidden" name="_method" id="method_lm" value="POST">
                             <div class="mb-3">
                                 <label for="mapel" class="form-label">Mapel</label>
-                                <input type="text" class="form-control" readonly name="" id="mapel_name">
+                                <input type="text" class="form-control form-control-alt" readonly name=""
+                                    id="mapel_name">
                                 <input type="hidden" class="form-control" readonly name="idMapel" id="mapel">
                             </div>
                             <div class="mb-3">
                                 <label for="kelas" class="form-label">Kelas</label>
-                                <input type="text" class="form-control" readonly name="kelas" id="kelas" />
+                                <input type="text" class="form-control form-control-alt" readonly name="kelas"
+                                    id="kelas" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="semester" class="form-label">Semester</label>
+                                <input type="text" class="form-control form-control-alt" readonly id="semester">
+                                <input type="hidden" class="form-control form-control-alt" readonly name="periode"
+                                    id="periode_LM">
                             </div>
                             <div class="mb-3">
                                 <label for="kodeLM" class="form-label">Kode LM</label>
-                                <input type="text" class="form-control text-uppercase" maxlength="4" name="kode"
+                                <input type="text" class="form-control" maxlength="4" name="kode"
                                     id="kodeLM" aria-describedby="helpId" placeholder="LM" />
                                 <small id="kode-lm" class="form-text text-muted"><span class="fw-bold">Catatan:
-                                    </span>Contoh: LM1, LM2, LM3, ...</small>
+                                    </span>Contoh kode LM1, LM2, LM3, dst.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="deskripsiLM" class="form-label">Lingkup Materi</label>
@@ -160,17 +173,25 @@
                             <input type="hidden" name="_method" id="method" value="POST">
                             <input type="hidden" name="idTP" id="idTP">
                             <div class="mb-3">
-                                <label for="mapel" class="form-label">Mapel</label>
-                                <input type="text" class="form-control" readonly name="" id="mapel_name_tp">
+                                <label for="mapel_tp" class="form-label">Mapel</label>
+                                <input type="text" class="form-control form-control-alt" readonly name=""
+                                    id="mapel_name_tp">
                                 <input type="hidden" class="form-control" readonly name="idMapel" id="mapel_tp">
                             </div>
                             <div class="mb-3">
-                                <label for="kelas" class="form-label">Kelas</label>
-                                <input type="text" class="form-control" readonly name="kelas" id="kelas_tp" />
+                                <label for="kelas_tp" class="form-label">Kelas</label>
+                                <input type="text" class="form-control form-control-alt" readonly name="kelas"
+                                    id="kelas_tp" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="semester_tp" class="form-label">Semester</label>
+                                <input type="text" class="form-control form-control-alt" readonly id="semester_tp">
+                                <input type="hidden" class="form-control form-control-alt" readonly name="periode"
+                                    id="periode_TP">
                             </div>
                             <div class="mb-3">
                                 <label for="kode" class="form-label">Kode TP</label>
-                                <input type="text" class="form-control text-uppercase" maxlength="4" name="kodeTP"
+                                <input type="text" class="form-control" maxlength="4" name="kodeTP"
                                     id="kode" aria-describedby="helpId" placeholder="TP" />
                                 <small id="kode-tp" class="form-text text-muted"><span class="fw-bold">Catatan:
                                     </span>Contoh: TP1, TP2, TP3, ...</small>
@@ -196,8 +217,19 @@
     </div>
 
     <script>
+        function getPeriode() {
+            $('#periode_id').empty();
+            var periode = {!! json_encode($periode) !!};
+            var selected = periode.status === 'Aktif' ? (periode.semester === 'Genap' || 'Ganjil' ? 'selected' : '') : '';
+            $('#periode_id').append(`
+                <option value="ganjil" ${periode.semester === 'Ganjil' ? 'selected' : ''}>Ganjil</option>
+                <option value="genap" ${periode.semester === 'Genap' ? 'selected' : ''}>Genap</option>
+            `);
+        }
+
         function getMapel(kelas) {
             $('#mapel_id').empty();
+            let option = '';
             $.ajax({
                 url: `{{ route('get.mapel.gurupengajar') }}`,
                 type: 'GET',
@@ -206,20 +238,24 @@
                 },
                 success: function(data) {
                     // console.log(data);
-                    let option = '';
                     $.each(data.mapel, function(i, item) {
                         let selectedAttr = (i === 0) ? 'selected' : '';
                         option +=
                             `<option value="${item.mapel.idMapel}" ${selectedAttr}>${item.mapel.singkatan ?? item.mapel.namaMapel}</option>`;
                     });
+                },
+                complete: function() {
                     $('#mapel_id').html(option);
-
-                    $('#tp_nilai').DataTable().ajax.reload();
-                    $('#lm_nilai').DataTable().ajax.reload();
+                    $('#mapel_id').trigger('change');
+                    getPeriode();
+                    $('#periode_id').trigger('change');
                 }
             });
         }
+
+
         $(document).ready(function() {
+            // getPeriode();
             $('#tp_nilai').DataTable({
                 processing: true,
                 ajax: {
@@ -228,6 +264,7 @@
                     data: function(d) {
                         d.idMapel = $('#mapel_id option:selected').val();
                         d.kelas = $('#kelas_name option:selected').val();
+                        d.periode = $('#periode_id option:selected').val();
                     }
                 },
                 columns: [{
@@ -241,7 +278,7 @@
                     data: null,
                     className: 'text-center',
                     render: function(data, type, row) {
-                        return `<div class="btn-group z-3">
+                        return `<div class="btn-group">
                                     <button class="btn btn-alt-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         #
                                     </button>
@@ -261,8 +298,6 @@
                 searching: false,
                 info: false,
             });
-
-
             $('#lm_nilai').DataTable({
                 processing: true,
                 ajax: {
@@ -271,6 +306,7 @@
                     data: function(d) {
                         d.idMapel = $('#mapel_id option:selected').val();
                         d.kelas = $('#kelas_name option:selected').val();
+                        d.periode = $('#periode_id option:selected').val();
                     }
                 },
                 columns: [{
@@ -305,11 +341,10 @@
                 info: false,
             });
 
-
             var kelasG = $('#kelas_name option:selected').val();
             getMapel(kelasG);
 
-            $('#mapel_id').change(function() {
+            $('#mapel_id, #periode_id').change(function() {
                 $('#tp_nilai').DataTable().ajax.reload();
                 $('#lm_nilai').DataTable().ajax.reload();
             });
@@ -328,6 +363,10 @@
                 var mapel = $('#mapel_id option:selected').text();
                 var id = $('#mapel_id option:selected').val();
                 var kelas = $('#kelas_name option:selected').val();
+                var periode = $('#periode_id option:selected').val();
+                var periodeTX = $('#periode_id option:selected').text();
+                $('#modal_LM').find('#periode_LM').val(periode);
+                $('#modal_LM').find('#semester').val(periodeTX);
                 $('#modal_LM').find('#kelas').val(kelas);
                 $('#modal_LM').find('#mapel_name').val(mapel);
                 $('#modal_LM').find('#mapel').val(id);
@@ -388,6 +427,10 @@
                 var mapel = $('#mapel_id option:selected').text();
                 var id = $('#mapel_id option:selected').val();
                 var kelas = $('#kelas_name option:selected').val();
+                var periode = $('#periode_id option:selected').val();
+                var periodeTX = $('#periode_id option:selected').text();
+                $('#modal_TP').find('#periode_TP').val(periode);
+                $('#modal_TP').find('#semester_tp').val(periodeTX);
                 $('#modal_TP').find('#kelas_tp').val(kelas);
                 $('#modal_TP').find('#mapel_name_tp').val(mapel);
                 $('#modal_TP').find('#mapel_tp').val(id);

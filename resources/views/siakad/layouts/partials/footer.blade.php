@@ -24,6 +24,7 @@
 <script src="{{ asset('assets/js/plugins/select2/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/select2/js/select2.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
+{{-- <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script> --}}
 <script src="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/chartjs/Chart.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
@@ -34,6 +35,8 @@
 <script src="{{ asset('assets/js/plugins/air-datepicker/dist/air-datepicker.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/print-this/printThis.js') }}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
 @if (session('status') === 'success')
     <script>

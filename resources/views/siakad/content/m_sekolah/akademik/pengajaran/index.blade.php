@@ -5,7 +5,7 @@
     <div class="content">
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title"></h3>
+                <h3 class="block-title title-kelas"></h3>
                 <div class="block-options">
                     <select name="pilih_periode" id="pilih_periode" class="form-select form-select-sm">
                         @foreach ($periode as $item)
@@ -79,7 +79,7 @@
                         </div>
                         <div class="block-content fs-sm">
                             {{-- FORM --}}
-                            <form action="POST" enctype="multipart/form-data" id="form-pengajaran">
+                            <form action="" method="POST" enctype="multipart/form-data" id="form-pengajaran">
                                 @csrf
                                 <input type="hidden" name="_method" id="method" value="POST">
                                 <input type="hidden" name="idPengajaran[]" id="idPengajaran" value="POST">
@@ -131,8 +131,126 @@
                 </div>
             </div>
         </div>
+
+        {{-- MOdal Hapus Mapel --}}
+        <div class="modal fade" id="modal-Mapel-Del" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+            aria-labelledby="modalMapeltLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+                    <div class="block block-rounded block-transparent mb-0">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">Info Mapel</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option" data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                    <i class="fa fa-fw fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content fs-sm">
+                            <div id="con_mapel"></div>
+                        </div>
+                        <div class="block-content block-content-full bg-body">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         @push('scripts')
             <script>
+                $(document).on('click', '#mapel_btn', function(e) {
+                    e.preventDefault();
+                    var idMapel = $(this).val();
+                    $('#modal-Mapel-Del').modal('show');
+                    $('#con_mapel').empty();
+                    var html;
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('data.mapel.pengajar') }}",
+                        data: {
+                            idMapel: idMapel,
+                            namaKelas: $('.btn_kelas.active').val(),
+                            idPeriode: $('#pilih_periode option:selected').val(),
+                        },
+                        dataType: "json",
+                        success: function(data) {
+                            html = `
+                            <div class="mb-3">
+                                    <label for="periode" class="form-label">Semester</label>
+                                    <input type="text" class="form-control form-control-alt" id="periode" value="${data.periode.semester} ${data.periode.tahun}" readonly />                            
+                                </div>
+                                <div class="mb-3">
+                                    <label for="guru" class="form-label">Guru Pengajar</label>
+                                    <input type="text" readonly class="form-control form-control-alt" id="guru" value="${data.guru.namaPegawai}" />                            
+                                </div>
+                                <div class="mb-3">
+                                    <label for="kelas" class="form-label">Kelas</label>                            
+                                    <input type="text" readonly class="form-control form-control-alt" id="kelas" value="Kelas ${data.kelas.namaKelas}" />
+                                </div>
+                                <div class="mb-4">
+                                    <label for="mapel" class="form-label">Mapel</label>                            
+                                    <input type="text" readonly class="form-control form-control-alt" id="mapel" value="${data.mapel.namaMapel}" />
+                                </div>
+                                <div class="mb-3 text-end">
+                                    <button type="button" value="${data.idPengajaran}" data-mapel="${data.mapel.namaMapel}" data-kelas="${data.kelas.namaKelas}" id="btn_hapus_mapel" class="btn btn-danger">Hapus</button>    
+                                </div>`;
+                        },
+                        complete: function() {
+                            $('#con_mapel').append(html);
+                        }
+                    });
+                });
+
+                $(document).on('click', '#btn_hapus_mapel', function(e) {
+                    e.preventDefault();
+                    var id = $(this).val();
+                    var mapel = $(this).data('mapel');
+                    var kelas = $(this).data('kelas');
+
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        html: `Menghapus mapel <b>${mapel}</b> dari <b>Kelas ${kelas}</b>.`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Hapus!',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "DELETE",
+                                url: `{{ url('pengajar/destroy/mapel${id}') }}`,
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response.status === 'success') {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        });
+                                        $('#modal-Mapel-Del').modal('hide');
+                                        $('#tabel_Pengajar').DataTable().ajax.reload();
+                                    } else {
+                                        Swal.fire({
+                                            icon: response.status,
+                                            title: response.title,
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 3000
+                                        });
+                                    }
+                                },
+                            });
+                        }
+                    });
+                });
+
                 $(document).ready(function() {
                     const tabelPengajar = $('#tabel_Pengajar');
                     const btnInsert = $('#btn_tambahPengajar');
@@ -148,13 +266,13 @@
                     });
 
                     let kelas = $('.btn_kelas').val();
-                    $('.content .block-title').text('Data Pengajar Kelas ' + kelas);
+                    $('.content .title-kelas').text('Data Pengajar Kelas ' + kelas);
 
                     $('.btn_kelas').on('click', function() {
                         $('.btn_kelas').removeClass('active');
                         $(this).addClass('active');
                         let kelas = $(this).val();
-                        $('.content .block-title').text('Data Pengajar Kelas ' + kelas);
+                        $('.content .title-kelas').text('Data Pengajar Kelas ' + kelas);
 
                         // Muat ulang data tabel
                         tabelPengajar.DataTable().ajax.reload();
@@ -172,37 +290,36 @@
                         columns: [{
                                 data: null,
                                 name: 'nomor',
-                                className: 'text-center',
+                                className: 'text-center align-top',
                                 render: function(data, type, row, meta) {
                                     return meta.row + 1;
                                 }
                             },
                             {
                                 data: 'nipPengajar',
-                                name: 'nipPengajar'
+                                name: 'nipPengajar',
+                                className: 'align-top'
                             },
                             {
                                 data: 'namaPengajar',
-                                name: 'namaPengajar'
+                                name: 'namaPengajar',
+                                className: 'align-top'
                             },
                             {
                                 data: 'mapelDiampu',
                                 name: 'mapelDiampu',
-                                className: 'fw-medium lh-3'
                             },
                             {
                                 data: 'semester',
                                 name: 'semester',
+                                className: 'align-top'
                             }, {
                                 data: null,
-                                className: 'text-center',
+                                className: 'text-center align-top',
                                 searchable: false,
                                 render: function(data, type, row) {
                                     // console.log(data);
                                     return '<div class="btn-group">' +
-                                        // '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editPengajar" value="' +
-                                        // data.idPengajaran + '">' +
-                                        // '<i class="fa fa-fw fa-pencil-alt"></i></button>' +
                                         '<button type="button" class="btn btn-sm btn-alt-danger"  id="action-hapusPengajar" title="Delete" value="' +
                                         data.idPengajaran + '" data-nama-pengajar="' + data
                                         .namaPengajar + '" data-kelas="' + data.kelasPengajar + '">' +

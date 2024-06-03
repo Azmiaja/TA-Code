@@ -73,6 +73,22 @@
                                         <label for="fm_slogan" class="form-label">Slogan</label>
                                         <input type="text" name="slogan" class="form-control" id="fm_slogan">
                                     </div>
+                                    <div class="col-lg-6">
+                                        <label for="fm_kepsek" class="form-label">Kepala Sekolah</label>
+                                        <div class="input-group">
+                                            <input type="text" name="kepsek" class="form-control"
+                                                id="fm_kepsek">
+                                            <input type="file" class="form-control d-none" name="fotoKepsek"
+                                                accept=".jpg,.jpeg,.png,.svg" id="kepsekFoto">
+                                            <button type="button" id="file_kepsek" title="Upload Foto Kepala Sekolah" class="btn btn-secondary"><i
+                                                    class="fa-solid fa-file-image mx-auto"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="fm_nip_kepsek" class="form-label">NIP</label>
+                                        <input type="text" name="nip" class="form-control"
+                                            id="fm_nip_kepsek">
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-12">
@@ -103,7 +119,8 @@
                                     <input type="file" class="form-control d-none" name="logo"
                                         accept=".jpg,.jpeg,.png,.svg" id="logoSekolah" onchange="prevImg()">
                                     <div class="text-end">
-                                        <button type="button" id="fileButton" class="btn btn-success"><i class="fa-solid fa-file-image me-2"></i>Pilih
+                                        <button type="button" id="fileButton" class="btn btn-success"><i
+                                                class="fa-solid fa-file-image me-2"></i>Pilih
                                             File</button>
                                     </div>
                                 </div>

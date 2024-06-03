@@ -168,14 +168,14 @@
                     </li>
                     @if ($pegawai)
                         <li
-                            class="nav-main-item {{ Request::routeIs('catatan.guru.index', 'ket.naik-tidak.index', 'ekstrakulikuler.index', 'cetak_rapor.index') ? 'open' : '' }}">
-                            <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('catatan.guru.index', 'ket.naik-tidak.index', 'ekstrakulikuler.index', 'cetak_rapor.index') ? 'active' : '' }}"
+                            class="nav-main-item {{ Request::routeIs('catatan.guru.index', 'ket.naik-tidak.index', 'ekstrakulikuler.index', 'cetak_rapor.index', 'input.rapor.index') ? 'open' : '' }}">
+                            <a class="nav-main-link nav-main-link-submenu {{ Request::routeIs('catatan.guru.index', 'ket.naik-tidak.index', 'ekstrakulikuler.index', 'cetak_rapor.index', 'input.rapor.index') ? 'active' : '' }}"
                                 data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="javascript:void(0)">
                                 <i class="nav-main-link-icon si si-docs"></i>
                                 <span class="nav-main-link-name">Rapor Siswa</span>
                             </a>
                             <ul class="nav-main-submenu">
-                                <li class="nav-main-item">
+                                {{-- <li class="nav-main-item">
                                     <a class="nav-main-link {{ Request::routeIs('catatan.guru.index') ? 'active' : '' }}"
                                         href="{{ route('catatan.guru.index') }}">
                                         <span class="nav-main-link-name">Catatan Guru</span>
@@ -191,6 +191,12 @@
                                     <a class="nav-main-link {{ Request::routeIs('ket.naik-tidak.index') ? 'active' : '' }}"
                                         href="{{ route('ket.naik-tidak.index') }}">
                                         <span class="nav-main-link-name">Ket. Naik/Tidak</span>
+                                    </a>
+                                </li> --}}
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link {{ Request::routeIs('input.rapor.index') ? 'active' : '' }}"
+                                        href="{{ route('input.rapor.index') }}">
+                                        <span class="nav-main-link-name">Isi Rapor</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
@@ -313,6 +319,13 @@
                             href="{{ route('re-nilai.index') }}">
                             <i class="nav-main-link-icon si si-notebook"></i>
                             <span class="nav-main-link-name">Penilaian</span>
+                        </a>
+                    </li>
+                    <li class="nav-main-item">
+                        <a class="nav-main-link {{ Request::routeIs('sa.rapor-siswa.index') ? 'active' : '' }}"
+                            href="{{ route('sa.rapor-siswa.index') }}">
+                            <i class="nav-main-link-icon si si-docs"></i>
+                            <span class="nav-main-link-name">Rapor Siswa</span>
                         </a>
                     </li>
 

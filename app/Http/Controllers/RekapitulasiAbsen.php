@@ -7,6 +7,7 @@ use App\Models\Kelas;
 use App\Models\Pegawai;
 use App\Models\Pengajaran;
 use App\Models\Periode;
+use App\Models\Sekolah;
 use App\Models\Siswa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -77,9 +78,7 @@ class RekapitulasiAbsen extends Controller
             $query->where('idKelas', $kelas->idKelas);
         })->first();
 
-        $kepsek = Pegawai::select('namaPegawai', 'nip')->whereHas('jabatanPegawai', function ($query) {
-            $query->where('jabatan', 'Kepala Sekolah');
-        })->first();
+        $kepsek = Sekolah::select('kepsek', 'nip')->first();
 
         return compact('periode', 'kelas', 'kehadiran', 'siswaWithKelas', 'wakel', 'kepsek');
     }

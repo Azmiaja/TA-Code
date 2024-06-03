@@ -62,9 +62,11 @@ class KategoriNilaiController extends Controller
     {
         $idMapel = $request->idMapel;
         $kelas = $request->kelas;
+        $periode = $request->periode;
 
         $tp = TP_sumatif::where('idMapel', $idMapel)
             ->where('kelas', $kelas)
+            ->where('periode', $periode)
             ->orderBy('kodeTP', 'asc')
             ->get();
         $tp = $tp->map(function ($item, $key) {
@@ -83,9 +85,11 @@ class KategoriNilaiController extends Controller
     {
         $idMapel = $request->idMapel;
         $kelas = $request->kelas;
+        $periode = $request->periode;
 
         $lm = LM_sumatif::where('idMapel', $idMapel)
             ->where('kelas', $kelas)
+            ->where('periode', $periode)
             ->orderBy('kodeLM', 'asc')
             ->get();
         $lm = $lm->map(function ($item, $key) {
@@ -103,10 +107,29 @@ class KategoriNilaiController extends Controller
     public function storeLM(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'deskripsi' => 'required|max:100'
+            'deskripsi' => 'required|max:100',
+            'kode' => [
+                'required',
+                'max:4',
+                'regex:/^LM[0-9]+$/',
+                function ($attribute, $value, $fail) use ($request) {
+                    $exists = LM_sumatif::where('kodeLM', $value)
+                        ->where('idMapel', $request->input('idMapel'))
+                        ->where('periode', $request->input('periode'))
+                        ->where('kelas', $request->input('kelas'))
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('Kode LM sudah ada!');
+                    }
+                }
+            ],
         ], [
             'deskripsi.required' => 'Lingkup materi tidak boleh kosong!',
-            'deskripsi.max' => 'Lingkup materi tidak boleh lebih dari 100 karakter!'
+            'deskripsi.max' => 'Lingkup materi tidak boleh lebih dari 100 karakter!',
+            'kode.required' => 'Kode LM tidak boleh kosong!',
+            'kode.max' => 'Kode LM tidak boleh lebih dari 4 karakter!',
+            'kode.regex' => 'Format kode LM tidak sesuai, ikuti contoh!',
         ]);
 
         if ($validator->fails()) {
@@ -116,12 +139,14 @@ class KategoriNilaiController extends Controller
             $deskripsi = $request->input('deskripsi');
             $kelas = $request->input('kelas');
             $kode = $request->input('kode');
+            $periode = $request->input('periode');
 
             LM_sumatif::create([
                 'idMapel' => $idMapel,
                 'kelas' => $kelas,
                 'deskripsi' => $deskripsi,
-                'kodeLM' => $kode
+                'kodeLM' => $kode,
+                'periode' => $periode
             ]);
 
             return response()->json([
@@ -147,11 +172,29 @@ class KategoriNilaiController extends Controller
     public function storeTP(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'kodeTP' => 'required',
-            'deskripsi' => 'required'
+            'kodeTP' => [
+                'required',
+                'max:4',
+                'regex:/^TP[0-9]+$/',
+                function ($attribute, $value, $fail) use ($request) {
+                    $exists = TP_sumatif::where('kodeTP', $value)
+                        ->where('idMapel', $request->input('idMapel'))
+                        ->where('periode', $request->input('periode'))
+                        ->where('kelas', $request->input('kelas'))
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('Kode TP sudah ada!');
+                    }
+                }
+            ],
+            'deskripsi' => 'required|max:255'
         ], [
             'deskripsi.required' => 'Tujuan pembelajaran tidak boleh kosong!',
+            'deskripsi.max' => 'Tujuan pembelajaran tidak boleh lebih dari 255 karakter!',
             'kodeTP.required' => 'Kode TP tidak boleh kosong!',
+            'kodeTP.max' => 'Kode TP tidak boleh lebih dari 4 karakter!',
+            'kodeTP.regex' => 'Format kode TP tidak sesuai, ikuti contoh!',
         ]);
 
         if ($validator->fails()) {
@@ -161,12 +204,14 @@ class KategoriNilaiController extends Controller
             $deskripsi = $request->input('deskripsi');
             $kode = $request->input('kodeTP');
             $kelas = $request->input('kelas');
+            $periode = $request->input('periode');
 
             TP_sumatif::create([
                 'idMapel' => $idMapel,
                 'deskripsi' => $deskripsi,
                 'kodeTP' => $kode,
-                'kelas' => $kelas
+                'kelas' => $kelas,
+                'periode' => $periode
             ]);
 
             return response()->json([

@@ -14,15 +14,15 @@
     </div>
     @if ($orgDeskripsi && $orgGambar)
         <div class="row m-0 mb-3">
-            <div class="card border-0 rounded p-0 mb-3 ratio ratio-16x9">
-                <img src="{{ $orgGambar }}" class="card-img rounded" style="width: 100%; height: 100%; object-fit: contain;" alt="Cover Berita">
+            <div class="text-center rounded p-0 mb-3 ratio ratio-16x9">
+                <img src="{{ $orgGambar }}" class="" style="width: 100%; height: 100%; object-fit: contain" alt="Cover Berita">
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="text-justify story">
+                <article class="ck-content">
                     {!! $orgDeskripsi !!}
-                </div>
+                </article>
             </div>
         </div>
     @else

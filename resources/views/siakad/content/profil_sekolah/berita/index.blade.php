@@ -13,13 +13,13 @@
             <div class="block-content block-content-full p-0">
                 <div class="table-responsive p-3">
                     <table id="tabelBerita" class="table w-100 table-hover table-borderless align-middle table-">
-                        <thead class="bg-gray-light align-middle">
+                        <thead class="table-primary align-middle">
                             <tr class="text-center fw-medium fs-sm">
-                                <th style="width: 5%">No</th>
-                                <th style="min-width: 23%">Gambar</th>
+                                <th width="4%">No</th>
+                                <th width="15%">Gambar</th>
                                 <th>Judul</th>
-                                <th style="width: 16%;">Tanggal</th>
-                                <th style="width: 10%">Aksi</th>
+                                <th width="18%">Tanggal</th>
+                                <th width="10%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,6 +31,14 @@
         </div>
     </div>
 
+    
+    <style>
+        body {
+            /* ckEditor5 */
+            --ck-z-default: 100;
+            --ck-z-panel: calc(var(--ck-z-default) + 999);
+        }
+    </style>
     {{-- MOAL --}}
     @include('siakad/content/profil_sekolah/berita/modal-berita')
 
@@ -38,6 +46,7 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
+
 
                 const modalBerita = $('#modalBerita');
                 const formBerita = $('#formBerita');
@@ -53,19 +62,167 @@
                 const tabelBerita = $('#tabelBerita');
                 const method = $('#method');
 
+
+                var option = {
+                    plugins: [
+                        'Alignment',
+                        'Essentials',
+                        'Autoformat',
+                        'BlockQuote',
+                        'FontFamily',
+                        'FontSize',
+                        'FontColor',
+                        'Highlight',
+                        'Bold',
+                        'Italic',
+                        'Heading',
+                        'Link',
+                        'List',
+                        'Paragraph',
+                        'Image',
+                        'ImageCaption',
+                        'ImageResize',
+                        'ImageStyle',
+                        'ImageToolbar',
+                        'ImageUpload',
+                        // 'CkFinder',
+                        'Base64UploadAdapter',
+                        'Underline',
+                        'Italic',
+                        'Link',
+                        'List',
+                        'MediaEmbed',
+                        'Paragraph',
+                        'Table',
+                        'TableColumnResize',
+                        'TableToolbar',
+                        'Indent',
+                        'GeneralHtmlSupport',
+                        // 'CKFinderUploadAdapter'
+                    ],
+                    toolbar: {
+                        items: [
+                            'undo', 'redo',
+                            '|', 'heading',
+                            '|',
+                            {
+                                label: 'Fonts',
+                                withText: true,
+                                icon: 'text',
+                                items: ['fontfamily', 'fontsize', 'fontcolor']
+                            },
+                            '|',
+                            {
+                                label: 'Basic styles',
+                                withText: true,
+                                icon: 'bold',
+                                items: ['bold', 'italic', 'underline', 'alignment', 'highlight', 'indent',
+                                    'outdent'
+                                ]
+                            },
+                            '|',
+                            {
+                                label: 'Insert',
+                                withText: true,
+                                icon: 'plus',
+                                items: ['link', 'uploadImage', 'insertTable', ]
+                            },
+                            '|',
+                            {
+                                label: 'List',
+                                withText: true,
+                                icon: false,
+                                items: ['bulletedList', 'numberedList', ]
+                            },
+                        ],
+                        shouldNotGroupWhenFull: true
+                    },
+                    heading: {
+                        options: [{
+                                model: 'paragraph',
+                                title: 'Paragraph',
+                                class: 'ck-heading_paragraph',
+                            },
+                            {
+                                model: 'heading1',
+                                view: 'h1',
+                                title: 'Heading 1',
+                                class: 'ck-heading_heading1',
+                            },
+                            {
+                                model: 'heading2',
+                                view: 'h2',
+                                title: 'Heading 2',
+                                class: 'ck-heading_heading2',
+                            },
+                            {
+                                model: 'heading3',
+                                view: 'h3',
+                                title: 'Heading 3',
+                                class: 'ck-heading_heading3',
+                            },
+                            {
+                                model: 'heading4',
+                                view: 'h4',
+                                title: 'Heading 4',
+                                class: 'ck-heading_heading4',
+                            },
+                        ],
+                    },
+                    image: {
+                        styles: ['alignCenter', 'alignLeft', 'alignRight'],
+                        resizeOptions: [{
+                                name: 'resizeImage:original',
+                                label: 'Default image width',
+                                value: null,
+                            },
+                            {
+                                name: 'resizeImage:50',
+                                label: '50% page width',
+                                value: '50',
+                            },
+                            {
+                                name: 'resizeImage:75',
+                                label: '75% page width',
+                                value: '75',
+                            },
+                        ],
+                        toolbar: [
+                            'imageTextAlternative',
+                            'toggleImageCaption',
+                            '|',
+                            'imageStyle:inline',
+                            'imageStyle:wrapText',
+                            'imageStyle:breakText',
+                            'imageStyle:side',
+                            '|',
+                            'resizeImage',
+                        ],
+                    },
+                    table: {
+                        contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
+                    },
+                    // ckfinder: {
+                    //     uploadUrl: "{{ route('ckberita.upload', ['_token' => csrf_token()]) }}",
+                    //     options: {
+                    //         resourceType: 'Images'
+                    //     }
+                    // },
+                }
                 var myEditor;
                 ClassicEditor
-                    .create(document.querySelector('#isiBerita'), {
-                        // ckfinder: {
-                        //     uploadUrl: "{{ route('ckberita.upload', ['_token' => csrf_token()]) }}",
-                        // }
-                    })
+                    .create(document.querySelector('textarea#isiBerita'), option)
                     .then(editor => {
                         myEditor = editor;
                     })
                     .catch(error => {
                         console.error(error);
                     });
+
+                modalBerita.modal({
+                    focus: false
+                });
+
 
                 new AirDatepicker('#waktu', {
                     container: '#modalBerita',
@@ -76,33 +233,15 @@
                     timeFormat: 'hh:mm AA',
                 });
 
-                judulBerita.on('input', function() {
-                    var judulBeritaValue = $(this).val();
-                    if (judulBeritaValue.length > 225) {
-                        $('#judulBeritaError').text('Judul tidak boleh lebih dari 225 karakter.');
-                    } else {
-                        $('#judulBeritaError').text('');
-                    }
-                });
-
-                waktu.on('input', function() {
-                    var inputValue = $(this).val();
-                    var numericValue = inputValue.replace(/\D/g, ''); // Menghilangkan karakter non-angka
-                    $(this).val(numericValue);
-                });
-
                 formBerita.submit(function(event) {
                     // Pastikan bahwa formulir tidak benar-benar dikirim.
                     event.preventDefault();
 
-                    var judulBeritaValue = $('#judulBerita').val();
-                    if (judulBeritaValue.length > 225) {
-                        $('#judulBeritaError').text('Judul tidak boleh lebih dari 225 karakter.');
-                        return false; // Formulir tidak dikirim
-                    }
-
                     var data = new FormData(formBerita[0]);
                     var isiBerita = myEditor.getData();
+                    if (isiBerita === '<p>&nbsp;</p>') {
+                        isiBerita = '';
+                    }
                     data.append('isiBerita', isiBerita);
 
                     $.ajax({
@@ -113,15 +252,25 @@
                         processData: false,
                         dataType: "json",
                         success: function(response) {
-                            Swal.fire({
-                                icon: response.status,
-                                title: response.title,
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                            modalBerita.modal('hide');
-                            tabelBerita.DataTable().ajax.reload();
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                modalBerita.modal('hide');
+                                tabelBerita.DataTable().ajax.reload();
+                            } else {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
                         },
                     });
                 });
@@ -137,7 +286,6 @@
                     resetForm(formBerita, function() {
                         myEditor.setData('');
                         imgPrev.style.display = 'none';
-                        $('#judulBeritaError').text('');
                     });
                 });
 
@@ -193,6 +341,9 @@
 
                     var data = new FormData(formBerita[0]);
                     var isiBerita = myEditor.getData();
+                    if (isiBerita === '<p>&nbsp;</p>') {
+                        isiBerita = '';
+                    }
                     data.append('isiBerita', isiBerita);
 
                     $.ajax({
@@ -203,16 +354,25 @@
                         processData: false,
                         dataType: 'json',
                         success: function(response) {
-                            Swal.fire({
-                                icon: response.status,
-                                title: response.title,
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-
-                            modalBerita.modal('hide');
-                            tabelBerita.DataTable().ajax.reload();
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                modalBerita.modal('hide');
+                                tabelBerita.DataTable().ajax.reload();
+                            } else {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
                         },
                     });
                 });
@@ -258,7 +418,7 @@
                     columns: [{
                             data: 'nomor',
                             name: 'nomor',
-                            className: 'text-center fw-medium rounded-start'
+                            className: 'text-center fw-semibold rounded-start'
 
                         },
                         {
@@ -298,6 +458,7 @@
                         {
                             data: 'judulBerita',
                             name: 'judulBerita',
+                            className: 'fw-semibold align-top'
                         },
                         {
                             data: 'waktu',

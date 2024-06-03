@@ -20,7 +20,6 @@
                                 <th>Mata Pelajaran</th>
                                 <th style="width: 10%;">KKM</th>
                                 <th style="width: 15%;">Singkatan</th>
-                                <th style="width: 35%;">Deskripsi</th>
                                 <th style="width: 10%;">Aksi</th>
                             </tr>
                         </thead>
@@ -64,8 +63,16 @@
                                         placeholder="Masukan nama singkatan mapel">
                                 </div>
                                 <div class="mb-3">
+                                    <label class="form-label" for="kategori">Kategori</label>
+                                    <select name="kategori" id="kategori" class="form-select">
+                                        <option value="-" selected >Pilih Kategori</option>
+                                        <option value="seni pilihan">Seni Pilihan</option>
+                                        <option value="mulok">Muatan Lokal</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
                                     <label class="form-label" for="kkm">KKM</label>
-                                    <input type="number" class="form-control" id="kkm" name="kkm"
+                                    <input type="number" class="form-control" id="kkm" step="any" name="kkm"
                                         placeholder="Masukan Kriteria Ketuntasan Minimal (KKM)" required
                                         inputmode="numeric">
                                 </div>
@@ -110,9 +117,6 @@
                     render: function(data) {
                         return data ?? '-';
                     }
-                }, {
-                    data: 'deskripsi',
-                    name: 'deskripsi',
                 }, {
                     data: null,
                     className: 'text-center',
@@ -165,6 +169,7 @@
                         $('#deskripsiMapel').val(response.data.deskripsiMapel);
                         $('#kkm').val(response.data.kkm);
                         $('#singkatan').val(response.data.singkatan);
+                        $('#kategori').val(response.data.kategori);
                     },
                 });
             });

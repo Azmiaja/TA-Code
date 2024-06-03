@@ -65,24 +65,25 @@
         }
 
         .left-title {
-            width: 140px;
-            min-width: 140px;
+            width: 130px;
+            min-width: 130px;
         }
 
         .left-center {
-            width: 15px
+            width: 10px
         }
 
         .right-end {
-            width: 30px;
+            width: 90px;
         }
 
         .right-center {
-            width: 15px;
+            width: 10px;
         }
 
         .right-title {
-            width: 120px;
+            width: 110px;
+            min-width: 110px;
         }
 
         .sticky-top-80 {
@@ -103,9 +104,13 @@
                 /* font-size: 10pt; */
             }
 
-            table {
+            .tb_tb {
                 page-break-inside: avoid;
                 /* Hindari pemotongan tabel di dalam halaman */
+            }
+
+            thead {
+                display: table-header-group;
             }
 
 
@@ -115,8 +120,8 @@
             }
 
             @page {
-                size: A4;
-                margin: 1.8cm 1cm 1.5cm 1.8cm;
+                /* size: A4; */
+                margin: 1.8cm 1cm 1.8cm 1cm;
                 /* Anda bisa menyesuaikan margin sesuai kebutuhan */
             }
         }
@@ -138,21 +143,6 @@
                     class="form-control form-control-alt fw-semibold border-secondary" id="kelas_diampu">
             </div>
         </div>
-        {{-- <div class="row g-3 mb-4 justify-content-end">
-            <div class="col-md-3 mb-md-0 mb-2">
-                <label for="periode_id" class="form-label text-uppercase fw-bold fs-sm">Periode</label>
-                <select class="form-select fw-medium" name="" id="periode_id">
-                    <option value="{{ $periodeAktif->idPeriode }}" data-smt="{{ $periodeAktif->semester }}"
-                        data-tahun="{{ $periodeAktif->tahun }}">
-                        {{ $periodeAktif->semester }} {{ $periodeAktif->tahun }}
-                    </option>
-                    <option value="{{ $periodeLewat->idPeriode }}" data-smt="{{ $periodeLewat->semester }}"
-                        data-tahun="{{ $periodeLewat->tahun }}">
-                        {{ $periodeLewat->semester }} {{ $periodeLewat->tahun }}
-                    </option>
-                </select>
-            </div>
-        </div> --}}
         <div class="row">
             <div class="col-12">
                 <div class="block block-rounded">
@@ -171,9 +161,6 @@
                             </div>
                             <div class="col-md-5">
                                 <select class="form-select form-select-lg border-dark" name="" id="data_siswa">
-                                    <option value="">New Delhi</option>
-                                    <option value="">Istanbul</option>
-                                    <option value="">Jakarta</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -184,12 +171,14 @@
                                     <option value="Wali">Wali Murid</option>
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 d-flex">
                                 <button id="cetak_rp" type="button" class="btn btn-lg btn-primary w-100">Cetak</button>
+                                <button id="setting_rp" type="button" title="Setting"
+                                    class="btn btn-lg btn-alt-info w-100 ms-2"><i class="fa-solid fa-gear"></i></button>
                             </div>
                         </div>
                         <div class="mx-auto"
-                            style="max-width:21.1cm; padding: 1.8cm 1cm 1.5cm 1.8cm; border: 1px dashed #4e4e4e;">
+                            style="max-width:21.1cm; padding: 1.8cm 1cm 1.8cm 1cm; border: 1px dashed #4e4e4e;">
                             <div id="loading_spinner" class="text-center" style="display: none">
                                 <div class="spinner-border text-primary" role="status"></div>
                             </div>
@@ -208,8 +197,50 @@
         </div>
     </div>
 
+    {{-- Modal option --}}
+    <div class="modal fade" id="modal_option" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="modalMapeltLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="block block-rounded block-transparent mb-0">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title">Pengaturan Rapor</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content fs-sm form-container">
+                        <div class="mb-3">
+                            <label for="tgl_rapor" class="form-label">Tanggal Rapor</label>
+                            <input type="text" readonly class="form-control" name="" id="tgl_rapor" />
+                        </div>
+                        <div id="form_mapel"></div>
+                        <div class="mb-3 text-end">
+                            <button type="button" name="" id="sv_rapor" class="btn btn-primary">
+                                Simpan
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full bg-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @push('scripts')
         <script>
+            $('#setting_rp').click(function() {
+                $('#modal_option').modal('show');
+                new AirDatepicker('#tgl_rapor', {
+                    container: '#modal_option',
+                    autoClose: true,
+                    dateFormat: "dd MMMM yyyy",
+                }).selectDate(new Date());
+            });
+
             function slectSiswa() {
                 var periode = $('#periode_id').data('id');
                 var kelas = $('#kelas_diampu').data('nama');
@@ -239,7 +270,99 @@
                 });
             }
 
-            function printDiv(idSiswa) {
+            var mapel_data_mulok = [];
+            var mapel_data_seni = [];
+            var mapel_data = [];
+
+            function updateMapelData() {
+                mapel_data = $('.input-mapel:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                mapel_data_seni = $('.input-mapel-seni:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                mapel_data_mulok = $('.input-mapel-mulok:checked').map(function() {
+                    return $(this).val();
+                }).get();
+            }
+
+            function getMapel() {
+                var kelas = $('#kelas_diampu').data('id');
+                var periode = $('#periode_id').data('id');
+                $('#form_mapel').empty();
+                var form_mapel = `<div class="mb-3">
+                                        <label class="form-label">Mata Pelajaran Rapor</label>`;
+                $.ajax({
+                    url: `{{ route('get-data.rapor.mapel') }}`,
+                    type: 'GET',
+                    data: {
+                        idPeriode: periode,
+                        idKelas: kelas,
+                    },
+                    success: function(data) {
+                        var mapel = data.filter(function(item) {
+                            return item.mapel.kategori === '-';
+                        });
+                        $.each(mapel, function(key, value) {
+
+                            form_mapel += `<div class="form-check">
+                                          <input class="form-check-input input-mapel" type="checkbox" checked value="${value.mapel.idMapel}" id="mapel_check_${value.mapel.idMapel}" data-position="${key}">
+                                          <label class="form-check-label" for="mapel_check_${value.mapel.idMapel}">
+                                            ${value.mapel.namaMapel}
+                                          </label>
+                                        </div>`;
+                        });
+
+                        var mapel_seni = data.filter(function(item) {
+                            return item.mapel.kategori === 'seni pilihan';
+                        });
+                        form_mapel += `</div>
+                        <div class="mb-3">
+                            <label class="form-label">Seni Pilihan</label>`;
+
+
+                        $.each(mapel_seni, function(i, seni) {
+                            form_mapel += `<div class="form-check">
+                                          <input class="form-check-input input-mapel-seni" type="checkbox" checked value="${seni.mapel.idMapel}" id="mapel_seni_check_${seni.mapel.idMapel}" data-position="${i}">
+                                          <label class="form-check-label" for="mapel_seni_check_${seni.mapel.idMapel}">
+                                            ${seni.mapel.namaMapel}
+                                          </label>
+                                        </div>`;
+                        });
+
+                        form_mapel += `</div>
+                        <div class="mb-3">
+                            <label class="form-label">Muata Lokal</label>`;
+
+                        var mapel_mulok = data.filter(function(item) {
+                            return item.mapel.kategori === 'mulok';
+                        });
+                        $.each(mapel_mulok, function(j, mulok) {
+                            form_mapel += `<div class="form-check">
+                                          <input class="form-check-input input-mapel-mulok" type="checkbox" checked value="${mulok.mapel.idMapel}" id="mapel_mulok_check_${mulok.mapel.idMapel}" data-position="${j}">
+                                          <label class="form-check-label" for="mapel_mulok_check_${mulok.mapel.idMapel}">
+                                            ${mulok.mapel.namaMapel}
+                                          </label>
+                                        </div>`;
+                        });
+
+                        form_mapel += `</div>`;
+
+
+                    },
+                    complete: function() {
+                        $('#form_mapel').append(form_mapel);
+
+                        updateMapelData();
+                        slectSiswa();
+                    }
+                });
+
+            }
+
+            function printDiv(idSiswa, data_mp, data_seni, data_mulok, tanggal) {
                 var periode = $('#periode_id').data('id');
                 var periode_th = $('#periode_id').data('tahun');
                 var periode_smt = $('#periode_id').data('smt');
@@ -248,12 +371,12 @@
                 var sekolah = {!! json_encode($sekolah) !!};
 
                 var kls_romawi = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+                var kls_nama = ['Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam'];
 
                 $('#ctk_rapor').empty();
                 $('#loading_spinner').show();
                 var tb;
 
-                var kepsek = {!! json_encode($kepsek) !!};
                 var guru_kelas = {!! json_encode($guru_kls) !!};
 
                 // console.log(sekolah);
@@ -267,7 +390,11 @@
                         idSiswa: idSiswa
                     },
                     success: function(data) {
+                        var tgl = tanggal;
+                        // var mapel_data = [];
+
                         var siswa = data.siswa;
+
 
                         function getOrtu() {
                             var cange = $('#ortu_selected').find('option:selected').val();
@@ -278,7 +405,7 @@
                             } else if (cange == 'Wali') {
                                 return `<u>${siswa.namaWali}</u>`;
                             } else {
-                                return '<u><pre>                   </pre></u>';
+                                return '<pre>........................</pre>';
                             }
                         }
 
@@ -288,7 +415,9 @@
                                 ortu); // Cetak nilai ortu setiap kali pilihan berubah
                         });
 
-                        tb = `<table id="table_rapor" class="table_rapor table-sm table w-100 table-bordered border-dark mb-0">
+
+
+                        tb = `<table id="table_rapor" class="table_rapor table-sm table w-100 table-bordered border-dark">
                                     <tr class="border-0">
                                         <th colspan="4" class="p-0 pb-3 border-0">
                                             <h4 class="text-center text-uppercase mb-0" style="color: #000">Laporan Hasil
@@ -296,14 +425,15 @@
                                         </th>
                                     </tr>
                                     <tr class="border-0">
-                                        <th colspan="4" class="p-0 border-0">
-                                            <table class="table table-borderless fw-normal">
+                                        <th class="border-0" style="width: 4.22ch; min-width: 4.22ch;"></th>
+                                        <th colspan="2" class="p-0 border-0">
+                                            <table class="table table-borderless fw-normal mb-0">
                                                 <tr>
                                                     <td class="m-0 p-0 pe-2 border-0" width="68%">
                                                         <div class="d-flex">
                                                             <div class="text-nowrap left-title">Nama Peserta Didik</div>
                                                             <div class="left-center">:</div>
-                                                            <div class="left-end text-uppercase fw-bold">${siswa.namaSiswa}</div>
+                                                            <div class="left-end text-uppercase">${siswa.namaSiswa}</div>
                                                         </div>
                                                         <div class="d-flex">
                                                             <div class="text-nowrap left-title">NISN/NIS</div>
@@ -325,7 +455,7 @@
                                                         <div class="d-flex">
                                                             <div class="text-nowrap right-title">Kelas</div>
                                                             <div class="right-center">:</div>
-                                                            <div class="right-end">${kls_romawi[kelas - 1??'']}</div>
+                                                            <div class="right-end text-uppercase">${kls_romawi[kelas - 1??'']} (${kls_nama[kelas - 1??'']})</div>
                                                         </div>
                                                         <div class="d-flex">
                                                             <div class="text-nowrap right-title">Fase</div>
@@ -335,7 +465,7 @@
                                                         <div class="d-flex">
                                                             <div class="text-nowrap right-title">Semester</div>
                                                             <div class="right-center">:</div>
-                                                            <div class="right-end">${periode_smt}</div>
+                                                            <div class="right-end text-uppercase">${periode_smt === 'Genap' ? 'II' : 'I'}/${periode_smt}</div>
                                                         </div>
                                                         <div class="d-flex">
                                                             <div class="text-nowrap right-title">Tahun Pelajaran</div>
@@ -346,41 +476,54 @@
                                                 </tr>
                                             </table>
                                         </th>
+                                        <th class="border-0" style="width: 4.22ch; min-width: 4.22ch;"></th>
                                     </tr>
                                 </table>
-                                <table class="table_rapor table-sm  table w-100 table-bordered border-dark">
-                                    <tr class="text-center bg-0 border-dark">
-                                        <th>No.</th>
-                                        <th>Mata Pelajaran</th>
-                                        <th width="9%" class="text-nowrap">Nilai Akhir</th>
-                                        <th>Capaian Kompetensi</th>
-                                    </tr>
+                                <table class="table_rapor table-sm  table w-100 table-bordered border-dark mb-0">
+                                    <thead>
+                                        <tr class="text-center bg-0 border-dark align-middle" style="border-bottom: none;">
+                                            <th style="text-transform: none; border-bottom: none;">No</th>
+                                            <th style="text-transform: none; border-bottom: none;">Mata Pelajaran</th>
+                                            <th style="text-transform: none; border-bottom: none;" class="text-center">Nilai Akhir</th>
+                                            <th style="text-transform: none; border-bottom: none;">Capaian Kompetensi</th>
+                                        </tr>
+                                    </thead>
                                 `;
 
-                        var mapel = data.mapel;
-                        $.each(mapel, function(key, value) {
-                            tb += `<tr class="align-middle">
-                                        <td style="width:20px; min-width: 20px;" class="text-center">${key+1}</td>
-                                        <td style="width:200px; min-width: 200px;">${value.mapel.namaMapel}</td>
+                        // var mapel_data = [7, 8, 13];
+                        var mapel = data.mapel.filter(function(item) {
+                            return item.mapel.kategori === '-' && data_mp.includes(item.idMapel
+                                .toString());
+                        });
+                        var number = 0;
+
+                        if (mapel.length > 0) {
+                            $.each(mapel, function(key, value) {
+                                // console.log(value);
+                                number++;
+
+                                tb += `<tr class="align-middle">
+                                        <td style="width:4.22ch; min-width: 4.22ch;" class="text-center">${key+1}</td>
+                                        <td style="width:22.78ch; min-width: 22.78ch;">${value.mapel.namaMapel}</td>
                                         `;
-                            var nilai = data.nilai.find(function(item) {
-                                return item.idPengajaran === value.idPengajaran;
-                            });
-                            if (nilai) {
-                                tb += `<td class="text-center" style="font-size:12pt;">${nilai.raport === 0 ? '' : nilai.raport}</td>
+                                var nilai = data.nilai.find(function(item) {
+                                    return item.idPengajaran === value.idPengajaran;
+                                });
+                                if (nilai && nilai.deskripsiCPtinggi && nilai.deskripsiCPrendah) {
+                                    tb += `<td class="text-center" style="width:9.22ch; min-width: 9.22ch; font-size:12pt;">${nilai.raport === 0 ? '' : nilai.raport}</td>
                                         <td class="p-0">
                                             <table class="table table-sm table11 m-0">
                                                 <tr>
-                                                    <td style="font-size:10pt; ${nilai.deskripsiCPtinggi === null ? 'padding: 15px' : ''}">${nilai.deskripsiCPtinggi === null ? '' : nilai.deskripsiCPtinggi}</td>
+                                                    <td class="py-2 lh-1" style="font-size:10pt;">Ananda <span class="text-uppercase">${siswa.namaSiswa}</span> ${nilai.deskripsiCPtinggi === null ? '' : nilai.deskripsiCPtinggi}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="font-size:10pt; ${nilai.deskripsiCPrendah === null ? 'padding: 15px' : ''}">${nilai.deskripsiCPrendah === null ? '' : nilai.deskripsiCPrendah}</td>
+                                                    <td class="py-2 lh-1" style="font-size:10pt;">Ananda <span class="text-uppercase">${siswa.namaSiswa}</span> ${nilai.deskripsiCPrendah === null ? '' : nilai.deskripsiCPrendah}</td>
                                                 </tr>
                                             </table>
                                         </td>
                                     </tr>`;
-                            } else {
-                                tb += `<td class="text-center"></td>
+                                } else {
+                                    tb += `<td class="text-center" style="width:9.22ch; min-width: 9.22ch;"></td>
                                         <td class="p-0">
                                             <table class="table table-sm table11 m-0">
                                                 <tr>
@@ -393,58 +536,202 @@
                                         </td>
                                     </tr>`;
 
-                            }
-                            // console.log(nilai);
+                                }
+                                // console.log(nilai);
+                            });
+                        } else {
+                            tb += `<tr class="align-middle">
+                                        <td style="width:4.22ch; min-width: 4.22ch;" class="text-center">${number+1}</td>
+                                        <td style="width:22.78ch; min-width: 22.78ch;"></td>
+                                        <td class="text-center" style="width:9.22ch; min-width: 9.22ch;"></td>
+                                        <td class="p-0">
+                                            <table class="table table-sm table11 m-0">
+                                                <tr>
+                                                    <td style="padding: 15px"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 15px"></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>`;
+                        }
+
+                        var mapel_seni = data.mapel.filter(function(item) {
+                            return item.mapel.kategori === 'seni pilihan' && data_seni.includes(item
+                                .idMapel
+                                .toString());
                         });
 
+                        if (mapel_seni.length > 0) {
+                            tb += `<tr>
+                                <td class="text-center">${mapel.length == 0 ? number+2: number+1}</td>
+                                <td colspan="3">Seni (Pilihan)</td>
+                            </tr>`;
+                            $.each(mapel_seni, function(j, seni) {
+                                var nilai = data.nilai.find(function(item) {
+                                    return item.idPengajaran === seni.idPengajaran;
+                                });
+                                var alfabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+                                tb += `<tr class="align-middle">
+                                        <td style="width:4.22ch; min-width: 4.22ch;" class="text-center">${alfabet[j+1 -1 ?? '']}</td>
+                                        <td style="width:22.78ch; min-width: 22.78ch;">${seni.mapel.namaMapel}</td>
+                                        `;
+
+                                if (nilai && nilai.deskripsiCPtinggi && nilai.deskripsiCPrendah) {
+                                    tb += `<td class="text-center" style="width:9.22ch; min-width: 9.22ch; font-size:12pt;">${nilai.raport === 0 ? '' : nilai.raport}</td>
+                                        <td class="p-0">
+                                            <table class="table table-sm table11 m-0">
+                                                <tr>
+                                                    <td class="py-2 lh-1" style="font-size:10pt;">Ananda <span class="text-uppercase">${siswa.namaSiswa}</span> ${nilai.deskripsiCPtinggi === null ? '' : nilai.deskripsiCPtinggi}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-2 lh-1" style="font-size:10pt;">Ananda <span class="text-uppercase">${siswa.namaSiswa}</span> ${nilai.deskripsiCPrendah === null ? '' : nilai.deskripsiCPrendah}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>`;
+                                } else {
+                                    tb += `<td class="text-center" style="width:9.22ch; min-width: 9.22ch;"></td>
+                                        <td class="p-0">
+                                            <table class="table table-sm table11 m-0">
+                                                <tr>
+                                                    <td style="padding: 15px"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 15px"></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>`;
+
+                                }
+
+                            });
+                        }
+
+                        tb += ` </table>`;
+
+                        var mapel_mulok = data.mapel.filter(function(item) {
+                            return item.mapel.kategori === 'mulok' && data_mulok.includes(item
+                                .idMapel
+                                .toString());
+                        });
+                        if (mapel_mulok.length > 0) {
+                            tb += `<table class="table_rapor tb_tb table-sm table w-100 table-bordered border-dark mt-0">
+                                <tr class="border-0">
+                                    <th colspan="4" class="h6 text-uppercase border-0">Muatan Lokal</th>
+                                </tr>
+                                <tr class="text-center bg-0 border-dark align-middle">
+                                    <th>No</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th class="text-center">Nilai Akhir</th>
+                                    <th>Capaian Kompetensi</th>
+                                </tr>`;
+
+                            $.each(mapel_mulok, function(k, mulok) {
+                                tb += `<tr class="align-middle">
+                                        <td style="width:4.22ch; min-width: 4.22ch;" class="text-center">${mapel.length > 0 ? (mapel_seni.length == 0 ? number + 1 : number+2) : number+3}</td>
+                                        <td style="width:22.78ch; min-width: 22.78ch;">${mulok.mapel.namaMapel}</td>
+                                        `;
+
+                                var nilai = data.nilai.find(function(item) {
+                                    return item.idPengajaran === mulok.idPengajaran;
+                                });
+
+                                if (nilai && nilai.deskripsiCPtinggi && nilai.deskripsiCPrendah) {
+                                    tb += `<td class="text-center" style="width:9.22ch; min-width: 9.22ch; font-size:12pt;">${nilai.raport === 0 ? '' : nilai.raport}</td>
+                                        <td class="p-0">
+                                            <table class="table table-sm table11 m-0">
+                                                <tr>
+                                                    <td class="py-2 lh-1" style="font-size:10pt;">Ananda <span class="text-uppercase">${siswa.namaSiswa}</span> ${nilai.deskripsiCPtinggi === null ? '' : nilai.deskripsiCPtinggi}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-2 lh-1" style="font-size:10pt;">Ananda <span class="text-uppercase">${siswa.namaSiswa}</span> ${nilai.deskripsiCPrendah === null ? '' : nilai.deskripsiCPrendah}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>`;
+                                } else {
+                                    tb += `<td class="text-center" style="width:10.22ch; min-width: 10.22ch;"></td>
+                                        <td class="p-0">
+                                            <table class="table table-sm table11 m-0">
+                                                <tr>
+                                                    <td style="padding: 15px"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 15px"></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>`;
+
+                                }
+                            });
+                        }
+
                         tb += `</table>
-                        <table class="table_rapor table-sm  table w-100 table-bordered border-dark">
+                        <table class="table_rapor table-sm tb_tb table w-100 table-bordered border-dark align-middle ${mapel_mulok.length == 0 ? 'mt-3' : ''}">
                                     <tr class="text-center bg-0 border-dark">
-                                        <th>No.</th>
+                                        <th>No</th>
                                         <th>Ekstrakulikuler</th>
+                                        <th>Predikat</th>
                                         <th>Keterangan</th>
                                     </tr>`;
 
-                        var ekstra = data.kegiatan;
+                        var ekstra = data.kegiatan.sort(function(a, b) {
+                            if (a.ekstra.status === "wajib" && b.ekstra.status === "pilihan") {
+                                return -1;
+                            }
+                            if (a.ekstra.status === "pilihan" && b.ekstra.status === "wajib") {
+                                return 1;
+                            }
+                            return 0; // Tidak ada perubahan jika statusnya sama
+                        });
                         if (ekstra.length > 0) {
                             $.each(ekstra, function(key, value) {
+                                var predikat = ['Sangat Berkembang', 'Berkembang',
+                                    'Cukup Berkembang',
+                                    'Mulai Berkembang'
+                                ];
                                 tb += `<tr>
-                                            <td style="width:20px; min-width: 20px;" class="text-center">${key +1}</td>
-                                            <td style="width:240px; min-width: 240px;">${value.ekstra.ekstra}</td>
-                                            <td>${value.deskripsi ?? ''}</td>
+                                            <td style="width: 4.22ch; min-width:  4.22ch;" class="text-center">${key +1}</td>
+                                            <td style="width:22.78ch; min-width: 22.78ch;">${value.ekstra.ekstra}</td>
+                                            <td class="text-center" style="width:9.22ch; min-width: 9.22ch; font-size:9.7pt;">${predikat[value.predikat-1 ?? '']}</td>
+                                            <td class="py-2 lh-1" >${value.deskripsi ?? ''}</td>
                                         </tr>`;
                             });
                         } else {
                             tb += `<tr>
-                                        <td style="width:20px; min-width: 20px;" class="text-center">1</td>
-                                        <td style="width:240px; min-width: 240px;"></td>
-                                        <td></td>
+                                        <td style="width: 4.22ch; min-width:  4.22ch;" class="text-center">1</td>
+                                        <td style="width:22.78ch; min-width: 22.78ch;"></td>
+                                        <td style="width:9.22ch; min-width: 9.22ch;"></td>
+                                        <td class="py-2"></td>
                                     </tr>`;
 
                         }
 
                         tb += `</table>
-                            <table class="table_rapor table-sm table w-100 table-bordered border-dark">
+                            <table class="table_rapor tb_tb table-sm table w-100 table-bordered border-dark">
                                     <tr class="text-start bg-0 border-dark">
                                         <th>Catatan Guru</th>
                                     </tr>`;
 
                         var catatan = data.catatan;
-                        if (catatan.length > 0) {
-                            $.each(catatan, function(key, value) {
-                                tb += `<tr>
-                                            <td>${value.catatan_guru ?? ''}</td>
-                                        </tr>`;
-                            });
+                        if ([catatan].length > 0 && catatan !== null) {
+                            tb += `<tr>
+                                        <td class="py-2 lh-1">${catatan.catatan_guru ?? ''}</td>
+                                    </tr>`;
                         } else {
                             tb += `<tr>
-                                        <td></td>
+                                        <td class="py-2"></td>
                                     </tr>`;
                         }
 
                         tb += `</table>`;
+
                         if (periode_smt == 'Genap') {
-                            tb += `<table class="table_rapor table-sm table w-100 table-bordered border-dark">
+                            tb += `<table class="table_rapor tb_tb table-sm table w-100 table-bordered border-dark">
                                     <tr class="text-start bg-0 border-dark">
                                         <th>Keterangan Kenaikan Kelas</th>
                                     </tr>`;
@@ -452,11 +739,11 @@
                             if ([keterangan].length > 0 && keterangan !== null) {
                                 tb += `
                                 <tr>
-                                    <td>${keterangan.deskripsi ?? ''}</td>
+                                    <td class="py-2 lh-1">${keterangan.deskripsi ?? ''}</td>
                                 </tr>`;
                             } else {
                                 tb += `<tr>
-                                        <td></td>
+                                        <td class="py-2"></td>
                                     </tr>`;
                             }
                             tb += `</table>`;
@@ -474,9 +761,9 @@
                             return presensi.presensi === 'A';
                         }).length;
 
-                        tb += `<table style="width:240px; min-width: 240px;"
+                        tb += `<table style="width:40ch; min-width: 40ch; margin-left: 4.22ch;"
                                     class="table_rapor table-sm table table-bordered border-dark">
-                                    <tr class="text-start border-dark bg-0">
+                                    <tr class="text-center border-dark bg-0">
                                         <th colspan="3">Ketidakhadiran</th>
                                     </tr>
                                     <tr>
@@ -497,36 +784,38 @@
                                 </table>
                                 <table class="table_rapor table table-borderless">
                                     <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-around">
-                                                <div class="flex-item">
-                                                    <span>Mengetahui :</span><br>
-                                                    <span>Orang Tua / Wali Murid,</span>
+                                        <td style="width: 4.22ch; min-width: 4.22ch;"></td>
+                                        <td colspan="2">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="flex-item text-center">
+                                                    <br>
+                                                    <span>Orang Tua/Wali,</span>
                                                     <br>
                                                     <br>
                                                     <br>
                                                     <br>
                                                     <br>
-                                                    <span class="fw-bold" id="ortu_ttd"></span>
+                                                    <span id="ortu_ttd"></span>
                                                 </div>
-                                                <div class="flex-item">
-                                                    <br>
-                                                    <span>Guru Kelas,</span>
-                                                    <br>
-                                                    <br>
+                                                <div class="flex-item text-center">
+                                                    <span id="tanggal_rapor">${tgl}</span><br>
+                                                    <span>Wali Kelas ${kls_romawi[kelas - 1??'']} <span class="text-uppercase">(${kls_nama[kelas - 1??'']})</span></span>
                                                     <br>
                                                     <br>
                                                     <br>
-                                                    <span class="fw-bold"><u>${guru_kelas.namaPegawai}</u></span><br>
-                                                    <span>NIP.${guru_kelas.nip}</span>
+                                                    <br>
+                                                    <br>
+                                                    <span><u>${guru_kelas.namaPegawai}</u></span><br>
+                                                    <span>NIP. ${guru_kelas.nip}</span>
                                                 </div>
                                             </div>
                                         </td>
+                                        <td style="width: 4.22ch; min-width: 4.22ch;"></td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td colspan="4">
                                             <div class="d-flex justify-content-center">
-                                                <div class="flex-item">
+                                                <div class="flex-item text-center">
                                                     <span>Mengetahui,</span><br>
                                                     <span>Kepala Sekolah</span>
                                                     <br>
@@ -534,8 +823,8 @@
                                                     <br>
                                                     <br>
                                                     <br>
-                                                    <span class="fw-bold"><u>${[kepsek].length > 0 ? kepsek.namaPegawai : ''}</u></span><br>
-                                                    <span>NIP.${[kepsek].length > 0 ? kepsek.nip : ''}</span>
+                                                    <span><u>${[sekolah].length > 0 ? sekolah.kepsek : ''}</u></span><br>
+                                                    <span>NIP. ${[sekolah].length > 0 ? sekolah.nip : ''}</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -554,18 +843,28 @@
                 });
             }
 
-
             $(document).ready(function() {
-                slectSiswa();
-                // printDiv();
+                // slectSiswa();
+                getMapel();
                 $('#data_siswa').change(function(e) {
+                    moment.locale('id');
                     e.preventDefault();
                     var no = $('#data_siswa option:selected').data('no');
-                    var id = $('#data_siswa option:selected').val();
                     $('#urut_siswa').val(no);
-                    printDiv(id);
+                    var id = $('#data_siswa option:selected').val();
+                    printDiv(id, mapel_data, mapel_data_seni, mapel_data_mulok, moment().format('DD MMMM YYYY'));
+                });
+
+                $('#sv_rapor').click(function() {
+                    var tgl = $('#tgl_rapor').val();
+
+                    updateMapelData();
+                    $('#modal_option').modal('hide');
+                    var id = $('#data_siswa option:selected').val();
+                    printDiv(id, mapel_data, mapel_data_seni, mapel_data_mulok, tgl);
 
                 });
+
                 $('#cetak_rp').on('click', function() {
                     $("#ctk_rapor").printThis({
                         debug: false, // show the iframe for debugging
@@ -574,41 +873,6 @@
                     });
                 });
 
-                // Event listener untuk mencetak nilai ortu setiap kali pilihan berubah
-
-                // $('#table_rapor').DataTable({
-                //     ajax: "{{ route('siswa.get-data') }}",
-                //     columns: [{
-                //             data: 'nomor',
-                //             name: 'nomor',
-                //             className: 'text-center'
-                //         }, {
-                //             data: 'nis',
-                //             name: 'nis'
-                //         }, {
-                //             data: 'nama',
-                //             name: 'nama'
-                //         },  {
-                //             data: 'jenisKelamin',
-                //             name: 'jenisKelamin',
-                //             className: 'text-center'
-                //         }, 
-                //         {
-                //             data: null,
-                //             className: 'text-center',
-                //             render: function(data, type, row) {
-                //                 return '<div class="btn-group">' +
-                //                     '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editSiswa" value="' +
-                //                     data.idSiswa + '">' +
-                //                     '<i class="fa fa-fw fa-pencil-alt"></i></button></div>';
-                //             }
-                //         }
-                //     ],
-                //     dom: "<'row mb-2 '<'col-12 col-sm-12 col-md-6'l><'col-12 col-sm-12 col-md-6'f>>" +
-                //         "<'row my-2 '<'col-12 col-sm-12'tr>>" +
-                //         "<'row mb-2'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-                //     lengthMenu: [10, 25, 50, 100],
-                // });
             });
         </script>
     @endpush

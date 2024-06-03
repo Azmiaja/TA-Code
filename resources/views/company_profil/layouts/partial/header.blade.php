@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/magnific-popup/magnific-popup.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/oneui.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/js/plugins/ckeditor5-classic/build/ckeditor.css') }}">
 
     @stack('style')
 
@@ -169,14 +170,26 @@
             width: 100%;
         }
 
-        .maps-container{
+        .maps-container {
             width: 100%;
             display: flex;
         }
 
-        .maps-container iframe{
+        .maps-container iframe {
             width: 100%;
             height: 200px;
+        }
+
+        .ck-content .image-style-align-left {
+            margin-right: var(--ck-image-style-spacing);
+        }
+
+        .ck-content .image-style-align-right {
+            margin-left: var(--ck-image-style-spacing);
+        }
+
+        .ck-content .image-style-side {
+            margin-left: var(--ck-image-style-spacing);
         }
     </style>
 
@@ -192,13 +205,13 @@
                         <div class="row m-0">
                             <div class="col-sm-2 col-3 p-0">
                                 <!-- Logo -->
-                                <img src="{{ $logoSD }}" class="img-fluid" alt="logo SD"
-                                    width="90">
+                                <img src="{{ $logoSD }}" class="img-fluid" alt="logo SD" width="90">
                             </div>
                             <div class="col-sm-8 col-9 p-0 align-self-center">
                                 <a href="{{ route('home') }}"
                                     class="navbar-brand py-auto d-inline-block text-lg-start text-center w-100">
-                                    <h3 class="text-city fw-bold text-lg-nowrap text-wrap m-0 text-uppercase">{{ $namaSD }}<br>
+                                    <h3 class="text-city fw-bold text-lg-nowrap text-wrap m-0 text-uppercase">
+                                        {{ $namaSD }}<br>
                                         <p class="fw-semibold text-lg-nowrap text-wrap text-city-dark m-0 pt-2 text-uppercase"
                                             style="font-size: .8rem;">{{ $sloganSD }}</p>
                                     </h3>

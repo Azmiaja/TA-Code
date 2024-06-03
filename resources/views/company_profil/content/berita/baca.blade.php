@@ -1,5 +1,6 @@
 @extends('company_profil/layouts/app')
 @section('app')
+    
     <div class="row my-2 g-3">
         <div class="col-xxl-9 col-lg-8 col-12">
             <div class="row m-0 mb-3">
@@ -16,9 +17,29 @@
                             &bull; <span class="text-muted">{{ $waktu }}</span>
                         </span>
                     </div>
-                    <article class="text-justify story text-dark">
+                    <article class="ck-content">
                         {!! $contenBerita !!}
                     </article>
+                    <br>
+                    {{-- <br>
+                    <br>
+                    <div class="ck-content">
+                        <figure class="image image_resized image-style-align-left"
+                            style="width:14.58%; margin-right: var(--ck-image-style-spacing);">
+                            <img style="aspect-ratio:563/806;"
+                                src="http://127.0.0.1:8000/storage/gambar-berita/665b6968422f9.jpg" width="563"
+                                height="806">
+                        </figure>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis consectetur veritatis ut
+                            dicta autem temporibus necessitatibus adipisci iusto aperiam qui molestiae error perferendis
+                            quibusdam, commodi dolores officiis porro sed illum enim assumenda iure facere tenetur.
+                            Similique perspiciatis omnis modi deleniti ipsam iste vel soluta! Odit asperiores magnam nemo
+                            dolores perspiciatis numquam nostrum, distinctio unde dicta optio incidunt accusantium iste non
+                            odio id voluptas architecto modi eaque ullam aspernatur totam deserunt minus temporibus
+                            obcaecati! Quam nemo in voluptas iste ut delectus sit inventore repellat, officiis, ad quaerat?
+                            Assumenda suscipit eveniet ducimus reiciendis sed vitae, sit voluptate provident ipsum ullam nam
+                            ab.</p>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -41,7 +62,8 @@
                             <div class="col-md-12">
                                 <div class="d-flex block block-rounded shadow-sm p-2 m-0 position-relative">
                                     <div class="ratio" style="max-width: 6rem; height: 6rem;">
-                                        <img src="{{ $bTree['gambar'] }}" alt="Berita" class="rounded" style="width: 100%; height: 100%; object-fit: cover">
+                                        <img src="{{ $bTree['gambar'] }}" alt="Berita" class="rounded"
+                                            style="width: 100%; height: 100%; object-fit: cover">
                                     </div>
                                     <div class="block-content w-100 align-items-center px-0 ms-2">
                                         <h6 class="my-0 fst-normal text-dark mb-1">

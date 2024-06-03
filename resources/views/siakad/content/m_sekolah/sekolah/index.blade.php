@@ -97,11 +97,21 @@
                             <div class="col-1 fw-semibold">:</div>
                             <div class="col-7 overflow-hidden" style="word-wrap: break-word;" id="slogan"></div>
                         </div>
+                        <div class="d-flex flex-row py-2">
+                            <div class="col-4 fw-semibold">Kepala Sekolah</div>
+                            <div class="col-1 fw-semibold">:</div>
+                            <div class="col-7 overflow-hidden" style="word-wrap: break-word;" id="kepsek"></div>
+                        </div>
+                        <div class="d-flex flex-row py-2">
+                            <div class="col-4 fw-semibold">NIP</div>
+                            <div class="col-1 fw-semibold">:</div>
+                            <div class="col-7 overflow-hidden" style="word-wrap: break-word;" id="nip_kepsek"></div>
+                        </div>
                     </div>
 
                     <div class="col-lg-3 col-12">
                         <div class="row g-3">
-                            <div class="col-lg-12 col-sm-6 col-12">
+                            <div class="col-lg-12 col-sm-4 col-12">
                                 <div>
                                     <figure class="figure w-100">
                                         <figcaption class="fw-semibold mb-2">Logo Sekolah</figcaption>
@@ -112,7 +122,17 @@
                                     </figure>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-sm-6 col-12">
+                            <div class="col-lg-12 col-sm-4 col-12">
+                                <div>
+                                    <figure class="figure w-100">
+                                        <figcaption class="fw-semibold mb-2">Foto Kepala Sekolah</figcaption>
+                                        <div class="ratio ratio-1x1 rounded p-1" style="border: 2px dashed #dfe3ea;">
+                                            <img src="" id="kepsek_foto" class="figure-img img-fluid rounded">
+                                        </div>
+                                    </figure>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-sm-4 col-12">
                                 <div>
                                     <figure class="figure w-100">
                                         <figcaption class="fw-semibold mb-2">Maps Embed</figcaption>
@@ -163,6 +183,9 @@
                 const tbl_logo = document.getElementById('logo');
                 const tbl_mlink = document.getElementById('maps_link');
                 const tbl_membed = document.getElementById('maps_embed');
+                const tbl_kepsek = document.getElementById('kepsek');
+                const tbl_nip = document.getElementById('nip_kepsek');
+                const tbl_fotoKepsek = document.getElementById('kepsek_foto');
 
                 const modalSekolah = $("#modalSekolah");
                 const formSekolah = $("#formSekolah");
@@ -189,13 +212,16 @@
                 $('#fileButton').click(function() {
                     $('#logoSekolah').click();
                 });
+                $('#file_kepsek').click(function() {
+                    $('#kepsekFoto').click();
+                });
 
                 fetchDataSekolah();
 
                 function fetchDataSekolah() {
                     $('#loading_spinner').show();
                     // Lakukan AJAX request ke endpoint yang telah dibuat
-                    var url = '{!! url('sekolah/get-data') !!}';
+                    var url = `{!! url('sekolah/get-data') !!}`;
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {
@@ -218,6 +244,10 @@
                             tbl_logo.src = data.logo;
                             tbl_mlink.innerHTML = data.mapsLink ?? '-';
                             $(tbl_membed).html(data.mapsEmbed ?? '<iframe></iframe>');
+                            
+                            tbl_kepsek.innerHTML = data.kepsek ?? '-';
+                            tbl_nip.innerHTML = data.nip_kepsek ?? '-';
+                            tbl_fotoKepsek.src = data.foto;
 
                             $('#updateData').val(data.idSekolah);
                         });
@@ -262,6 +292,8 @@
                             slogan.val(response.slogan);
                             mp_link.val(response.mapsLink);
                             mp_embed.val(response.mapsEmbed);
+                            $('#fm_kepsek').val(response.kepsek);
+                            $('#fm_nip_kepsek').val(response.nip_kepsek);
                             // var image =
                             //     `{{ asset('storage/${response.profil.gambar}') }}`;
                             imgPrev.style.display = 'block';

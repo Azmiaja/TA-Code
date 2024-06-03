@@ -106,16 +106,6 @@ class KegiatanEkstra extends Controller
                     $eks->save();
                     # code...
                 }
-                // else {
-                //     $eks = KegEkstra::where('idSiswa', $idSiswa)
-                //         ->where('idPeriode', $idPeriode)
-                //         ->where('idKelas', $idKelas)
-                //         ->where('idEks', $ekstra)
-                //         ->first();
-
-                //     $eks->delete();
-                //     # code...
-                // }
             }
 
             return response()->json([

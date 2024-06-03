@@ -55,18 +55,16 @@ class Controller extends BaseController
                 return compact('gambar');
             });
 
-        $pegawai = Pegawai::with('jabatanPegawai')->whereHas('jabatanPegawai', function ($query) {
-            $query->where('jabatan', 'Kepala Sekolah');
-        })->first();
+        $pegawai = Sekolah::select('kepsek', 'nip', 'fotoKepsek')->first();
 
-        $kepsek = $pegawai ? $pegawai->namaPegawai : '-';
-        $gambarKepsek = $pegawai ? ($pegawai->gambar
-            ? (file_exists(public_path('storage/' . $pegawai->gambar))
-                ? asset('storage/' . $pegawai->gambar)
+        $kepsek = $pegawai ? $pegawai->kepsek : '-';
+        $gambarKepsek = $pegawai ? ($pegawai->fotoKepsek
+            ? (file_exists(public_path('storage/' . $pegawai->fotoKepsek))
+                ? asset('storage/' . $pegawai->fotoKepsek)
                 : asset('assets/media/avatars/avatar1.jpg'))
             : asset('assets/media/avatars/avatar1.jpg')) : asset('assets/media/avatars/avatar1.jpg');
 
-        $jabatan = $pegawai ? optional($pegawai->jabatanPegawai)->jabatan : 'Kepala Sekolah';
+        $jabatan = 'Kepala Sekolah';
 
 
         $profil = Profil::all()->first();
@@ -212,7 +210,7 @@ class Controller extends BaseController
             $this->getCommonData(),
             $this->getBeritaTerbaru(),
             [
-                'title' => Str::title(str_replace('-', ' ', $berita)),
+                'title' => Str::title(str_replace('-', ' ', $berita->slug)),
             ]
         );
 
@@ -429,7 +427,9 @@ class Controller extends BaseController
             $query->select('idPegawai')
                 ->from('user')
                 ->where('hakAkses', 'Super Admin');
-        })->orderBy('idJabatan', 'asc')->get();
+        })->orderBy('idJabatan', 'asc')
+        ->select('namaPegawai', 'gambar')
+        ->get();
 
         return $guru->map(function ($pegawai) {
             $namaPegawai = $pegawai->namaPegawai;

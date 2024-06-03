@@ -46,21 +46,16 @@ class RaporSiswa extends Controller
         $kelas_nama = ['Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam'];
 
 
-        $sekolah = Sekolah::first() ?? null;
-
-        $kepsek = Pegawai::select('namaPegawai', 'nip')->whereHas('jabatanPegawai', function ($query) {
-            $query->where('jabatan', 'Kepala Sekolah');
-        })->first();
+        $sekolah = Sekolah::select('namaSekolah', 'alamat', 'kepsek', 'nip')->first() ?? null;
 
 
         return view('siakad/content/rapor/index', compact('periodeAktif', 'periodeLewat', 'periode', 'kelas', 'kelas_nama', 'sekolah'), [
             'judul' => 'Rapor Siswa',
             'sub_judul' => 'Rapor Semester',
-            'text_singkat' => 'Mengelola rapor semester siswa!',
+            'text_singkat' => 'Mencetak rapor semester siswa!',
             's_idKelas' => '',
             'kelasName' => '',
             'guru_kls' => Auth::user()->pegawai,
-            'kepsek' => $kepsek
             // 'periode' => $periodeGuru
         ]);
     }
@@ -102,12 +97,11 @@ class RaporSiswa extends Controller
         $pengajar = Pengajaran::where('idPeriode', $idPeriode)
             ->where('idKelas', $kelas->idKelas)
             ->with('mapel')
-            ->orderBy('idPengajaran', 'asc')
+            ->orderBy('idMapel', 'asc')
             ->get();
 
         $nilai = Nilai::where('idPeriode', $idPeriode)
             ->where('idSiswa', $idSiswa)
-            ->orderBy('idPengajaran', 'asc')
             ->get();
 
         $ekstra = KegEkstra::where('idPeriode', $idPeriode)
@@ -120,7 +114,7 @@ class RaporSiswa extends Controller
         $ct_guru = CatatanGuru::where('idPeriode', $idPeriode)
             ->where('idKelas', $kelas->idKelas)
             ->where('idSiswa', $idSiswa)
-            ->get();
+            ->first();
 
         $kehadiran = ModelsAbsensi::select('idSiswa')
             ->selectRaw('DAY(tanggal) as tanggal')
@@ -150,6 +144,40 @@ class RaporSiswa extends Controller
             'catatan' => $ct_guru,
             'absen' => $kehadiran,
             'keterangan' => $ketNaikTidak
+        ]);
+    }
+
+    public function getMapelData(Request $request)
+    {
+        $idPeriode = $request->idPeriode;
+        $idKelas = $request->idKelas;
+
+        $pengajar = Pengajaran::where('idPeriode', $idPeriode)
+            ->where('idKelas', $idKelas)
+            ->orderBy('idMapel', 'asc')
+            ->with('mapel')
+            ->get();
+
+        return response()->json($pengajar);
+    }
+
+    public function indexRPA()
+    {
+        $periode = Periode::orderBy('tanggalMulai', 'desc')->get();
+
+        $kelas_nama = ['Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam'];
+
+
+        $sekolah = Sekolah::select('namaSekolah', 'alamat', 'kepsek', 'nip')->first() ?? null;
+
+
+        return view('siakad/content/rapor/rpadmin/index', compact('periode', 'kelas_nama', 'sekolah'), [
+            'judul' => 'Akademik',
+            'sub_judul' => 'Rapor Siswa',
+            'text_singkat' => 'Data rapor siswa!',
+            's_idKelas' => '',
+            'kelasName' => '',
+            // 'periode' => $periodeGuru
         ]);
     }
 }

@@ -2,11 +2,11 @@
 @section('siakad')
     @include('siakad/layouts/partials/hero')
     <div class="content">
-        @php
-            $kelas = ['Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam'];
-        @endphp
-        <div class="row mb-4 justify-content-end align-items-end">
-            @if ($periode)
+        @if ($periode)
+            @php
+                $kelas = ['Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam'];
+            @endphp
+            <div class="row mb-4 justify-content-end align-items-end">
                 <div class="col-md-3 mb-md-0 mb-3">
                     <label for="periode_aktif" class="form-label fw-bold">Periode Aktif</label>
                     <input type="text" readonly data-id="{{ $periode->idPeriode }}"
@@ -26,33 +26,33 @@
                         @endforeach
                     </select>
                 </div>
-            @endif
-            <div class="col-md-auto text-end">
-                <button class="btn btn-lg btn-primary" id="aksi_absen_siswa"><i
-                        class="fa-solid fa-list-check me-2"></i>Mulai
-                    Presensi</button>
-            </div>
-        </div>
-        <div id="kelas_list">
-            <div class="block block-rounded">
-                <div class="block-header block-header-default">
-                    <h3 class="block-title">Daftar Hadir Siswa
-                    </h3>
-                    <div class="block-options">
-                        <button type="button" class="btn-block-option me-1" data-toggle="block-option"
-                            data-action="fullscreen_toggle"></button>
-                    </div>
-                </div>
-                <div class="block-content block-content-full">
-                    <div id="loading_spinner_2" class="text-center" style="display: none">
-                        <div class="spinner-border text-primary" role="status"></div>
-                    </div>
-                    <div class="table-responsive" id="tabel_absenSiswa">
-                        {{-- content  --}}
-                    </div>
+                <div class="col-md-auto text-end">
+                    <button class="btn btn-lg btn-primary" id="aksi_absen_siswa"><i
+                            class="fa-solid fa-list-check me-2"></i>Mulai
+                        Presensi</button>
                 </div>
             </div>
-        </div>
+            <div id="kelas_list">
+                <div class="block block-rounded">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title">Daftar Hadir Siswa
+                        </h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option me-1" data-toggle="block-option"
+                                data-action="fullscreen_toggle"></button>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full">
+                        <div id="loading_spinner_2" class="text-center" style="display: none">
+                            <div class="spinner-border text-primary" role="status"></div>
+                        </div>
+                        <div class="table-responsive" id="tabel_absenSiswa">
+                            {{-- content  --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 
     {{-- MODAL INSERT --}}
@@ -137,13 +137,13 @@
         </div>
     </div>
 
-    @push('style')
+    {{-- @push('style')
         <style>
             #kelas_list .block-content {
                 font-family: 'Times New Roman', Times, serif
             }
         </style>
-    @endpush
+    @endpush --}}
 
     @push('scripts')
         <script>
@@ -193,28 +193,25 @@
                         let kehadiran = data.kehadiran;
 
                         let table = `<table class="table table-sm table-bordered w-100 border-dark">
-                            <thead class="align-middle text-center border-dark table-light">
-                                <tr>
-                                    <h4 class="text-center fw-normal mb-4">
-                                        <span>DAFTAR HADIR PESERTA DIDIK</span><br>
-                                        <strong>SD NEGERI LEMAHBANG</strong><br>
-                                        <span>TAHUN PELAJARAN ${periode.tahun}</span>
-                                    </h4>
-                                    <strong class="text-start mb-2">
+                            <thead class="align-middle">
+                                <tr class="border-0 p-0">
+                                    <th class="border-0 p-0" colspan="${(daftarTanggal.length !== 0 ? daftarTanggal.length : '1')+ 8}">
+                                        <strong class="text-start mb-2">
                                         KELAS : ${kelas} (${kls_name[kelas - 1] ?? ''})
-                                    </strong>
-                                    <strong class="float-end mb-2 text-uppercase">
+                                        </strong>
+                                        <strong class="float-end mb-2 text-uppercase">
                                         BULAN : ${bulan}</strong>
+                                    </th>
                                 </tr>
-                                <tr>
-                                    <th rowspan="2" style="width: 30px;">NO</th>
-                                    <th rowspan="2" style="width: 40px;">NIS</th>
-                                    <th rowspan="2">NAMA</th>
-                                    <th rowspan="2" style="width: 35px;">L/P</th>
+                                <tr class="table-light border-dark text-center">
+                                    <th rowspan="2" style="width: 35px; min-width: 35px;">NO</th>
+                                    <th rowspan="2" style="width: 42px; min-width: 42px;">NIS</th>
+                                    <th rowspan="2">NAMA SISWA</th>
+                                    <th rowspan="2" style="width: 42px; min-width: 42px;">L/P</th>
                                     <th colspan="${daftarTanggal.length !== 0 ? daftarTanggal.length : '1'}">Tanggal</th>
                                     <th colspan="4">Jumlah</th>
                                 </tr>
-                                <tr>`;
+                                <tr class="table-light border-dark">`;
 
                         if (daftarTanggal.length !== 0) {
                             $.each(daftarTanggal, function(i, tanggal) {
@@ -222,23 +219,23 @@
                                 let bln = moment().format('M');
                                 if (tgl !== null) {
                                     table +=
-                                        `<th style="min-width: 30px;">
+                                        `<th style="width: 35px; min-width: 35px; text-align: center;">
                                                     <a href="javascript:void(0)" id="ubah_absen" 
                                                     data-tgl="${tanggal}"
                                                     data-bln="${bln}" 
                                                     class="nav-link" data-bs-toggle="tooltip"
                                                     data-bs-title="Ubah kehadiran siswa tanggal ${tanggal} ${bulan}.">${tanggal}</a>
-                                                    </th>`;
+                                                </th>`;
                                 }
                             });
                         } else {
-                            table += `<th width="35px">0</th>`;
+                            table += `<th style="width:35px; min-width: 35px; text-align:center;">0</th>`;
                         }
 
-                        table += `<th style="width: 35px;" title="Hadir">H</th>
-                                    <th style="width: 35px;" title="Sakit">S</th>
-                                    <th style="width: 35px;" title="Izin">I</th>
-                                    <th style="width: 35px;" title="Alpha">A</th>
+                        table += `<th style="width: 35px; min-width: 35px; text-align: center;" title="Hadir">H</th>
+                                    <th style="width: 35px; min-width: 35px; text-align: center;" title="Sakit">S</th>
+                                    <th style="width: 35px; min-width: 35px; text-align: center;" title="Izin">I</th>
+                                    <th style="width: 35px; min-width: 35px; text-align: center;" title="Alpha">A</th>
                                             </tr>
                                         </thead>
                                     <tbody>`;
@@ -284,7 +281,7 @@
                                                 break;
                                         }
                                         table +=
-                                            `<td class="fs-sm text-center" style="background-color: ${bg};">${presensi.presensi}</td>`;
+                                            `<td class="fs-sm text-center fw-medium" style="background-color: ${bg};">${presensi.presensi}</td>`;
                                     } else {
                                         table += `<td></td>`;
                                     }

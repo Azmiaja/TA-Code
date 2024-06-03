@@ -17,15 +17,15 @@
             @if ($visiDeskripsi && $misiDeskripsi)
                 <div class="row m-0 mb-3">
                     <h3 class="fw-bold m-0 mb-3 text-center">VISI</h3>
-                    <div class="text-justify story">
+                    <article class="ck-content">
                         {!! $visiDeskripsi !!}
-                    </div>
+                    </article>
                 </div>
                 <div class="row m-0 mb-3">
                     <h3 class="fw-bold m-0 mb-3 text-center">MISI</h3>
-                    <div class="text-justify story">
+                    <article class="ck-content">
                         {!! $misiDeskripsi !!}
-                    </div>
+                    </article>
                 </div>
             @else
                 <div class="col-12">

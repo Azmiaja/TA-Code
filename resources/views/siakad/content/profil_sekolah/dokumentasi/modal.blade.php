@@ -45,8 +45,8 @@
                             <div class="col-md-8 col-12 order-md-1 order-0">
                                 <div class="mb-2">
                                     <label class="form-label" for="judulDokumentasi">Judul</label>
-                                    <textarea class="form-control" id="judulDokumentasi" name="judulDokumentasi" style="resize: none" required rows="3"></textarea>
-                                    <span id="judulDokumentasiError" class="text-danger fs-sm"></span>
+                                    <textarea class="form-control" required id="judulDokumentasi" name="judulDokumentasi" style="resize: none"  rows="3"></textarea>
+                                    
                                 </div>
                                 <div class="mb-2">
                                     <div class="row p-0">
@@ -66,7 +66,7 @@
                                                     <i class="fa-regular fa-calendar-days"></i>
                                                 </span>
                                                 <input type="text" class="form-control" id="waktu" name="waktu"
-                                                    required autocomplete="none">
+                                                    required readonly autocomplete="none">
                                             </div>
                                         </div>
                                     </div>

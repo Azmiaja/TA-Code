@@ -8,6 +8,7 @@ use App\Models\Kelas;
 use App\Models\Pegawai;
 use App\Models\Pengajaran;
 use App\Models\Periode;
+use App\Models\Sekolah;
 use App\Models\Siswa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -119,9 +120,8 @@ class Absensi extends Controller
     public function rekapPresensiAdmin()
     {
         $periode = Periode::orderBy('tanggalMulai', 'desc')->get();
-        $kepsek = Pegawai::select('namaPegawai', 'nip')->whereHas('jabatanPegawai', function ($query) {
-            $query->where('jabatan', 'Kepala Sekolah');
-        })->first();
+        $kepsek = Sekolah::select('kepsek', 'nip')->first();
+
         return view('siakad.content.absen.ssadmin.index_absensi', compact('periode', 'kepsek'), [
             'judul' => 'Akademik',
             'sub_judul' => 'Rekap Kehadiran Siswa',

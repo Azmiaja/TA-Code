@@ -1,7 +1,6 @@
-
 <div class="modal fade" id="modalBerita" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="modalInsert"
     aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="block block-rounded block-transparent mb-0">
                 <div class="block-header block-header-default">
@@ -13,26 +12,25 @@
                         </button>
                     </div>
                 </div>
-                <div class="block-content fs-sm">
+                <div class="block-content block-content-full fs-sm">
                     <form id="formBerita" method="POST" name="formBerita" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="_method" id="method" value="POST">
                         <div class="row g-3 p-0">
-                            <div class="col-lg-8 col-12 ">
+                            <div class="col-md-9 col-12">
                                 <input type="hidden" id="idBerita" name="idBerita">
                                 <div class="mb-2">
                                     <label class="form-label" for="judulBerita">Judul</label>
                                     <input type="text" class="form-control" id="judulBerita" name="judulBerita"
                                         required>
-                                    <span id="judulBeritaError" class="text-danger fs-sm"></span>
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label" for="isiBerita">Deskripsi</label>
-                                    <textarea id="isiBerita" class="form-control clasic-editor" name="isiBerita"></textarea>
+                                    <textarea id="isiBerita" name="isiBerita"></textarea>
                                 </div>
 
                             </div>
-                            <div class="col-lg-4 col-12 ">
+                            <div class="col-md-3 col-12 ">
                                 <div class="mb-2">
                                     <label class="form-label" for="gambarBerita">Gambar</label>
                                     <img src="" class="img-preview img-fluid rounded-2 col-md-12 col-sm-4 mb-3"
@@ -47,7 +45,8 @@
                                         <span class="input-group-text">
                                             <i class="fa-regular fa-calendar-days"></i>
                                         </span>
-                                    <input type="text" class="form-control" id="waktu" name="waktu" required>
+                                        <input type="text" class="form-control" id="waktu" readonly
+                                            name="waktu" required>
                                     </div>
                                 </div>
                             </div>

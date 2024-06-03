@@ -35,6 +35,11 @@
             .bt-show-modal {
                 display: none;
             }
+
+            @page {
+                margin: 0.4in;
+                /* Anda bisa menyesuaikan margin sesuai kebutuhan */
+            }
         }
     </style>
     @php
@@ -110,10 +115,10 @@
                                 </tr>
                                 <tr id="ketPresensi">
                                     {{-- keterangan presensi siswa --}}
-                                    <th class="total" style="min-width: 30px;">H</th>
-                                    <th class="total" style="min-width: 30px;">S</th>
-                                    <th class="total" style="min-width: 30px;">I</th>
-                                    <th class="total" style="min-width: 30px;">A</th>
+                                    <th class="total" style="min-width: 30px; border-bottom: none;">H</th>
+                                    <th class="total" style="min-width: 30px; border-bottom: none;">S</th>
+                                    <th class="total" style="min-width: 30px; border-bottom: none;">I</th>
+                                    <th class="total" style="min-width: 30px; border-bottom: none;">A</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -125,7 +130,7 @@
                                         <div class="d-flex justify-content-around mt-4">
                                             <div class="fw-normal">
                                                 <span>Mengetahui <br>Kepala Sekolah</span><br><br><br><br><br>
-                                                <strong><u>{{ $kepsek->namaPegawai }}</u></strong><br>
+                                                <strong><u>{{ $kepsek->kepsek }}</u></strong><br>
                                                 <span class="text-uppercase">NIP.{{ $kepsek->nip }}</span>
                                             </div>
                                             <div class="fw-normal">
@@ -271,6 +276,7 @@
             const formAbsen = $('#form_absensi');
             const method = $('#method');
 
+            // fungsi rekap mingguan dalam bulan
             function getRekapBulanan(bulan) {
                 $('#table_bulanan').empty();
                 $('#loading_spinner_3').show();
@@ -285,7 +291,7 @@
 
                         let tableHTML = `<table id="tabel_bulan" class="table table-sm table-bordered border-dark w-100 align-middle">
                             <thead class="align-middle text-center border-dark">
-                                <tr class="border-0">
+                                <tr class="border-0" style="color: #000;">
                                     <th class="border-0" colspan="39">
                                         <h4 class="text-center fw-normal mb-4" style="font-size:14pt;">
                                             <span>DAFTAR HADIR PESERTA DIDIK</span><br>
@@ -309,7 +315,7 @@
                                 <tr>`;
                         // Tambahkan tanggal pada baris kedua
                         for (let i = 1; i <= 31; i++) {
-                            tableHTML += `<th style="min-width: 30px;">
+                            tableHTML += `<th style="min-width: 30px; border-bottom: none;">
                                                 <a href="javascript:void(0)" id="ubah_absen" 
                                                     data-tgl="${i}"
                                                     data-bln="${bln}" 
@@ -319,10 +325,10 @@
                         }
 
                         // Tutup tag <tr> dan <thead>
-                        tableHTML += `<th style="min-width: 30px;">H</th>
-                                    <th style="min-width: 30px;">S</th>
-                                    <th style="min-width: 30px;">I</th>
-                                    <th style="min-width: 30px;">A</th>
+                        tableHTML += `<th style="min-width: 30px; border-bottom: none;">H</th>
+                                    <th style="min-width: 30px; border-bottom: none;">S</th>
+                                    <th style="min-width: 30px; border-bottom: none;">I</th>
+                                    <th style="min-width: 30px; border-bottom: none;">A</th>
                                 </tr>
                             </thead>
                             <tbody>`;
@@ -330,10 +336,10 @@
                         $.each(data.siswa, function(key, value) {
                             let kehadiran = data.absensi;
                             tableHTML += `<tr>
-                                <td class="text-center fs-sm " style="min-width:15px">${key + 1}</td>
-                                <td class="fs-sm text-center">${value.nis}</td>
-                                <td class="fs-sm text-nowrap">${value.namaSiswa}</td>
-                                <td class="fs-sm text-center">${value.jenisKelamin === 'Laki-Laki' ? 'L' : 'P'}</td>`;
+                                <td class="text-center fs-sm " style="min-width:15px; border-bottom: none;">${key + 1}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${value.nis}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-nowrap">${value.namaSiswa}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${value.jenisKelamin === 'Laki-Laki' ? 'L' : 'P'}</td>`;
 
                             for (let i = 1; i <= 31; i++) {
                                 let presensi = kehadiran.find(function(item) {
@@ -341,9 +347,9 @@
                                         item.tanggal === i;
                                 });
                                 if (presensi) {
-                                    tableHTML += `<td class="fs-sm text-center">${presensi.presensi}</td>`;
+                                    tableHTML += `<td style="border-bottom: none;" class="fs-sm text-center">${presensi.presensi}</td>`;
                                 } else {
-                                    tableHTML += `<td></td>`;
+                                    tableHTML += `<td style="border-bottom: none;"></td>`;
                                 }
                             }
 
@@ -368,10 +374,10 @@
                                     item.presensi === 'A';
                             }).length;
 
-                            tableHTML += `<td class="fs-sm text-center">${jmlHadir}</td>
-                                <td class="fs-sm text-center">${jmlSakit}</td>
-                                <td class="fs-sm text-center">${jmlIzin}</td>
-                                <td class="fs-sm text-center">${jmlAlfa}</td>`;
+                            tableHTML += `<td style="border-bottom: none;" class="fs-sm text-center">${jmlHadir}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${jmlSakit}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${jmlIzin}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${jmlAlfa}</td>`;
 
                             tableHTML += '</tr>';
 
@@ -387,7 +393,7 @@
                                     <div class="d-flex justify-content-around text-center mt-4">
                                         <div class="fw-normal">
                                             <span>Mengetahui <br>Kepala Sekolah</span><br><br><br><br><br>
-                                            <strong><u>${kepsek.namaPegawai}</u></strong><br>
+                                            <strong><u>${kepsek.kepsek}</u></strong><br>
                                             <span>NIP.${kepsek.nip}</span>
                                         </div>
                                         <div class="fw-normal">
@@ -416,6 +422,7 @@
                 });
             }
 
+            // fungsi rekap per bulan
             function getRekap() {
                 let periode = $('#periode_aktif').data('id');
                 let kelas = $('#kelas_diampu').data('nama');
@@ -456,19 +463,19 @@
 
                             // perilangan keterangan presensi
                             $('#ketPresensi').append(`
-                                <th style="min-width: 30px;">H</th>
-                                <th style="min-width: 30px;">S</th>
-                                <th style="min-width: 30px;">I</th>
-                                <th style="min-width: 30px;">A</th>
+                                <th style="min-width: 30px; border-bottom: none;">H</th>
+                                <th style="min-width: 30px; border-bottom: none;">S</th>
+                                <th style="min-width: 30px; border-bottom: none;">I</th>
+                                <th style="min-width: 30px; border-bottom: none;">A</th>
                             `);
                         });
 
                         $.each(data.siswa, function(key, value) {
                             let barisPresensi = `<tr>
-                                <td class="text-center fs-sm">${key + 1}</td>
-                                <td class="fs-sm text-center">${value.nis}</td>
-                                <td class="fs-sm text-nowrap">${value.namaSiswa}</td>
-                                <td class="fs-sm text-center">${value.jenisKelamin === 'Laki-Laki' ? 'L' : 'P'}</td>`;
+                                <td style="border-bottom: none;" class="text-center fs-sm">${key + 1}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${value.nis}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-nowrap">${value.namaSiswa}</td>
+                                <td style="border-bottom: none;" class="fs-sm text-center">${value.jenisKelamin === 'Laki-Laki' ? 'L' : 'P'}</td>`;
 
                             let dfBulan = data.bulan.length;
                             let absen = data.absensi;
@@ -498,10 +505,10 @@
 
                                 // Mengisi baris tabel dengan nilai yang sesuai
                                 barisPresensi += `
-                                    <td class="text-center">${jmlHadir == 0 ? '' : jmlHadir}</td>
-                                    <td class="text-center">${jmlSakit == 0 ? '' : jmlSakit}</td>
-                                    <td class="text-center">${jmlIzin == 0 ? '' : jmlIzin}</td>
-                                    <td class="text-center">${jmlAlpa == 0 ? '' : jmlAlpa}</td>
+                                    <td style="border-bottom: none;" class="text-center">${jmlHadir == 0 ? '' : jmlHadir}</td>
+                                    <td style="border-bottom: none;" class="text-center">${jmlSakit == 0 ? '' : jmlSakit}</td>
+                                    <td style="border-bottom: none;" class="text-center">${jmlIzin == 0 ? '' : jmlIzin}</td>
+                                    <td style="border-bottom: none;" class="text-center">${jmlAlpa == 0 ? '' : jmlAlpa}</td>
                                 `;
                             });
 
@@ -530,10 +537,10 @@
                                     presensi.presensi === 'A';
                             }).length;
                             let total = `
-                                    <td class="text-center">${totHadir}</td>
-                                    <td class="text-center">${totSakit}</td>
-                                    <td class="text-center">${totIzin}</td>
-                                    <td class="text-center">${totAlfa}</td>
+                                    <td style="border-bottom: none;" class="text-center">${totHadir}</td>
+                                    <td style="border-bottom: none;" class="text-center">${totSakit}</td>
+                                    <td style="border-bottom: none;" class="text-center">${totIzin}</td>
+                                    <td style="border-bottom: none;" class="text-center">${totAlfa}</td>
                                     </tr>
                                     `;
 

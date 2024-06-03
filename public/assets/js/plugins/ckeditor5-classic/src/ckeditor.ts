@@ -15,12 +15,20 @@ import { Essentials } from '@ckeditor/ckeditor5-essentials';
 import { FontColor, FontFamily, FontSize } from '@ckeditor/ckeditor5-font';
 import { Heading } from '@ckeditor/ckeditor5-heading';
 import { Highlight } from '@ckeditor/ckeditor5-highlight';
-import { FullPage, GeneralHtmlSupport, HtmlComment } from '@ckeditor/ckeditor5-html-support';
+import { GeneralHtmlSupport } from '@ckeditor/ckeditor5-html-support';
+import {
+	Image,
+	ImageCaption,
+	ImageInsert,
+	ImageResize,
+	ImageStyle,
+	ImageToolbar,
+	ImageUpload
+} from '@ckeditor/ckeditor5-image';
 import { Indent } from '@ckeditor/ckeditor5-indent';
-import { AutoLink, Link } from '@ckeditor/ckeditor5-link';
-import { List, ListProperties } from '@ckeditor/ckeditor5-list';
-import { Markdown } from '@ckeditor/ckeditor5-markdown-gfm';
-import { MediaEmbed } from '@ckeditor/ckeditor5-media-embed';
+import { Link } from '@ckeditor/ckeditor5-link';
+import { List } from '@ckeditor/ckeditor5-list';
+import { MediaEmbed, MediaEmbedToolbar } from '@ckeditor/ckeditor5-media-embed';
 import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
 import { PasteFromOffice } from '@ckeditor/ckeditor5-paste-from-office';
 import {
@@ -31,7 +39,9 @@ import {
 	TableProperties,
 	TableToolbar
 } from '@ckeditor/ckeditor5-table';
+import { TextTransformation } from '@ckeditor/ckeditor5-typing';
 import { Undo } from '@ckeditor/ckeditor5-undo';
+import { Base64UploadAdapter } from '@ckeditor/ckeditor5-upload';
 
 // You can read more about extending the build with additional plugins in the "Installing plugins" guide.
 // See https://ckeditor.com/docs/ckeditor5/latest/installation/plugins/installing-plugins.html for details.
@@ -39,8 +49,8 @@ import { Undo } from '@ckeditor/ckeditor5-undo';
 class Editor extends ClassicEditor {
 	public static override builtinPlugins = [
 		Alignment,
-		AutoLink,
 		Autoformat,
+		Base64UploadAdapter,
 		BlockQuote,
 		Bold,
 		CloudServices,
@@ -48,18 +58,22 @@ class Editor extends ClassicEditor {
 		FontColor,
 		FontFamily,
 		FontSize,
-		FullPage,
 		GeneralHtmlSupport,
 		Heading,
 		Highlight,
-		HtmlComment,
+		Image,
+		ImageCaption,
+		ImageInsert,
+		ImageResize,
+		ImageStyle,
+		ImageToolbar,
+		ImageUpload,
 		Indent,
 		Italic,
 		Link,
 		List,
-		ListProperties,
-		Markdown,
 		MediaEmbed,
+		MediaEmbedToolbar,
 		Paragraph,
 		PasteFromOffice,
 		Table,
@@ -68,6 +82,7 @@ class Editor extends ClassicEditor {
 		TableColumnResize,
 		TableProperties,
 		TableToolbar,
+		TextTransformation,
 		Underline,
 		Undo
 	];
@@ -75,33 +90,35 @@ class Editor extends ClassicEditor {
 	public static override defaultConfig: EditorConfig = {
 		toolbar: {
 			items: [
-				'undo',
-				'redo',
-				'|',
 				'heading',
-				'|',
-				'fontFamily',
-				'fontSize',
-				'fontColor',
-				'highlight',
 				'|',
 				'bold',
 				'italic',
-				'underline',
-				'|',
-				'alignment',
+				'link',
 				'bulletedList',
 				'numberedList',
 				'|',
 				'outdent',
 				'indent',
 				'|',
-				'link',
+				'imageUpload',
 				'blockQuote',
-				'insertTable'
+				'insertTable',
+				'mediaEmbed',
+				'undo',
+				'redo'
 			]
 		},
 		language: 'en',
+		image: {
+			toolbar: [
+				'imageTextAlternative',
+				'toggleImageCaption',
+				'imageStyle:inline',
+				'imageStyle:block',
+				'imageStyle:side'
+			]
+		},
 		table: {
 			contentToolbar: [
 				'tableColumn',

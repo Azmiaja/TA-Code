@@ -9,15 +9,15 @@
             <div class="block-content block-content-full p-0">
                 <div class="table-responsive m-md-0 m-4 p-md-4 p-0">
                     <table id="tabelPesan" class="table w-100 table-bordered">
-                        <thead class="bg-body-light align-middle">
+                        <thead class="table-primary align-middle">
                             <tr class="text-center fw-medium fs-sm">
-                                <th style="width: 5%">No</th>
-                                <th style="width: 14%">Waktu</th>
-                                <th style="width: 20%">Nama Pengirim</th>
+                                <th width="5%">No</th>
+                                <th width="18%">Waktu</th>
+                                <th width="20%">Nama Pengirim</th>
                                 <th>Email</th>
                                 <th>Telepon</th>
-                                <th style="width: 27%">Pesan</th>
-                                <th style="width: 7%">Aksi</th>
+                                <th width="30%">Pesan</th>
+                                <th width="10%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

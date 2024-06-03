@@ -24,13 +24,13 @@
                     tabindex="0">
                     <div class="table-responsive  m-md-0 m-4 p-md-4 p-0">
                         <table id="tabelFoto" class="table w-100 table-hover table-borderless align-middle">
-                            <thead class="bg-body-light align-middle">
+                            <thead class="table-primary align-middle">
                                 <tr class="text-center fw-medium fs-sm">
-                                    <th style="width: 5%">No</th>
-                                    <th style="min-width: 23%">Gambar</th>
+                                    <th width="4%">No</th>
+                                    <th width="15%">Gambar</th>
                                     <th>Judul</th>
-                                    <th style="width: 16%;">Tanggal</th>
-                                    <th style="width: 10%">Aksi</th>
+                                    <th width="18%">Tanggal</th>
+                                    <th width="10%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -43,13 +43,13 @@
                     tabindex="0">
                     <div class="table-responsive  m-md-0 m-4 p-md-4 p-0">
                         <table id="tabelVideo" class="table w-100 table-hover table-borderless align-middle table-">
-                            <thead class="bg-body-light align-middle">
+                            <thead class="table-primary align-middle">
                                 <tr class="text-center fw-medium fs-sm">
-                                    <th>No</th>
-                                    <th style="min-width: 23%">Video</th>
+                                    <th width="4%">No</th>
+                                    <th width="15%">Video</th>
                                     <th>Judul</th>
-                                    <th style="width: 16%;">Tanggal</th>
-                                    <th style="width: 10%">Aksi</th>
+                                    <th width="18%">Tanggal</th>
+                                    <th width="10%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -151,15 +151,10 @@
                     disabledInput();
                 });
 
+
                 $('form[name=formDokumentasi]').submit(function(e) {
                     // Pastikan bahwa formulir tidak benar-benar dikirim.
                     e.preventDefault();
-
-                    var judulDokumentasiValue = $('#judulDokumentasi').val();
-                    if (judulDokumentasiValue.length > 225) {
-                        $('#judulDokumentasiError').text('Judul tidak boleh lebih dari 225 karakter.');
-                        return false; // Formulir tidak dikirim
-                    }
 
                     var data = new FormData(formDock[0]);
                     // console.log($('#waktu').val());
@@ -172,17 +167,27 @@
                         processData: false,
                         dataType: "json",
                         success: function(response) {
-                            Swal.fire({
-                                icon: response.status,
-                                title: response.title,
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                            modalDocFoto.modal('hide');
-                            resetForm();
-                            tableFoto.DataTable().ajax.reload();
-                            tableVideo.DataTable().ajax.reload();
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                modalDocFoto.modal('hide');
+                                resetForm();
+                                tableFoto.DataTable().ajax.reload();
+                                tableVideo.DataTable().ajax.reload();
+                            } else {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
                         },
                     });
                 });
@@ -206,10 +211,6 @@
                     $.ajax({
                         type: "GET",
                         url: url,
-                        headers: {
-                            "Cache-Control": "no-cache, no-store, must-revalidate",
-                            "Pragma": "no-cache"
-                        },
                         success: function(response) {
                             // Set the form fields with the fetched data
                             id.val(response.dock.idDokumentasi);
@@ -254,18 +255,27 @@
                         processData: false,
                         dataType: 'json',
                         success: function(response) {
-                            Swal.fire({
-                                icon: response.status,
-                                title: response.title,
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-
-                            modalDocFoto.modal('hide');
-                            resetForm();
-                            tableFoto.DataTable().ajax.reload();
-                            tableVideo.DataTable().ajax.reload();
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                modalDocFoto.modal('hide');
+                                resetForm();
+                                tableFoto.DataTable().ajax.reload();
+                                tableVideo.DataTable().ajax.reload();
+                            } else {
+                                Swal.fire({
+                                    icon: response.status,
+                                    title: response.title,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
                         },
                     });
                 });
@@ -313,7 +323,7 @@
                     columns: [{
                             data: 'nomor',
                             name: 'nomor',
-                            className: 'text-center fw-medium rounded-start'
+                            className: 'text-center fw-semibold rounded-start'
 
                         },
                         {
@@ -352,6 +362,7 @@
                         {
                             data: 'judul',
                             name: 'judul',
+                            className: 'fw-semibold align-top'
                         },
                         {
                             data: 'waktu',
@@ -384,7 +395,7 @@
                     columns: [{
                             data: 'nomor',
                             name: 'nomor',
-                            className: 'text-center fw-medium rounded-start',
+                            className: 'text-center fw-semibold rounded-start',
                             width: '5%',
 
                         },
@@ -414,6 +425,7 @@
                         {
                             data: 'judul',
                             name: 'judul',
+                            className: 'fw-semibold align-top'
                         },
                         {
                             data: 'waktu',

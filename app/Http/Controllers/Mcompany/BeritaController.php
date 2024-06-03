@@ -49,30 +49,53 @@ class BeritaController extends Controller
     public function store(Request $request)
     {
         try {
-            $validatedData = $request->validate([
+            $validator = Validator::make($request->all(), [
                 'judulBerita' => 'required|max:255',
                 'isiBerita' => 'required',
-                'gambar' => 'file|mimes:jpeg,png,jpg,svg',
+                'gambarBerita' => 'required|file|mimes:jpeg,png,jpg,svg|max:2048',
+                'waktu' => 'required',
+            ], [
+                'judulBerita.required' => 'Judul berita tidak boleh kosong!',
+                'judulBerita.max' => 'Judul berita tidak boleh melebihi 255 karakter!',
+                'isiBerita.required' => 'Deskripsi berita tidak boleh kosong!',
+                'gambarBerita.required' => 'Gambar berita tidak boleh kosong!',
+                'gambarBerita.file' => 'Gambar berita harus berupa file yang valid!',
+                'gambarBerita.mimes' => 'Gambar berita harus berupa file dengan format: jpeg, png, jpg, atau svg!',
+                'gambarBerita.max' => 'Ukuran gambar berita tidak boleh melebihi 2 MB!',
+                'waktu.required' => 'Waktu berita tidak boleh kosong!',
+                // 'waktu.date_format' => 'Waktu berita harus dalam format dd/mm/yyyy hh:mm!',
             ]);
 
-            $validatedData['penulis'] = auth()->user()->pegawai->namaPegawai;
-            $validatedData['waktu'] = Carbon::createFromFormat('d/m/Y h:i A', $request->waktu)->format('Y-m-d H:i:s');
-            $validatedData['slug'] = Str::slug($request->input('judulBerita'));
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+                $judul = $request->input('judulBerita');
+                $isi = $request->input('isiBerita');
+                $penulis = auth()->user()->pegawai->namaPegawai;
+                $waktu = Carbon::createFromFormat('d/m/Y h:i A', $request->waktu)->format('Y-m-d H:i:s');
+                $slug = Str::slug($request->input('judulBerita'));
 
+                if ($request->file('gambarBerita')) {
+                    // $img = $request->file('gambarBerita');
+                    $imgName = uniqid() . '.' . $request->file('gambarBerita')->getClientOriginalExtension();
+                    $gambarPath = $request->file('gambarBerita')->storeAs('gambar-berita', $imgName, 'public');
+                }
 
-            if ($request->file('gambarBerita')) {
-                // $img = $request->file('gambarBerita');
-                $imgName = uniqid() . '.' . $request->file('gambarBerita')->getClientOriginalExtension();
-                $validatedData['gambar'] = $request->file('gambarBerita')->storeAs('gambar-berita', $imgName, 'public');
+                Berita::create([
+                    'judulBerita' => $judul,
+                    'isiBerita' => $isi,
+                    'penulis' => $penulis,
+                    'waktu' => $waktu,
+                    'slug' => $slug,
+                    'gambar' => $gambarPath,
+                ]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil menyimpan data.'
+                ]);
             }
-
-            Berita::create($validatedData);
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil menyimpan data.'
-            ]);
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
 
@@ -89,32 +112,36 @@ class BeritaController extends Controller
 
     public function upload(Request $request)
     {
-        if ($request->file('gambar')) {
+        // if ($request->file('gambar')) {
 
-            $img = $request->file('gambar');
+        //     $img = $request->file('gambar');
 
-            $idBerita = $request->idBerita;
+        //     $idBerita = $request->idBerita;
 
-            // $imageName = strtotime(now()) . rand(11111, 99999) . '.' . $img->getClientOriginalExtension();
-            $imageName = $request->file('gambar')->getClientOriginalName();
-            $berita_img = new Berita();
-            // $original_name = $img->getClientOriginalName();
-            $berita_img->gambar = $imageName;
+        //     // $imageName = strtotime(now()) . rand(11111, 99999) . '.' . $img->getClientOriginalExtension();
+        //     $imageName = $request->file('gambar')->getClientOriginalName();
+        //     $berita_img = new Berita();
+        //     // $original_name = $img->getClientOriginalName();
+        //     $berita_img->gambar = $imageName;
 
-            if (!is_dir(public_path() . '/uploads/berita/')) {
-                mkdir(public_path() . '/uploads/berita/', 0777, true);
-            }
+        //     if (!is_dir(public_path() . '/uploads/berita/')) {
+        //         mkdir(public_path() . '/uploads/berita/', 0777, true);
+        //     }
 
-            $beritaImgPath = '/storage/gambar-berita/' . $imageName;
+        //     $beritaImgPath = '/storage/gambar-berita/' . $imageName;
 
-            $request->file('gambar')->move(public_path() . '/storage/gambar-berita/', $imageName);
+        //     $request->file('gambar')->move(public_path() . '/storage/gambar-berita/', $imageName);
 
-            $berita_img->where('idBerita', $idBerita)->update(['gambar' => asset($beritaImgPath)]);
+        //     $berita_img->where('idBerita', $idBerita)->update(['gambar' => asset($beritaImgPath)]);
+        if ($request->hasFile('upload')) {
+            $file = $request->file('upload');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('public/berita', $filename);
+
+            $url = Storage::url($path);
 
             return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil menyimpan data.'
+                'url' => $url
             ]);
         }
     }
@@ -124,14 +151,26 @@ class BeritaController extends Controller
         if ($request->hasFile('upload')) {
             $image = $request->file('upload');
             $imageName = strtotime(now()) . rand(11111, 99999) . '.' . $image->getClientOriginalExtension();
-            if (!is_dir(public_path() . '/uploads/dokumentasi/')) {
-                mkdir(public_path() . '/uploads/dokumentasi/', 0777, true);
+            if (!is_dir(public_path() . '/storage/gambar-berita/')) {
+                mkdir(public_path() . '/storage/gambar-berita/', 0777, true);
             }
-            $request->file('upload')->move(public_path() . '/uploads/dokumentasi/', $imageName);
+            $request->file('upload')->move(public_path() . '/storage/gambar-berita/', $imageName);
 
-            $url = asset('uploads/dokumentasi/' . $imageName);
+            $url = asset('/storage/gambar-berita/' . $imageName);
             return response()->json(['uploaded' => 1, 'url' => $url]);
         }
+    }
+
+    public function deleteImage(Request $request)
+    {
+        $filePath = public_path('storage/gambar-berita/' . $request->get('file_name'));
+
+        if (File::exists($filePath)) {
+            File::delete($filePath);
+            return response()->json(['success' => true, 'message' => 'File deleted successfully']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'File not found']);
     }
 
 
@@ -159,34 +198,61 @@ class BeritaController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $berita = Berita::find($id);
-            $validatedData = $request->validate([
+            $validator = Validator::make($request->all(), [
                 'judulBerita' => 'required|max:255',
                 'isiBerita' => 'required',
-                'gambar' => 'file|mimes:jpeg,png,jpg,svg',
+                'gambarBerita' => 'file|mimes:jpeg,png,jpg,svg|max:2048',
+                'waktu' => 'required',
+            ], [
+                'judulBerita.required' => 'Judul berita tidak boleh kosong!',
+                'judulBerita.max' => 'Judul berita tidak boleh melebihi 255 karakter!',
+                'isiBerita.required' => 'Deskripsi berita tidak boleh kosong!',
+                // 'gambarBerita.required' => 'Gambar berita tidak boleh kosong!',
+                'gambarBerita.file' => 'Gambar berita harus berupa file yang valid!',
+                'gambarBerita.mimes' => 'Gambar berita harus berupa file dengan format: jpeg, png, jpg, atau svg!',
+                'gambarBerita.max' => 'Ukuran gambar berita tidak boleh melebihi 2 MB!',
+                'waktu.required' => 'Waktu berita tidak boleh kosong!',
+                // 'waktu.date_format' => 'Waktu berita harus dalam format dd/mm/yyyy hh:mm!',
             ]);
 
-            $validatedData['penulis'] = auth()->user()->pegawai->namaPegawai;
-            $validatedData['waktu'] = Carbon::createFromFormat('d/m/Y h:i A', $request->waktu)->format('Y-m-d H:i:s');
-            $validatedData['slug'] = Str::slug($request->input('judulBerita'));
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+                $berita = Berita::find($id);
 
-            if ($request->file('gambarBerita')) {
-                // $img = $request->file('gambarBerita');
-                $imgName = uniqid() . '.' . $request->file('gambarBerita')->getClientOriginalExtension();
-                $validatedData['gambar'] = $request->file('gambarBerita')->storeAs('gambar-berita', $imgName, 'public');
+                $judul = $request->input('judulBerita');
+                $isi = $request->input('isiBerita');
+                $penulis = auth()->user()->pegawai->namaPegawai;
+                $waktu = Carbon::createFromFormat('d/m/Y h:i A', $request->waktu)->format('Y-m-d H:i:s');
+                $slug = Str::slug($request->input('judulBerita'));
 
-                if ($berita->gambar) {
-                    Storage::delete('public/' . $berita->gambar);
+                $gambarPath = $berita->gambar;
+
+                if ($request->file('gambarBerita')) {
+                    // $img = $request->file('gambarBerita');
+                    $imgName = uniqid() . '.' . $request->file('gambarBerita')->getClientOriginalExtension();
+                    $gambarPath = $request->file('gambarBerita')->storeAs('gambar-berita', $imgName, 'public');
+
+                    if ($berita->gambar) {
+                        Storage::delete('public/' . $berita->gambar);
+                    }
                 }
+
+                $berita->update([
+                    'judulBerita' => $judul,
+                    'isiBerita' => $isi,
+                    'penulis' => $penulis,
+                    'waktu' => $waktu,
+                    'slug' => $slug,
+                    'gambar' => $gambarPath,
+                ]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil memperbarui data.'
+                ]);
             }
-
-            $berita->update($validatedData);
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil memperbarui data.'
-            ]);
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
 
@@ -215,7 +281,7 @@ class BeritaController extends Controller
         $berita->delete();
 
         return response()->json([
-            'status' => 'success',                    
+            'status' => 'success',
             'title' => 'Dihapus!',
             'message' => 'Berhasil menghapus data.'
         ]);

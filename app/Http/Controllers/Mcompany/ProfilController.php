@@ -7,6 +7,7 @@ use App\Models\Profil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\HtmlString;
 
 class ProfilController extends Controller
@@ -90,28 +91,39 @@ class ProfilController extends Controller
     {
         try {
             $profil = Profil::find($id);
-
-            $deskripsi = $request->input('isiProfilSekolah');
-
-            if ($request->hasFile('gambarProfilSekolah')) {
-                $imgName = uniqid() . '.' . $request->file('gambarProfilSekolah')->getClientOriginalExtension();
-                $gambarPath = $request->file('gambarProfilSekolah')->storeAs('tentang-sekolah', $imgName, 'public');
-
-                if ($profil->gambar) {
-                    Storage::delete('public/' . $profil->gambar);
-                }
-                $profil->gambar = $gambarPath;
-            }
-
-            $profil->deskripsi = $deskripsi;
-
-            $profil->update();
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil memperbarui data.'
+            $validator = Validator::make($request->all(), [
+                'isiProfilSekolah' => 'required|max:65535',
+            ], [
+                'isiProfilSekolah.required' => 'Deskripsi tidak boleh kosong!',
+                'isiProfilSekolah.max' => 'Deskripsi terlalu panjang!',
             ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+
+                $deskripsi = $request->input('isiProfilSekolah');
+
+                if ($request->hasFile('gambarProfilSekolah')) {
+                    $imgName = uniqid() . '.' . $request->file('gambarProfilSekolah')->getClientOriginalExtension();
+                    $gambarPath = $request->file('gambarProfilSekolah')->storeAs('tentang-sekolah', $imgName, 'public');
+
+                    if ($profil->gambar) {
+                        Storage::delete('public/' . $profil->gambar);
+                    }
+                    $profil->gambar = $gambarPath;
+                }
+
+                $profil->deskripsi = $deskripsi;
+
+                $profil->update();
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil memperbarui data.'
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
 
@@ -129,27 +141,39 @@ class ProfilController extends Controller
         try {
             $profil = Profil::find($id);
 
-            $deskripsi = $request->input('isiProfilSekolah');
-
-            if ($request->hasFile('gambarProfilSekolah')) {
-                $imgName = uniqid() . '.' . $request->file('gambarProfilSekolah')->getClientOriginalExtension();
-                $gambarPath = $request->file('gambarProfilSekolah')->storeAs('tentang-sekolah', $imgName, 'public');
-
-                if ($profil->sejarahImg) {
-                    Storage::delete('public/' . $profil->sejarahImg);
-                }
-                $profil->sejarahImg = $gambarPath;
-            }
-
-            $profil->sejarahText = $deskripsi;
-
-            $profil->update();
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil memperbarui data.'
+            $validator = Validator::make($request->all(), [
+                'isiProfilSekolah' => 'required|max:65535',
+            ], [
+                'isiProfilSekolah.required' => 'Deskripsi tidak boleh kosong!',
+                'isiProfilSekolah.max' => 'Deskripsi terlalu panjang!',
             ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+
+                $deskripsi = $request->input('isiProfilSekolah');
+
+                if ($request->hasFile('gambarProfilSekolah')) {
+                    $imgName = uniqid() . '.' . $request->file('gambarProfilSekolah')->getClientOriginalExtension();
+                    $gambarPath = $request->file('gambarProfilSekolah')->storeAs('tentang-sekolah', $imgName, 'public');
+
+                    if ($profil->sejarahImg) {
+                        Storage::delete('public/' . $profil->sejarahImg);
+                    }
+                    $profil->sejarahImg = $gambarPath;
+                }
+
+                $profil->sejarahText = $deskripsi;
+
+                $profil->update();
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil memperbarui data.'
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
 
@@ -167,27 +191,39 @@ class ProfilController extends Controller
         try {
             $profil = Profil::find($id);
 
-            $deskripsi = $request->input('isiProfilSekolah');
-
-            if ($request->hasFile('gambarProfilSekolah')) {
-                $imgName = uniqid() . '.' . $request->file('gambarProfilSekolah')->getClientOriginalExtension();
-                $gambarPath = $request->file('gambarProfilSekolah')->storeAs('tentang-sekolah', $imgName, 'public');
-
-                if ($profil->strukturOrgImg) {
-                    Storage::delete('public/' . $profil->strukturOrgImg);
-                }
-                $profil->strukturOrgImg = $gambarPath;
-            }
-
-            $profil->strukturOrgText = $deskripsi;
-
-            $profil->update();
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil memperbarui data.'
+            $validator = Validator::make($request->all(), [
+                'isiProfilSekolah' => 'required|max:65535',
+            ], [
+                'isiProfilSekolah.required' => 'Deskripsi tidak boleh kosong!',
+                'isiProfilSekolah.max' => 'Deskripsi terlalu panjang!',
             ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+
+                $deskripsi = $request->input('isiProfilSekolah');
+
+                if ($request->hasFile('gambarProfilSekolah')) {
+                    $imgName = uniqid() . '.' . $request->file('gambarProfilSekolah')->getClientOriginalExtension();
+                    $gambarPath = $request->file('gambarProfilSekolah')->storeAs('tentang-sekolah', $imgName, 'public');
+
+                    if ($profil->strukturOrgImg) {
+                        Storage::delete('public/' . $profil->strukturOrgImg);
+                    }
+                    $profil->strukturOrgImg = $gambarPath;
+                }
+
+                $profil->strukturOrgText = $deskripsi;
+
+                $profil->update();
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil memperbarui data.'
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
 
@@ -205,27 +241,39 @@ class ProfilController extends Controller
         try {
             $profil = Profil::find($id);
 
-            $deskripsi = $request->input('isiProfilSekolah');
-
-            if ($request->hasFile('gambarProfilSekolah')) {
-                $imgName = uniqid() . '.' . $request->file('gambarProfilSekolah')->getClientOriginalExtension();
-                $gambarPath = $request->file('gambarProfilSekolah')->storeAs('tentang-sekolah', $imgName, 'public');
-
-                if ($profil->keuanganImg) {
-                    Storage::delete('public/' . $profil->keuanganImg);
-                }
-                $profil->keuanganImg = $gambarPath;
-            }
-
-            $profil->keuanganText = $deskripsi;
-
-            $profil->update();
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil memperbarui data.'
+            $validator = Validator::make($request->all(), [
+                'isiProfilSekolah' => 'required|max:65535',
+            ], [
+                'isiProfilSekolah.required' => 'Deskripsi tidak boleh kosong!',
+                'isiProfilSekolah.max' => 'Deskripsi terlalu panjang!',
             ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+
+                $deskripsi = $request->input('isiProfilSekolah');
+
+                if ($request->hasFile('gambarProfilSekolah')) {
+                    $imgName = uniqid() . '.' . $request->file('gambarProfilSekolah')->getClientOriginalExtension();
+                    $gambarPath = $request->file('gambarProfilSekolah')->storeAs('tentang-sekolah', $imgName, 'public');
+
+                    if ($profil->keuanganImg) {
+                        Storage::delete('public/' . $profil->keuanganImg);
+                    }
+                    $profil->keuanganImg = $gambarPath;
+                }
+
+                $profil->keuanganText = $deskripsi;
+
+                $profil->update();
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil memperbarui data.'
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
 
@@ -242,20 +290,35 @@ class ProfilController extends Controller
     {
         try {
             $profil = Profil::find($id);
-
-            $visi = $request->input('isiVisi');
-            $misi = $request->input('isiMisi');
-
-            $profil->visi = $visi;
-            $profil->misi = $misi;
-
-            $profil->update();
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil memperbarui data.'
+            $validator = Validator::make($request->all(), [
+                'isiVisi' => 'required|max:65535',
+                'isiMisi' => 'required|max:65535',
+            ], [
+                'isiVisi.required' => 'Deskripsi Visi tidak boleh kosong!',
+                'isiMisi.required' => 'Deskripsi Misi tidak boleh kosong!',
+                'isiVisi.max' => 'Deskripsi Visi terlalu panjang!',
+                'isiMisi.max' => 'Deskripsi Misi terlalu panjang!',
             ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+
+
+                $visi = $request->input('isiVisi');
+                $misi = $request->input('isiMisi');
+
+                $profil->visi = $visi;
+                $profil->misi = $misi;
+
+                $profil->update();
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil memperbarui data.'
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
 
@@ -273,17 +336,30 @@ class ProfilController extends Controller
         try {
             $profil = Profil::find($id);
 
-            $sambutanKepsek = $request->input('sambutanKepsek');
-
-            $profil->sambutanKepsek = $sambutanKepsek;
-
-            $profil->update();
-
-            return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil memperbarui data.'
+            $validator = Validator::make($request->all(), [
+                'sambutanKepsek' => 'required|max:65535',
+            ], [
+                'sambutanKepsek.required' => 'Deskripsi tidak boleh kosong!',
+                'sambutanKepsek.max' => 'Deskripsi terlalu panjang!',
             ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+
+
+                $sambutanKepsek = $request->input('sambutanKepsek');
+
+                $profil->sambutanKepsek = $sambutanKepsek;
+
+                $profil->update();
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil memperbarui data.'
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
 
