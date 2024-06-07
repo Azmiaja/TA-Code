@@ -705,7 +705,9 @@
                 $(document).ready(function() {
                     jadwalPeajaran();
                     getSiswa();
-                    getTb_rekap_nilai();
+                    @if ($kelas)
+                        getTb_rekap_nilai();
+                    @endif
                 });
             </script>
         @endcan
