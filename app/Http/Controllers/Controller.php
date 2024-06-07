@@ -232,13 +232,16 @@ class Controller extends BaseController
 
     public function indexSambutan()
     {
-        $pegawai = Pegawai::with('jabatanPegawai')->whereHas('jabatanPegawai', function ($query) {
-            $query->where('jabatan', 'Kepala Sekolah');
-        })->first();
+        $pegawai = Sekolah::select('kepsek', 'nip', 'fotoKepsek')->first();
 
-        $kepsek = $pegawai->namaPegawai ?: null;
-        $gambarKepsek = $pegawai->gambar ? asset('storage/' . $pegawai->gambar) : asset('assets/media/img/404.svg');
-        $jabatan = optional($pegawai->jabatanPegawai)->jabatan ?: null;
+        $kepsek = $pegawai ? $pegawai->kepsek : '-';
+        $gambarKepsek = $pegawai ? ($pegawai->fotoKepsek
+            ? (file_exists(public_path('storage/' . $pegawai->fotoKepsek))
+                ? asset('storage/' . $pegawai->fotoKepsek)
+                : asset('assets/media/avatars/avatar1.jpg'))
+            : asset('assets/media/avatars/avatar1.jpg')) : asset('assets/media/avatars/avatar1.jpg');
+
+        $jabatan = 'Kepala Sekolah';
 
 
         $profil = Profil::all()->first();
