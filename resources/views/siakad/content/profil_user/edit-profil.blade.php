@@ -22,7 +22,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-md-3 mb-5">
                                         <label class="form-label" for="username">Nama Pengguna</label>
-                                        <input type="text" class="form-control" id="username" name="username"
+                                        <input type="text" class="form-control form-control-alt" id="username" name="username"
                                             placeholder="Masukan username.."
                                             value="{{ old('username', $auths->username) }}">
                                         <span class="text-danger error-text username_error"></span>

@@ -70,7 +70,7 @@
                         <div class="spinner-border text-primary" role="status"></div>
                     </div>
                     <table id="table_nilai_siswa"
-                        class="table table-sm table-bordered align-middle border-dark w-100 caption-top">
+                        class="table table-bordered align-middle border-dark w-100 caption-top">
                     </table>
                 </div>
                 <div class="mt-3" id="chart_nilai"></div>
@@ -78,25 +78,26 @@
         </div>
     </div>
 
-    <script>
-        function getNilai() {
-            $('#loading_spinner').show();
-            // $('#table_nilai_siswa').addClass('d-none');
-            $('#table_nilai_siswa').empty();
-            $('#chart_nilai').empty();
-            $.ajax({
-                url: `{{ route('get-nilai-siswa') }}`,
-                type: 'GET',
-                data: {
-                    periode: $('#periode_siswa option:selected').val(),
-                },
-                success: function(data) {
-                    console.log();
-                    var kelas = data.kelas.namaKelas;
-                    var kls_name = ['SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM'];
-                    var per_smt = $('#periode_siswa option:selected').data('smt');
-                    var per_tahun = $('#periode_siswa option:selected').data('tahun');
-                    var tb_rekap = `<caption class="text-dark mb-0">
+    @push('scripts')
+        <script>
+            function getNilai() {
+                $('#loading_spinner').show();
+                // $('#table_nilai_siswa').addClass('d-none');
+                $('#table_nilai_siswa').empty();
+                $('#chart_nilai').empty();
+                $.ajax({
+                    url: `{{ route('get-nilai-siswa') }}`,
+                    type: 'GET',
+                    data: {
+                        periode: $('#periode_siswa option:selected').val(),
+                    },
+                    success: function(data) {
+                        console.log();
+                        var kelas = data.kelas.namaKelas;
+                        var kls_name = ['SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM'];
+                        var per_smt = $('#periode_siswa option:selected').data('smt');
+                        var per_tahun = $('#periode_siswa option:selected').data('tahun');
+                        var tb_rekap = `<caption class="text-dark mb-0">
                                         <strong class="text-start mb-0">
                                                     KELAS : ${kelas} (${kls_name[kelas - 1] ?? ''})
                                                 </strong>
@@ -107,139 +108,143 @@
                                         <tr>
                                             <th width="4%">No</th>
                                             <th>Mata Pelajaran</th>
+                                            <th width="5%">KKM</th>
                                             <th width="15%">Nilai</th>
                                         </tr>
                                     </thead><tbody>`;
 
-                    var idSiswa = data.siswa.idSiswa;
-                    var raport = 0;
-                    var jumPengajaran = 0;
-                    var N_map = [];
-                    var N_sis = [];
-                    $.each(data.pengajar, function(key, value) {
-                        var mapel = value.mapel.namaMapel;
-                        var mapel2 = value.mapel.singkatan ?? value.mapel.namaMapel;
-                        if (mapel) {
-                            tb_rekap += `<tr>
+                        var idSiswa = data.siswa.idSiswa;
+                        var raport = 0;
+                        var jumPengajaran = 0;
+                        var N_map = [];
+                        var N_sis = [];
+                        $.each(data.pengajar, function(key, value) {
+                            var mapel = value.mapel.namaMapel;
+                            var kkm = value.mapel.kkm;
+                            var mapel2 = value.mapel.singkatan ?? value.mapel.namaMapel;
+                            if (mapel) {
+                                tb_rekap += `<tr>
                                 <td class="text-center">${key + 1}</td>
-                                <td>${mapel}</td>`;
-                            N_map.push(mapel2);
-                        }
-                        var nilai = data.nilai.find(function(nilai) {
-                            return nilai.idSiswa === idSiswa &&
-                                nilai.idPengajaran === value.idPengajaran;
+                                <td>${mapel}</td>
+                                <td class="text-center">${kkm}</td>`;
+                                N_map.push(mapel2);
+                            }
+                            var nilai = data.nilai.find(function(nilai) {
+                                return nilai.idSiswa === idSiswa &&
+                                    nilai.idPengajaran === value.idPengajaran;
+                            });
+                            if (nilai !== undefined && nilai.raport !== null && nilai.raport !== 0) {
+                                tb_rekap += `<td class="text-center">${nilai.raport}</td></tr>`;
+
+                                N_sis.push(nilai.raport);
+
+                                raport += nilai.raport;
+                                jumPengajaran++;
+                            } else {
+                                tb_rekap += `<td class="text-center"></td></tr>`;
+                            }
+
                         });
-                        if (nilai !== undefined && nilai.raport !== null && nilai.raport !== 0) {
-                            tb_rekap += `<td class="text-center">${nilai.raport}</td></tr>`;
-
-                            N_sis.push(nilai.raport);
-
-                            raport += nilai.raport;
-                            jumPengajaran++;
-                        } else {
-                            tb_rekap += `<td class="text-center"></td></tr>`;
-                        }
-
-                    });
-                    tb_rekap += `<tr class="border-top border-2 border-dark">
-                                <td colspan="2" class="fw-bold">Jumlah</td>
+                        tb_rekap += `<tr class="border-top border-2 border-dark">
+                                <td colspan="3" class="fw-bold">Jumlah</td>
                                 <td class="text-center fw-bold">${raport === null || raport === 0 ? '' : raport}</td>
                                 </tr>
                                 <tr class="border-bottom border-2 border-dark">
-                                <td colspan="2" class="fw-bold">Rata-Rata</td>
+                                <td colspan="3" class="fw-bold">Rata-Rata</td>
                                 <td class="text-center fw-bold">${jumPengajaran === 0 ? '' : (raport / jumPengajaran).toFixed(2)}</td>
                                 </tr>
                                 </tbody>`;
 
-                    $('#table_nilai_siswa').html(tb_rekap);
+                        $('#table_nilai_siswa').html(tb_rekap);
 
-                    var options = {
-                        series: [{
-                            name: 'Nilai Siswa',
-                            data: N_sis
-                        }],
-                        chart: {
-                            height: 370,
-                            type: 'bar',
-                        },
-                        plotOptions: {
-                            bar: {
-                                borderRadius: 5,
-                                columnWidth: '50%',
-                            }
-                        },
-                        dataLabels: {
-                            enabled: false
-                        },
-                        stroke: {
-                            width: 0
-                        },
-                        grid: {
-                            row: {
-                                colors: ['#fff', '#f2f2f2']
-                            }
-                        },
-                        xaxis: {
-                            labels: {
-                                rotate: -45
+                        var options = {
+                            series: [{
+                                name: 'Nilai Siswa',
+                                data: N_sis
+                            }],
+                            chart: {
+                                height: 370,
+                                type: 'bar',
                             },
-                            categories: N_map,
-                            // tickPlacement: 'on'
-                        },
-                        yaxis: {
-                            title: {
-                                text: 'Nilai Siswa',
-                            },
-                            min: 0,
-                            max: 100,
-                            tickAmount: 10,
-                            labels: {
-                                show: true,
-                                formatter: function(val) {
-                                    return Math.floor(val); // Menghilangkan desimal atau koma
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 5,
+                                    columnWidth: '50%',
                                 }
                             },
-                        },
-                        title: {
-                            text: 'Grafik Nilai Siswa',
-                            align: 'left',
-                            margin: 10,
-                            offsetX: 0,
-                            offsetY: 0,
-                            floating: false,
-                            style: {
-                                fontSize: '18px',
-                                fontWeight: 'bold',
-                                // fontFamily: undefined,
-                                color: '#263238'
+                            dataLabels: {
+                                enabled: false
                             },
-                        }
-                    };
+                            stroke: {
+                                width: 0
+                            },
+                            grid: {
+                                row: {
+                                    colors: ['#fff', '#f2f2f2']
+                                }
+                            },
+                            xaxis: {
+                                labels: {
+                                    rotate: -45
+                                },
+                                categories: N_map,
+                                // tickPlacement: 'on'
+                            },
+                            yaxis: {
+                                title: {
+                                    text: 'Nilai Siswa',
+                                },
+                                min: 0,
+                                max: 100,
+                                tickAmount: 10,
+                                labels: {
+                                    show: true,
+                                    formatter: function(val) {
+                                        return Math.floor(val); // Menghilangkan desimal atau koma
+                                    }
+                                },
+                            },
+                            title: {
+                                text: 'Grafik Nilai Siswa',
+                                align: 'left',
+                                margin: 10,
+                                offsetX: 0,
+                                offsetY: 0,
+                                floating: false,
+                                style: {
+                                    fontSize: '18px',
+                                    fontWeight: 'bold',
+                                    // fontFamily: undefined,
+                                    color: '#263238'
+                                },
+                            }
+                        };
 
 
-                    var chart = new ApexCharts(document.querySelector("#chart_nilai"), options);
+                        var chart = new ApexCharts(document.querySelector("#chart_nilai"), options);
 
-                    chart.render();
-                    $('#chart_nilai').addClass('border border-dark border-2');
+                        chart.render();
+                        $('#chart_nilai').addClass('border border-dark border-2');
 
-                    // $('#table_nilai_siswa tfoot').html(tb_foot);
-                },
-                complete: function() {
-                    $('#loading_spinner').hide();
-                    // $('#table_nilai_siswa').removeClass('d-none');
-                }
-            });
-        }
+                        // $('#table_nilai_siswa tfoot').html(tb_foot);
+                    },
+                    complete: function() {
+                        $('#loading_spinner').hide();
+                        // $('#table_nilai_siswa').removeClass('d-none');
+                    }
+                });
+            }
 
 
-        $(document).ready(function() {
-            // getTb_rekap_nilai();
-            getNilai();
-
-            $('#periode_siswa').change(function() {
+            $(document).ready(function() {
                 // getTb_rekap_nilai();
                 getNilai();
+
+                $('#periode_siswa').change(function() {
+                    // getTb_rekap_nilai();
+                    getNilai();
+                });
             });
-        });
-    </script>
+        </script>
+    @endpush
 @endsection

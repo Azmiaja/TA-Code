@@ -103,9 +103,8 @@
                                                 : asset('assets/media/avatars/avatar1.jpg'))
                                             : asset('assets/media/avatars/avatar1.jpg');
                                     @endphp
-                                        <img class="rounded-circle"
-                                            src="{{ $gambar }}"
-                                            alt="Header Avatar" style="width: 100%; height: 100%; object-fit: cover">
+                                    <img class="rounded-circle" id="foto_header" src="{{ $gambar }}"
+                                        alt="Header Avatar" style="width: 100%; height: 100%; object-fit: cover">
                                 @endcanany
                                 @can('siswa')
                                     <img class="rounded-circle" src="{{ asset('assets/media/avatars/avatar0.jpg') }}"
@@ -129,7 +128,7 @@
                                 <div class="ratio mx-auto" style="width: 70px; height: 70px;">
                                     @cannot('siswa')
                                         <img class="rounded-circle border border-3 border-white"
-                                            style="width: 100%; height: 100%; object-fit: cover" src="{{ $gambar }}"
+                                            style="width: 100%; height: 100%; object-fit: cover" id="dr_header" src="{{ $gambar }}"
                                             alt="">
                                     @endcannot
                                     @can('siswa')

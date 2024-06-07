@@ -40,7 +40,8 @@
                     @if ($kelas)
                         <div class="block block-rounded">
                             <div class="block-header block-header-default">
-                                <h3 class="block-title">Grafik Daya Serap</h3>
+                                <h3 class="block-title">Grafik Daya Serap Kelas
+                                    {{ $kelas->namaKelas }} ({{ $kelas_nm[$kelas->namaKelas - 1 ?? ''] }})</h3>
                                 <div class="block-options">
                                     <input type="text" readonly data-id="{{ $periode->idPeriode }}"
                                         value="Semester {{ $periode->semester }} {{ $periode->tahun }}"
@@ -562,6 +563,7 @@
                 }
 
                 var chart;
+
                 function getTb_rekap_nilai() {
                     $('#grafik_dayaSerap').empty();
                     $.ajax({
@@ -609,7 +611,7 @@
                                         jumPengajaran++;
                                         totalNilaiMapel[tpe.idPengajaran] += nilai.raport;
                                         jumlahSiswaPerMapel[tpe.idPengajaran]++;
-                                    } 
+                                    }
                                 });
                             });
 

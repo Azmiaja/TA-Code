@@ -360,7 +360,7 @@
                             <li class="nav-main-item">
                                 <a class="nav-main-link {{ Request::routeIs('pesan.index') ? 'active' : '' }}"
                                     href="{{ route('pesan.index') }}">
-                                    <span class="nav-main-link-name">Pesan Masuk</span>
+                                    <span class="nav-main-link-name">Pesan</span>
                                 </a>
                             </li>
                         </ul>

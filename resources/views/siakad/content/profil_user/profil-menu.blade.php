@@ -6,14 +6,14 @@
                     <div class="ratio ratio-1x1">
                         @cannot('siswa')
                             @php
-                                $gambar = $auths->pegawai->gambar
-                                    ? (file_exists(public_path('storage/' . $auths->pegawai->gambar))
-                                        ? asset('storage/' . $auths->pegawai->gambar)
+                                $pegawai = Auth::user()->pegawai;
+                                $gambar = $pegawai->gambar
+                                    ? (file_exists(public_path('storage/' . $pegawai->gambar))
+                                        ? asset('storage/' . $pegawai->gambar)
                                         : asset('assets/media/avatars/avatar1.jpg'))
                                     : asset('assets/media/avatars/avatar1.jpg');
                             @endphp
-                            <img src="{{ $gambar }}"
-                                class="rounded-circle border border-5"
+                            <img id="gambar_pegawai" src="{{ $gambar }}" class="rounded-circle border border-5"
                                 style="width: 100%; height: 100%; object-fit: cover" alt="" srcset="">
                             <div class="position-relative">
                                 <div class="position-absolute bottom-0 end-0 translate-middle-x">

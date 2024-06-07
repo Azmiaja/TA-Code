@@ -49,10 +49,12 @@ class Dokumentasi extends Controller
             $validator = Validator::make($request->all(), [
                 'judulDokumentasi' => 'required|max:255',
                 'kategoriMedia' => 'required',
+                'waktu' => 'required',
             ], [
                 'judulDokumentasi.required' => 'Judul dokumentasi tidak boleh kosong!',
                 'judulDokumentasi.max' => 'Judul dokumentasi tidak boleh melebihi 255 karakter!',
                 'kategoriMedia.required' => 'Media tidak boleh kosong!',
+                'waktu.required' => 'Tanggal tidak boleh kosong!',
             ]);
 
             if ($validator->fails()) {

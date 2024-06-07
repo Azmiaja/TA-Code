@@ -278,7 +278,7 @@
                 mapel_data = $('.input-mapel:checked').map(function() {
                     return $(this).val();
                 }).get();
-
+                
                 mapel_data_seni = $('.input-mapel-seni:checked').map(function() {
                     return $(this).val();
                 }).get();

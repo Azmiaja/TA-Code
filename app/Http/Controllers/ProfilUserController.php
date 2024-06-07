@@ -31,6 +31,25 @@ class ProfilUserController extends Controller
         ]);
     }
 
+    public function getDataUser()
+    {
+        // $auth = auth()->user()->pegawai ?? auth()->user()->siswa;
+        // $auth = Pegawai::where('idPegawai', auth()->user()->pegawai->idPegawai)->with('jabatanPegawai')->first() ?? Siswa::where('idSiswa', auth()->user()->siswa->idSiswa)->first();
+        $user = auth()->user();
+
+        $data = null;
+
+        if (Auth::user()->siswa) {
+            $data = Siswa::where('idSiswa', $user->siswa->idSiswa)
+            ->first();
+        } else {
+            $data = Pegawai::where('idPegawai', $user->pegawai->idPegawai)
+                ->with('jabatanPegawai')
+                ->first();
+        }
+        return response()->json($data);
+    }
+
     public function changePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -66,7 +85,7 @@ class ProfilUserController extends Controller
 
             if ($update) {
                 return response()->json(['status' => 'success', 'msg' => 'Password berhasil diperbarui.']);
-            } 
+            }
         }
     }
 
@@ -247,5 +266,4 @@ class ProfilUserController extends Controller
 
         // return back()->with('siswa_success', 'Biografi siswa berhasil diubah.');
     }
-
 }

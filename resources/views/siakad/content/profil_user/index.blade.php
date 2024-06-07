@@ -10,74 +10,12 @@
                             <div class="block-header block-header-default">
                                 <h3 class="block-title">Profil Saya</h3>
                             </div>
-                            <div class="block-content">
-                                <div class="row g-2">
-                                    <div class="col-md-6 col-12">
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">NIP</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->pegawai->nip ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Nama lengkap</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->pegawai->namaPegawai ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Tempat lahir</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->pegawai->tempatLahir ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Tanggal lahir</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! date('d/m/Y', strtotime($auths->pegawai->tanggalLahir)) ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Jenis kelamin</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->pegawai->jenisKelamin ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Alamat domisili</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->pegawai->alamat ?: '-' !!}</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-12">
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Agama</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->pegawai->agama ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Telepon</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->pegawai->noHp ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Kategori</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->pegawai->jenisPegawai ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Jabatan</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->pegawai->idJabatan ? $auths->pegawai->jabatanPegawai->jabatan : '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Status</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">
-                                                @if ($auths->pegawai->status !== null)
-                                                    <span
-                                                        class="fs-sm fw-semibold d-inline-block py-1 px-3 rounded-pill {{ $auths->pegawai->status === 'Aktif' ? 'bg-success-light text-success' : 'bg-danger-light text-danger' }} ">{{ $auths->pegawai->status }}</span>
-                                                @else
-                                                    <span>-</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="block-content block-content-full">
+                                <div id="loading_spinner_pegawai" class="text-center" style="display: none;">
+                                    <div class="spinner-border text-primary" role="status"></div>
+                                </div>
+                                <div class="row g-2" id="pegawai">
+                                    {{-- data diri --}}
                                 </div>
                             </div>
                         </div>
@@ -87,99 +25,12 @@
                             <div class="block-header block-header-default">
                                 <h3 class="block-title">Profil Saya</h3>
                             </div>
-                            <div class="block-content">
-                                <div class="row g-2">
-                                    <div class="col-md-6 col-12">
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">NISN</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->nisn ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">NIS</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->nis ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Nama lengkap</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->namaSiswa ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Nama panggilan</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->panggilan ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Tempat lahir</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->tempatLahir ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Tanggal lahir</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! date('d/m/Y', strtotime($auths->siswa->tanggalLahir)) ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Jenis kelamin</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->jenisKelamin ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Alamat tinggal</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->alamat ?: '-' !!}</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-12">
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Agama</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->agama ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Nama ayah</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->namaAyah ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Pekerjaan ayah</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->pekerjaanAyah ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Nama ibu</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->namaIbu ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Pekerjaan ibu</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->pekerjaanIbu ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Nama wali</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->namaWali ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Pekerjaan wali</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">{!! $auths->siswa->pekerjaanWali ?: '-' !!}</div>
-                                        </div>
-                                        <div class="d-flex flex-row mb-3 py-2">
-                                            <div class="col-4 fw-semibold">Status</div>
-                                            <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">
-                                                @if ($auths->siswa->status !== null)
-                                                    <span
-                                                        class="fs-sm fw-semibold d-inline-block py-1 px-3 rounded-pill {{ $auths->siswa->status === 'Aktif' ? 'bg-success-light text-success' : 'bg-danger-light text-danger' }} ">{{ $auths->siswa->status }}</span>
-                                                @else
-                                                    <span>-</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="block-content block-content-full">
+                                <div id="loading_spinner_siswa" class="text-center" style="display: none;">
+                                    <div class="spinner-border text-primary" role="status"></div>
+                                </div>
+                                <div class="row g-2" id="siswa">
+                                    
                                 </div>
                             </div>
                         </div>
@@ -211,18 +62,11 @@
                                     method="POST" id="form_editFotoProfil" enctype="multipart/form-data">
                                     @csrf
                                     @method('put')
-                                    @php
-                                        $gambar = $auths->pegawai->gambar
-                                            ? (file_exists(public_path('storage/' . $auths->pegawai->gambar))
-                                                ? asset('storage/' . $auths->pegawai->gambar)
-                                                : asset('assets/media/avatars/avatar1.jpg'))
-                                            : asset('assets/media/avatars/avatar1.jpg');
-                                    @endphp
                                     <div class="row">
                                         <div class="mb-2 text-center">
                                             <div class="ratio mx-auto mb-2 rounded-circle border border-5"
                                                 style="width: 200px; height: 200px;">
-                                                <img src="{{ $gambar }}" class="img-preview rounded-circle"
+                                                <img src="{!! asset('assets/media/avatars/avatar1.jpg') !!}" class="img-preview rounded-circle"
                                                     style="width: 100%; height: 100%; object-fit: cover;" alt="">
                                             </div>
                                             <span class="text-danger error-text gambar_error"></span>
@@ -252,7 +96,215 @@
 
         @push('scripts')
             <script>
+                function getDataPegawai() {
+                    $('#pegawai').empty();
+                    $('#loading_spinner_pegawai').show();
+                    var htmlString;
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('get.profil') }}",
+                        dataType: "json",
+                        success: function(data) {
+                            moment.locale('id');
+
+                            htmlString = `<div class="col-md-7 col-12">
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">NIP</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.nip ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Nama lengkap</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.namaPegawai ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Tempat lahir</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.tempatLahir ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Tanggal lahir</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${moment(data.tanggalLahir).format('DD MMMM YYYY') ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Jenis kelamin</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.jenisKelamin ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Alamat domisili</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.alamat ?? '-'}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 col-12">
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Agama</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.agama ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Telepon</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.noHp ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Kategori</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.jenisPegawai ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Jabatan</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.jabatan_pegawai ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Status</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.status ?? '-'}</div>
+                                        </div>
+                                    </div>`;
+
+
+                        },
+                        complete: function() {
+                            $('#pegawai').html(htmlString);
+                            $('#loading_spinner_pegawai').hide();
+                        }
+                    });
+                }
+                function getDataSiswa() {
+                    $('#siswa').empty();
+                    $('#loading_spinner_siswa').show();
+                    var htmlString;
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('get.profil') }}",
+                        dataType: "json",
+                        success: function(data) {
+                            moment.locale('id');
+
+                            htmlString = `<div class="col-md-6 col-12">
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">NISN</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.nisn ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">NIS</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.nis ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Nama lengkap</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.namaLengkap ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Nama panggilan</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.namaPanggilan ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Tempat lahir</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.tempatLahir ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Tanggal lahir</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${moment(data.tanggalLahir).format('DD MMMM YYYY') ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Jenis kelamin</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.jenisKelamin ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Alamat tinggal</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.alamat ?? '-'}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Agama</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.agama ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Nama ayah</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.namaAyah ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Pekerjaan ayah</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.pekerjaanAyah ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Nama ibu</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.namaIbu ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Pekerjaan ibu</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.pekerjaanIbu ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Nama wali</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.namaWali ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Pekerjaan wali</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.pekerjaanWali ?? '-'}</div>
+                                        </div>
+                                        <div class="d-flex flex-row mb-2 py-2">
+                                            <div class="col-4 fw-semibold">Status</div>
+                                            <div class="col-1 fw-semibold">:</div>
+                                            <div class="col-7">${data.status ?? '-'}</div>
+                                        </div>
+                                    </div>`;
+
+
+                        },
+                        complete: function() {
+                            $('#siswa').html(htmlString);
+                            $('#loading_spinner_siswa').hide();
+                        }
+                    });
+                }
+
+                function getFoto() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('get.profil') }}",
+                        dataType: "json",
+                        success: function(data) {
+                            var gambar = data.gambar ? (fileExists(`{!! asset('storage/${data.gambar}') !!}`) ?
+                                    `{!! asset('storage/${data.gambar}') !!}` : `{!! asset('assets/media/avatars/avatar1.jpg') !!}`) :
+                                `{!! asset('assets/media/avatars/avatar1.jpg') !!}`;
+                            $('#gambar_pegawai').attr('src', gambar);
+                            $('#foto_header').attr('src', gambar);
+                            $('#dr_header').attr('src', gambar);
+                            imgPrev.src = gambar;
+                        }
+                    });
+                }
+
                 $(document).ready(function() {
+                    @cannot('siswa')
+                        getDataPegawai();
+                        getFoto();
+                    @endcannot
+                    @can('siswa')
+                        getDataSiswa();
+                    @endcan
                     const chPass = $('#btn_changepassword');
                     const chProfil = $('#btn_ubahprofil');
                     const btFotoProfil = $('#edit_fotoProfil');
@@ -320,7 +372,7 @@
                                             title: 'Sukses',
                                             text: data.msg,
                                             showConfirmButton: false,
-                                            timer: 1300
+                                            timer: 2000
                                         });
                                         modal.modal('hide');
                                         options();
@@ -332,19 +384,19 @@
 
                     insertData(form_chPass, modal_chPass, function() {});
                     insertData(form_editProfil, modal_chProfil, function() {
-                        setTimeout(function() {
-                            location.reload();
-                        }, 1000);
+                        @cannot('siswa')
+                            getDataPegawai();
+                        @endcannot
                     });
                     insertData(form_ediFotoProfil, modal_fotoProfil, function() {
-                        setTimeout(function() {
-                            location.reload();
-                        }, 1000);
+                        @cannot('siswa')
+                            getFoto();
+                        @endcannot
                     });
                     insertData(form_ediProfilSiswa, modal_chProfil, function() {
-                        setTimeout(function() {
-                            location.reload();
-                        }, 1000);
+                        @can('siswa')
+                            getDataSiswa();
+                        @endcan
                     });
 
                     $('#fileButton').click(function() {

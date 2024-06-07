@@ -95,6 +95,10 @@ class Controller extends BaseController
         $bulan = request('bulanBerita');
         $tahun = request('tahunBerita');
 
+        $itemsPerPage = 6; // Jumlah item per halaman
+        $page = request('page', 1); // Ambil halaman saat ini, default halaman 1
+        $skip = 5; // Jumlah item yang di-skip
+
         if ($bulan && $tahun) {
             // list($tahun, $bulan) = explode('/', $bulan);
 
@@ -144,6 +148,8 @@ class Controller extends BaseController
             // $bulanSaatIni = date('m');
 
             $beritaTerbaru = Berita::orderBy('waktu', 'desc')
+                // ->whereMonth('waktu', Carbon::now()->month)
+                // ->whereYear('waktu', Carbon::now()->year)
                 ->take(5)
                 ->get()
                 ->map(function ($berita) {
@@ -164,30 +170,37 @@ class Controller extends BaseController
 
             $beritaSatuTerbaru = $beritaTerbaru->shift();
 
-            $berita = Berita::orderBy('waktu', 'desc')
-                ->skip(5)
-                ->take(PHP_INT_MAX)
-                ->get()
-                ->map(function ($berita) {
-                    $gambar = $berita->gambar ? (file_exists(public_path('storage/' . $berita->gambar))
-                        ? asset('storage/' . $berita->gambar)
-                        : asset('assets/media/img/empty-image.jpg'))
-                        : asset('assets/media/img/empty-image.jpg');
-                    $judul = $berita->judulBerita ?: null;
-                    $id = $berita->idBerita ?: null;
-                    $slug = $berita->slug ?: null;
-                    $penulis = implode(' ', array_slice(str_word_count($berita->penulis, 1), 0, 2)) ?: null;
-                    $tanggal = Carbon::parse($berita->waktu)->locale('id_ID')->isoFormat('Do MMMM YYYY') ?: null;
-                    $waktu = Carbon::parse($berita->waktu)->locale('id_ID')->diffForHumans() ?: null;
-                    return compact('gambar', 'judul', 'penulis', 'tanggal', 'waktu', 'slug', 'id');
-                });
+            $beritaQuery = Berita::orderBy('waktu', 'desc');
+            $totalItems = $beritaQuery->count();
+            $beritaPagination = $beritaQuery->skip($skip + ($page - 1) * $itemsPerPage)->take($itemsPerPage)->get();
+
+            $berita = $beritaPagination->map(function ($berita) {
+                $gambar = $berita->gambar ? (file_exists(public_path('storage/' . $berita->gambar))
+                    ? asset('storage/' . $berita->gambar)
+                    : asset('assets/media/img/empty-image.jpg'))
+                    : asset('assets/media/img/empty-image.jpg');
+                $judul = $berita->judulBerita ?: null;
+                $id = $berita->idBerita ?: null;
+                $slug = $berita->slug ?: null;
+                $penulis = implode(' ', array_slice(str_word_count($berita->penulis, 1), 0, 2)) ?: null;
+                $tanggal = Carbon::parse($berita->waktu)->locale('id_ID')->isoFormat('Do MMMM YYYY') ?: null;
+                $waktu = Carbon::parse($berita->waktu)->locale('id_ID')->diffForHumans() ?: null;
+                return compact('gambar', 'judul', 'penulis', 'tanggal', 'waktu', 'slug', 'id');
+            });
+            $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
+                $berita,
+                $totalItems - $skip,
+                $itemsPerPage,
+                $page,
+                ['path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()]
+            );
         }
         $data = array_merge(
             $this->getCommonData(),
             ['title' => 'Berita Sekolah']
         );
 
-        return view('company_profil/content/berita/index', compact('berita', 'beritaTerbaru', 'beritaSatuTerbaru', 'ambilBulan', 'ambilTahun'), $data);
+        return view('company_profil/content/berita/index', compact('berita', 'beritaTerbaru', 'beritaSatuTerbaru', 'ambilBulan', 'ambilTahun', 'paginator'), $data);
     }
 
     public function bacaBerita($slug)
@@ -387,7 +400,7 @@ class Controller extends BaseController
     public function galeriFoto()
     {
         $dock = Dokumentasi::where('kategoriMedia', 'Foto')
-            ->orderBy('waktu', 'desc')->paginate(12);
+            ->orderBy('waktu', 'desc')->paginate(9);
         $data = array_merge(
             $this->getCommonData(),
             $this->getBeritaTerbaru(),
@@ -428,8 +441,8 @@ class Controller extends BaseController
                 ->from('user')
                 ->where('hakAkses', 'Super Admin');
         })->orderBy('idJabatan', 'asc')
-        ->select('namaPegawai', 'gambar')
-        ->get();
+            ->select('namaPegawai', 'gambar')
+            ->get();
 
         return $guru->map(function ($pegawai) {
             $namaPegawai = $pegawai->namaPegawai;

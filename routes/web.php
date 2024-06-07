@@ -88,6 +88,7 @@ Route::middleware(['auth:siswa', 'ceklevel:Siswa'])->group(function () {
     });
     // get kalender siswa
     Route::get('get-kalender-jadwal', [BerandaController::class, 'getDataKalenderJadwal']);
+
 });
 
 // ROUTE GURU
@@ -269,6 +270,8 @@ Route::middleware(['auth:user,siswa'])->group(function () {
     Route::put('/profil-pengguna/update/foto-profil/{id}', [ProfilUserController::class, 'updateFotoProfil'])->name('profil_pengguna.update.foto-profil');
     Route::put('/profil-pengguna/update/biografi/{id}', [ProfilUserController::class, 'updateBiografi'])->name('profil_pengguna.update.biografi');
     Route::put('/profil-pengguna/update/biografi/siswa/{id}', [ProfilUserController::class, 'updateBiografiSiswa'])->name('profil_pengguna.update.biografi.siswa');
+    Route::get('/get/data/user', [ProfilUserController::class, 'getDataUser'])->name('get.profil');
+
 
     // penilaian
     Route::get('get-data/penilaian-siswa', [PenilaianController::class, 'getPenilaian']);

@@ -23,6 +23,7 @@ class BerandaController extends Controller
                 ->where('idPegawai', Auth::user()->pegawai->idPegawai)
                 ->first();
             # code...
+            $kelas_nm = ['SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM', ];
         }
         return view('siakad/content/dashboard/beranda', [
             'judul' => 'Beranda',
@@ -30,7 +31,8 @@ class BerandaController extends Controller
             'text_singkat' => 'Selamat datang <a href="' . route('profil_pengguna.index') . '" class="fw-semibold">' . $auth . '</a>, di SIAKAD SD Negeri Lemahbang',
             's_idKelas' => '',
             'periode' => $periode,
-            'kelas' => $kelas ?? ''
+            'kelas' => $kelas ?? '',
+            'kelas_nm' => $kelas_nm ?? '',
         ]);
     }
 
