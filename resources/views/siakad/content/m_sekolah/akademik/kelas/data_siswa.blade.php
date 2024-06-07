@@ -97,7 +97,8 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="idSiswa">Nama Siswa</label>
-                                <select name="idSiswa[]" multiple="multiple" id="idSiswa" class="form-select"></select>
+                                <select name="idSiswa[]" multiple="multiple" id="idSiswa" class="form-select"
+                                    data-placeholder="Pilih Siswa"></select>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="idKelas">Kelas</label>
@@ -129,19 +130,18 @@
                 const formSiswaKelas = $('#form_siswaKelas');
 
 
-                insertSiswaKelas.click(function() {
-                    // $('#idKelas').val(null).change();
-                    // $('#idSiswa').val(null).change();
-                    $('#pilih_periode').change(function() {
-                        var id = $(this).val();
-                        getSelectSiswa(id);
-                    });
-                });
+                // insertSiswaKelas.click(function() {
+                //     // $('#idKelas').val(null).change();
+                //     // $('#idSiswa').val(null).change();
+                //     $('#pilih_periode').change(function() {
+
+                //     });
+                // });
 
                 // selet2 from kelas siswa
                 select2('#idKelas', modalSiswaKelas);
 
-                let kelas = $('.btn_kelas.active').val();
+                var kelas = $('.btn_kelas.active').val();
                 $('.content .block-title').text('Data Siswa Kelas ' + kelas);
 
                 $('#gb_kelas').on('click', '.btn_kelas', function() {
@@ -157,6 +157,7 @@
 
 
                 function getSelectSiswa(id) {
+                    $('#idSiswa').empty();
                     $.ajax({
                         type: "GET",
                         url: `{{ url('data-kelas/option/siswa') }}`,
@@ -164,41 +165,29 @@
                             idPeriode: id
                         },
                         success: function(data) {
-                            $('#idSiswa').empty();
-                            $.each(data.siswa, function(i, item) {
-                                $('#idSiswa').append(
-                                    `<option ${i<10 ? 'selected' : ''} value="${item.idSiswa}">${item.nis} - ${item.namaSiswa}</option>`
-                                );
-                            });
-                        },
-                    });
-                }
-
-                function getAppKelas() {
-                    $.ajax({
-                        type: "GET",
-                        url: `{{ url('data-kelas/get/siswa') }}`,
-                        data: {
-                            periode_siswa: $('#pilih_periode_siswa').val(),
-                            kelas_nama: $('.btn_kelas.active').val(),
-                        },
-                        success: function(data) {
-                            console.log(data);
+                            // console.log(data.siswa.length);
+                            if (data.siswa.length !== 0) {
+                                $.each(data.siswa, function(i, item) {
+                                    $('#idSiswa').append(
+                                        `<option ${i<10 ? 'selected' : ''} value="${item.idSiswa}">${item.nis} - ${item.namaSiswa}</option>`
+                                    );
+                                });
+                            }
                         },
                     });
                 }
 
 
-                function getSelectKelas() {
-                    $('#idKelas').html('');
+                function getSelectKelas(id) {
+                    $('#idKelas').empty();
                     $.ajax({
                         type: "GET",
                         url: `{{ route('form.kelas') }}`,
                         data: {
-                            periode: $('#pilih_periode').val()
+                            periode: id
                         },
                         success: function(data) {
-                            $('#idKelas').prepend(`<option disabled selected>Pilih Kelas</option>`);
+                            // $('#idKelas').prepend(`<option disabled selected>Pilih Kelas</option>`);
                             $.each(data.kelas, function(i, item) {
                                 var selected = '';
                                 if (item.idKelas === $('#idKelas').val()) {
@@ -212,8 +201,21 @@
                     });
                 }
 
-                $('#pilih_periode').on('change', function() {
-                    getSelectKelas();
+                modalSiswaKelas.on('show.bs.modal', function() {
+                    var val_periode = $('#pilih_periode_siswa option:selected').val();
+                    $('#pilih_periode option').each(function() {
+                        if ($(this).val() === val_periode) {
+                            $(this).prop('selected', true);
+                        }
+                    });
+
+                    $('#pilih_periode').trigger('change');
+                });
+
+                $('#pilih_periode').change(function() {
+                    var id = $(this).find('option:selected').val();
+                    getSelectSiswa(id);
+                    getSelectKelas(id);
                 });
 
 

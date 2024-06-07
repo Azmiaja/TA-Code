@@ -133,7 +133,7 @@ class ProfilUserController extends Controller
 
             // Validasi data
             $validatedData =  Validator::make($request->all(), [
-                'username' => 'required|max:25',
+                'username' => 'required|max:25|unique:user,username,' . $id . ',idPegawai',
                 'nip' => 'required|max:18',
                 'namaPegawai' => 'required|string|max:45',
                 'tempatLahir' => 'required|string|max:10',
@@ -145,6 +145,7 @@ class ProfilUserController extends Controller
             ], [
                 'username.required' => 'Masukan username.',
                 'username.max' => 'Username maksimal 25 karakter.',
+                'username.unique' => 'Username sudah digunakan.',
                 'nip.required' => 'Masukan NIP.',
                 'nip.max' => 'NIP maksimal 18 karakter.',
                 'namaPegawai.required' => 'Masukan nama lengkap Anda.',

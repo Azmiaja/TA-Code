@@ -295,7 +295,7 @@
                                             timer: 2000
                                         });
                                         tabelWaliKelas.DataTable().ajax.reload();
-                                        
+
                                     } else {
                                         Swal.fire({
                                             icon: response.status,
@@ -304,7 +304,7 @@
                                             showConfirmButton: false,
                                             timer: 2000
                                         });
-                                        
+
                                     }
                                 },
                             });
@@ -322,6 +322,17 @@
                             $('#namaKelas').find('option').not(':first').remove();
                         }
                     );
+                });
+
+                modalWaliKelas.on('show.bs.modal', function() {
+                    var val_periode = $('#pilih_periode_guru option:selected').val();
+                    $('#idPeriode option').each(function() {
+                        if ($(this).val() === val_periode) {
+                            $(this).prop('selected', true);
+                        }
+                    });
+
+                    $('#idPeriode').trigger('change');
                 });
 
                 $('#idPeriode').change(function() {
@@ -371,10 +382,6 @@
                     '#idPegawai',
                     modalWaliKelas,
                 );
-
-
-
-
             });
         </script>
     @endpush

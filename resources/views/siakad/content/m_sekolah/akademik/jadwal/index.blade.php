@@ -80,7 +80,7 @@
                                             <i class="fa fa-print me-2"></i>Cetak</button>
                                     </div>
                                 </div>
-                                <table id="tabel-JPSiswa" class="table table-bordered border-dark w-100">
+                                <table id="tabel-JPSiswa" class="table table-bordered border-dark w-100 align-middle">
                                     <thead class="table-light border-dark align-middle">
                                         <tr>
                                             <th width="14%">Waktu</th>
@@ -251,6 +251,31 @@
                     </div>
                 </div>
             </div>
+
+            {{-- MOdal Hapus Mapel --}}
+            <div class="modal fade" id="modal-Mapel-Del" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+                aria-labelledby="modalMapeltLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="block block-rounded block-transparent mb-0">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title">Info Jadwal</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-bs-dismiss="modal"
+                                        aria-label="Close">
+                                        <i class="fa fa-fw fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content fs-sm">
+                                <div class="row" id="con_mapel"></div>
+                            </div>
+                            <div class="block-content block-content-full bg-body">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endcanany
     </div>
 
@@ -258,6 +283,108 @@
 
     @push('scripts')
         <script>
+            $(document).on('click', '#hapus_jadwal', function(e) {
+                e.preventDefault();
+                var id = $(this).data('id-jadwal');
+                console.log(id);
+                $('#modal-Mapel-Del').modal('show');
+                $('#con_mapel').empty();
+                var html;
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('data.mapel.jadwal') }}",
+                    data: {
+                        idJadwal: id,
+                        namaKelas: $('.btn_kelas.active').val(),
+                        idPeriode: $('#periode option:selected').val(),
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        console.log(data);
+                        html = `
+                            <div class="mb-3">
+                                    <label for="periode" class="form-label">Semester</label>
+                                    <input type="text" class="form-control form-control-alt" id="periode" value="${data.periode.semester} ${data.periode.tahun}" readonly />                            
+                                </div>
+                                <div class="mb-3">
+                                    <label for="guru" class="form-label">Guru Pengajar</label>
+                                    <input type="text" readonly class="form-control form-control-alt" id="guru" value="${data.pengajaran.guru.namaPegawai}" />                            
+                                </div>
+                                <div class="mb-3">
+                                    <label for="kelas" class="form-label">Kelas</label>                            
+                                    <input type="text" readonly class="form-control form-control-alt" id="kelas" value="Kelas ${data.kelas.namaKelas}" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="hari" class="form-label">Hari</label>                            
+                                    <input type="text" readonly class="form-control form-control-alt" id="hari" value="${data.hari}" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="waktu" class="form-label">Waktu</label>                            
+                                    <input type="text" readonly class="form-control form-control-alt" id="waktu" value="${data.jamke.jamMulai} - ${data.jamke.jamSelesai}" />
+                                </div>
+                                <div class="mb-4">
+                                    <label for="mapel" class="form-label">Mapel</label>                            
+                                    <input type="text" readonly class="form-control form-control-alt" id="mapel" value="${data.pengajaran.mapel.namaMapel}" />
+                                </div>
+                                <div class="mb-3 text-end">
+                                    <button type="button" value="${data.idJadwal}" data-mapel="${data.pengajaran.mapel.namaMapel}" data-kelas="${data.kelas.namaKelas}" data-jam="${data.jamke.jamKe}" id="btn_hapus_mapel" class="btn btn-danger">Hapus</button>    
+                                </div>`;
+                    },
+                    complete: function() {
+                        $('#con_mapel').append(html);
+                    }
+                });
+            });
+
+            $(document).on('click', '#btn_hapus_mapel', function(e) {
+                e.preventDefault();
+                var id = $(this).val();
+                var mapel = $(this).data('mapel');
+                var kelas = $(this).data('kelas');
+                var jam = $(this).data('jam');
+
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    html: `Menghapus jadwal jam ke <b>-${jam}</b> mapel <b>${mapel}</b> dari <b>Kelas ${kelas}</b>.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Hapus!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: `{{ url('jadwal/mapel/destroy/${id}') }}`,
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.status === 'success') {
+                                    Swal.fire({
+                                        icon: response.status,
+                                        title: response.title,
+                                        text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                    $('#modal-Mapel-Del').modal('hide');
+                                    $('#tabel-JPSiswa').DataTable().ajax.reload();
+                                } else {
+                                    Swal.fire({
+                                        icon: response.status,
+                                        title: response.title,
+                                        text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+                                }
+                            },
+                        });
+                    }
+                });
+            });
+
             $(document).ready(function() {
                 const tabelJadwal = $('#tabel-JPkelas1');
                 const btnInsert = $('#tambah_jadwal');
@@ -482,14 +609,22 @@
 
                 modalJadwal.on('show.bs.modal', function() {
                     getJamKe();
-                    $('#idPeriode').on('change', function() {
-                        getSelectKelas();
-                        $('#idKelas').find('option:first').prop('selected', true);
-                        $('#idKelas').find('option').not(':first').remove();
+                    var val_periode = $('#periode option:selected').val();
+                    $('#idPeriode option').each(function() {
+                        if ($(this).val() === val_periode) {
+                            $(this).prop('selected', true);
+                        }
                     });
-                    $('#idKelas').change(function() {
-                        getPengjar();
-                    });
+
+                    $('#idPeriode').trigger('change');
+                });
+                $('#idPeriode').on('change', function() {
+                    getSelectKelas();
+                    $('#idKelas').find('option:first').prop('selected', true);
+                    $('#idKelas').find('option').not(':first').remove();
+                });
+                $('#idKelas').change(function() {
+                    getPengjar();
                 });
 
                 modalJadwal.on('hidden.bs.modal', function() {

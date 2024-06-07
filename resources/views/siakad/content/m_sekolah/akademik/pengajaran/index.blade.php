@@ -88,10 +88,8 @@
                                     <select name="idPeriode" id="idPeriode" class="form-select" required>
                                         <option value="" selected>Pilih Periode</option>
                                         @foreach ($periode as $item)
-                                            <option value="{{ $item->idPeriode }}">
-                                                Semester
-                                                {{ $item->semester }} {{ $item->tahun }}
-                                            </option>
+                                            <option value="{{ $item->idPeriode }}"> Semester {{ $item->semester }}
+                                                {{ $item->tahun }} </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -99,7 +97,6 @@
                                     <label class="form-label" for="idKelas">Kelas</label>
                                     <select name="idKelas" id="idKelas" class="form-select" data-placeholder="Pilih Kelas"
                                         required>
-                                        <option value="" disabled selected>Pilih Kelas</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -350,16 +347,17 @@
 
 
 
-                    function getSelectKelas() {
+                    function getSelectKelas(id) {
+                        $('#idKelas').empty();
                         $.ajax({
                             type: "GET",
                             url: `{{ route('form.kelas') }}`,
                             data: {
-                                periode: $('#idPeriode').val()
+                                periode: id
                             },
                             success: function(data) {
-                                // $('#idKelas').prepend(`<option value="" disabled selected>Pilih Kelas</option>`);
-                                $('#idKelas').find('option').not(':first').remove();
+                                $('#idKelas').prepend(
+                                `<option value="" disabled selected>Pilih Kelas</option>`);
                                 // $('#idKelas').html('');
                                 $.each(data.kelas, function(i, item) {
                                     $('#idKelas').append(
@@ -390,12 +388,12 @@
                     }
 
                     function getSelectMapel(id) {
+                        $('#idMapel').empty();
+                        $('#idMapel_two').empty();
                         $.ajax({
                             type: "GET",
                             url: `{{ url('pengajar/get-mapel/${id}') }}`,
                             success: function(data) {
-                                $('#idMapel').html('');
-                                $('#idMapel_two').empty();
                                 $.each(data, function(i, item) {
                                     $('#idMapel').append(
                                         `<option ${i<10 ? 'selected' : ''} value="${item.idMapel}">${item.singkatan ?? item.namaMapel}</option>`
@@ -428,19 +426,31 @@
                     });
 
                     modalPengajar.on('show.bs.modal', function() {
-                        $('#idPeriode').on('change', function() {
-                            getSelectKelas();
-                            $('#idKelas').find('option:first').prop('selected', true);
-                            $('#idKelas').find('option').not(':first').remove();
-                            $('#idPegawai').val(null).change();
-                        });
-                        $('#idKelas').on('change', function() {
-                            var id = $(this).val();
-                            // console.log(id);
-                            getSelectMapel(id);
-                            getSelectPegawai(id);
+                        var val_periode = $('#pilih_periode option:selected').val();
+                        $('#idPeriode option').each(function() {
+                            if ($(this).val() === val_periode) {
+                                $(this).prop('selected', true);
+                            }
                         });
 
+                        $('#idPeriode').trigger('change');
+                        // $('#idKelas').trigger('change');
+                    });
+
+                    $('#idPeriode').change(function() {
+                        var id = $(this).find('option:selected').val();
+                        getSelectKelas(id);
+                        $('#idKelas').find('option:first').prop('selected', true);
+                        // $('#idKelas').find('option').not(':first').remove();
+                        $('#idPegawai').empty();
+                        $('#idMapel').empty();
+                    });
+
+                    $('#idKelas').change(function() {
+                        var id = $(this).find('option:selected').val();
+                        // console.log(id);
+                        getSelectMapel(id);
+                        getSelectPegawai(id);
                     });
 
                     insertOrUpdateData(formPengajar, function() {

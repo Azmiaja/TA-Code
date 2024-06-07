@@ -331,7 +331,9 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin|Admin'])->group(function (
 
     Route::get('pengajar/mapel/data', [Mkelas\PengajarController::class, 'getMapelPengajar'])->name('data.mapel.pengajar');
     Route::delete('pengajar/destroy/mapel{id}', [Mkelas\PengajarController::class, 'destroyMapel']);
-
+    
+    Route::get('jadwal/mapel/data', [Mkelas\PenjadwalanController::class, 'getHpJadwal'])->name('data.mapel.jadwal');
+    Route::delete('jadwal/mapel/destroy/{id}', [Mkelas\PenjadwalanController::class, 'destroyJadwal']);
 
     Route::get('/get-jadwal-guru', [Mkelas\PenjadwalanController::class, 'getJadwalPGuru'])->name('get-jadwalP.guru');
 

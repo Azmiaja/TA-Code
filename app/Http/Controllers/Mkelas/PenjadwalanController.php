@@ -63,8 +63,8 @@ class PenjadwalanController extends Controller
         $jamKe = JamKe::all();
 
         $kelas = Kelas::where('idPeriode', $periode->idPeriode)
-        ->orderBy('namaKelas', 'asc')
-        ->get();
+            ->orderBy('namaKelas', 'asc')
+            ->get();
 
         return response()->json([
             'jadwal' => $jadwal,
@@ -266,47 +266,54 @@ class PenjadwalanController extends Controller
                 foreach ($groupedData as $item) {
                     $jamMulai = date('H:i', strtotime($item->jamke->jamMulai));
                     $jamSelesai = date('H:i', strtotime($item->jamke->jamSelesai));
-                    $formattedData[$item->hari] = $item->pengajaran->mapel->singkatan ?? ($item->pengajaran->mapel->namaMapel ?? '-');
+
+                    $mapel = $item->pengajaran->mapel;
+                    $formattedData[$item->hari] = '<a href="javascript:void(0)" title="Info ' . ($mapel->singkatan ?? $mapel->namaMapel) . '" data-id-jadwal="' . $item->idJadwal . '" id="hapus_jadwal" class="link-warning">';
+                    if (!empty($mapel->singkatan)) {
+                        $formattedData[$item->hari] .= $mapel->singkatan;
+                    } elseif (!empty($mapel->namaMapel)) {
+                        $formattedData[$item->hari] .= $mapel->namaMapel;
+                    } else {
+                        $formattedData[$item->hari] .= '-';
+                    }
+                    $formattedData[$item->hari] .= '</a>';
+
                     $formattedData['Guru' . $item->hari] = $item->pengajaran->guru->namaPegawai . ' (' . ($item->pengajaran->mapel ? ($item->pengajaran->mapel->singkatan ? $item->pengajaran->mapel->singkatan : $item->pengajaran->mapel->namaMapel) : '-') . ')';
                     $formattedData['waktu'] = $jamMulai . ' - ' . $jamSelesai;
                 }
 
                 return $formattedData;
-            });
+            })->values();
 
-            return DataTables::of($data)->toJson();
+            // return DataTables::of($data)->toJson();
+            return response()->json(['data' => $data]);
         } catch (\Exception $e) {
             Log::error('Error get data: ' . $e->getMessage());
             // Handle the exception here
         }
     }
 
+    public function getHpJadwal(Request $request)
+    {
+        $idJadwal = $request->idJadwal;
+        $idPeriode = $request->idPeriode;
+        $namaKelas = $request->namaKelas;
+
+        $jadwal = Jadwal::where('idJadwal', $idJadwal)
+            ->where('idPeriode', $idPeriode)
+            ->whereHas('kelas', function ($query) use ($namaKelas) {
+                $query->where('namaKelas', $namaKelas);
+            })
+            ->with('periode', 'kelas', 'jamke', 'pengajaran.mapel', 'pengajaran.guru')
+            ->first();
+
+        return response()->json($jadwal);
+    }
+
     // Guru
 
     public function getJadwalPGuru(Request $request)
     {
-        // $data = DB::table('jadwal')
-        //     ->select(
-        //         DB::raw('CONCAT(DATE_FORMAT(jadwal.jamMulai, "%H:%i"), " - ", DATE_FORMAT(jadwal.jamSelesai, "%H:%i")) AS waktu'),
-        //         DB::raw('TRIM(BOTH "," FROM GROUP_CONCAT(IF(jadwal.hari = "Senin", CONCAT(mapel.namaMapel, " - Kelas ", kelas.namaKelas), ""))) AS senin'),
-        //         DB::raw('TRIM(BOTH "," FROM GROUP_CONCAT(IF(jadwal.hari = "Selasa", CONCAT(mapel.namaMapel, " - Kelas ", kelas.namaKelas), ""))) AS selasa'),
-        //         DB::raw('TRIM(BOTH "," FROM GROUP_CONCAT(IF(jadwal.hari = "Rabu", CONCAT(mapel.namaMapel, " - Kelas ", kelas.namaKelas), ""))) AS rabu'),
-        //         DB::raw('TRIM(BOTH "," FROM GROUP_CONCAT(IF(jadwal.hari = "Kamis", CONCAT(mapel.namaMapel, " - Kelas ", kelas.namaKelas), ""))) AS kamis'),
-        //         DB::raw('TRIM(BOTH "," FROM GROUP_CONCAT(IF(jadwal.hari = "Jumat", CONCAT(mapel.namaMapel, " - Kelas ", kelas.namaKelas), ""))) AS jumat'),
-        //         DB::raw('TRIM(BOTH "," FROM GROUP_CONCAT(IF(jadwal.hari = "Sabtu", CONCAT(mapel.namaMapel, " - Kelas ", kelas.namaKelas), ""))) AS sabtu')
-        //     )
-        //     ->join('pengajaran', 'jadwal.idPengajaran', '=', 'pengajaran.idPengajaran')
-        //     ->join('pegawai', 'pengajaran.idPegawai', '=', 'pegawai.idPegawai')
-        //     ->join('mapel', 'pengajaran.idMapel', '=', 'mapel.idMapel')
-        //     ->join('kelas', 'pengajaran.idKelas', '=', 'kelas.idKelas')
-        //     ->join('periode', 'pengajaran.idPeriode', '=', 'periode.idPeriode')
-        //     ->where('pegawai.idPegawai', '=', $request->id_nama)
-        //     ->where('periode.idPeriode', '=', $request->id_periode)
-        //     ->groupBy('jamMulai', 'jamSelesai')
-        //     ->orderBy('jamMulai')
-        //     ->get();
-
-        // return Datatables::of($data)->make(true);
 
         try {
             $periode = $request->idPeriode;
@@ -452,7 +459,7 @@ class PenjadwalanController extends Controller
         try {
             $jam = JamKe::find($id);
             $jam->delete();
-    
+
             return response()->json([
                 'status' => 'success',
                 'title' => 'Dihapus!',
@@ -465,5 +472,17 @@ class PenjadwalanController extends Controller
                 'message' => 'Tidak dapat menghapus data karena memiliki relasi dengan data lain!.'
             ]);
         }
+    }
+
+    public function destroyJadwal($id)
+    {
+        $jadwal = Jadwal::find($id);
+        $jadwal->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'title' => 'Dihapus!',
+            'message' => 'Berhasil menghapus data.'
+        ]);
     }
 }
