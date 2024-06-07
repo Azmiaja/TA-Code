@@ -98,6 +98,7 @@ class Controller extends BaseController
         $itemsPerPage = 6; // Jumlah item per halaman
         $page = request('page', 1); // Ambil halaman saat ini, default halaman 1
         $skip = 5; // Jumlah item yang di-skip
+        $totalItems = 0;
 
         if ($bulan && $tahun) {
             // list($tahun, $bulan) = explode('/', $bulan);
@@ -187,14 +188,14 @@ class Controller extends BaseController
                 $waktu = Carbon::parse($berita->waktu)->locale('id_ID')->diffForHumans() ?: null;
                 return compact('gambar', 'judul', 'penulis', 'tanggal', 'waktu', 'slug', 'id');
             });
-            $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
-                $berita,
-                $totalItems - $skip,
-                $itemsPerPage,
-                $page,
-                ['path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()]
-            );
         }
+        $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
+            $berita,
+            $totalItems - $skip,
+            $itemsPerPage,
+            $page,
+            ['path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()]
+        );
         $data = array_merge(
             $this->getCommonData(),
             ['title' => 'Berita Sekolah']
