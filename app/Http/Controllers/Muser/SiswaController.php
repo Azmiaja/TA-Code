@@ -50,12 +50,13 @@ class SiswaController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'nisn' => [
-                    'integer',
+                    'required',
+                    'numeric',
                     'digits:10',
                     'unique:siswa,nisn'
                 ],
-                'nis' => 'integer|unique:siswa,nis|digits:4',
-                'namaSiswa' => 'max:45',
+                'nis' => 'required|numeric|unique:siswa,nis|digits:4',
+                'namaSiswa' => 'required|max:45',
                 'panggilan' => 'max:20',
                 'alamat' => 'max:125',
                 'namaAyah' => 'max:45',
@@ -70,14 +71,20 @@ class SiswaController extends Controller
                 'noTlpAyah' => 'max:15',
                 'noTlpIbu' => 'max:15',
                 'noTlpWali' => 'max:15',
+                'tempatLahir' => 'max:20',
+                'tanggalLahir' => 'required',
+                'tahunMasuk' => 'required',
             ], [
-                'nisn.integer' => 'NISN harus berupa angka.',
-                'nis.integer' => 'NIS harus berupa angka.',
+                'nisn.numeric' => 'NISN harus berupa angka.',
+                'nisn.required' => 'NISN harus diisi.',
+                'nis.numeric' => 'NIS harus berupa angka.',
+                'nis.required' => 'NIS harus diisi.',
                 'nisn.unique' => 'NISN sudah terdaftar.',
                 'nis.unique' => 'NIS sudah terdaftar.',
                 'nisn.digits' => 'Panjang NISN harus 10 digit.',
                 'nis.digits' => 'Panjang NIS harus 4 digit.',
                 'namaSiswa.max' => 'Panjang nama lengkap maksimal 45 karakter.',
+                'namaSiswa.required' => 'Nama lengkap harus diisi.',
                 'namaAyah.max' => 'Panjang nama ayah maksimal 45 karakter.',
                 'namaIbu.max' => 'Panjang nama ibu maksimal 45 karakter.',
                 'namaWali.max' => 'Panjang nama wali maksimal 45 karakter.',
@@ -92,6 +99,10 @@ class SiswaController extends Controller
                 'pekerjaanAyah' => 'Pekerjaan ayah terlalu pajang maksimal 45 karakter.',
                 'pekerjaanIbu' => 'Pekerjaan ibu terlalu pajang maksimal 45 karakter.',
                 'pekerjaanWali' => 'Pekerjaan wali terlalu pajang maksimal 45 karakter.',
+                'tempatLahir.max' => 'Tempat lahir terlalu panjang maksimal 20 karakter.',
+                'tanggalLahir.required' => 'Tanggal lahir harus diisi.',
+                'tahunMasuk.required' => 'Tahun masuk harus diisi.',
+
             ]);
 
             if ($validator->fails()) {
@@ -151,16 +162,18 @@ class SiswaController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'nisn' => [
-                    'integer',
+                    'required',
+                    'numeric',
                     'digits:10',
                     'unique:siswa,nisn,' . $id . ',idSiswa'
                 ],
                 'nis' => [
-                    'integer',
+                    'required',
+                    'numeric',
                     'digits:4',
                     'unique:siswa,nis,' . $id . ',idSiswa',
                 ],
-                'namaSiswa' => 'max:45',
+                'namaSiswa' => 'required|max:45',
                 'panggilan' => 'max:20',
                 'alamat' => 'max:125',
                 'namaAyah' => 'max:45',
@@ -175,14 +188,20 @@ class SiswaController extends Controller
                 'noTlpAyah' => 'max:15',
                 'noTlpIbu' => 'max:15',
                 'noTlpWali' => 'max:15',
+                'tanggalLahir' => 'required',
+                'tempatLahir' => 'max:20',
+                'tahunMasuk' => 'required'
             ], [
-                'nisn.integer' => 'NISN harus berupa angka.',
-                'nis.integer' => 'NIS harus berupa angka.',
+                'nisn.numeric' => 'NISN harus berupa angka.',
+                'nisn.required' => 'NISN harus diisi.',
+                'nis.numeric' => 'NIS harus berupa angka.',
+                'nis.required' => 'NIS harus diisi.',
                 'nisn.unique' => 'NISN sudah terdaftar.',
                 'nis.unique' => 'NIS sudah terdaftar.',
                 'nisn.digits' => 'Panjang NISN harus 10 digit.',
                 'nis.digits' => 'Panjang NIS harus 4 digit.',
                 'namaSiswa.max' => 'Panjang nama lengkap maksimal 45 karakter.',
+                'namaSiswa.required' => 'Nama lengkap harus diisi.',
                 'namaAyah.max' => 'Panjang nama ayah maksimal 45 karakter.',
                 'namaIbu.max' => 'Panjang nama ibu maksimal 45 karakter.',
                 'namaWali.max' => 'Panjang nama wali maksimal 45 karakter.',
@@ -197,6 +216,9 @@ class SiswaController extends Controller
                 'pekerjaanAyah' => 'Pekerjaan ayah terlalu pajang maksimal 45 karakter.',
                 'pekerjaanIbu' => 'Pekerjaan ibu terlalu pajang maksimal 45 karakter.',
                 'pekerjaanWali' => 'Pekerjaan wali terlalu pajang maksimal 45 karakter.',
+                'tanggalLahir.required' => 'Tanggal lahir harus diisi.',
+                'tempatLahir.max' => 'Tempat lahir terlalu panjang maksimal 20 karakter.',
+                'tahunMasuk.required' => 'Tahun angkatan harus diisi.'
             ]);
 
             if ($validator->fails()) {

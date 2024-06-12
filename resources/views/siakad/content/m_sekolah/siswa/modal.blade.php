@@ -53,7 +53,7 @@
                                 <label class="form-label" for="tanggalLahir">Tanggal Lahir <span
                                     class="text-danger fs-sm">*</span></label>
                                 <input type="text" class="form-control" id="tanggalLahir" name="tanggalLahir"
-                                    placeholder="Tanggal Lahir Siswa" required>
+                                    placeholder="Tanggal Lahir Siswa" required readonly>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" for="jenisKelamin">Jenis Kelamin</label>
@@ -85,7 +85,7 @@
                             <div class="col-md-6">
                                 <label class="form-label" for="tahunMasuk">Tahun Angkatan <span
                                     class="text-danger fs-sm">*</span></label>
-                                <input type="text" class="form-control" id="tahunMasuk" name="tahunMasuk" placeholder="Masukan Tahun Masuk Siswa" required>
+                                <input type="text" class="form-control" readonly id="tahunMasuk" name="tahunMasuk" placeholder="Masukan Tahun Masuk Siswa" required>
                             </div>
                             <div class="col-md-12 mb-4">
                                 <label class="form-label" for="alamat">Alamat</label>
