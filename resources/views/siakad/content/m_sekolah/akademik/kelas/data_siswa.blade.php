@@ -181,7 +181,7 @@
                             // $('#idKelas').prepend(`<option disabled selected>Pilih Kelas</option>`);
                             $.each(data.kelas, function(i, item) {
                                 var selected = '';
-                                if (item.idKelas === $('#idKelas').val()) {
+                                if (item.namaKelas === $('.btn_kelas.active').val()) {
                                     selected = 'selected';
                                 }
                                 $('#idKelas').append(
