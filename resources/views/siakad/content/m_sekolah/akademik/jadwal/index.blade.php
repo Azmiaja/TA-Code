@@ -4,26 +4,89 @@
     <style>
         @media print {
             table {
-                page-break-inside: avoid;
-                width: 100%;
+                min-width: 100%;
                 color: #000;
                 font-size: 12pt;
-
+                border-collapse: collapse;
+                background-color: #fff;
+                text-transform: uppercase;
+                text-decoration: none;
+                font-weight: 600;
+                border: 1.5px solid #000;
+                vertical-align: top;
+                margin-bottom: 1rem;
             }
 
-            table thead,
-            table tbody,
-            table tfoot {
+            table thead tr{
+                background-color: rgba(111, 162, 210, 0.607)
+            }
+
+            table tr td a {
                 color: #000;
+                text-decoration: none;
+            }
+
+            table tr td,
+            table tr th {
+                padding: 0.75rem 0.75rem;
+                padding-left: 5px;
+                padding-right: 5px;
+                text-align: center;
+                border: 1px solid #000;
+            }
+
+            table tr th:nth-child(1) {
+                width: 6%;
+            }
+
+            table tr th:nth-child(2),
+            table tr td:nth-child(2) {
+                width: 14%;
+                font-size: 12pt;
+                white-space: nowrap;
+            }
+
+            table tr th:nth-child(3) {
+                width: 80%;
+            }
+
+            table tr:nth-child(2) th:nth-child(1),
+            table tr:nth-child(2) th:nth-child(2),
+            table tr:nth-child(2) th:nth-child(3),
+            table tr:nth-child(2) th:nth-child(4),
+            table tr:nth-child(2) th:nth-child(5),
+            table tr:nth-child(2) th:nth-child(6) {
+                width: 13.33%;
+                background-color: #ddd8787e;
+            }
+
+            table tr td:nth-child(3),
+            table tr td:nth-child(4),
+            table tr td:nth-child(5),
+            table tr td:nth-child(6),
+            table tr td:nth-child(7),
+            table tr td:nth-child(8) {
+                font-size: 10pt;
             }
 
             body {
                 background-color: #fff;
                 font-family: 'Times New Roman', Times, serif;
-                font-size: 12pt;
-                width: 100%;
                 color: #000;
             }
+
+            body h4{
+                font-size: 14pt;
+            }
+        }
+
+        .fs-min {
+            font-size: 9.5pt;
+            font-weight: 550;
+        }
+
+        .hari {
+            border-left: none;
         }
     </style>
     <div class="content">
@@ -46,8 +109,8 @@
                             </div>
                         </div>
                         <div class="block-content p-0">
-                            <div class="table-responsive m-4 m-md-0 p-md-4 p-0">
-                                <div class="row g-3 pt-1">
+                            <div class="table-responsive m-4 m-md-0 p-md-4 p-0 ">
+                                <div class="row g-3 pt-1 mb-3">
                                     <div class="col-md-7 col-12 text-md-start text-center">
                                         <div class="btn-group" role="group" aria-label="Horizontal Alternate Info">
                                             <button type="button" class="btn btn-sm btn-outline-danger btn_kelas active"
@@ -71,11 +134,9 @@
                                         </div>
                                     </div>
                                     <div class="col-md-5 col-12 text-md-end text-center">
-                                        <button class="btn btn-sm btn-alt-success" id="tambah_jadwal" title="Kelola Jadwal"><i
-                                                class="fa fa-plus mx-2"></i>Kelola
+                                        <button class="btn btn-sm btn-alt-success me-2 me-md-0" id="tambah_jadwal"
+                                            title="Kelola Jadwal"><i class="fa fa-plus mx-2"></i>Kelola
                                             Jadwal</button>
-                                    </div>
-                                    <div class="col-12 text-md-end text-center">
                                         <button class="btn btn-sm btn-primary" id="btn_print_jadwal">
                                             <i class="fa fa-print me-2"></i>Cetak</button>
                                     </div>
@@ -83,13 +144,17 @@
                                 <table id="tabel-JPSiswa" class="table table-bordered table-striped w-100 align-middle">
                                     <thead class="table-light align-middle">
                                         <tr>
-                                            <th width="14%">Waktu</th>
-                                            <th width="14%">Senin</th>
-                                            <th width="14%">Selasa</th>
-                                            <th width="14%">Rabu</th>
-                                            <th width="14%">Kamis</th>
-                                            <th width="14%">Jumat</th>
-                                            <th width="14%">Sabtu</th>
+                                            <th width="6%" rowspan="2">Jam</th>
+                                            <th width="14%" rowspan="2">Waktu</th>
+                                            <th width="80%" style="text-align: center;" colspan="6">Hari</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="hari" width="13.33%">Senin</th>
+                                            <th class="hari" width="13.33%">Selasa</th>
+                                            <th class="hari" width="13.33%">Rabu</th>
+                                            <th class="hari" width="13.33%">Kamis</th>
+                                            <th class="hari" width="13.33%">Jumat</th>
+                                            <th class="hari" width="13.33%">Sabtu</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -106,7 +171,7 @@
                             <h3 class="block-title">Jam Pelajaran</h3>
                             <div class="block-options">
                                 <button class="btn btn-sm btn-alt-success" title="Kelola Jam Pelajaran" id="atur_jam">
-                                    <i class="fa fa-plus mx-2"></i>
+                                    <i class="fa fa-plus mx-2"></i><span class="d-inline d-md-none">Kelola Jam</span>
                                 </button>
                             </div>
                         </div>
@@ -405,82 +470,124 @@
                             //     // console.log(d.kelas_id);
                         }
                     },
+                    columnDefs: [{
+                            width: '6%',
+                            targets: 0
+                        }, // Jam
+                        {
+                            width: '14%',
+                            targets: 1
+                        }, // Waktu
+                        {
+                            width: '13.33%',
+                            targets: [2, 3, 4, 5, 6, 7]
+                        } // Hari
+                    ],
                     columns: [{
+                            data: 'nomor',
+                            name: 'nomor',
+                            className: 'text-center fs-sm px-0',
+                            orderable: false
+                        }, {
                             data: 'waktu',
                             name: 'waktu',
-                            className: 'text-center fs-sm px-0 text-nowrap'
+                            className: 'text-center px-0 text-nowrap fs-min',
+                            orderable: false
                         },
                         {
                             data: 'Senin',
                             name: 'Senin',
-                            className: 'text-center fs-sm px-0'
+                            className: 'text-center fs-sm px-0',
+                            orderable: false
                         },
                         {
                             data: 'Selasa',
                             name: 'Selasa',
-                            className: 'text-center fs-sm px-0'
+                            className: 'text-center fs-sm px-0',
+                            orderable: false
+
                         },
                         {
                             data: 'Rabu',
                             name: 'Rabu',
-                            className: 'text-center fs-sm px-0'
+                            className: 'text-center fs-sm px-0',
+                            orderable: false
+
                         },
                         {
                             data: 'Kamis',
                             name: 'Kamis',
-                            className: 'text-center fs-sm px-0'
+                            className: 'text-center fs-sm px-0',
+                            orderable: false
+
                         },
                         {
                             data: 'Jumat',
                             name: 'Jumat',
-                            className: 'text-center fs-sm px-0'
+                            className: 'text-center fs-sm px-0',
+                            orderable: false
+
                         },
                         {
                             data: 'Sabtu',
                             name: 'Sabtu',
-                            className: 'text-center fs-sm px-0'
+                            className: 'text-center fs-sm px-0',
+                            orderable: false
+
                         },
                     ],
-                    dom: "<'row my-0 '<'col-12 col-sm-12 col-md-7'><'col-12 col-sm-12 col-md-5 text-md-end'B>>" +
+                    dom: "<'row my-0 '<'col-12 col-sm-12 col-md-7'><'col-12 col-sm-12 col-md-5 text-md-end'>>" +
                         "<'row my-0 '<'col-12 col-sm-12'tr>>" +
                         "<'row mb-0'<'col-12 col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
-                    buttons: [{
-                        extend: 'print',
-                        title: function() {
-                            let periode = $('#periode option:selected').data('tahun');
-                            let kelas = $(".btn_kelas.active").val();
-                            return '<h4 style="margin-bottom: 3rem; font-family: Times New Roman, Times, serif;">JADWAL PELAJARAN KELAS ' +
-                                kelas + '<br>' + 'SD NEGERI LEMAHBANG' +
-                                '<br>' +
-                                'TAHUN PELAJARAN ' + periode + '</h4>';
-                        },
-                        className: 'd-none',
-                        exportOptions: {
-                            columns: ':visible'
-                        },
-                        messageTop: null,
-                        messageBottom: null,
-                        customize: function(win) {
-                            $(win.document.body).css('text-align', 'center');
-                            $(win.document.body).find('table').css({
-                                'text-transform': 'uppercase',
-                                'font-size': '12pt',
-                                'border-color': '#000'
-                            });
-                            $(win.document.body).find('th').css('font-size', '1.25rem').width(
-                                '14%');
-                        }
+                    // buttons: [{
+                    //     extend: 'print',
+                    //     title: function() {
+                    //         let periode = $('#periode option:selected').data('tahun');
+                    //         let kelas = $(".btn_kelas.active").val();
+                    //         return '<h4 style="margin-bottom: 3rem; font-family: Times New Roman, Times, serif;">JADWAL PELAJARAN KELAS ' +
+                    //             kelas + '<br>' + 'SD NEGERI LEMAHBANG' +
+                    //             '<br>' +
+                    //             'TAHUN PELAJARAN ' + periode + '</h4>';
+                    //     },
+                    //     className: 'd-none',
+                    //     exportOptions: {
+                    //         columns: ':visible'
+                    //     },
+                    //     messageTop: null,
+                    //     messageBottom: null,
+                    //     customize: function(win) {
+                    //         $(win.document.body).css('text-align', 'center');
+                    //         $(win.document.body).find('table').css({
+                    //             'text-transform': 'uppercase',
+                    //             'font-size': '12pt',
+                    //             'border-color': '#000'
+                    //         });
+                    //         // $(win.document.body).find('.hari').css('font-size', '1.25rem').width(
+                    //         //     '13.33%');
+                    //     }
 
-                    }],
+                    // }],
                     paging: false,
-                    ordering: true,
+                    ordering: false,
                     searching: false,
                     info: false,
                 });
 
                 $('#btn_print_jadwal').on('click', function() {
-                    $('.buttons-print').click();
-                })
+                    // $('.buttons-print').click();
+                    let periode = $('#periode option:selected').data('tahun');
+                    let kelas = $(".btn_kelas.active").val();
+                    $('#tabel-JPSiswa').printThis({
+                        debug: false, // show the iframe for debugging
+                        importCSS: false,
+                        importStyle: true,
+                        pageTitle: "Judul Dokumen",
+                        header: `<h4 style="margin-bottom: 3rem; font-family: Times New Roman, Times, serif; text-align: center">JADWAL PELAJARAN KELAS ${kelas}
+                                    <br> SD NEGERI LEMAHBANG
+                                    <br> TAHUN PELAJARAN ${periode}</h4>`,
+                        printContainer: true,
+                    });
+                });
                 $('.buttons-print').prop('hidden', true);
 
                 fatchDataJam();

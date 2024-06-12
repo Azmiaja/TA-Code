@@ -250,7 +250,7 @@ class PenjadwalanController extends Controller
                 return $jadwal->jamke->jamMulai . '-' . $jadwal->jamke->jamSelesai;
             })->map(function ($groupedData) {
                 $formattedData = [
-                    'nomor' => $groupedData->keys()->first() + 1,
+                    'nomor' => $groupedData->first()->jamke->jamKe,
                     'Senin' => '-',
                     'Selasa' => '-',
                     'Rabu' => '-',
