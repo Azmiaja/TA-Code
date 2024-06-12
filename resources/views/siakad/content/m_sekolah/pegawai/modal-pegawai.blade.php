@@ -80,7 +80,7 @@
                                 <!-- Jabatan -->
                                 <div class="mb-2">
                                     <label class="form-label" for="jabatan">Jabatan <span
-                                            class="text-danger fs-sm">*</span></label>
+                                            class="text-danger fs-sm"></span></label>
                                     <select name="idJabatan" id="idJabatan" class="form-select">
                                         <option value="" selected disabled>Pilih Jabatan</option>
                                     </select>
@@ -113,20 +113,6 @@
                                         <option value="Tidak Aktif">Tidak Aktif</option>
                                     </select>
                                 </div>
-                                {{-- Gambar
-                                <div class="mb-2">
-                                    <label class="form-label" for="gambarPegawai">Gambar</label>
-                                    <img src="" class="img-preview img-fluid rounded-2 col-12 mb-2"
-                                        style="display: none; border: 2px dashed #dfe3ea; width: 150px;"
-                                        alt="">
-                                    <input type="file" class="form-control d-none" name="gambarPegawai"
-                                        accept=".jpg,.jpeg,.png,.svg" id="gambarPegawai" onchange="prevImg()">
-                                    <div class="col">
-                                        <button type="button" id="fileButton" class="btn btn-success"><i
-                                                class="fa-solid fa-file-image me-2"></i>Pilih
-                                            File</button>
-                                    </div>
-                                </div> --}}
                             </div>
                             <hr>
                             <div class="mb-2 text-end" id="bt-form-pegawai">

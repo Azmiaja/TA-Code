@@ -42,7 +42,7 @@
                     <div class="block-content block-content-full">
                         <div class="table-responsive pb-2">
                             <table id="tp_nilai"
-                                class="table w-100 align-middle table-stripped table-bordered caption-top">
+                                class="table w-100 align-middle table-striped table-bordered caption-top">
                                 <thead class="table-light align-middle">
                                     <tr>
                                         {{-- <th width="5%" class="text-center ">NO</th> --}}
@@ -68,7 +68,7 @@
                     <div class="block-content block-content-full">
                         <div class="table-responsive pb-2">
                             <table id="lm_nilai"
-                                class="table w-100 align-middle table-stripped table-bordered caption-top">
+                                class="table w-100 align-middle table-striped table-bordered caption-top">
                                 <thead class="table-light align-middle">
                                     <tr>
                                         {{-- <th width="5%" class="text-center ">NO</th> --}}
@@ -347,6 +347,7 @@
             $('#mapel_id, #periode_id').change(function() {
                 $('#tp_nilai').DataTable().ajax.reload();
                 $('#lm_nilai').DataTable().ajax.reload();
+                
             });
 
             $('#kelas_name').change(function() {
@@ -565,6 +566,8 @@
                             $('#mapel_name_tp').val(mapel);
                             $('#mapel_tp').val(id);
                             $('#kelas_tp').val(response.data.kelas);
+                            $('#semester_tp').val(response.data.periode);
+                            $('#semester_tp').addClass('text-capitalize');
                             $('#kode').val(response.data.kodeTP);
                             $('#idTP').val(response.data.idTP);
                             $('#deskripsi_TP').val(response.data.deskripsi);
@@ -601,6 +604,8 @@
                             $('#mapel_name').val(mapel);
                             $('#mapel').val(id);
                             $('#kelas').val(response.data.kelas);
+                            $('#semester').val(response.data.periode);
+                            $('#semester').addClass('text-capitalize');
                             $('#kodeLM').val(response.data.kodeLM);
                             $('#deskripsiLM').val(response.data.deskripsi);
                         } else {

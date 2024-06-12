@@ -30,7 +30,7 @@
                                     <div class="spinner-border text-primary" role="status"></div>
                                 </div>
                                 <div class="row g-2" id="siswa">
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -158,7 +158,7 @@
                                         <div class="d-flex flex-row mb-2 py-2">
                                             <div class="col-4 fw-semibold">Jabatan</div>
                                             <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">${data.jabatan_pegawai ?? '-'}</div>
+                                            <div class="col-7">${data.jabatan_pegawai ? data.jabatan_pegawai.jabatan :'-'}</div>
                                         </div>
                                         <div class="d-flex flex-row mb-2 py-2">
                                             <div class="col-4 fw-semibold">Status</div>
@@ -175,6 +175,7 @@
                         }
                     });
                 }
+
                 function getDataSiswa() {
                     $('#siswa').empty();
                     $('#loading_spinner_siswa').show();
@@ -297,6 +298,20 @@
                     });
                 }
 
+                function getDT() {
+                    $('#name_ppw').empty();
+                    $('#us_name').empty();
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('get.profil') }}",
+                        dataType: "json",
+                        success: function(data) {
+                            $('#name_ppw').text(data.namaPegawai);
+                            $('#us_name').text('@'+data.user[0].username);
+                        }
+                    });
+                }
+
                 $(document).ready(function() {
                     @cannot('siswa')
                         getDataPegawai();
@@ -386,6 +401,7 @@
                     insertData(form_editProfil, modal_chProfil, function() {
                         @cannot('siswa')
                             getDataPegawai();
+                            getDT();
                         @endcannot
                     });
                     insertData(form_ediFotoProfil, modal_fotoProfil, function() {

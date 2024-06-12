@@ -88,7 +88,6 @@ Route::middleware(['auth:siswa', 'ceklevel:Siswa'])->group(function () {
     });
     // get kalender siswa
     Route::get('get-kalender-jadwal', [BerandaController::class, 'getDataKalenderJadwal']);
-
 });
 
 // ROUTE GURU
@@ -161,7 +160,7 @@ Route::middleware(['auth:user', 'ceklevel:Guru'])->group(function () {
 // ROUTE ALL
 Route::middleware(['auth:user,siswa'])->group(function () {
     //dashboard
-    Route::get('/get-jadwal/siswa', [Mkelas\PenjadwalanController::class, 'getJadwalSiswa'])->name('get-jadwal.siswa');
+    Route::get('/get-jadwal/siswa', [Mkelas\PenjadwalanController::class, 'getJadwalSiswa'])->name('get.data-jadwal.siswa');
 
     // absen
     Route::get('rekap/absen/siswa/kelas{name}/{bulan}', [Absensi::class, 'rekapitulasi'])->name('rekapitulasi.index');
@@ -285,6 +284,9 @@ Route::middleware(['auth:user,siswa'])->group(function () {
 Route::middleware(['auth:user', 'ceklevel:Super Admin|Admin'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'indexBeranda'])->name('dashboard.index');
     Route::get('/chart/pengguna', [HomeController::class, 'chart'])->name('chart.pengguna');
+    
+    Route::get('/get-jadwal/siswa/admin', [Mkelas\PenjadwalanController::class, 'getJadwalSiswaAdmin'])->name('get-jadwal.siswa');
+
 
     // Data master sekolah
     Route::prefix('data-master')->group(function () {
@@ -331,7 +333,7 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin|Admin'])->group(function (
 
     Route::get('pengajar/mapel/data', [Mkelas\PengajarController::class, 'getMapelPengajar'])->name('data.mapel.pengajar');
     Route::delete('pengajar/destroy/mapel{id}', [Mkelas\PengajarController::class, 'destroyMapel']);
-    
+
     Route::get('jadwal/mapel/data', [Mkelas\PenjadwalanController::class, 'getHpJadwal'])->name('data.mapel.jadwal');
     Route::delete('jadwal/mapel/destroy/{id}', [Mkelas\PenjadwalanController::class, 'destroyJadwal']);
 
@@ -407,6 +409,7 @@ Route::middleware(['auth:user', 'ceklevel:Super Admin|Admin'])->group(function (
     Route::get('get-jabatan/options', [Muser\JabatanController::class, 'getJabatanOptions'])->name('get-jabatan.options');
     Route::get('get-jabatan/options/edit', [Muser\JabatanController::class, 'getJabatanOptionsEdit'])->name('get-jabatan.options.edit');
     Route::post('jabatan/store', [Muser\JabatanController::class, 'store'])->name('jabatan.store');
+    Route::put('jabatan/update/{id}', [Muser\JabatanController::class, 'update'])->name('jabatan.update');
     Route::delete('jabatan/destroy/{id}', [Muser\JabatanController::class, 'destroy']);
 });
 

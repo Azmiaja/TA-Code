@@ -13,8 +13,8 @@
             </div>
             <div class="block-content block-content-full p-0">
                 <div class="table-responsive m-md-0 m-4 p-md-4 p-0">
-                    <table id="tabelMapel" class="table w-100 table-bordered table-vcenter align-middle">
-                        <thead class="align-middle bg-body-light">
+                    <table id="tabelMapel" class="table table-striped w-100 table-bordered table-vcenter align-middle">
+                        <thead class="align-middle table-light">
                             <tr>
                                 <th style="width: 5%">No</th>
                                 <th>Mata Pelajaran</th>

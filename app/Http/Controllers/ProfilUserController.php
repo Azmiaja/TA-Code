@@ -44,7 +44,7 @@ class ProfilUserController extends Controller
             ->first();
         } else {
             $data = Pegawai::where('idPegawai', $user->pegawai->idPegawai)
-                ->with('jabatanPegawai')
+                ->with('jabatanPegawai', 'user')
                 ->first();
         }
         return response()->json($data);

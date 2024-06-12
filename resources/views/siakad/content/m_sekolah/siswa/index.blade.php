@@ -27,17 +27,17 @@
                         </div>
 
                     </div>
-                    <table id="tabelSiswa" class="table table-bordered align-middle w-100">
-                        <thead class="bg-body-light align-middle">
+                    <table id="tabelSiswa" class="table table-bordered table-striped align-middle w-100">
+                        <thead class="table-light align-middle">
                             <tr>
-                                <th style="width: 5%;">No</th>
-                                <th style="width: 7%;">NIS</th>
+                                <th width="5%">No</th>
+                                <th width="8%" class="text-center">NIS</th>
                                 <th>Nama</th>
-                                <th style="width: 13%;">Tempat, Tgl Lahir</th>
-                                <th style="width: 14%;">Jenis Kelamin</th>
-                                <th style="width: 8%;">Status</th>
-                                <th style="width: 8%;">Angkatan</th>
-                                <th style="width: 10%;">Aksi</th>
+                                <th width="18%">Tempat, Tgl Lahir</th>
+                                <th width="5%">L/P</th>
+                                <th width="8%">Status</th>
+                                <th width="8%">Angkatan</th>
+                                <th width="10%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -19,11 +19,11 @@
                     <!-- Form -->
                     <form id="formJabatan" method="POST" name="formJabatan" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="_method" id="method" value="POST">
+                        <input type="hidden" name="_method" id="method_jb" value="POST">
                         <input type="hidden" name="idJabatan" id="idJ">
                         <div class="mb-3 kategori-jabatan">
                             <label for="jenis" class="form-label">Kategori</label>
-                            <select type="text" name="jenis" id="jenis" class="form-select" required>
+                            <select type="text" name="jenis" id="jenis" class="form-select">
                                 <option value="" selected disabled>Pilih Kategori</option>
                                 <option value="Guru">Guru</option>
                                 <option value="Tendik">Tenaga Kependidikan</option>

@@ -12,8 +12,8 @@
             </div>
             <div class="block-content block-content-full p-0">
                 <div class="table-responsive p-3">
-                    <table id="tabelBerita" class="table w-100 table-hover table-borderless align-middle table-">
-                        <thead class="table-primary align-middle">
+                    <table id="tabelBerita" class="table w-100 table-striped table-bordered align-middle table-">
+                        <thead class="table-light align-middle">
                             <tr class="text-center fw-medium fs-sm">
                                 <th width="4%">No</th>
                                 <th width="15%">Gambar</th>
@@ -418,7 +418,7 @@
                     columns: [{
                             data: 'nomor',
                             name: 'nomor',
-                            className: 'text-center fw-semibold rounded-start'
+                            className: 'text-center fw-semibold'
 
                         },
                         {
@@ -467,7 +467,6 @@
 
                         {
                             data: null,
-                            className: 'rounded-end',
                             render: function(data, type, row) {
                                 return '<div class="btn-group">' +
                                     '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editBerita" value="' +

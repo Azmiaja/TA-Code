@@ -385,6 +385,8 @@
         @can('guru')
             <script>
                 function getJadwalGuru(hari, tgl) {
+                    var jadwal;
+                    $('#jadwal_hariIni').empty();
                     $.ajax({
                         url: `{{ url('get-guru-jadwal') }}`,
                         type: 'GET',
@@ -393,8 +395,7 @@
                         },
                         success: function(data) {
                             // console.log(data);
-                            $('#jadwal_hariIni').empty();
-                            let jadwal =
+                            jadwal =
                                 `<li class="mb-0 h3 fw-bold" style="color:#45bced;">${hari}<span class="text-dark float-end fs-sm fw-medium mt-2">${tgl}</span></li><div class="border border-bottom mb-3"></div>`;
                             if (data.jadwal.length > 0) {
                                 // console.log('data 1' + data.jadwal);
@@ -411,6 +412,8 @@
                                 jadwal +=
                                     `<li class="text-center text-muted my-3">Jadwal Masih Kosong</li>`;
                             }
+                        },
+                        complete: function() {
                             $('#jadwal_hariIni').append(jadwal);
                         }
                     });

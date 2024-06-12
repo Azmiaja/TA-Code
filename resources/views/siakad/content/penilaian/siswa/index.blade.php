@@ -2,7 +2,7 @@
 @section('siakad')
     @include('siakad/layouts/partials/hero')
     <div class="content">
-        <div class="alert alert-info pb-0" role="alert">
+        <div class="alert alert-primary pb-0" role="alert">
             @php
                 $kelas_nama = ['SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM'];
             @endphp
@@ -70,7 +70,7 @@
                         <div class="spinner-border text-primary" role="status"></div>
                     </div>
                     <table id="table_nilai_siswa"
-                        class="table table-bordered align-middle border-dark w-100 caption-top">
+                        class="table table-bordered align-middle table-striped w-100 caption-top">
                     </table>
                 </div>
                 <div class="mt-3" id="chart_nilai"></div>
@@ -97,14 +97,14 @@
                         var kls_name = ['SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM'];
                         var per_smt = $('#periode_siswa option:selected').data('smt');
                         var per_tahun = $('#periode_siswa option:selected').data('tahun');
-                        var tb_rekap = `<caption class="text-dark mb-0">
+                        var tb_rekap = `<!--<caption class="text-dark mb-0">
                                         <strong class="text-start mb-0">
                                                     KELAS : ${kelas} (${kls_name[kelas - 1] ?? ''})
                                                 </strong>
                                         <strong class="float-end mb-0 text-uppercase">
                                             SEMESTER : ${per_smt}</strong>
-                                    </caption>
-                                    <thead class="table-light text-center align-middle border-dark">
+                                    </caption>-->
+                                    <thead class="table-light text-center align-middle">
                                         <tr>
                                             <th width="4%">No</th>
                                             <th>Mata Pelajaran</th>
@@ -145,15 +145,17 @@
                             }
 
                         });
-                        tb_rekap += `<tr class="border-top border-2 border-dark">
-                                <td colspan="3" class="fw-bold">Jumlah</td>
-                                <td class="text-center fw-bold">${raport === null || raport === 0 ? '' : raport}</td>
-                                </tr>
-                                <tr class="border-bottom border-2 border-dark">
-                                <td colspan="3" class="fw-bold">Rata-Rata</td>
-                                <td class="text-center fw-bold">${jumPengajaran === 0 ? '' : (raport / jumPengajaran).toFixed(2)}</td>
-                                </tr>
-                                </tbody>`;
+                        tb_rekap += `</tbody>
+                        <tfoot class="table-light">
+                            <tr class="">
+                                <td colspan="3" class="fw-medium">Jumlah</td>
+                                <td class="text-center fw-medium">${raport === null || raport === 0 ? '' : raport}</td>
+                            </tr>
+                            <tr class="">
+                                <td colspan="3" class="fw-medium">Rata-Rata</td>
+                                <td class="text-center fw-medium">${jumPengajaran === 0 ? '' : (raport / jumPengajaran).toFixed(2)}</td>
+                            </tr>
+                        </tfoot>`;
 
                         $('#table_nilai_siswa').html(tb_rekap);
 

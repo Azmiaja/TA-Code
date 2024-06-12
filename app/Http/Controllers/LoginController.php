@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Dokumentasi;
+use App\Models\Sekolah;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -15,45 +18,64 @@ class LoginController extends Controller
 
     public function index()
     {
-        return view('login');
+        $sekolah = Sekolah::select('namaSekolah', 'logo')->first();
+        return view('login', [
+            'title' => $sekolah->namaSekolah ?? 'SDN Lemahbang',
+            'logo' => $sekolah->logo ? (file_exists(public_path('storage/' . $sekolah->logo))
+                ? asset('storage/' . $sekolah->logo)
+                : asset('assets/media/img/tut-wuri.png'))
+                : asset('assets/media/img/tut-wuri.png'),
+        ]);
     }
 
 
     public function authenticate(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'username' => 'required',
             'password' => 'required'
+        ], [
+            'username.required' => 'Username tidak boleh kosong!',
+            'password.required' => 'Password tidak boleh kosong!'
         ]);
 
-        $credentials = $request->only('username', 'password');
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        } else {
+            // $request->validate([
+            //     'username' => 'required',
+            //     'password' => 'required'
+            // ]);
 
-        $guards = ['user', 'siswa'];
+            $credentials = $request->only('username', 'password');
 
-        foreach ($guards as $guard) {
-            if ($this->attemptUserLogin($credentials, $guard)) {
-                // return redirect()->intended('/dashboard');
-                // Cek peran setelah berhasil login
-                $user = Auth::guard($guard)->user();
+            $guards = ['user', 'siswa'];
 
-                if ($user->hakAkses === 'Guru') {
-                    return redirect()->route('gg.beranda.index');
-                } elseif ($guard === 'siswa') {
-                    return redirect()->route('ss.beranda.index');
+            foreach ($guards as $guard) {
+                if ($this->attemptUserLogin($credentials, $guard)) {
+                    // return redirect()->intended('/dashboard');
+                    // Cek peran setelah berhasil login
+                    $user = Auth::guard($guard)->user();
+
+                    if ($user->hakAkses === 'Guru') {
+                        return redirect()->route('gg.beranda.index');
+                    } elseif ($guard === 'siswa') {
+                        return redirect()->route('ss.beranda.index');
+                    } else {
+                        return redirect()->route('dashboard.index');
+                    }
                 } else {
-                    return redirect()->route('dashboard.index');
-                }
-            } else {
-                // Cek apakah login gagal karena akun tidak aktif
-                if ($guard === 'siswa' && $this->isAccountInactive($credentials, $guard)) {
-                    return back()->with('error', 'Akun Anda tidak aktif.');
-                } elseif ($guard === 'user' && $this->isAccountInactive($credentials, $guard)) {
-                    return back()->with('error', 'Akun Anda tidak aktif.');
+                    // Cek apakah login gagal karena akun tidak aktif
+                    if ($guard === 'siswa' && $this->isAccountInactive($credentials, $guard)) {
+                        return back()->with('error', 'Akun Anda tidak aktif.');
+                    } elseif ($guard === 'user' && $this->isAccountInactive($credentials, $guard)) {
+                        return back()->with('error', 'Akun Anda tidak aktif.');
+                    }
                 }
             }
-        }
 
-        return back()->with('error', 'Username atau password salah.');
+            return back()->with('error', 'Username atau password salah.');
+        }
     }
 
     private function isAccountInactive($credentials, $guard)

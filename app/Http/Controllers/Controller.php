@@ -246,7 +246,7 @@ class Controller extends BaseController
 
 
         $profil = Profil::all()->first();
-        $sambutan = $profil->sambutanKepsek ?: null;
+        $sambutan = $profil->sambutanKepsek ?: '';
 
         $data = array_merge(
             $this->getCommonData(),
@@ -267,8 +267,8 @@ class Controller extends BaseController
             : asset('assets/media/img/tut-wuri.png'))
             : asset('assets/media/img/tut-wuri.png');
         $sloganSD = $sekolah->slogan ?: '-';
-        $emailSD = $sekolah->email ?: '-';
-        $mapsLink = $sekolah->mapsLink ?: '#';
+        $emailSD = $sekolah->email ?: '#';
+        $mapsLink = $sekolah->mapsLink ?: 'javascript:void(0)';
         $telpSD = $sekolah->telp ?: '-';
         $alamatSD = $sekolah->alamat ?: '-';
         $mapsEmbed = $sekolah->mapsEmbed ?: '<iframe></iframe>';
@@ -444,8 +444,8 @@ class Controller extends BaseController
             $query->select('idPegawai')
                 ->from('user')
                 ->where('hakAkses', 'Super Admin');
-        })->orderBy('idJabatan', 'asc')
-            ->select('namaPegawai', 'gambar')
+        })->orderBy('idPegawai', 'asc')
+            ->select('namaPegawai', 'gambar', 'idJabatan')
             ->get();
 
         return $guru->map(function ($pegawai) {

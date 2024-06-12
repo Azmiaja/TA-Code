@@ -80,8 +80,8 @@
                                             <i class="fa fa-print me-2"></i>Cetak</button>
                                     </div>
                                 </div>
-                                <table id="tabel-JPSiswa" class="table table-bordered border-dark w-100 align-middle">
-                                    <thead class="table-light border-dark align-middle">
+                                <table id="tabel-JPSiswa" class="table table-bordered table-striped w-100 align-middle">
+                                    <thead class="table-light align-middle">
                                         <tr>
                                             <th width="14%">Waktu</th>
                                             <th width="14%">Senin</th>
@@ -449,10 +449,10 @@
                         title: function() {
                             let periode = $('#periode option:selected').data('tahun');
                             let kelas = $(".btn_kelas.active").val();
-                            return '<h3 style="margin-bottom: 3rem; font-family: Times New Roman, Times, serif;">JADWAL PELAJARAN KELAS ' +
+                            return '<h4 style="margin-bottom: 3rem; font-family: Times New Roman, Times, serif;">JADWAL PELAJARAN KELAS ' +
                                 kelas + '<br>' + 'SD NEGERI LEMAHBANG' +
                                 '<br>' +
-                                'TAHUN PELAJARAN ' + periode + '</h3>';
+                                'TAHUN PELAJARAN ' + periode + '</h4>';
                         },
                         className: 'd-none',
                         exportOptions: {

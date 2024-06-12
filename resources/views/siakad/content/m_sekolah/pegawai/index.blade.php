@@ -16,14 +16,14 @@
                     </div>
                     <div class="block-content block-content-full p-0">
                         <div class="table-responsive m-md-0 m-4 p-md-4 p-0">
-                            <table id="tabelPegawai" class="table w-100 table-bordered align-middle">
-                                <thead class="bg-body-light align-middle">
+                            <table id="tabelPegawai" class="table w-100 table-striped table-bordered align-middle">
+                                <thead class="table-light align-middle">
                                     <tr>
                                         <th style="width: 5%;">No</th>
                                         <th>NIP</th>
                                         <th>Nama</th>
-                                        <th>L/P</th>
-                                        <th>Kategori</th>
+                                        <th width="5%">L/P</th>
+                                        <th width="10%">Kategori</th>
                                         <th style="width: 10%">Aksi</th>
                                     </tr>
                                 </thead>
@@ -275,9 +275,6 @@
                 });
 
 
-
-
-
                 formFoto.submit(function(e) {
                     e.preventDefault();
 
@@ -330,7 +327,7 @@
                     jabatandd.find('option').not(':first').remove();
                 });
                 modalJabatan.on('hidden.bs.modal', function() {
-                    $('.kategori-jabatan').prop('hidden', false);
+                    $('.kategori-jabatan').removeClass('d-none');
                 });
 
                 // tabel pegawai
@@ -409,9 +406,9 @@
                         `<button type="submit" class="btn btn-primary" id="btn-tbhSubmitJabatan">Simpan</button>`
                     );
                     formJabatan.attr('action', '{{ route('jabatan.store') }}');
-                    formMethod.val('POST');
+                    $('#method_jb').val('POST');
                     formJabatan.trigger('reset');
-                    $('#jabatan').prop('readonly', false);
+                    // $('#jabatan').prop('readonly', false);
                 });
 
                 // submit form pegawai
@@ -435,11 +432,13 @@
                     var name_jenis = $(this).data('name-jenis');
 
                     modalJabatan.modal('show');
-                    $('.kategori-jabatan').prop('hidden', true);
+                    formJabatan.attr('action', `{{ url('jabatan/update/${id}') }}`);
+                    $('#method_jb').val('PUT');
+                    $('.kategori-jabatan').addClass('d-none');
                     updateModals($('#modal-title-jabatan'), $('#bt-form-jabatan'), 'Data Jabatan',
-                        `<button type="button" class="btn btn-danger" id="btn-hapusJabatan">Hapus</button>`
+                        `<button type="button" class="btn btn-danger me-2" id="btn-hapusJabatan">Hapus</button><button type="submit" class="btn btn-primary" id="btn_updateJabatan">Simpan</button>`
                     );
-                    $('#jabatan').prop('readonly', true);
+                    // $('#jabatan').prop('readonly', true);
                     $('#jabatan').val(name);
                     $('#idJ').val(id);
                 });
@@ -496,6 +495,7 @@
                         },
                     });
                 });
+
 
                 // delete data pegawai
                 $(document).on('click', '#action-hapusPegawai', function(e) {

@@ -2,7 +2,7 @@
 @section('siakad')
     @include('siakad/layouts/partials/hero')
     <div class="content">
-        <div class="alert alert-info pb-0" role="alert">
+        <div class="alert alert-primary pb-0" role="alert">
             @php
                 $kelas_nama = ['SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM'];
             @endphp
@@ -70,7 +70,7 @@
                         <div class="spinner-border text-primary" role="status"></div>
                     </div>
                     <table id="tabel_absen"
-                        class="table table-sm w-100 table-bordered border-dark align-middle caption-top">
+                        class="table table-sm w-100 table-bordered table-striped align-middle border-1">
 
                     </table>
                 </div>
@@ -91,24 +91,27 @@
                                     var kls_name = ['SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM'];
                                     var per_smt = $('#periode_siswa option:selected').data('smt');
                                     var per_tahun = $('#periode_siswa option:selected').data('tahun');
-                                    var tabel = `<caption class="text-dark mb-0">
-                                        <strong class="text-start mb-0">
+                                    var tabel = `<thead class="table-light text-center align-middle">
+                                    <!--<tr class="border-0 table-transparent">
+                                        <th colspan="7" class="border-0 table-transparent">
+                                            <strong class="text-start mb-0">
                                                     KELAS : ${kelas} (${kls_name[kelas - 1] ?? ''})
-                                                </strong>
-                                        <strong class="float-end mb-0 text-uppercase">
-                                            SEMESTER : ${per_smt}</strong>
-                                    </caption>
-                                <thead class="table-light align-middle text-center border-dark">
+                                            </strong>
+                                            <strong class="float-end mb-0 text-uppercase">
+                                                SEMESTER : ${per_smt}
+                                            </strong>
+                                        </th>
+                                    </tr>-->
                                     <tr>
                                         <th rowspan="2" width="5%">No</th>
                                         <th rowspan="2">Bulan</th>
                                         <th colspan="4">Keterangan</th>
                                     </tr>
                                     <tr>
-                                        <th width="5%">H</th>
-                                        <th width="5%">S</th>
-                                        <th width="5%">I</th>
-                                        <th width="5%">A</th>
+                                        <th class="border-bottom border-1" width="5%">H</th>
+                                        <th class="border-bottom border-1" width="5%">S</th>
+                                        <th class="border-bottom border-1" width="5%">I</th>
+                                        <th class="border-bottom border-1" width="5%">A</th>
                                     </tr>
                                     </thead><tbody>`;
 
@@ -162,13 +165,16 @@
                                             presensi.presensi === 'A';
                                     }).length;
 
-                                    tabel += `<tr>
-                                    <td colspan="2" class="text-uppercase border-top border-2 border-dark fw-bold">Jumlah</td>
-                                    <td class="text-center border-top border-2 border-dark fw-bold">${totHadir}</td>
-                                    <td class="text-center border-top border-2 border-dark fw-bold">${totSakit}</td>
-                                    <td class="text-center border-top border-2 border-dark fw-bold">${totIzin}</td>
-                                    <td class="text-center border-top border-2 border-dark fw-bold">${totAlfa}</td>
-                                    </tr><>/tbody`;
+                                    tabel += `</tbody>
+                                    <tfoot class="table-light text-center">
+                                        <tr>
+                                            <th colspan="2" class="text-uppercase fw-medium">Jumlah</th>
+                                            <th class="text-center fw-medium">${totHadir}</th>
+                                            <th class="text-center fw-medium">${totSakit}</th>
+                                            <th class="text-center fw-medium">${totIzin}</th>
+                                            <th class="text-center fw-medium">${totAlfa}</th>
+                                        </tr>
+                                    </tfoot>`;
 
                                     $('#tabel_absen').html(tabel);
                                 },

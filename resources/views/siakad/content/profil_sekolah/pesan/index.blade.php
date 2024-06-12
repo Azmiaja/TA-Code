@@ -8,12 +8,12 @@
             </div>
             <div class="block-content block-content-full p-0">
                 <div class="table-responsive m-md-0 m-4 p-md-4 p-0">
-                    <table id="tabelPesan" class="table w-100 table-bordered">
-                        <thead class="table-primary align-middle">
-                            <tr class="text-center fw-medium fs-sm">
+                    <table id="tabelPesan" class="table w-100 table-striped table-bordered">
+                        <thead class="table-light align-middle">
+                            <tr>
                                 <th width="5%">No</th>
-                                <th width="18%">Waktu</th>
-                                <th width="20%">Nama Pengirim</th>
+                                <th width="17%">Waktu</th>
+                                <th>Nama Pengirim</th>
                                 <th>Email</th>
                                 <th>Telepon</th>
                                 <th width="30%">Pesan</th>
@@ -40,16 +40,17 @@
                     columns: [{
                             data: 'nomor',
                             nama: 'nomor',
-                            className: 'text-center'
+                            className: 'text-center px-1 align-middle',
+                            orderable: false
                         }, {
                             data: 'waktu',
                             name: 'waktu',
                         }, {
                             data: 'namaPengirim',
-                            name: 'namaPengirim'
+                            name: 'namaPengirim',
                         }, {
                             data: 'email',
-                            name: 'email'
+                            name: 'email',
                         }, {
                             data: 'telp',
                             name: 'telp',
@@ -59,7 +60,7 @@
                         },
                         {
                             data: null,
-                            className: 'text-center',
+                            className: 'text-center align-middle',
                             render: function(data, type, row) {
                                 return `<div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-alt-danger" title="Hapus" id="action-hapusPegawai" data-nama-pesan="${data.namaPengirim}" value="${data.idPesan}">
@@ -73,6 +74,10 @@
                         "<'row my-2 '<'col-12 col-sm-12'tr>>" +
                         "<'row mb-2'<'col-12 col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
                     lengthMenu: [10, 25, 50],
+                    order: {
+                        name: 'waktu',
+                        dir: 'asc'
+                    }
                 });
 
                 $(document).on('click', '#action-hapusPegawai', function(e) {

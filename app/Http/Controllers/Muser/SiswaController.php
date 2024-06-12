@@ -26,13 +26,14 @@ class SiswaController extends Controller
 
     public function getData()
     {
-        $data = Siswa::orderBy('idSiswa', 'desc')->get();
+        $data = Siswa::orderBy('nis', 'asc')->get();
         $data = $data->map(function ($item, $key) {
             $item['nomor'] = $key + 1;
             $item['nama'] = $item->namaSiswa;
             $item['ttl'] = $item->tempatLahir || $item->tanggalLahir ? $item->tempatLahir . ', ' . Carbon::createFromFormat('Y-m-d', $item->tanggalLahir)->format('d-m-Y') : '-';
             $item['status'] = $item->status === 'Aktif' ? '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-success-light text-success">' . $item->status . '</span>' : '<span class="fs-xs fw-semibold d-inline-block py-1 px-3 rounded-pill bg-danger-light text-danger">' . $item->status . '</span>';
             $item['angkatan'] = $item->tahunMasuk ? $item->tahunMasuk : '-';
+            $item['jenisKelamin'] = $item->jenisKelamin === 'Laki-Laki' ? 'L' : 'P';
             return $item;
         });
         return response()->json(['data' => $data]);
@@ -233,7 +234,6 @@ class SiswaController extends Controller
                     'message' => 'Berhasil mengubah data.'
                 ]);
             }
-
         } catch (\Exception $e) {
             Log::error('Error update data: ' . $e->getMessage());
         }
@@ -245,7 +245,7 @@ class SiswaController extends Controller
         try {
             $siswa = Siswa::find($id);
             $siswa->delete();
-    
+
             return response()->json([
                 'status' => 'success',
                 'title' => 'Dihapus!',

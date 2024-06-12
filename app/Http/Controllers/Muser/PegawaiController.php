@@ -86,17 +86,22 @@ class PegawaiController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'nip' => 'integer|digits:18|unique:pegawai,nip',
+                'nip' => 'required|integer|digits:18|unique:pegawai,nip',
+                'tanggalLahir' => 'required',
                 'alamat' => 'max:125',
                 'noHp' => 'max:15',
-                'namaPegawai' => 'max:45'
+                'namaPegawai' => 'required|string|max:45'
             ], [
                 'nip.integer' => 'NIP harus berupa angka.',
                 'nip.unique' => 'NIP sudah terdaftar.',
                 'nip.digits' => 'Panjang NIP harus 18 digit.',
+                'nip.required' => 'NIP tidak boleh kosong.',
+                'tanggalLahir.required' => 'Tanggal lahir tidak boleh kosong.',
                 'alamat.max' => 'Alamat terlalu panjang maksimal 125 karakter.',
                 'noHp.max' => 'Panjang Nomor telepon maksimal 15',
-                'namaPegawai.max' => 'Nama pegawai terlalu panjang maksimal 45 karakter.'
+                'namaPegawai.max' => 'Nama pegawai terlalu panjang maksimal 45 karakter.',
+                'namaPegawai.required' => 'Nama pegawai tidak boleh kosong.',
+                'namaPegawai.string' => 'Nama pegawai harus berupa string.',
             ]);
 
             if ($validator->fails()) {
@@ -157,7 +162,8 @@ class PegawaiController extends Controller
                 'alamat' => 'max:125',
                 'noHp' => 'max:15',
                 'idJabatan' => 'unique:pegawai,idJabatan,' . $id . ',idPegawai',
-                'namaPegawai' => 'max:45'
+                'namaPegawai' => 'required|string|max:45',
+                'tanggalLahir' => 'required'
             ], [
                 'nip.integer' => 'NIP harus berupa angka.',
                 'nip.unique' => 'NIP sudah terdaftar.',
@@ -165,7 +171,10 @@ class PegawaiController extends Controller
                 'alamat.max' => 'Alamat terlalu panjang maksimal 125 karakter.',
                 'noHp.max' => 'Panjang Nomor telepon maksimal 15',
                 'idJabatan.unique' => 'Jabatan sudah digunakan pegawai lain.',
-                'namaPegawai.max' => 'Nama pegawai terlalu panjang maksimal 45 karakter.'
+                'namaPegawai.max' => 'Nama pegawai terlalu panjang maksimal 45 karakter.',
+                'namaPegawai.required' => 'Nama pegawai tidak boleh kosong.',
+                'namaPegawai.string' => 'Nama pegawai harus berupa string.',
+                'tanggalLahir.required' => 'Tanggal lahir tidak boleh kosong.'
             ]);
 
             if ($validator->fails()) {

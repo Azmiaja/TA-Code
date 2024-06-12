@@ -42,8 +42,8 @@
                                     class="fa fa-plus me-2"></i>Kelola Pengajar</button>
                         </div>
                     </div>
-                    <table id="tabel_Pengajar" class="table table-bordered table-vcenter w-100">
-                        <thead class="bg-body-light align-middle">
+                    <table id="tabel_Pengajar" class="table table-striped table-bordered table-vcenter w-100">
+                        <thead class="table-light align-middle">
                             <tr>
                                 <th style="width: 4%;" class="text-center">No</th>
                                 {{-- <th style="width: 10%;">Kelas</th> --}}

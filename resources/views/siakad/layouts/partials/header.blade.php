@@ -24,8 +24,6 @@
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/air-datepicker/dist/air-datepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/magnific-popup/magnific-popup.css') }}">
 
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
-
     @stack('style')
     <style>
         .ellipse {

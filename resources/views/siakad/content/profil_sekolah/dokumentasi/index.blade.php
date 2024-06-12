@@ -3,7 +3,7 @@
     @include('siakad/layouts/partials/hero')
     <div class="content">
         <div class="block block-rounded">
-            <ul class="nav nav-tabs nav-tabs-block" role="tablist">
+            <ul class="nav nav-tabs nav-tabs-alt bg-body-light" role="tablist">
                 <li class="nav-item">
                     <button class="nav-link active" id="tabs-foto" data-bs-toggle="tab" data-bs-target="#daftarFoto"
                         role="tab" aria-controls="daftarFoto" aria-selected="true">Foto</button>
@@ -23,8 +23,8 @@
                 <div class="tab-pane fade fade-left show active" id="daftarFoto" role="tabpanel" aria-labelledby="tabs-foto"
                     tabindex="0">
                     <div class="table-responsive  m-md-0 m-4 p-md-4 p-0">
-                        <table id="tabelFoto" class="table w-100 table-hover table-borderless align-middle">
-                            <thead class="table-primary align-middle">
+                        <table id="tabelFoto" class="table w-100 table-striped table-bordered align-middle">
+                            <thead class="table-light align-middle">
                                 <tr class="text-center fw-medium fs-sm">
                                     <th width="4%">No</th>
                                     <th width="15%">Gambar</th>
@@ -42,8 +42,8 @@
                 <div class="tab-pane fade fade-left" id="daftarVideo" role="tabpanel" aria-labelledby="tabs-video"
                     tabindex="0">
                     <div class="table-responsive  m-md-0 m-4 p-md-4 p-0">
-                        <table id="tabelVideo" class="table w-100 table-hover table-borderless align-middle table-">
-                            <thead class="table-primary align-middle">
+                        <table id="tabelVideo" class="table w-100 table-striped table-bordered align-middle table-">
+                            <thead class="table-light align-middle">
                                 <tr class="text-center fw-medium fs-sm">
                                     <th width="4%">No</th>
                                     <th width="15%">Video</th>
@@ -323,7 +323,7 @@
                     columns: [{
                             data: 'nomor',
                             name: 'nomor',
-                            className: 'text-center fw-semibold rounded-start'
+                            className: 'text-center fw-semibold'
 
                         },
                         {
@@ -371,7 +371,6 @@
 
                         {
                             data: null,
-                            className: 'rounded-end',
                             render: function(data, type, row) {
                                 return '<div class="btn-group">' +
                                     '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editFoto" value="' +
@@ -395,7 +394,7 @@
                     columns: [{
                             data: 'nomor',
                             name: 'nomor',
-                            className: 'text-center fw-semibold rounded-start',
+                            className: 'text-center fw-semibold',
                             width: '5%',
 
                         },
@@ -434,7 +433,6 @@
 
                         {
                             data: null,
-                            className: 'rounded-end',
                             render: function(data, type, row) {
                                 return '<div class="btn-group">' +
                                     '<button type="button" class="btn btn-sm btn-alt-primary" title="Edit" id="action-editFoto" value="' +

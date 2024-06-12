@@ -27,7 +27,7 @@ class PesanController extends Controller
 
     public function getData()
     {
-        $data = Pesan::orderBy("idPesan", "DESC")->get();
+        $data = Pesan::orderBy("waktu", "DESC")->get();
         $data = $data->map(function ($item, $key) {
             $item['nomor'] = $key + 1;
             return $item;

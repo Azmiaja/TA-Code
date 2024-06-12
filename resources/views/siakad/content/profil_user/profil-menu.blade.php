@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <h5 class="fw-semibold mb-0">
+                    <h5 class="fw-semibold mb-0" id="name_ppw">
                         @cannot('siswa')
                             {{ Auth::user()->pegawai->namaPegawai }}
                         @endcannot
@@ -39,7 +39,7 @@
                             {{ Auth::user()->siswa->namaSiswa }}
                         @endcan
                     </h5>
-                    <p class="fw-medium mb-0"><span>@</span>{{ Auth::user()->username }}</p>
+                    <p id="us_name" class="fw-medium mb-0"><span>@</span>{{ Auth::user()->username }}</p>
                     <p class="fw-normal text-muted">{{ Auth::user()->hakAkses }}</p>
                 </div>
             </div>

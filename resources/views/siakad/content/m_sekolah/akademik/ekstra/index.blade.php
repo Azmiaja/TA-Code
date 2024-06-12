@@ -12,12 +12,12 @@
             </div>
             <div class="block-content block-content-full p-0">
                 <div class="table-responsive m-md-0 m-4 p-md-4 p-0">
-                    <table id="tabel_ekstra" class="table w-100 table-bordered table-vcenter align-middle">
-                        <thead class="align-middle bg-body-light">
+                    <table id="tabel_ekstra" class="table table-striped w-100 table-bordered table-vcenter align-middle">
+                        <thead class="align-middle table-light">
                             <tr>
                                 <th style="width: 5%">No</th>
                                 <th>Ekstrakulikuler</th>
-                                <th style="width: 15%;">Predikat</th>
+                                <th style="width: 15%;">Kategori</th>
                                 <th style="width: 10%;">Aksi</th>
                             </tr>
                         </thead>
@@ -56,9 +56,9 @@
                                         placeholder="Masukan nama ekstrakulikuler" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label" for="predikat">Predikat</label>
+                                    <label class="form-label" for="predikat">Kategori</label>
                                     <select name="status" class="form-select" id="predikat">
-                                        <option value="" selected>Pilih Predikat</option>
+                                        <option value="" selected>Pilih Kategori</option>
                                         <option value="wajib">Wajib</option>
                                         <option value="pilihan">Pilihan</option>
                                     </select>
@@ -126,6 +126,10 @@
                 insertOrUpdateData($('#form_ekstra'), function() {
                     $('#modal-Ekstra').modal('hide');
                     $('#tabel_ekstra').DataTable().ajax.reload();
+                });
+
+                $('#modal-Ekstra').on('hidden.bs.modal', function() {
+                    $('#form_ekstra').trigger("reset");
                 });
 
                 $(document).on('click', '#action-editEkstra', function(e) {

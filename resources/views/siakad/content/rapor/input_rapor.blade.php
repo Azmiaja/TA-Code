@@ -88,8 +88,8 @@
                         },
                         dataType: "json",
                         success: function(data) {
-                            tb_siswa = `<table class="table w-100 table-bordered border-dark">
-                                    <thead class="text-center table-light border-dark">
+                            tb_siswa = `<table class="table table-striped w-100 table-bordered">
+                                    <thead class="text-center table-light">
                                         <tr class="rounded">
                                             <th>No</th>
                                             <th>NIS</th>
@@ -104,9 +104,9 @@
                                 if (siswa) {
                                     var lp = siswa.jenisKelamin == 'Laki-Laki' ? 'L' : 'P';
                                     tb_siswa += `<tr>
-                                            <td style="width: 15px; min-width: 15px; text-align: center; font-weight: bold">${i+1}</td>
+                                            <td style="width: 15px; min-width: 15px; text-align: center;">${i+1}</td>
                                             <td style="width: 30px; min-width: 30px;" class="text-center">${siswa.nis}</td>
-                                            <td class="fw-semibold w-100">${siswa.namaSiswa}</td>
+                                            <td class="w-100">${siswa.namaSiswa}</td>
                                             <td style="width: 30px; min-width: 30px;" class="text-center fw-medium">${lp}</td>
                                             <td style="width: 110px; min-width: 110px; text-align: center">
                                                 <button type="button" class="btn btn-sm btn-dark" id="btn_isi_rapor" data-id="${siswa.idSiswa}" data-nama="${siswa.namaSiswa}">Isi Rapor

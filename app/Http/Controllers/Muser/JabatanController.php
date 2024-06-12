@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Jabatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class JabatanController extends Controller
 {
@@ -46,18 +47,69 @@ class JabatanController extends Controller
     public function store(Request $request)
     {
         try {
-            $jabatan = new Jabatan;
 
-            $jabatan->jabatan = $request->input('jabatan');
-            $jabatan->jenis = $request->input('jenis');
+            $validator = Validator::make($request->all(), [
+                'jabatan' => 'required|max:100',
+                'jenis' => 'required',
+            ], [
+                'jabatan.required' => 'Jabatan harus diisi.',
+                'jabatan.max' => 'Jabatan terlalu panjang, maksimal 100 karakter.',
+                'jenis.required' => 'Kategori harus diisi.',
+            ]);
 
-            $jabatan->save();
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+                $jabatan = new Jabatan;
+
+                $jabatan->jabatan = $request->input('jabatan');
+                $jabatan->jenis = $request->input('jenis');
+
+                $jabatan->save();
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil menambahkan data.',
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error storing data: ' . $e->getMessage());
 
             return response()->json([
-                'status' => 'success',
-                'title' => 'Sukses',
-                'message' => 'Berhasil menambahkan data.',
+                'status' => 'error',
+                'title' => 'Gagal',
+                'message' => 'Error storing data.'  . $e->getMessage(),
+            ], 422);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $jabatan = Jabatan::find($id);
+            $validator = Validator::make($request->all(), [
+                'jabatan' => 'required|max:100',
+            ], [
+                'jabatan.required' => 'Jabatan harus diisi.',
+                'jabatan.max' => 'Jabatan terlalu panjang, maksimal 100 karakter.',
             ]);
+
+            if ($validator->fails()) {
+                return response()->json(['status' => 'error', 'message' => $validator->errors()->first()]);
+            } else {
+
+                $jabatan->jabatan = $request->input('jabatan');
+                // $jabatan->jenis = $request->input('jenis');
+
+                $jabatan->update();
+
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Sukses',
+                    'message' => 'Berhasil mengubah data.',
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Error storing data: ' . $e->getMessage());
 
@@ -74,7 +126,7 @@ class JabatanController extends Controller
         try {
             $jabatan = Jabatan::find($id);
             $jabatan->delete();
-    
+
             return response()->json([
                 'status' => 'success',
                 'title' => 'Dihapus!',

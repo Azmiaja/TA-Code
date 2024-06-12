@@ -1,7 +1,7 @@
 <nav id="sidebar" aria-label="Main Navigation" class="" style="background-color: #005c87;">
     {{-- Sidebar header --}}
     <div class="content-header p-0 shadow-sm" style="background-color: #005c87;">
-        <a class="fw-bold text-dual d-flex" href="#">
+        <a class="fw-bold text-dual d-flex" href="javascript:void(0)">
             @php
                 use App\Models\Sekolah;
                 use App\Models\Pengajaran;
@@ -71,7 +71,7 @@
                         <a class="nav-main-link {{ Request::routeIs('nilai_siswa.index') ? 'active' : '' }}"
                             href="{{ route('nilai_siswa.index') }}">
                             <i class="nav-main-link-icon si si-list"></i>
-                            <span class="nav-main-link-name">Nilai</span>
+                            <span class="nav-main-link-name">Hasil Penilaian</span>
                         </a>
                     </li>
                     <li class="nav-main-item">

@@ -36,7 +36,6 @@
 <script src="{{ asset('assets/js/plugins/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/print-this/printThis.js') }}"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
 @if (session('status') === 'success')
     <script>

@@ -31,17 +31,17 @@
                          <div class="mb-3">
                              <label class="form-label" for="tahun">Tahun Periode</label>
                              <input type="text" class="form-control" id="tahun" name="tahun"
-                                 placeholder="Masukan Tahun Periode" required>
+                                 placeholder="Masukan Tahun Periode" readonly required>
                          </div>
                          <div class="mb-3">
                              <label class="form-label" for="tanggalMulai">Tanggal Mulai</label>
                              <input type="text" class="form-control" id="tanggalMulai" name="tanggalMulai"
-                                 placeholder="Masukan Tanggal Mulai" required>
+                                 placeholder="Masukan Tanggal Mulai" readonly required>
                          </div>
                          <div class="mb-3">
                              <label class="form-label" for="tanggalSelesai">Tanggal Selesai</label>
                              <input type="text" class="form-control" id="tanggalSelesai" name="tanggalSelesai"
-                                 placeholder="Masukan Tanggal Selesai" required>
+                                 placeholder="Masukan Tanggal Selesai" readonly required>
                          </div>
                          <div class="mb-3">
                              <label class="form-label" for="status">Status</label>

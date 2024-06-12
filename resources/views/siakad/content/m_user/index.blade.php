@@ -23,15 +23,15 @@
                                     Pegawai</button>
                             </div>
                         </div>
-                        <table id="tabel-userPegawai" class="table w-100 table-bordered align-middle">
-                            <thead class="bg-body-light align-middle">
+                        <table id="tabel-userPegawai" class="table w-100 table-striped table-bordered align-middle">
+                            <thead class="table-light align-middle">
                                 <tr>
-                                    <th style="width: 5%;">No</th>
-                                    <th>Nama</th>
-                                    <th style="width: 20%;">Username</th>
-                                    <th style="width: 15%;">Hak Akses</th>
-                                    <th style="width: 10%;">Status</th>
-                                    <th style="width: 10%;">Aksi</th>
+                                    <th width="5%">No</th>
+                                    <th>Nama Pegawai</th>
+                                    <th width="20%">Username</th>
+                                    <th width="15%">Hak Akses</th>
+                                    {{-- <th style="width: 10%;">Status</th> --}}
+                                    <th width="10%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,16 +49,16 @@
                                     Siswa</button>
                             </div>
                         </div>
-                        <table id="tabel-userSiswa" class="table w-100 table-bordered align-middle">
-                            <thead class="bg-body-light align-middle">
+                        <table id="tabel-userSiswa" class="table table-striped w-100 table-bordered align-middle">
+                            <thead class="table-light align-middle">
                                 <tr>
-                                    <th style="width: 5%;">No</th>
-                                    <th>Nama</th>
-                                    <th style="width: 10%;">Kelas</th>
-                                    <th style="width: 20%;">Username</th>
-                                    <th style="width: 15%;">Hak Akses</th>
-                                    <th style="width: 10%;">Status</th>
-                                    <th style="width: 10%;">Aksi</th>
+                                    <th width="5%">No</th>
+                                    <th>Nama Siswa</th>
+                                    <th width="10%">Kelas</th>
+                                    <th width="20%">Username</th>
+                                    <th width="15%">Hak Akses</th>
+                                    {{-- <th style="width: 10%;">Status</th> --}}
+                                    <th width="10%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -104,7 +104,7 @@
                     columns: [{
                             data: 'nomor',
                             bame: 'nomor',
-                            className: 'text-center fw-semibold',
+                            className: 'text-center',
                             searchable: false,
                         }, {
                             data: 'namaSiswa',
@@ -121,11 +121,6 @@
                             name: 'hakAkses',
                             className: 'text-center'
                         }, {
-                            data: 'status',
-                            className: 'text-center',
-                            searchable: false,
-                        },
-                        {
                             data: null,
                             className: 'text-center',
                             searchable: false,
@@ -333,7 +328,7 @@
                     columns: [{
                             data: 'nomor',
                             bame: 'nomor',
-                            className: 'text-center fw-semibold',
+                            className: 'text-center',
                             searchable: false,
                         }, {
                             data: 'namaPegawai',
@@ -346,11 +341,6 @@
                             name: 'hakAkses',
                             className: 'text-center'
                         }, {
-                            data: 'status',
-                            className: 'text-center',
-                            searchable: false,
-                        },
-                        {
                             data: null,
                             className: 'text-center',
                             searchable: false,
