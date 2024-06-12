@@ -96,14 +96,14 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="idSiswa">Nama Siswa</label>
-                                <select name="idSiswa[]" multiple="multiple" id="idSiswa" class="form-select"
-                                    data-placeholder="Pilih Siswa"></select>
-                            </div>
-                            <div class="mb-3">
                                 <label class="form-label" for="idKelas">Kelas</label>
                                 <select name="idKelas" id="idKelas" class="form-select"
                                     data-placeholder="Pilih Kelas"></select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="idSiswa">Nama Siswa</label>
+                                <select name="idSiswa[]" multiple="multiple" id="idSiswa" class="form-select"
+                                    data-placeholder="Pilih Siswa"></select>
                             </div>
 
                             <div class="mb-4 text-end" id="cn-btn-siswa">
@@ -128,15 +128,6 @@
                 const modalSiswaKelas_btn = $('#cn-btn-siswa');
                 const methodlSiswaKelas = $('#method_siswaKelas');
                 const formSiswaKelas = $('#form_siswaKelas');
-
-
-                // insertSiswaKelas.click(function() {
-                //     // $('#idKelas').val(null).change();
-                //     // $('#idSiswa').val(null).change();
-                //     $('#pilih_periode').change(function() {
-
-                //     });
-                // });
 
                 // selet2 from kelas siswa
                 select2('#idKelas', modalSiswaKelas);

@@ -22,7 +22,7 @@
 <script src="{{ asset('assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/select2/js/select2.full.min.js') }}"></script>
-<script src="{{ asset('assets/js/plugins/select2/js/select2.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/js/plugins/select2/js/select2.min.js') }}"></script> --}}
 <script src="{{ asset('assets/js/plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
 {{-- <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script> --}}
 <script src="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
@@ -151,6 +151,8 @@
             dropdownParent: modal,
             theme: "bootstrap-5",
             multiple: true,
+            closeOnSelect: false,
+            placeholder: $(this).data('placeholder'),
         });
     }
 
