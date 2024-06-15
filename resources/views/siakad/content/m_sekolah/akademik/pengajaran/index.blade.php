@@ -499,7 +499,7 @@
                     $(document).on('click', '#action-hapusPengajar', function(e) {
                         e.preventDefault();
                         var id = $(this).val();
-                        var idP = $('#pilih_periode').val();
+                        var idP = $('#pilih_periode option:selected').val();
                         var nama = $(this).data('nama-pengajar');
                         var kelas = $(this).data('kelas');
 

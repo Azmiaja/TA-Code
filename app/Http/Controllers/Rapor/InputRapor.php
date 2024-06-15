@@ -104,12 +104,15 @@ class InputRapor extends Controller
         try {
             $rules = [];
             $idEks = $request->input('ideks');
+            $periode = Periode::where('status', 'Aktif')->first();
 
             foreach ($idEks as $eks) {
                 $rules['ekstra_' . $eks] = 'nullable|max:255';
                 $rules['catatan'] = 'required|max:255'; // Sesuaikan dengan aturan validasi yang Anda perlukan
-                $rules['naik_tidak_desk'] = 'required|max:255'; // Sesuaikan dengan aturan validasi yang Anda perlukan
-                $rules['naik_tidak'] = 'required'; // Sesuaikan dengan aturan validasi yang Anda perlukan
+                if($periode->semester == 'Genap'){
+                    $rules['naik_tidak_desk'] = 'required|max:255'; // Sesuaikan dengan aturan validasi yang Anda perlukan
+                    $rules['naik_tidak'] = 'required'; // Sesuaikan dengan aturan validasi yang Anda perlukan
+                }
             }
             $validator = Validator::make($request->all(), $rules, [
                 'ekstra_*.max' => 'Deskripsi ekskul terlalu panjang, maksimal 255 karakter.',
