@@ -51,6 +51,9 @@ class BerandaController extends Controller
                 $query->where('namaKelas', $kelas->namaKelas);
             })
             ->get()
+            ->sortBy(function ($item) {
+                return $item->jamke ? $item->jamke->jamKe : 0;
+            })
             ->groupBy('pengajaran.idMapel')
             ->map(function ($items) {
                 $combinedSchedules = [];

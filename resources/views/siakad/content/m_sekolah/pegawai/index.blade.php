@@ -252,6 +252,10 @@
                     });
                 }
 
+                $(document).on('click', '#idtombol-submit', function(){
+                    $('#form-data')
+                })
+
                 $(document).on('click', '#action-editGambarPegawai', function(e) {
                     e.preventDefault();
 

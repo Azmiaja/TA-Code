@@ -16,6 +16,6 @@ class JamKe extends Model
 
     public function jadwal()
     {
-        return $this->hasMany(Jadwal::class, 'idJadwal');
+        return $this->hasMany(Jadwal::class, 'idjamKe');
     }
 }

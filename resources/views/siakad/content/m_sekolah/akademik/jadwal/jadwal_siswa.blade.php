@@ -3,34 +3,32 @@
     @include('siakad/layouts/partials/hero')
     @push('style')
         <style>
-            #tabel-JPSiswa caption {
-                font-family: 'Times New Roman', Times, serif;
-            }
-
             @media print {
                 table {
                     page-break-inside: avoid;
                     width: 100%;
                     color: #000;
                     font-size: 12pt;
+                    /* border: 1px solid #000 */
                 }
 
-                table thead,
-                table tbody,
-                table tfoot {
-                    /* border: 1px solid #000; */
+                table thead tr:nth-child(1) th {
                     color: #000;
                 }
 
-                table thead .table-light,
+                table tbody tr td:nth-child(2) {
+                    color: #000;
+                    white-space: nowrap;
+                }
+
+                table thead tr:nth-child(2) th,
+                table thead tr:nth-child(3) th,
                 table tbody,
                 table tfoot {
-                    background-color: #fff;
+                    /* background-color: #fff; */
                     border: 1px solid #000;
                     color: #000;
                 }
-
-
 
                 body {
                     background-color: #fff;
@@ -128,28 +126,37 @@
                         var periode = {!! json_encode($periode->tahun) !!};
                         var tabel = `<thead class="text-center fw-bold ">
                                         <tr class=" border-0">
-                                            <th colspan="7" class="text-center text-uppercase border-0">
+                                            <th colspan="8" class="text-center text-uppercase border-0">
                                                 <h4>Jadwal Pelajaran Kelas ${kelas}</br>
                                                 SD Negeri Lemahbang</br>
                                                 Tahun Pelajaran ${periode}
                                                 </h4>
                                             </th>
                                         </tr>
+                                        <tr class="table-primary align-middle">
+                                            <th rowspan="2" width="6%">Jam</th>
+                                            <th rowspan="2" width="14%">Waktu</th>
+                                            <th colspan="6" width="80%">Hari</th>
+                                        </tr>
                                         <tr class="table-light align-middle">
-                                            <th width="14%">Waktu</th>
-                                            <th width="14%">Senin</th>
-                                            <th width="14%">Selasa</th>
-                                            <th width="14%">Rabu</th>
-                                            <th width="14%">Kamis</th>
-                                            <th width="14%">Jumat</th>
-                                            <th width="14%">Sabtu</th>
+                                            <th width="13.33%">Senin</th>
+                                            <th width="13.33%">Selasa</th>
+                                            <th width="13.33%">Rabu</th>
+                                            <th width="13.33%">Kamis</th>
+                                            <th width="13.33%">Jumat</th>
+                                            <th width="13.33%">Sabtu</th>
                                         </tr>
                                     </thead>
                                 <tbody>`;
 
+                        data.data.sort(function(a, b) {
+                            return a.nomor - b.nomor;
+                        });
+
                         $.each(data.data, function(key, value) {
                             // console.log(value);
                             tabel += `<tr>
+                            <td class="fs-sm fw-semibold">${value.nomor}</td>
                             <td class="fs-sm fw-semibold">${value.waktu}</td>
                             <td class="fs-sm fw-semibold text-uppercase">${value.Senin}</td>
                             <td class="fs-sm fw-semibold text-uppercase">${value.Selasa}</td>
@@ -159,6 +166,7 @@
                             <td class="fs-sm fw-semibold text-uppercase">${value.Sabtu}</td>
                             </tr>`;
                         });
+                        tabel += `</tbody>`;
                         $('#tb_jadwal').html(tabel);
 
                     },
@@ -180,5 +188,6 @@
                 });
             });
         </script>
+        
     @endpush
 @endsection

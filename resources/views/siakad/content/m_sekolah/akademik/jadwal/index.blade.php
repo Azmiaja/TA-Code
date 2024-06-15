@@ -17,7 +17,7 @@
                 margin-bottom: 1rem;
             }
 
-            table thead tr{
+            table thead tr {
                 background-color: rgba(111, 162, 210, 0.607)
             }
 
@@ -75,7 +75,7 @@
                 color: #000;
             }
 
-            body h4{
+            body h4 {
                 font-size: 14pt;
             }
         }
@@ -487,7 +487,7 @@
                             data: 'nomor',
                             name: 'nomor',
                             className: 'text-center fs-sm px-0',
-                            orderable: false
+                            orderable: true
                         }, {
                             data: 'waktu',
                             name: 'waktu',
@@ -539,38 +539,13 @@
                     dom: "<'row my-0 '<'col-12 col-sm-12 col-md-7'><'col-12 col-sm-12 col-md-5 text-md-end'>>" +
                         "<'row my-0 '<'col-12 col-sm-12'tr>>" +
                         "<'row mb-0'<'col-12 col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
-                    // buttons: [{
-                    //     extend: 'print',
-                    //     title: function() {
-                    //         let periode = $('#periode option:selected').data('tahun');
-                    //         let kelas = $(".btn_kelas.active").val();
-                    //         return '<h4 style="margin-bottom: 3rem; font-family: Times New Roman, Times, serif;">JADWAL PELAJARAN KELAS ' +
-                    //             kelas + '<br>' + 'SD NEGERI LEMAHBANG' +
-                    //             '<br>' +
-                    //             'TAHUN PELAJARAN ' + periode + '</h4>';
-                    //     },
-                    //     className: 'd-none',
-                    //     exportOptions: {
-                    //         columns: ':visible'
-                    //     },
-                    //     messageTop: null,
-                    //     messageBottom: null,
-                    //     customize: function(win) {
-                    //         $(win.document.body).css('text-align', 'center');
-                    //         $(win.document.body).find('table').css({
-                    //             'text-transform': 'uppercase',
-                    //             'font-size': '12pt',
-                    //             'border-color': '#000'
-                    //         });
-                    //         // $(win.document.body).find('.hari').css('font-size', '1.25rem').width(
-                    //         //     '13.33%');
-                    //     }
-
-                    // }],
                     paging: false,
-                    ordering: false,
+                    ordering: true,
                     searching: false,
                     info: false,
+                    order: [
+                        [0, 'asc'],
+                    ]
                 });
 
                 $('#btn_print_jadwal').on('click', function() {
