@@ -711,7 +711,7 @@
 
                 modalJadwal.on('hidden.bs.modal', function() {
                     resetForm(formJadwal, function() {
-                        $('#idPengajaran').val(null).change();
+                        $('#idPengajaran').find('option').not(':first').remove();
                         $('#idKelas').find('option').not(':first').remove();
                     });
                 });
