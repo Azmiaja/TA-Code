@@ -89,6 +89,9 @@ class BerandaController extends Controller
             $jadwal = Jadwal::where('hari', $hari)
                 ->where('idPeriode', $periode->idPeriode)
                 ->get()
+                ->sortBy(function ($item) {
+                    return $item->jamke ? $item->jamke->jamKe : 0;
+                })
                 ->filter(function ($item) {
                     // Filter jadwal berdasarkan idPegawai yang login
                     return $item->pengajaran->guru->idPegawai === Auth::user()->pegawai->idPegawai;
