@@ -201,12 +201,12 @@
                                         <div class="d-flex flex-row mb-2 py-2">
                                             <div class="col-4 fw-semibold">Nama lengkap</div>
                                             <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">${data.namaLengkap ?? '-'}</div>
+                                            <div class="col-7">${data.namaSiswa ?? '-'}</div>
                                         </div>
                                         <div class="d-flex flex-row mb-2 py-2">
                                             <div class="col-4 fw-semibold">Nama panggilan</div>
                                             <div class="col-1 fw-semibold">:</div>
-                                            <div class="col-7">${data.namaPanggilan ?? '-'}</div>
+                                            <div class="col-7">${data.panggilan ?? '-'}</div>
                                         </div>
                                         <div class="d-flex flex-row mb-2 py-2">
                                             <div class="col-4 fw-semibold">Tempat lahir</div>
