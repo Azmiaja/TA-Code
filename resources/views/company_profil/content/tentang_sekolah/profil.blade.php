@@ -25,13 +25,5 @@
                 </article>
             </div>
         </div>
-    @else
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="text-center story lend">
-                    <img src="{{ asset('assets/media/img/error404.svg') }}" class="opacity-25" alt="" srcset="">
-                </div>
-            </div>
-        </div>
     @endif
 @endsection

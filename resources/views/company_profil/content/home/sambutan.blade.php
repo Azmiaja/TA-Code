@@ -39,7 +39,8 @@
                             <div class="col-md-12">
                                 <div class="d-flex block block-rounded shadow-sm p-2 m-0 position-relative">
                                     <div class="ratio" style="max-width: 6rem; height: 6rem;">
-                                        <img src="{{ $bTree['gambar'] }}" alt="Berita" class="rounded" style="width: 100%; height: 100%; object-fit: cover">
+                                        <img src="{{ $bTree['gambar'] }}" alt="Berita" class="rounded"
+                                            style="width: 100%; height: 100%; object-fit: cover">
                                     </div>
                                     <div class="block-content w-100 align-items-center px-0 ms-2">
                                         <h6 class="my-0 fst-normal text-dark mb-1">
@@ -74,7 +75,6 @@
             </div>
             <div class="row m-0 mb-3">
                 {{-- Kesan Pesan --}}
-                {{-- Kesan Pesan --}}
                 <div class="card bg-with mt-md-0 p-2 shadow-sm border-0 mb-3">
                     @if (session('success'))
                         <div class="alert alert-success d-flex align-items-center" role="alert">
@@ -83,41 +83,53 @@
                                 {{ session('success') }}
                             </div>
                         </div>
-                        @push('scripts')
-                            <script>
-                                $(document).ready(function() {
-                                    setTimeout(function() {
-                                        $(".alert").alert('close');
-                                    }, 5000);
-                                });
-                            </script>
-                        @endpush
                     @endif
-
+                    @push('scripts')
+                        <script>
+                            $(document).ready(function() {
+                                setTimeout(function() {
+                                    $(".alert").alert('close');
+                                }, 5000);
+                            });
+                        </script>
+                    @endpush
                     <div class="card-body p-2">
                         <form action="{{ route('pesan.store') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label for="nama" class="form-label">Nama<span class="text-danger">*</span></label>
+                                <label for="nama" class="form-label">Nama</label>
                                 <input type="text" class="form-control form-control-alt"
-                                    placeholder="Masukkan nama lengkap Anda" id="nama" name="nama" required>
+                                    placeholder="Masukkan nama lengkap Anda" id="nama" name="nama"
+                                    value="{{ old('nama') }}">
+                                @error('nama')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email<span class="text-danger">*</span></label>
+                                <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control form-control-alt"
-                                    placeholder="Masukkan alamat email Anda" id="email" name="email" required>
+                                    placeholder="Masukkan alamat email Anda" id="email" name="email"
+                                    value="{{ old('email') }}">
+                                @error('email')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="noHp" class="form-label">No Telepon<span
-                                        class="text-danger">*</span></label>
+                                <label for="noHp" class="form-label">No Telepon</label>
                                 <input type="number" class="form-control form-control-alt"
-                                    placeholder="Masukkan nomor telepon Anda" id="noHp" name="noHp" required>
-                                <small id="noHpError" class="text-danger"></small>
+                                    placeholder="Masukkan nomor Hp Anda (62..)" id="noHp" value="{{ old('noHp') }}"
+                                    name="noHp">
+                                @error('noHp')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label for="pesan" class="form-label">Pesan</label>
                                 <textarea id="pesan" class="form-control form-control-alt" name="pesan"
-                                    placeholder="Tulis pesan atau pertanyaan Anda di sini" cols="30" rows="5"></textarea>
+                                    placeholder="Tulis pesan atau pertanyaan Anda di sini" style="resize: none;" cols="30" rows="5">{{ old('pesan') }}</textarea>
+                                @error('pesan')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <button type="submit" class="btn btn-alt-primary float-end"><i
                                     class="fa-solid fa-paper-plane me-1"></i>Kirim</button>

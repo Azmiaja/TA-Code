@@ -27,12 +27,6 @@
                         {!! $misiDeskripsi !!}
                     </article>
                 </div>
-            @else
-                <div class="col-12">
-                    <div class="text-center story lend">
-                        <img src="{{ asset('assets/media/img/error404.svg') }}" class="opacity-25" alt="">
-                    </div>
-                </div>
             @endif
         </div>
     </div>

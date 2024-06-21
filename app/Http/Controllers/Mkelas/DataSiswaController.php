@@ -70,7 +70,9 @@ class DataSiswaController extends Controller
 
         $siswaWithoutKelas = Siswa::whereDoesntHave('kelas', function ($query) use ($periodeId) {
             $query->where('idPeriode', $periodeId);
-        })->get();
+        })
+        ->where('status', 'Aktif')
+        ->get();
         // $siswaWithoutKelas = Siswa::whereDoesntHave('kelas')->get();
 
         return response()->json(['siswa' => $siswaWithoutKelas]);
